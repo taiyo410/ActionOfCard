@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Src\Manager\Generic\MenuController.cpp" />
+    <ClCompile Include="Src\Object\Card\CardPresenter.cpp" />
+    <ClCompile Include="Src\Manager\Generic\ButtonUIManager.cpp" />
+    <ClCompile Include="Src\Object\DirectionUI.cpp" />
+    <ClCompile Include="Src\Object\Character\UIData\CharacterUIData.cpp" />
+    <ClCompile Include="Src\Object\Character\UI\HpUI.cpp" />
+    <ClCompile Include="Src\Object\Character\Enemy\EnemyRock.cpp" />
+    <ClCompile Include="Src\Object\Character\Enemy\EnemyOnHit.cpp" />
+    <ClCompile Include="Src\Object\Character\Base\CharacterOnHitBase.cpp" />
+    <ClCompile Include="Src\Object\Common\EffectController.cpp" />
+    <ClCompile Include="Src\Scene\GameOverScene.cpp" />
+    <ClCompile Include="Src\Common\Easing.cpp" />
+    <ClCompile Include="Src\Object\Card\CardUIController.cpp" />
+    <ClCompile Include="Src\Object\Card\CardUIDraw.cpp" />
+    <ClCompile Include="Src\Object\Card\EnemyCardUI.cpp" />
+    <ClCompile Include="Src\Object\Card\CardUIBase.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\Dodge.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Cylinder.cpp" />
+    <ClCompile Include="Src\Object\Character\Base\CardActionBase.cpp" />
+    <ClCompile Include="Src\Object\SkyDome\SkyDome.cpp" />
+    <ClCompile Include="Src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\EnemyCardAction.cpp" />
+    <ClCompile Include="Src\Manager\Game\CharacterManager.cpp" />
+    <ClCompile Include="Src\Manager\Resource\SoundManager.cpp" />
+    <ClCompile Include="Src\Renderer\ModelMaterial.cpp" />
+    <ClCompile Include="Src\Renderer\ModelRenderer.cpp" />
+    <ClCompile Include="Src\Renderer\PixelMaterial.cpp" />
+    <ClCompile Include="Src\Renderer\PixelRenderer.cpp" />
+    <ClCompile Include="Src\Scene\GameClearScene.cpp" />
+    <ClCompile Include="Src\Object\Card\PlayerCardUI.cpp" />
+    <ClCompile Include="Src\Manager\Game\CollisionManager.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\React.cpp" />
+    <ClCompile Include="Src\Object\Character\Base\CharacterBase.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\PlayerCardAction.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\Idle.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\Run.cpp" />
+    <ClCompile Include="Src\Object\Character\Base\ActionBase.cpp" />
+    <ClCompile Include="Src\Object\Character\Enemy\EnemyLogic.cpp" />
+    <ClCompile Include="Src\Object\Character\Enemy\Enemy.cpp" />
+    <ClCompile Include="Src\Object\Character\Base\LogicBase.cpp" />
+    <ClCompile Include="Src\Object\Card\CardSystem.cpp" />
+    <ClCompile Include="Src\Object\Card\CardDeck.cpp" />
+    <ClCompile Include="Src\Object\Card\CardBase.cpp" />
+    <ClCompile Include="Src\Common\Vector2F.cpp" />
+    <ClCompile Include="Src\Manager\Generic\DataBank.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\Player.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\ActionController.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\PlayerLogic.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\PlayerOnHit.cpp" />
+    <ClCompile Include="Src\Object\Common\Collider.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Capsule.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Cube.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Geometry.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Line.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Model.cpp" />
+    <ClCompile Include="Src\Object\Common\Geometry\Sphere.cpp" />
+    <ClCompile Include="Src\Scene\PauseScene.cpp" />
+    <ClCompile Include="Src\Manager\Generic\InputManagerS.cpp" />
+    <ClCompile Include="Src\Manager\Resource\FontManager.cpp" />
+    <ClCompile Include="Src\Common\IntVector3.cpp" />
+    <ClCompile Include="Src\FpsControl\FpsControl.cpp" />
+    <ClCompile Include="Src\Object\ObjectBase.cpp" />
+    <ClCompile Include="Src\Application.cpp" />
+    <ClCompile Include="Src\Common\Fader.cpp" />
+    <ClCompile Include="Src\Common\Quaternion.cpp" />
+    <ClCompile Include="Src\Common\Vector2.cpp" />
+    <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\Manager\Generic\Camera.cpp" />
+    <ClCompile Include="Src\Manager\Generic\InputManager.cpp" />
+    <ClCompile Include="Src\Manager\Resource\Resource.cpp" />
+    <ClCompile Include="Src\Manager\Resource\ResourceManager.cpp" />
+    <ClCompile Include="Src\Manager\Generic\SceneManager.cpp" />
+    <ClCompile Include="Src\Object\Common\AnimationController.cpp" />
+    <ClCompile Include="Src\Object\Common\Transform.cpp" />
+    <ClCompile Include="Src\Scene\GameScene.cpp" />
+    <ClCompile Include="Src\Scene\SceneBase.cpp" />
+    <ClCompile Include="Src\Scene\TitleScene.cpp" />
+    <ClCompile Include="Src\Utility\ModelFrameUtility.cpp" />
+    <ClCompile Include="Src\Utility\Utility2D.cpp" />
+    <ClCompile Include="Src\Utility\Utility3D.cpp" />
+    <ClCompile Include="Src\Utility\UtilityCommon.cpp" />
+    <ClCompile Include="Src\Utility\UtilityDraw.cpp" />
+    <ClCompile Include="Src\Object\Stage.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\Weapon.cpp" />
+    <ClCompile Include="Src\Object\Character\Base\UIBase2D.cpp" />
+    <ClCompile Include="Src\Manager\Generic\UIManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Src\Manager\Generic\MenuController.h" />
+    <ClInclude Include="Src\Object\Card\CardPresenter.h" />
+    <ClInclude Include="Src\Manager\Generic\ButtonUIManager.h" />
+    <ClInclude Include="Src\Object\DirectionUI.h" />
+    <ClInclude Include="Src\Object\Character\UIData\CharacterUIData.h" />
+    <ClInclude Include="Src\Object\Character\UI\HpUI.h" />
+    <ClInclude Include="Src\Object\Character\Enemy\EnemyRock.h" />
+    <ClInclude Include="Src\Object\Character\Enemy\EnemyOnHit.h" />
+    <ClInclude Include="Src\Object\Character\Base\CharacterOnHitBase.h" />
+    <ClInclude Include="Src\Object\Common\EffectController.h" />
+    <ClInclude Include="Src\Scene\GameOverScene.h" />
+    <ClInclude Include="Src\Common\Easing.h" />
+    <ClInclude Include="Src\Object\Card\CardUIController.h" />
+    <ClInclude Include="Src\Object\Card\CardUIDraw.h" />
+    <ClInclude Include="Src\Object\Card\EnemyCardUI.h" />
+    <ClInclude Include="Src\Object\Card\CardUIBase.h" />
+    <ClInclude Include="Src\Object\Character\Action\Dodge.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Cylinder.h" />
+    <ClInclude Include="Src\Object\Character\Base\CardActionBase.h" />
+    <ClInclude Include="Src\Object\SkyDome\SkyDome.h" />
+    <ClInclude Include="Src\pch.h" />
+    <ClInclude Include="Src\Object\Character\Action\EnemyCardAction.h" />
+    <ClInclude Include="Src\Manager\Game\CharacterManager.h" />
+    <ClInclude Include="Src\Manager\Resource\SoundManager.h" />
+    <ClInclude Include="Src\Renderer\ModelMaterial.h" />
+    <ClInclude Include="Src\Renderer\ModelRenderer.h" />
+    <ClInclude Include="Src\Renderer\PixelMaterial.h" />
+    <ClInclude Include="Src\Renderer\PixelRenderer.h" />
+    <ClInclude Include="Src\Scene\GameClearScene.h" />
+    <ClInclude Include="Src\Object\Card\PlayerCardUI.h" />
+    <ClInclude Include="Src\Manager\Game\CollisionManager.h" />
+    <ClInclude Include="Src\Object\Character\Action\React.h" />
+    <ClInclude Include="Src\Object\Character\Base\CharacterBase.h" />
+    <ClInclude Include="Src\Object\Character\Action\PlayerCardAction.h" />
+    <ClInclude Include="Src\Object\Character\Action\Idle.h" />
+    <ClInclude Include="Src\Object\Character\Action\Run.h" />
+    <ClInclude Include="Src\Object\Character\Base\ActionBase.h" />
+    <ClInclude Include="Src\Object\Character\Enemy\EnemyLogic.h" />
+    <ClInclude Include="Src\Object\Character\Enemy\Enemy.h" />
+    <ClInclude Include="Src\Object\Character\Base\LogicBase.h" />
+    <ClInclude Include="Src\Object\Card\CardSystem.h" />
+    <ClInclude Include="Src\Object\Card\CardDeck.h" />
+    <ClInclude Include="Src\Object\Card\CardBase.h" />
+    <ClInclude Include="Src\Common\Vector2F.h" />
+    <ClInclude Include="Src\Manager\Generic\DataBank.h" />
+    <ClInclude Include="Src\Object\Character\Player\Player.h" />
+    <ClInclude Include="Src\Object\Character\Player\ActionController.h" />
+    <ClInclude Include="Src\Object\Character\Player\PlayerLogic.h" />
+    <ClInclude Include="Src\Object\Character\Player\PlayerOnHit.h" />
+    <ClInclude Include="Src\Object\Common\Collider.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Capsule.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Cube.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Geometry.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Line.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Model.h" />
+    <ClInclude Include="Src\Object\Common\Geometry\Sphere.h" />
+    <ClInclude Include="Src\Scene\PauseScene.h" />
+    <ClInclude Include="Src\Template\Singleton.h" />
+    <ClInclude Include="Src\Manager\Generic\InputManagerS.h" />
+    <ClInclude Include="Src\Manager\Resource\FontManager.h" />
+    <ClInclude Include="Src\Lib\nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\abi_macros.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\conversions\from_json.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\conversions\to_json.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\exceptions.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\hash.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\input\binary_reader.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\input\input_adapters.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\input\json_sax.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\input\lexer.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\input\parser.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\input\position_t.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\json_custom_base_class.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\json_pointer.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\json_ref.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\macro_scope.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\macro_unscope.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\call_std\begin.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\call_std\end.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\detected.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\identity_tag.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\is_sax.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\std_fs.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\type_traits.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\meta\void_t.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\output\binary_writer.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\output\output_adapters.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\output\serializer.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\string_concat.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\string_escape.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\string_utils.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\json.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\json_fwd.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\ordered_map.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="Src\Lib\nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+    <ClInclude Include="Src\Common\IntVector3.h" />
+    <ClInclude Include="Src\FpsControl\FpsControl.h" />
+    <ClInclude Include="Src\Object\ObjectBase.h" />
+    <ClInclude Include="Src\Application.h" />
+    <ClInclude Include="Src\Common\Fader.h" />
+    <ClInclude Include="Src\Common\Quaternion.h" />
+    <ClInclude Include="Src\Common\Vector2.h" />
+    <ClInclude Include="Src\main.h" />
+    <ClInclude Include="Src\Manager\Generic\Camera.h" />
+    <ClInclude Include="Src\Manager\Generic\InputManager.h" />
+    <ClInclude Include="Src\Manager\Resource\Resource.h" />
+    <ClInclude Include="Src\Manager\Resource\ResourceManager.h" />
+    <ClInclude Include="Src\Manager\Generic\SceneManager.h" />
+    <ClInclude Include="Src\Object\Common\AnimationController.h" />
+    <ClInclude Include="Src\Object\Common\Transform.h" />
+    <ClInclude Include="Src\Scene\GameScene.h" />
+    <ClInclude Include="Src\Scene\SceneBase.h" />
+    <ClInclude Include="Src\Scene\TitleScene.h" />
+    <ClInclude Include="Src\Utility\ModelFrameUtility.h" />
+    <ClInclude Include="Src\Utility\UtilityTemplates.h" />
+    <ClInclude Include="Src\Utility\Utility2D.h" />
+    <ClInclude Include="Src\Utility\Utility3D.h" />
+    <ClInclude Include="Src\Utility\UtilityCommon.h" />
+    <ClInclude Include="Src\Utility\UtilityDraw.h" />
+    <ClInclude Include="Src\Object\Stage.h" />
+    <ClInclude Include="Src\Object\Character\Player\Weapon.h" />
+    <ClInclude Include="Src\Object\Character\Base\UIBase2D.h" />
+    <ClInclude Include="Src\Manager\Generic\UIManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Src\Shader\Common\Pixel\PixelShader2DHeader.hlsli" />
+    <None Include="Src\Shader\Common\Pixel\PixelShader3DHeader.hlsli" />
+    <None Include="Src\Shader\Common\VertexToPixelHeader.hlsli" />
+    <None Include="Src\Shader\Common\Vertex\CommonShader3DHeader.hlsli" />
+    <None Include="Src\Shader\Common\Vertex\VertexInput.hlsli" />
+    <None Include="Src\Shader\Common\Vertex\VertexInputType.hlsli" />
+    <None Include="Src\Shader\Common\Vertex\VertexShader3DHeader.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Src\Shader\Model\CardNormalPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\CardVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\CardReloadPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\IntensivePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\LineHpBarPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\ArcHpBarPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\SelectCardPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\SkyDomePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\StagePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/Data/Shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\StageVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)/Data/Shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{EAE8EE94-FD52-4CCB-AF50-ECC1E6485C92}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>BaseProject</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(DXLIB_DIR);$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXLIB_DIR);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir)Src/Lib/</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>$(ProjectDir)/Data/Shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(DXLIB_DIR);$(ProjectDir)Src/Lib/</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DXLIB_DIR)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalLibraryDirectories>
+    </Link>
+    <FxCompile>
+      <ObjectFileOutput>$(ProjectDir)/Data/Shader/%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

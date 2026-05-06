@@ -1,0 +1,449 @@
+{
+  "ResourceData": [
+    {
+      "type": "model",
+      "name": "PLAYER",
+      "handle": "Ninja.mv1"
+    },
+    {
+      "type": "model",
+      "name": "ENEMY_1",
+      "handle": "Mutant.mv1"
+    },
+    {
+      "type": "model",
+      "name": "SKY_DOME",
+      "handle": "SkyDome/SkyDome.mv1"
+    },
+    {
+      "type": "model",
+      "name": "SPHERE_ROCK",
+      "handle": "Rock.mv1"
+    },
+    {
+      "type": "model",
+      "name": "KEY_BLADE",
+      "handle": "KeyBlade/KeyBlade1.mv1"
+    },
+    {
+      "type": "model",
+      "name": "STAGE",
+      "handle": "SandStage.mv1"
+    },
+    {
+      "type": "model",
+      "name": "STAGE_WALL",
+      "handle": "Wall.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_IDLE",
+      "handle": "Animation/Player/PlayerIdle.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_RUN",
+      "handle": "Animation/Player/PlayerRun.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_ATTACK_1_SHORT",
+      "handle": "Animation/Player/PlayerAttack1.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_ATTACK_1_MIDDLE",
+      "handle": "Animation/Player/PlayerStabAttack.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_ATTACK_2",
+      "handle": "Animation/Player/PlayerAttack2.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_ATTACK_3",
+      "handle": "Animation/Player/PlayerAttackCombo.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_DODGE",
+      "handle": "Animation/Player/PlayerDodge.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_RELOAD",
+      "handle": "Animation/Player/CardReload.mv1"
+    },
+    {
+      "type": "model",
+      "name": "REACT",
+      "handle": "Animation/Player/PlayerReact.mv1"
+    },
+    {
+      "type": "model",
+      "name": "P_DEATH",
+      "handle": "Animation/Player/PlayerDying.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_IDLE",
+      "handle": "Animation/Enemy/Mutant_Idle.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_RUN",
+      "handle": "Animation/Enemy/Mutant_Run.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_STOMP_ATK",
+      "handle": "Animation/Enemy/MutantStomp.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_JUMP_ATK",
+      "handle": "Animation/Enemy/Mutant_JumpAttack.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_KNOCK_DOWN",
+      "handle": "Animation/Enemy/MutantKnockDown.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_ROAR_ATK",
+      "handle": "Animation/Enemy/Mutant_Roar.mv1"
+    },
+    {
+      "type": "model",
+      "name": "E_DEATH",
+      "handle": "Animation/Enemy/Mutant Dying.mv1"
+    },
+    {
+      "type": "image",
+      "name": "TITLE_BACK_IMG",
+      "handle": "TitleBack.png"
+    },
+    {
+      "type": "image",
+      "name": "TITLE_LOGO",
+      "handle": "TitleLogo.png"
+    },
+    {
+      "type": "image",
+      "name": "GAME_CLEAR_IMG",
+      "handle": "GameClear2.png"
+    },
+    {
+      "type": "image",
+      "name": "GAME_OVER_IMG",
+      "handle": "GameOver.png"
+    },
+    {
+      "type": "image",
+      "name": "PLAYER_ATK_CARD_IMG",
+      "handle": "PlayerAttackCard.png"
+    },
+    {
+      "type": "image",
+      "name": "ENEMY_ATK_CARD_IMG",
+      "handle": "EnemyAttackCard.png"
+    },
+    {
+      "type": "image",
+      "name": "RELOAD_CARD_IMG",
+      "handle": "ReloadCard.png"
+    },
+    {
+      "type": "image",
+      "name": "RELOAD_GAGE",
+      "handle": "ReloadGage.png"
+    },
+    {
+      "type": "image",
+      "name": "E_HP_BAR_MASK",
+      "handle": "E_HpBarMask.png"
+    },
+    {
+      "type": "image",
+      "name": "E_HP_BAR_FRAME",
+      "handle": "E_HpBarFrame.png"
+    },
+    {
+      "type": "image",
+      "name": "E_HP_COVER",
+      "handle": "E_GaugeCover.png"
+    },
+    {
+      "type": "image",
+      "name": "P_CARD_NUM_GAUGE_MASK",
+      "handle": "CardNumGaugeMask.png"
+    },
+    {
+      "type": "image",
+      "name": "P_CARD_NUM_GAUGE_FRAME",
+      "handle": "CardNumGaugeFrame.png"
+    },
+    {
+      "type": "image",
+      "name": "P_CARD_NUM_GAUGE_BACK",
+      "handle": "CardNumBack.png"
+    },
+    {
+      "type": "image",
+      "name": "INTENSIVE_LINE_1",
+      "handle": "Intensive_Line_1.png"
+    },
+    {
+      "type": "image",
+      "name": "INTENSIVE_LINE_2",
+      "handle": "Intensive_Line_2.png"
+    },
+    {
+      "type": "image",
+      "name": "SKIP_BUTTOM_MASK",
+      "handle": "SkipButtonMask.png"
+    },
+    {
+      "type": "image",
+      "name": "CARD_REVOLVER_L_ARROW",
+      "handle": "CardDirArrowLeft.png"
+    },
+    {
+      "type": "images",
+      "name": "NUMBERS_IMGS",
+      "handle": "CardNumber.png",
+      "numX": 5,
+      "numY": 2,
+      "sizeX": 180,
+      "sizeY": 222
+    },
+    {
+      "type": "images",
+      "name": "CONTROLLER_UI_IMGS",
+      "handle": "XboxControllerBotton128.png",
+      "numX": 10,
+      "numY": 10,
+      "sizeX": 128,
+      "sizeY": 128
+    },
+    {
+      "type": "effect",
+      "name": "BLAST",
+      "handle": "Blast/Blast.efkefc"
+    },
+    {
+      "type": "effect",
+      "name": "E_JUMP_CHARGE_EFF",
+      "handle": "Blast/EnemyCharge.efkefc"
+    },
+    {
+      "type": "effect",
+      "name": "KEY_BLADE_HIT_EFF",
+      "handle": "ExpandStar/ExpandStar.efkefc"
+    },
+    {
+      "type": "effect",
+      "name": "E_DEATH_EFF",
+      "handle": "DeathEnemy/boss_death.efkproj"
+    },
+    {
+      "type": "effect",
+      "name": "RELOAD_EFF",
+      "handle": "Reload/PowerUp.efkproj"
+    },
+    {
+      "type": "effect",
+      "name": "RELOAD_END_EFF",
+      "handle": "ReloadEnd/MagicHeal1.efkproj"
+    },
+    {
+      "type": "sound",
+      "soundtype": "BGM",
+      "name": "TITLE_BGM",
+      "handle": "GameTitle.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "BGM",
+      "name": "GAME_BGM",
+      "handle": "GameSceneK.mp3",
+      "volume": 0.6
+    },
+    {
+      "type": "sound",
+      "soundtype": "BGM",
+      "name": "GAME_CLEAR_BGM",
+      "handle": "GameClear.mp3",
+      "volume": 0.8
+    },
+    {
+      "type": "sound",
+      "soundtype": "BGM",
+      "name": "GAME_OVER_BGM",
+      "handle": "GameOver.mp3"
+    },
+
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "CARD_PUT_SE",
+      "handle": "PutCard.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "CARD_MOVE_SE",
+      "handle": "CardSelect2.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "CARD_BE_REFLECTED_SE",
+      "handle": "CardReflected.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "CARD_BREAK_SE",
+      "handle": "CardBreak.mp3",
+      "volume": 0.6
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "CARD_RELOAD_SE",
+      "handle": "CardReload1.mp3",
+      "volume": 0.6
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "CARD_RELOAD_FINISH_SE",
+      "handle": "CardReloadFinish.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "PLAYER_FOOT_SE",
+      "handle": "PlayerFoot.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "PLAYER_ATTACK_SE",
+      "handle": "Blade_Atk.mp3",
+      "pitch": -1000.0
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "PLAYER_HIT_SE",
+      "handle": "KeyBladeHit.mp3",
+      "pitch": -1000.0
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "ENEMY_FOOT_SE",
+      "handle": "EnemyFoot.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "ENEMY_STOMP_SE",
+      "handle": "EnemyStomp.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "ENEMY_CHARGE_SE",
+      "handle": "EnemyCharge.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "ENEMY_JUMP_LAND_SE",
+      "handle": "Enemy_Bomb2.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "ENEMY_HIT_SE",
+      "handle": "PlayerDamage.mp3",
+      "volume": 0.8
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "MOVE_BTN_SE",
+      "handle": "CursolButtonSE.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "DESIDE_BTN_SE",
+      "handle": "DesideButton3.mp3"
+    },
+    {
+      "type": "sound",
+      "soundtype": "SE",
+      "name": "GAME_START_SE",
+      "handle": "DesideButton.mp3"
+    },
+    {
+      "type": "json",
+      "name": "CHARA_DATA",
+      "handle": "CharaData.json"
+    },
+    {
+      "type": "pixelShader",
+      "name": "STAGE_PS",
+      "handle": "StagePS.cso",
+      "constBufNum": 0
+    },
+    {
+      "type": "pixelShader",
+      "name": "SKYDOME_PS",
+      "handle": "SkyDomePS.cso",
+      "constBufNum": 1
+    },
+    {
+      "type": "pixelShader",
+      "name": "HPBAR_PS",
+      "handle": "LineHpBarPS.cso",
+      "constBufNum": 3
+    },
+    {
+      "type": "pixelShader",
+      "name": "ARCBAR_PS",
+      "handle": "ArcHpBarPS.cso",
+      "constBufNum": 2
+    },
+    {
+      "type": "pixelShader",
+      "name": "CARD_NORMAL_PS",
+      "handle": "CardNormalPS.cso",
+      "constBufNum": 2
+    },
+    {
+      "type": "pixelShader",
+      "name": "CARD_RELOAD_PS",
+      "handle": "CardReloadPS.cso",
+      "constBufNum": 2
+    },
+    {
+      "type": "pixelShader",
+      "name": "CARD_SELECT_PS",
+      "handle": "SelectCardPS.cso",
+      "constBufNum": 1
+    },
+    {
+      "type": "vertexShader",
+      "name": "STAGE_VS",
+      "handle": "StageVS.cso",
+      "constBufNum": 1
+    }
+  ]
+}
