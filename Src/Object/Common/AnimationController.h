@@ -144,6 +144,9 @@ private :
 	//アニメーションのタイプ
 	Animation playAnim_;
 
+	//一つ前のアニメーション
+	Animation preAnim_;
+
 	// アニメーションをループするかしないか
 	bool isLoop_;
 

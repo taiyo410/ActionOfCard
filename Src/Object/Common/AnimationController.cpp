@@ -72,7 +72,6 @@ void AnimationController::Play(int type, bool isLoop,
 		{
 			// モデルからアニメーションを外す
 			playAnim_.attachNo = MV1DetachAnim(modelId_, playAnim_.attachNo);
-			//MV1ResetFrameUserLocalWorldMatrix(modelId_, HIP_FRAME_NO);
 		}
 
 		// アニメーション種別を変更
@@ -119,8 +118,6 @@ void AnimationController::Play(int type, bool isLoop,
 
 void AnimationController::Update(const float _spdScl)
 {
-
-
 	if (!isStop_)
 	{
 
