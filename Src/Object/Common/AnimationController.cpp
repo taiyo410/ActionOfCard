@@ -116,10 +116,40 @@ void AnimationController::Play(int type, bool isLoop,
 
 }
 
+void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, float startStep, float endStep, bool isStop, bool isForce)
+{
+	if (playType_ == type)return;
+
+	//次アニメーション設定
+	nextAnim_ = animations_[type];
+
+	// モデルにアニメーションを付ける
+	int animIdx = 0;
+	if (MV1GetAnimNum(playAnim_.model) > 1)
+	{
+		// アニメーションが複数保存されていたら、番号1を指定
+		animIdx = 1;
+	}
+
+	nextAnim_.attachNo= MV1AttachAnim(modelId_, animIdx, nextAnim_.model);
+
+	//初期カウントで初期化
+	nextAnim_.step = startStep;
+
+	nextAnim_.totalTime= MV1GetAttachAnimTotalTime(modelId_, nextAnim_.attachNo);
+
+	blendTime_ = 0.0f;
+	blendTime_ = blendTime;
+	isBlend_ = true;
+
+	playType_ = type;
+}
+
 void AnimationController::Update(const float _spdScl)
 {
 	if (!isStop_)
 	{
+		//if(isBlend_)
 
 		// 経過時間の取得
 		float deltaTime = SceneManager::GetInstance().GetDeltaTime();
@@ -351,4 +381,9 @@ void AnimationController::GetFrameAnimAttachLocalMatrix(int modelId, int attachN
 
 	// 移動成分
 	pos = MGetTranslateElem(mat);
+}
+
+void AnimationController::BlendAnimation(void)
+{
+
 }

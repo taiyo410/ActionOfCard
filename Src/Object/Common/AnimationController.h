@@ -50,6 +50,16 @@ public :
 	void Play(int type, bool isLoop = true, 
 		float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
 
+	/// @brief ブレンドアニメーション用再生
+	/// @param type アニメーションタイプ
+	/// @param isLoop ループするかしないか
+	/// @param startStep アニメーションスタート位置
+	/// @param endStep アニメーション終了位置
+	/// @param isStop 
+	/// @param isForce 
+	void PlayBlend(int type, float blendTime, bool isLoop = true, 
+		float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
+
 	/// @brief アニメーション更新 
 	/// @param _spdScl 
 	void Update(const float _spdScl=1.0f);
@@ -145,7 +155,19 @@ private :
 	Animation playAnim_;
 
 	//一つ前のアニメーション
-	Animation preAnim_;
+	Animation nextAnim_;
+
+	//現在再生中のアニメーション保存用
+	Animation currentAnim_;
+
+	//ブレンドしているか
+	bool isBlend_;
+
+	//ブレンドカウント
+	float blendCnt_;
+
+	//ブレンド時間
+	float blendTime_;
 
 	// アニメーションをループするかしないか
 	bool isLoop_;
@@ -169,5 +191,8 @@ private :
 
 	//モデルのヒップ番号
 	int hipNum_;
+
+	//アニメーションブレンド
+	void BlendAnimation(void);
 };
 
