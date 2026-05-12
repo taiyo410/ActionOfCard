@@ -192,6 +192,8 @@ private :
 	//ブレンド率
 	float blendPer_;
 
+	int debugAttachCount_ = 0;
+
 	// アニメーションをループするかしないか
 	bool isLoop_;
 

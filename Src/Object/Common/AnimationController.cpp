@@ -143,9 +143,10 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 		animIdx = 1;
 	}
 
+
 	if (isBlend_)
 	{
-		currentAnim_.attachNo=MV1DetachAnim(
+		MV1DetachAnim(
 			modelId_,
 			currentAnim_.attachNo);
 
@@ -154,13 +155,9 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 		MV1SetAttachAnimBlendRate(
 			modelId_,
 			currentAnim_.attachNo,
-			blendCnt_);
+			UtilityCommon::RATIO_MAX);
 
 		isBlend_ = false;
-	}
-	else
-	{
-		blendCnt_ = 0.0f;
 	}
 
 	nextAnim_.attachNo= MV1AttachAnim(modelId_, animIdx, nextAnim_.model);
@@ -441,8 +438,17 @@ void AnimationController::UpdateNormal(const float _spdScl)
 
 void AnimationController::UpdateBlend(void)
 {
+	printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
+		currentAnim_.attachNo, nextAnim_.attachNo);
+	printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
+		currentAnim_.step, nextAnim_.step);
+	printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
+		blendPer_, blendCnt_, blendTime_);
+
+
 	//次のアニメーションブレンド率
-	blendPer_>=UtilityCommon::RATIO_MAX? blendPer_= UtilityCommon::RATIO_MAX : blendPer_=blendCnt_ / blendTime_;
+		// ブレンド率計算
+	blendPer_ = (blendCnt_ >= blendTime_)? UtilityCommon::RATIO_MAX: blendCnt_ / blendTime_;
 
 	//現在アニメーションのブレンド率
 	float currentAnimBlendRate = UtilityCommon::RATIO_MAX - blendPer_;
@@ -466,8 +472,6 @@ void AnimationController::UpdateBlend(void)
 	//アニメーション進行前のルートのローカル座標
 	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
 
-	// アニメーション設定（進行）
-	MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
 
 	//アニメーション進行後のルートのローカル座標
 	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
@@ -491,12 +495,17 @@ void AnimationController::UpdateBlend(void)
 		blendTime_ = 0.0f;
 
 		//現在アニメーションをデタッチ
-		currentAnim_.attachNo = MV1DetachAnim(modelId_, currentAnim_.attachNo);
+		MV1DetachAnim(modelId_, currentAnim_.attachNo);
 
 		//次アニメーションをアタッチ
 		//MV1AttachAnim(modelId_, nextAnim_.attachNo);
 
 		currentAnim_ = nextAnim_;
+		// ブレンド率を1.0に確定
+		MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, 1.0f);
+
+		blendCnt_ = 0.0f;
+		blendTime_ = 0.0f;
 		isBlend_ = false;
 
 		ChangeState(STATE::NORMAL);
