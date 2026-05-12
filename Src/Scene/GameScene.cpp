@@ -88,7 +88,8 @@ void GameScene::Init(void)
 	updatePhase_ = UPDATE_PHASE::NONE;
 
 	//演出へ
-	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
+	//ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
+	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
 
 	CharacterManager::GetInstance().Init();
 	UIManager::GetInstance().Init();
@@ -204,6 +205,7 @@ void GameScene::NormalDraw(void)
 
 	//キャラクター
 	CharacterManager::GetInstance().Draw();
+	CharacterManager::GetInstance().Draw2D();
 	
 	//UI
 	UIManager::GetInstance().Draw();
@@ -262,6 +264,9 @@ void GameScene::ChangeDirection(void)
 	//キャラクターの演出更新
 	CharacterManager::GetInstance().ChangeCharacterDirectionUpdate();
 
+	//カメラモード変更
+	SceneManager::GetInstance().GetCamera().lock()->ChangeMode(Camera::MODE::START_DIRECTION);
+
 	updateFunc_ = [this]() {DirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };
 }
@@ -299,6 +304,9 @@ void GameScene::ChangeNormal(void)
 	CharacterManager::GetInstance().ChangeCharacterNormalUpdate();
 
 	//カメラのリセット
+	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::FOLLOW);
+
+
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
 
 	updateFunc_ = [this]() {NormalUpdate(); };
@@ -374,7 +382,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//演出状態へ移行
-	ChangeDirection();
+	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
 }
 void GameScene::Skip(void)
 {

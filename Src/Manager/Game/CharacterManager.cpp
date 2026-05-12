@@ -22,7 +22,6 @@ void CharacterManager::Init(void)
 	//プレイヤーのローカル中心座標をカプセルの中央に合わせ、カメラを演出状態に変更
 	const float playerCenterLocalPosY = (Player::CAP_LOCAL_TOP.y - Player::CAP_LOCAL_DOWN.y) * 0.5f;
 	SceneManager::GetInstance().GetCamera().lock()->SetFollow(&characters_[PLAYER_NO]->GetTransform(), {0.0f,playerCenterLocalPosY ,0.0f});
-	SceneManager::GetInstance().GetCamera().lock()->ChangeMode(Camera::MODE::START_DIRECTION);
 
 	//プレイヤーと敵のターゲットをお互いに設定
 	characters_[PLAYER_NO]->SetLogicTargetCharacter(characters_[ENEMY_NO]);

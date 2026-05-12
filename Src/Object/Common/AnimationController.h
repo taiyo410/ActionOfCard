@@ -25,6 +25,13 @@ public :
 		VECTOR movePow = {};
 	};
 
+	enum class STATE
+	{
+		NONE,
+		BLEND,
+		NORMAL
+	};
+
 	/// @brief コンストラクタ
 	/// @param _modelId モデルID
 	/// @param _hipNum 尻のボーン番号
@@ -134,10 +141,26 @@ public :
 	/// @param pos 座標
 	void GetFrameAnimAttachLocalMatrix(int modelId, int attachNo, int frameIdx, VECTOR& scl, MATRIX& matRot, VECTOR& pos);
 
+	const float GetBlendPer(void)const { return blendPer_; }
+
 private :
 
 	//ヒップフレームの番号
 	static constexpr int HIP_FRAME_NO = 0;
+
+	//シーンマネージャ
+	SceneManager& scnMng_;
+
+	//状態遷移
+	std::unordered_map<STATE, std::function<void(const float _spdScl)>>changeState_;
+
+	//状態更新
+	std::function<void(const float _spdScl)>stateUpdate_;
+
+	//更新配列
+	std::vector<std::function<void(const float _spdScl)>>stateUpdates_;
+
+	STATE state_;
 
 	//イージング
 	std::unique_ptr<Easing>easing_;
@@ -152,13 +175,10 @@ private :
 	int playType_;
 
 	//アニメーションのタイプ
-	Animation playAnim_;
+	Animation currentAnim_;
 
 	//一つ前のアニメーション
 	Animation nextAnim_;
-
-	//現在再生中のアニメーション保存用
-	Animation currentAnim_;
 
 	//ブレンドしているか
 	bool isBlend_;
@@ -168,6 +188,9 @@ private :
 
 	//ブレンド時間
 	float blendTime_;
+
+	//ブレンド率
+	float blendPer_;
 
 	// アニメーションをループするかしないか
 	bool isLoop_;
@@ -192,7 +215,12 @@ private :
 	//モデルのヒップ番号
 	int hipNum_;
 
-	//アニメーションブレンド
-	void BlendAnimation(void);
+	//状態遷移
+	void ChangeState(const STATE _state,const float _spdScl = 1.0f);
+
+	//状態別更新
+	void UpdateNone(void);		//アニメーションブレンド
+	void UpdateBlend(void);		//アニメーションブレンド
+	void UpdateNormal(const float _spdScl = 1.0f);	//通常
 };
 

@@ -1,9 +1,11 @@
 #include <DxLib.h>
+#include "../Utility/UtilityCommon.h"
 #include "../../Manager/Generic/SceneManager.h"
 #include "../Common/Easing.h"
 #include "AnimationController.h"
 
 AnimationController::AnimationController(const int _modelId, const int _hipNum) :
+	scnMng_(SceneManager::GetInstance()),
 	hipNum_(_hipNum),
 	modelId_(_modelId),
 	playType_(-1),
@@ -14,9 +16,21 @@ AnimationController::AnimationController(const int _modelId, const int _hipNum) 
 	stepEndLoopStart_(0.0f),
 	stepEndLoopEnd_(0.0f),
 	isMidLoop_(false),
-	isEase_(false)
+	isEase_(false),
+	state_(STATE::NONE),
+	blendCnt_(0.0f),
+	blendPer_(0.0f),
+	isBlend_(false)
 {
 	easing_ = std::make_unique<Easing>();
+
+	changeState_ = {
+		{STATE::NONE,[this](const float _sclSpd) {UpdateNone(); }},
+		{STATE::BLEND,[this](const float _sclSpd) {UpdateBlend(); }},
+		{STATE::NORMAL,[this](const float _sclSpd) {UpdateNormal(_sclSpd); }}
+	};
+
+	ChangeState(STATE::NORMAL);
 }
 
 AnimationController::~AnimationController(void)
@@ -65,39 +79,38 @@ void AnimationController::Add(int type, const float speed, int modelId)
 void AnimationController::Play(int type, bool isLoop, 
 	float startStep, float endStep, bool isStop, bool isForce)
 {
-
 	if (playType_ != type || isForce) {
 
 		if (playType_ != -1)
 		{
 			// モデルからアニメーションを外す
-			playAnim_.attachNo = MV1DetachAnim(modelId_, playAnim_.attachNo);
+			currentAnim_.attachNo = MV1DetachAnim(modelId_, currentAnim_.attachNo);
 		}
 
 		// アニメーション種別を変更
 		playType_ = type;
-		playAnim_ = animations_[type];
+		currentAnim_ = animations_[type];
 
 		// 初期化
-		playAnim_.step = startStep;
+		currentAnim_.step = startStep;
 
 		// モデルにアニメーションを付ける
 		int animIdx = 0;
-		if (MV1GetAnimNum(playAnim_.model) > 1)
+		if (MV1GetAnimNum(currentAnim_.model) > 1)
 		{
 			// アニメーションが複数保存されていたら、番号1を指定
 			animIdx = 1;
 		}
-		playAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, playAnim_.model);
+		currentAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, currentAnim_.model);
 
 		// アニメーション総時間の取得
 		if (endStep > 0.0f)
 		{
-			playAnim_.totalTime = endStep;
+			currentAnim_.totalTime = endStep;
 		}
 		else
 		{
-			playAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, playAnim_.attachNo);
+			currentAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, currentAnim_.attachNo);
 		}
 
 		// アニメーションループ
@@ -113,7 +126,6 @@ void AnimationController::Play(int type, bool isLoop,
 		stepEndLoopEnd_ = -1.0f;
 		switchLoopReverse_ = 1.0f;
 	}
-
 }
 
 void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, float startStep, float endStep, bool isStop, bool isForce)
@@ -125,10 +137,30 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 
 	// モデルにアニメーションを付ける
 	int animIdx = 0;
-	if (MV1GetAnimNum(playAnim_.model) > 1)
+	if (MV1GetAnimNum(currentAnim_.model) > 1)
 	{
 		// アニメーションが複数保存されていたら、番号1を指定
 		animIdx = 1;
+	}
+
+	if (isBlend_)
+	{
+		currentAnim_.attachNo=MV1DetachAnim(
+			modelId_,
+			currentAnim_.attachNo);
+
+		currentAnim_ = nextAnim_;
+
+		MV1SetAttachAnimBlendRate(
+			modelId_,
+			currentAnim_.attachNo,
+			blendCnt_);
+
+		isBlend_ = false;
+	}
+	else
+	{
+		blendCnt_ = 0.0f;
 	}
 
 	nextAnim_.attachNo= MV1AttachAnim(modelId_, animIdx, nextAnim_.model);
@@ -138,102 +170,23 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 
 	nextAnim_.totalTime= MV1GetAttachAnimTotalTime(modelId_, nextAnim_.attachNo);
 
-	blendTime_ = 0.0f;
+	blendCnt_ = 0.0f;
 	blendTime_ = blendTime;
 	isBlend_ = true;
 
 	playType_ = type;
+
+	blendPer_=0.0f;
+
+	//状態遷移
+	ChangeState(STATE::BLEND);
 }
 
 void AnimationController::Update(const float _spdScl)
 {
-	if (!isStop_)
-	{
-		//if(isBlend_)
-
-		// 経過時間の取得
-		float deltaTime = SceneManager::GetInstance().GetDeltaTime();
-
-		// 再生
-		playAnim_.step += (deltaTime * playAnim_.speed * switchLoopReverse_) * _spdScl;
-
-		// アニメーション終了判定
-		bool isEnd = false;
-		if (switchLoopReverse_ > 0.0f)
-		{
-			// 通常再生の場合
-			if (playAnim_.step > playAnim_.totalTime)
-			{
-				isEnd = true;
-			}
-		}
-		else
-		{
-			// 逆再生の場合
-			if (playAnim_.step < playAnim_.totalTime&&!isMidLoop_)
-			{
-				isEnd = true;
-			}
-		}
-
-		if (isEnd)
-		{
-			// アニメーションが終了したら
-			if (isLoop_)
-			{
-				// ループ再生
-				if (stepEndLoopStart_ > 0.0f)
-				{
-					// アニメーション終了後の指定フレーム再生
-					switchLoopReverse_ *= -1.0f;
-					if (switchLoopReverse_ > 0.0f)
-					{
-						playAnim_.step = stepEndLoopStart_;
-						playAnim_.totalTime = stepEndLoopEnd_;
-					}
-					else
-					{
-						playAnim_.step = stepEndLoopEnd_;
-						playAnim_.totalTime = stepEndLoopStart_;
-					}
-					playAnim_.speed = endLoopSpeed_;
-					
-				}
-				else
-				{
-					// 通常のループ再生
-					playAnim_.step = 0.0f;
-				}
-			}
-			else
-			{
-				// ループしない
-				playAnim_.step = playAnim_.totalTime;
-			}
-
-		}
-
-	}
-	//アニメーション進行前のルートのローカル座標
-	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, playAnim_.attachNo, hipNum_);
-
-	// アニメーション設定（進行）
-	MV1SetAttachAnimTime(modelId_, playAnim_.attachNo, playAnim_.step);
-
-	//アニメーション進行後のルートのローカル座標
-	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, playAnim_.attachNo, hipNum_);
-
-	//アニメーション移動量を取得
-	playAnim_.movePow = VSub(post, pre);
-
-	// 腰の位置がずれるので補正
-	playAnim_.firstPos.y = post.y;
-	//playAnim_.firstPos = post;
-
-	// 移動量を打ち消す
-	//SetFrameLocalMatrixPos(modelId_, hipNum_, playAnim_.firstPos);
-	SetFrameAnimAttachLocalMatrixPos(modelId_, playAnim_.attachNo, hipNum_, playAnim_.firstPos);
-
+	//状態別更新
+	stateUpdate_(_spdScl);
+	//stateUpdates_.front()(_spdScl);
 }
 
 void AnimationController::SetEndLoop(float startStep, float endStep, float speed)
@@ -246,14 +199,14 @@ void AnimationController::SetEndLoop(float startStep, float endStep, float speed
 void AnimationController::SetMidLoop(const float startStep, const float endStep, float _spd)
 {
 	isMidLoop_ = true;
-	if (playAnim_.step >= endStep)
+	if (currentAnim_.step >= endStep)
 	{
-		playAnim_.speed = _spd;
+		currentAnim_.speed = _spd;
 		switchLoopReverse_ = -1.0f;
 	}
-	else if (switchLoopReverse_ == -1.0f && playAnim_.step < startStep)
+	else if (switchLoopReverse_ == -1.0f && currentAnim_.step < startStep)
 	{
-		playAnim_.speed = _spd;
+		currentAnim_.speed = _spd;
 		switchLoopReverse_ = 1.0f;
 	}
 }
@@ -262,7 +215,7 @@ void AnimationController::SetEndMidLoop(const float _spd)
 {
 	isMidLoop_ = false;
 	switchLoopReverse_ = 1.0f;
-	playAnim_.speed = _spd;
+	currentAnim_.speed = _spd;
 }
 
 int AnimationController::GetPlayType(void) const
@@ -272,19 +225,19 @@ int AnimationController::GetPlayType(void) const
 
 const float AnimationController::GetAnimStep(void) const
 {
-	return playAnim_.step;
+	return currentAnim_.step;
 }
 
 void AnimationController::SetAnimSpeed(const float _spd, const bool _isEase, const float _startSpd, const float _t, Easing::EASING_TYPE _easeType)
 {
 	if (_isEase)
 	{
-		playAnim_.speed = easing_->EaseFunc(_startSpd, _spd, _t, _easeType);
+		currentAnim_.speed = easing_->EaseFunc(_startSpd, _spd, _t, _easeType);
 		return;
 	}
 
 	//イージングを使用しないならば、そのままスピードを代入
-	playAnim_.speed = _spd;
+	currentAnim_.speed = _spd;
 }
 
 bool AnimationController::IsEnd(void) const
@@ -299,7 +252,7 @@ bool AnimationController::IsEnd(void) const
 		return ret;
 	}
 
-	if (playAnim_.step >= playAnim_.totalTime)
+	if (currentAnim_.step >= currentAnim_.totalTime)
 	{
 		// 再生時間を過ぎたらtrue
 		return true;
@@ -357,6 +310,7 @@ void AnimationController::GetFrameLocalMatrix(const int _modelId, int _frameIdx,
 
 	// 回転成分＋拡大縮小成分
 	_matRot = MGetRotElem(mat);
+
 	// 回転成分のみにする
 	auto revScl = VGet(1.0f / _scl.x, 1.0f / _scl.y, 1.0f / _scl.z);
 	_matRot = MMult(_matRot, MGetScale(revScl));
@@ -383,7 +337,173 @@ void AnimationController::GetFrameAnimAttachLocalMatrix(int modelId, int attachN
 	pos = MGetTranslateElem(mat);
 }
 
-void AnimationController::BlendAnimation(void)
+void AnimationController::ChangeState(const STATE _state, const float _spdScl)
 {
+	if (state_ == _state)return;
+	state_ = _state;
+	stateUpdate_= changeState_[state_];
+	//stateUpdates_.push_back(changeState_[state_]);
+}
 
+void AnimationController::UpdateNone(void)
+{
+	//何もしない
+}
+
+void AnimationController::UpdateNormal(const float _spdScl)
+{
+	if (!isStop_)
+	{
+		// 経過時間の取得
+		float deltaTime = scnMng_.GetDeltaTime();
+
+		// 再生
+		currentAnim_.step += (deltaTime * currentAnim_.speed * switchLoopReverse_) * _spdScl;
+
+		// アニメーション終了判定
+		bool isEnd = false;
+		if (switchLoopReverse_ > 0.0f)
+		{
+			// 通常再生の場合
+			if (currentAnim_.step > currentAnim_.totalTime)
+			{
+				isEnd = true;
+			}
+		}
+		else
+		{
+			// 逆再生の場合
+			if (currentAnim_.step < currentAnim_.totalTime && !isMidLoop_)
+			{
+				isEnd = true;
+			}
+		}
+
+		if (isEnd)
+		{
+			// アニメーションが終了したら
+			if (isLoop_)
+			{
+				// ループ再生
+				if (stepEndLoopStart_ > 0.0f)
+				{
+					// アニメーション終了後の指定フレーム再生
+					switchLoopReverse_ *= -1.0f;
+					if (switchLoopReverse_ > 0.0f)
+					{
+						currentAnim_.step = stepEndLoopStart_;
+						currentAnim_.totalTime = stepEndLoopEnd_;
+					}
+					else
+					{
+						currentAnim_.step = stepEndLoopEnd_;
+						currentAnim_.totalTime = stepEndLoopStart_;
+					}
+					currentAnim_.speed = endLoopSpeed_;
+
+				}
+				else
+				{
+					// 通常のループ再生
+					currentAnim_.step = 0.0f;
+				}
+			}
+			else
+			{
+				// ループしない
+				currentAnim_.step = currentAnim_.totalTime;
+			}
+
+		}
+
+	}
+
+	//アニメーション進行前のルートのローカル座標
+	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
+
+	// アニメーション設定（進行）
+	MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
+
+	//アニメーション進行後のルートのローカル座標
+	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
+
+	//アニメーション移動量を取得
+	currentAnim_.movePow = VSub(post, pre);
+
+	// 腰の位置がずれるので補正
+	currentAnim_.firstPos.y = post.y;
+	//currentAnim_.firstPos = post;
+
+	// 移動量を打ち消す
+	//SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
+	SetFrameAnimAttachLocalMatrixPos(modelId_, currentAnim_.attachNo, hipNum_, currentAnim_.firstPos);
+}
+
+void AnimationController::UpdateBlend(void)
+{
+	//次のアニメーションブレンド率
+	blendPer_>=UtilityCommon::RATIO_MAX? blendPer_= UtilityCommon::RATIO_MAX : blendPer_=blendCnt_ / blendTime_;
+
+	//現在アニメーションのブレンド率
+	float currentAnimBlendRate = UtilityCommon::RATIO_MAX - blendPer_;
+
+	//現在アニメーションを更新
+	MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
+
+	//次アニメーションを更新
+	MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
+
+	nextAnim_.step += scnMng_.GetDeltaTime();
+
+	//現在アニメーションのブレンド
+	MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, currentAnimBlendRate);
+
+	//次アニメーションのブレンド
+	MV1SetAttachAnimBlendRate(modelId_, nextAnim_.attachNo, blendPer_);
+
+
+
+	//アニメーション進行前のルートのローカル座標
+	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
+
+	// アニメーション設定（進行）
+	MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
+
+	//アニメーション進行後のルートのローカル座標
+	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
+
+	//アニメーション移動量を取得
+	nextAnim_.movePow = VSub(post, pre);
+
+	// 腰の位置がずれるので補正
+	nextAnim_.firstPos.y = post.y;
+	//currentAnim_.firstPos = post;
+
+	// 移動量を打ち消す
+	//SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
+	SetFrameAnimAttachLocalMatrixPos(modelId_, nextAnim_.attachNo, hipNum_, nextAnim_.firstPos);
+
+
+	//ブレンドを終えたら
+	if (blendCnt_ >= blendTime_)
+	{
+		blendCnt_ = 0.0f;
+		blendTime_ = 0.0f;
+
+		//現在アニメーションをデタッチ
+		currentAnim_.attachNo = MV1DetachAnim(modelId_, currentAnim_.attachNo);
+
+		//次アニメーションをアタッチ
+		//MV1AttachAnim(modelId_, nextAnim_.attachNo);
+
+		currentAnim_ = nextAnim_;
+		isBlend_ = false;
+
+		ChangeState(STATE::NORMAL);
+		return;
+
+	}
+
+	//カウント更新
+	blendCnt_ > blendTime_ ? blendCnt_ = blendTime_ : blendCnt_ += scnMng_.GetDeltaTime();
 }

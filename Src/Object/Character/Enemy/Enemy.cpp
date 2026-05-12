@@ -81,11 +81,8 @@ void Enemy::Load(void)
 void Enemy::Init(void)
 {
 	deck_->Init();
-
 	action_->Init();
-
 	logic_->Init();
-
 	tag_ = Collider::TAG::ENEMY1;
 	capRadius_ = CAP_RADIUS;
 
@@ -249,9 +246,7 @@ void Enemy::MakeColliderGeometry(void)
 void Enemy::UpdateNormal(void)
 {
 	animationController_->Update();
-
-	logic_->Update();
-
+	//logic_->Update();
 	action_->Update();
 
 	//‰ñ“]‚Ì“¯Šú
