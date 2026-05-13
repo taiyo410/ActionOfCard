@@ -154,22 +154,22 @@ private:
 	static constexpr float BTN_STR_OFFSET_X = 16.0f;
 
 	//イージング
-	std::unique_ptr<Easing>easing_;
+	std::unique_ptr<Easing> easing_;
 
 	//各選択肢の更新
-	std::function<void(void)>updateTitle_;
+	std::function<void(void)> updateTitle_;
 
 	//タイトルのセレクト処理テーブル
 	std::unordered_map<TITLE_STATE, std::function<void(void)>> titleSelectFuncTable_;
 
 	//文字列格納
-	std::unordered_map<TITLE_BTN, std::wstring>buttonStrTable_;
+	std::unordered_map<TITLE_BTN, std::wstring> buttonStrTable_;
 
 	//YES,NOの文字列
-	std::unordered_map<YES_NO, std::wstring>yesNoStrTable_;
+	std::unordered_map<YES_NO, std::wstring> yesNoStrTable_;
 
 	//メニューコントローラー
-	std::unique_ptr<MenuController>menuController_;
+	std::unique_ptr<MenuController> menuController_;
 
 	//サウンド
 	SoundManager& soundMng_;

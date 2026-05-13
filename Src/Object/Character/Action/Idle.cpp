@@ -20,6 +20,7 @@ void Idle::Load(void)
 
 void Idle::Init(void)
 {
+	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE));
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE), BLEND_TIME);
 }
 

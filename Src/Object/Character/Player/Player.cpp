@@ -235,7 +235,7 @@ void Player::AddAnimation(void)
 {
 	animationController_ = std::make_unique<AnimationController>(trans_.modelId, SPINE_FRAME_NO);
 	animationController_->Add(static_cast<int>(ANIM_TYPE::IDLE), DEFAULT_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::P_IDLE));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::RUN), 10.0f , resMng_.LoadModelDuplicate(ResourceManager::SRC::P_RUN));
+	animationController_->Add(static_cast<int>(ANIM_TYPE::RUN), DEFAULT_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::P_RUN));
 	animationController_->Add(static_cast<int>(ANIM_TYPE::REACT), DEFAULT_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::REACT));
 	animationController_->Add(static_cast<int>(ANIM_TYPE::DODGE), DODGE_ANIM_SPD, resMng_.LoadModelDuplicate(ResourceManager::SRC::P_DODGE));
 	animationController_->Add(static_cast<int>(ANIM_TYPE::DEATH), DEFAULT_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::P_DEATH));

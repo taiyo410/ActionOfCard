@@ -18,10 +18,10 @@ TitleScene::TitleScene(void):
 	soundMng_(SoundManager::GetInstance())
 {
 	//更新関数のセット
-	updateFunc_ = [this]() {LoadingUpdate(); };
+	updateFunc_ = [this](){ LoadingUpdate(); };
 
 	//描画関数のセット
-	drawFunc_ = [this]() {LoadingDraw(); };
+	drawFunc_ = [this](){ LoadingDraw(); };
 
 	menuController_ = std::make_unique<MenuController>();
 }
@@ -59,7 +59,7 @@ void TitleScene::Load(void)
 
 void TitleScene::Init(void)
 {
-	//更新関連の格納
+	//更新用関数
 	titleSelectFuncTable_ = {
 		{TITLE_STATE::EASE_MENU,[this]() {UpdateEase();}},
 		{TITLE_STATE::MENU,[this]() {UpdateMenu();}},

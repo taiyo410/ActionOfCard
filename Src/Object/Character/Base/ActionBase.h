@@ -131,6 +131,9 @@ protected:
 	//移動スピード
 	static constexpr float MOVE_SPEED = 6.0f;
 
+	//ブレンド時間
+	static constexpr float BLEND_TIME = 0.1f;
+
 	//速度
 	float speed_;			
 

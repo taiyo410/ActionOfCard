@@ -245,7 +245,7 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	animationController_->Update();
+	//animationController_->Update();
 	//logic_->Update();
 	action_->Update();
 

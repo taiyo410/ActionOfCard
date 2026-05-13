@@ -26,8 +26,5 @@ public:
     /// @brief XV
 	/// @param
     void Update(void) override;
-
-private:
-    static constexpr float BLEND_TIME = 1.0f;
 };
 

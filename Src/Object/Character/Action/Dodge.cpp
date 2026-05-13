@@ -25,7 +25,7 @@ void Dodge::Load(void)
 
 void Dodge::Init(void)
 {
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE),false);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE),BLEND_TIME,false);
 
 	//方向入力されている場合は入力方向、
 	//そうでない場合はプレイヤーの前方向に回避

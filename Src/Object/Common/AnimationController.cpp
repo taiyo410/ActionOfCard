@@ -79,6 +79,14 @@ void AnimationController::Add(int type, const float speed, int modelId)
 void AnimationController::Play(int type, bool isLoop, 
 	float startStep, float endStep, bool isStop, bool isForce)
 {
+	if (isBlend_)
+	{
+		int i = 0;
+		MV1DetachAnim(
+			modelId_,
+			currentAnim_.attachNo);
+	}
+
 	if (playType_ != type || isForce) {
 
 		if (playType_ != -1)
@@ -132,9 +140,6 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 {
 	if (playType_ == type)return;
 
-	//次アニメーション設定
-	nextAnim_ = animations_[type];
-
 	// モデルにアニメーションを付ける
 	int animIdx = 0;
 	if (MV1GetAnimNum(currentAnim_.model) > 1)
@@ -143,37 +148,70 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 		animIdx = 1;
 	}
 
-
 	if (isBlend_)
 	{
-		MV1DetachAnim(
+		//
+		Animation& oldNext = nextAnim_;
+
+		currentAnim_.attachNo = MV1DetachAnim(
 			modelId_,
 			currentAnim_.attachNo);
 
-		currentAnim_ = nextAnim_;
+
+
+		currentAnim_ = oldNext;
+
+		currentAnim_.step = 0.0f;
+
+		//blendPer_ = 1.0f - blendPer_;
 
 		MV1SetAttachAnimBlendRate(
 			modelId_,
 			currentAnim_.attachNo,
-			UtilityCommon::RATIO_MAX);
+			blendPer_);
 
 		isBlend_ = false;
 	}
 
-	nextAnim_.attachNo= MV1AttachAnim(modelId_, animIdx, nextAnim_.model);
+	Animation cur = currentAnim_;
+
+	//次アニメーション設定
+	nextAnim_ = animations_[type];
+
+	nextAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, nextAnim_.model);
 
 	//初期カウントで初期化
 	nextAnim_.step = startStep;
 
-	nextAnim_.totalTime= MV1GetAttachAnimTotalTime(modelId_, nextAnim_.attachNo);
+	nextAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, nextAnim_.attachNo);
 
-	blendCnt_ = 0.0f;
+	//currentAnim_.step = 0.0f;
+
+
 	blendTime_ = blendTime;
 	isBlend_ = true;
 
 	playType_ = type;
 
-	blendPer_=0.0f;
+	// アニメーションループ
+	isLoop_ = isLoop;
+
+	//途中ループ
+	isMidLoop_ = false;
+
+	// アニメーションしない
+	isStop_ = isStop;
+
+	stepEndLoopStart_ = -1.0f;
+	stepEndLoopEnd_ = -1.0f;
+	switchLoopReverse_ = 1.0f;
+
+	printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
+		currentAnim_.attachNo, nextAnim_.attachNo);
+	printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
+		currentAnim_.step, nextAnim_.step);
+	printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
+		blendPer_, blendCnt_, blendTime_);
 
 	//状態遷移
 	ChangeState(STATE::BLEND);
@@ -349,7 +387,14 @@ void AnimationController::UpdateNone(void)
 
 void AnimationController::UpdateNormal(const float _spdScl)
 {
-	if (!isStop_)
+
+	//printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
+	//	currentAnim_.attachNo, nextAnim_.attachNo);
+	//printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
+	//	currentAnim_.step, nextAnim_.step);
+	//printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
+	//	blendPer_, blendCnt_, blendTime_);
+	if (!isStop_&&!isBlend_)
 	{
 		// 経過時間の取得
 		float deltaTime = scnMng_.GetDeltaTime();
@@ -438,12 +483,12 @@ void AnimationController::UpdateNormal(const float _spdScl)
 
 void AnimationController::UpdateBlend(void)
 {
-	printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
-		currentAnim_.attachNo, nextAnim_.attachNo);
-	printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
-		currentAnim_.step, nextAnim_.step);
-	printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-		blendPer_, blendCnt_, blendTime_);
+	//printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
+	//	currentAnim_.attachNo, nextAnim_.attachNo);
+	//printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
+	//	currentAnim_.step, nextAnim_.step);
+	//printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
+	//	blendPer_, blendCnt_, blendTime_);
 
 
 	//次のアニメーションブレンド率
@@ -459,7 +504,8 @@ void AnimationController::UpdateBlend(void)
 	//次アニメーションを更新
 	MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
 
-	nextAnim_.step += scnMng_.GetDeltaTime();
+	//currentAnim_.step += scnMng_.GetDeltaTime();
+	//nextAnim_.step += scnMng_.GetDeltaTime();
 
 	//現在アニメーションのブレンド
 	MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, currentAnimBlendRate);
@@ -498,11 +544,9 @@ void AnimationController::UpdateBlend(void)
 		MV1DetachAnim(modelId_, currentAnim_.attachNo);
 
 		//次アニメーションをアタッチ
-		//MV1AttachAnim(modelId_, nextAnim_.attachNo);
+		MV1AttachAnim(modelId_, nextAnim_.attachNo);
 
 		currentAnim_ = nextAnim_;
-		// ブレンド率を1.0に確定
-		MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, 1.0f);
 
 		blendCnt_ = 0.0f;
 		blendTime_ = 0.0f;
