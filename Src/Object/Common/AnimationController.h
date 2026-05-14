@@ -23,6 +23,9 @@ public :
 		float step = 0.0f;
 		VECTOR firstPos = {};
 		VECTOR movePow = {};
+
+		float blendRate_ = 0.0f;
+		bool isActive = false;
 	};
 
 	enum class STATE
@@ -184,7 +187,7 @@ private :
 	bool isBlend_;
 
 	//ブレンドカウント
-	float blendCnt_;
+	float blendStep_;
 
 	//ブレンド時間
 	float blendTime_;

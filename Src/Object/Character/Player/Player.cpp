@@ -107,15 +107,17 @@ void Player::Init(void)
 
 void Player::UpdateDirection(void)
 {
+	//Transformの更新
+	trans_.quaRot = charaRot_.playerRotY_;
+	trans_.Update();
+
 	//アニメーションの更新
 	animationController_->Update();
 
 	//武器の更新
 	weapon_->Update();
 
-	//Transformの更新
-	trans_.quaRot = charaRot_.playerRotY_;
-	trans_.Update();
+
 }
 
 void Player::UpdateNormal(void)

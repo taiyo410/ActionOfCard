@@ -18,7 +18,7 @@ AnimationController::AnimationController(const int _modelId, const int _hipNum) 
 	isMidLoop_(false),
 	isEase_(false),
 	state_(STATE::NONE),
-	blendCnt_(0.0f),
+	blendStep_(0.0f),
 	blendPer_(0.0f),
 	isBlend_(false)
 {
@@ -79,61 +79,62 @@ void AnimationController::Add(int type, const float speed, int modelId)
 void AnimationController::Play(int type, bool isLoop, 
 	float startStep, float endStep, bool isStop, bool isForce)
 {
-	if (isBlend_)
-	{
-		int i = 0;
-		MV1DetachAnim(
-			modelId_,
-			currentAnim_.attachNo);
-	}
+	PlayBlend(type, 0.5f, isLoop, startStep, endStep, isStop, isForce);
+	//if (isBlend_)
+	//{
+	//	int i = 0;
+	//	MV1DetachAnim(
+	//		modelId_,
+	//		currentAnim_.attachNo);
+	//}
 
-	if (playType_ != type || isForce) {
+	//if (playType_ != type || isForce) {
 
-		if (playType_ != -1)
-		{
-			// モデルからアニメーションを外す
-			currentAnim_.attachNo = MV1DetachAnim(modelId_, currentAnim_.attachNo);
-		}
+	//	if (playType_ != -1)
+	//	{
+	//		// モデルからアニメーションを外す
+	//		currentAnim_.attachNo = MV1DetachAnim(modelId_, currentAnim_.attachNo);
+	//	}
 
-		// アニメーション種別を変更
-		playType_ = type;
-		currentAnim_ = animations_[type];
+	//	// アニメーション種別を変更
+	//	playType_ = type;
+	//	currentAnim_ = animations_[type];
 
-		// 初期化
-		currentAnim_.step = startStep;
+	//	// 初期化
+	//	currentAnim_.step = startStep;
 
-		// モデルにアニメーションを付ける
-		int animIdx = 0;
-		if (MV1GetAnimNum(currentAnim_.model) > 1)
-		{
-			// アニメーションが複数保存されていたら、番号1を指定
-			animIdx = 1;
-		}
-		currentAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, currentAnim_.model);
+	//	// モデルにアニメーションを付ける
+	//	int animIdx = 0;
+	//	if (MV1GetAnimNum(currentAnim_.model) > 1)
+	//	{
+	//		// アニメーションが複数保存されていたら、番号1を指定
+	//		animIdx = 1;
+	//	}
+	//	currentAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, currentAnim_.model);
 
-		// アニメーション総時間の取得
-		if (endStep > 0.0f)
-		{
-			currentAnim_.totalTime = endStep;
-		}
-		else
-		{
-			currentAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, currentAnim_.attachNo);
-		}
+	//	// アニメーション総時間の取得
+	//	if (endStep > 0.0f)
+	//	{
+	//		currentAnim_.totalTime = endStep;
+	//	}
+	//	else
+	//	{
+	//		currentAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, currentAnim_.attachNo);
+	//	}
 
-		// アニメーションループ
-		isLoop_ = isLoop;
+	//	// アニメーションループ
+	//	isLoop_ = isLoop;
 
-		//途中ループ
-		isMidLoop_ = false;
+	//	//途中ループ
+	//	isMidLoop_ = false;
 
-		// アニメーションしない
-		isStop_ = isStop;
+	//	// アニメーションしない
+	//	isStop_ = isStop;
 
-		stepEndLoopStart_ = -1.0f;
-		stepEndLoopEnd_ = -1.0f;
-		switchLoopReverse_ = 1.0f;
-	}
+	//	stepEndLoopStart_ = -1.0f;
+	//	stepEndLoopEnd_ = -1.0f;
+	//	switchLoopReverse_ = 1.0f;
+	//}
 }
 
 void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, float startStep, float endStep, bool isStop, bool isForce)
@@ -148,6 +149,9 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 		animIdx = 1;
 	}
 
+	blendPer_ = 0.0f;
+
+	//ブレンド中にアニメーション遷移されたら
 	if (isBlend_)
 	{
 		//
@@ -161,7 +165,7 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 
 		currentAnim_ = oldNext;
 
-		currentAnim_.step = 0.0f;
+		//currentAnim_.step = 0.0f;
 
 		//blendPer_ = 1.0f - blendPer_;
 
@@ -211,7 +215,7 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 	printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
 		currentAnim_.step, nextAnim_.step);
 	printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-		blendPer_, blendCnt_, blendTime_);
+		blendPer_, blendStep_, blendTime_);
 
 	//状態遷移
 	ChangeState(STATE::BLEND);
@@ -393,7 +397,7 @@ void AnimationController::UpdateNormal(const float _spdScl)
 	//printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
 	//	currentAnim_.step, nextAnim_.step);
 	//printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-	//	blendPer_, blendCnt_, blendTime_);
+	//	blendPer_, blendStep_, blendTime_);
 	if (!isStop_&&!isBlend_)
 	{
 		// 経過時間の取得
@@ -461,24 +465,24 @@ void AnimationController::UpdateNormal(const float _spdScl)
 	}
 
 	//アニメーション進行前のルートのローカル座標
-	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
+	//VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
 
 	// アニメーション設定（進行）
 	MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
 
-	//アニメーション進行後のルートのローカル座標
-	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
+	////アニメーション進行後のルートのローカル座標
+	//VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
 
-	//アニメーション移動量を取得
-	currentAnim_.movePow = VSub(post, pre);
+	////アニメーション移動量を取得
+	//currentAnim_.movePow = VSub(post, pre);
 
-	// 腰の位置がずれるので補正
-	currentAnim_.firstPos.y = post.y;
-	//currentAnim_.firstPos = post;
+	//// 腰の位置がずれるので補正
+	//currentAnim_.firstPos.y = post.y;
+	////currentAnim_.firstPos = post;
 
-	// 移動量を打ち消す
-	//SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
-	SetFrameAnimAttachLocalMatrixPos(modelId_, currentAnim_.attachNo, hipNum_, currentAnim_.firstPos);
+	//// 移動量を打ち消す
+	////SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
+	//SetFrameAnimAttachLocalMatrixPos(modelId_, currentAnim_.attachNo, hipNum_, currentAnim_.firstPos);
 }
 
 void AnimationController::UpdateBlend(void)
@@ -488,12 +492,12 @@ void AnimationController::UpdateBlend(void)
 	//printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
 	//	currentAnim_.step, nextAnim_.step);
 	//printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-	//	blendPer_, blendCnt_, blendTime_);
+	//	blendPer_, blendStep_, blendTime_);
 
 
 	//次のアニメーションブレンド率
 		// ブレンド率計算
-	blendPer_ = (blendCnt_ >= blendTime_)? UtilityCommon::RATIO_MAX: blendCnt_ / blendTime_;
+	blendPer_ = (blendStep_ >= blendTime_)? UtilityCommon::RATIO_MAX: blendStep_ / blendTime_;
 
 	//現在アニメーションのブレンド率
 	float currentAnimBlendRate = UtilityCommon::RATIO_MAX - blendPer_;
@@ -504,8 +508,8 @@ void AnimationController::UpdateBlend(void)
 	//次アニメーションを更新
 	MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
 
-	//currentAnim_.step += scnMng_.GetDeltaTime();
-	//nextAnim_.step += scnMng_.GetDeltaTime();
+	currentAnim_.step += scnMng_.GetDeltaTime() * currentAnim_.speed;
+	nextAnim_.step += scnMng_.GetDeltaTime() * nextAnim_.speed;
 
 	//現在アニメーションのブレンド
 	MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, currentAnimBlendRate);
@@ -515,29 +519,28 @@ void AnimationController::UpdateBlend(void)
 
 
 
-	//アニメーション進行前のルートのローカル座標
-	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
+	////アニメーション進行前のルートのローカル座標
+	//VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
 
+	////アニメーション進行後のルートのローカル座標
+	//VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
 
-	//アニメーション進行後のルートのローカル座標
-	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
+	////アニメーション移動量を取得
+	//nextAnim_.movePow = VSub(post, pre);
 
-	//アニメーション移動量を取得
-	nextAnim_.movePow = VSub(post, pre);
+	//// 腰の位置がずれるので補正
+	//nextAnim_.firstPos.y = post.y;
+	////currentAnim_.firstPos = post;
 
-	// 腰の位置がずれるので補正
-	nextAnim_.firstPos.y = post.y;
-	//currentAnim_.firstPos = post;
-
-	// 移動量を打ち消す
-	//SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
-	SetFrameAnimAttachLocalMatrixPos(modelId_, nextAnim_.attachNo, hipNum_, nextAnim_.firstPos);
+	//// 移動量を打ち消す
+	////SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
+	//SetFrameAnimAttachLocalMatrixPos(modelId_, nextAnim_.attachNo, hipNum_, nextAnim_.firstPos);
 
 
 	//ブレンドを終えたら
-	if (blendCnt_ >= blendTime_)
+	if (blendStep_ >= blendTime_)
 	{
-		blendCnt_ = 0.0f;
+		blendStep_ = 0.0f;
 		blendTime_ = 0.0f;
 
 		//現在アニメーションをデタッチ
@@ -548,7 +551,7 @@ void AnimationController::UpdateBlend(void)
 
 		currentAnim_ = nextAnim_;
 
-		blendCnt_ = 0.0f;
+		blendStep_ = 0.0f;
 		blendTime_ = 0.0f;
 		isBlend_ = false;
 
@@ -558,5 +561,5 @@ void AnimationController::UpdateBlend(void)
 	}
 
 	//カウント更新
-	blendCnt_ > blendTime_ ? blendCnt_ = blendTime_ : blendCnt_ += scnMng_.GetDeltaTime();
+	blendStep_ > blendTime_ ? blendStep_ = blendTime_ : blendStep_ += scnMng_.GetDeltaTime();
 }

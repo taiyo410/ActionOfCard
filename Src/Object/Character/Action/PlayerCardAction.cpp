@@ -26,16 +26,13 @@ PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _c
 		{ CARD_ACT_TYPE::ATTACK_THREE, [this]() {ChangeAttackThree(); }},
 		{ CARD_ACT_TYPE::RELOAD, [this]() {ChangeReload(); }},
 	};
-
 	atkStatusStrTable_ = {
 		{CARD_ACT_TYPE::ATTACK_ONE_SHORT,"AttackOneShort"},
 		{CARD_ACT_TYPE::ATTACK_ONE_MIDDLE,"AttackOneMiddle"},
 		{CARD_ACT_TYPE::ATTACK_TWO,"AttackTwo"},
 		{CARD_ACT_TYPE::ATTACK_THREE,"AttackThree"}
 	};
-
 	atk_ = {};
-
 	easing_ = std::make_unique<Easing>();
 }
 
@@ -306,7 +303,6 @@ void PlayerCardAction::UpdateAttackThree(void)
 		//カメラシェイク
 		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / ATK_END_CNT, 50.0f, Easing::EASING_TYPE::ELASTIC_BACK);
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::ONE_SHAKE);
-
 	}
 	else if (animStep > atkEndStep)	//攻撃終了後
 	{

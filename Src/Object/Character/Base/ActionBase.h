@@ -132,7 +132,7 @@ protected:
 	static constexpr float MOVE_SPEED = 6.0f;
 
 	//ƒuƒŒƒ“ƒhŽžŠÔ
-	static constexpr float BLEND_TIME = 0.1f;
+	static constexpr float BLEND_TIME = 0.5f;
 
 	//‘¬“x
 	float speed_;			
