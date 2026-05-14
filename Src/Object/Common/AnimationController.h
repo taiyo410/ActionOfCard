@@ -144,6 +144,11 @@ public :
 	/// @param pos 座標
 	void GetFrameAnimAttachLocalMatrix(int modelId, int attachNo, int frameIdx, VECTOR& scl, MATRIX& matRot, VECTOR& pos);
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name=""></param>
+	/// <returns></returns>
 	const float GetBlendPer(void)const { return blendPer_; }
 
 private :
@@ -227,5 +232,9 @@ private :
 	void UpdateNone(void);		//アニメーションブレンド
 	void UpdateBlend(void);		//アニメーションブレンド
 	void UpdateNormal(const float _spdScl = 1.0f);	//通常
+
+	//移動量打ち消し
+	void FreezeMovementForAnimation(Animation& _anim);
+
 };
 

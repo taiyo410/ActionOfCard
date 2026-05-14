@@ -464,25 +464,33 @@ void AnimationController::UpdateNormal(const float _spdScl)
 
 	}
 
-	//アニメーション進行前のルートのローカル座標
-	//VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
+	
+	// アニメーション設定（進行）
+	FreezeMovementForAnimation(currentAnim_);
 
 	// アニメーション設定（進行）
 	MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
 
-	////アニメーション進行後のルートのローカル座標
-	//VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, currentAnim_.attachNo, hipNum_);
+	
+}
 
-	////アニメーション移動量を取得
-	//currentAnim_.movePow = VSub(post, pre);
+void AnimationController::FreezeMovementForAnimation(Animation& _anim)
+{
+	//アニメーション進行前のルートのローカル座標
+	VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, _anim.attachNo, hipNum_);
 
-	//// 腰の位置がずれるので補正
-	//currentAnim_.firstPos.y = post.y;
-	////currentAnim_.firstPos = post;
+	//アニメーション進行後のルートのローカル座標
+	VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, _anim.attachNo, hipNum_);
 
-	//// 移動量を打ち消す
-	////SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
-	//SetFrameAnimAttachLocalMatrixPos(modelId_, currentAnim_.attachNo, hipNum_, currentAnim_.firstPos);
+	//アニメーション移動量を取得
+	_anim.movePow = VSub(post, pre);
+
+	// 腰の位置がずれるので補正
+	_anim.firstPos.y = post.y;
+
+	// 移動量を打ち消す
+	//SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
+	SetFrameAnimAttachLocalMatrixPos(modelId_, nextAnim_.attachNo, hipNum_, nextAnim_.firstPos);
 }
 
 void AnimationController::UpdateBlend(void)
@@ -518,23 +526,8 @@ void AnimationController::UpdateBlend(void)
 	MV1SetAttachAnimBlendRate(modelId_, nextAnim_.attachNo, blendPer_);
 
 
-
-	////アニメーション進行前のルートのローカル座標
-	//VECTOR pre = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
-
-	////アニメーション進行後のルートのローカル座標
-	//VECTOR post = MV1GetAttachAnimFrameLocalPosition(modelId_, nextAnim_.attachNo, hipNum_);
-
-	////アニメーション移動量を取得
-	//nextAnim_.movePow = VSub(post, pre);
-
-	//// 腰の位置がずれるので補正
-	//nextAnim_.firstPos.y = post.y;
-	////currentAnim_.firstPos = post;
-
-	//// 移動量を打ち消す
-	////SetFrameLocalMatrixPos(modelId_, hipNum_, currentAnim_.firstPos);
-	//SetFrameAnimAttachLocalMatrixPos(modelId_, nextAnim_.attachNo, hipNum_, nextAnim_.firstPos);
+	//座標固定
+	FreezeMovementForAnimation(nextAnim_);
 
 
 	//ブレンドを終えたら
