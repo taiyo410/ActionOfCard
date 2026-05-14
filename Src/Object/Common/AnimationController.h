@@ -15,24 +15,18 @@ public :
 	// アニメーションデータ
 	struct Animation
 	{
-		int model = -1;
-		int attachNo = -1;
-		int animIndex = 0;
-		float speed = 0.0f;
-		float totalTime = 0.0f;
-		float step = 0.0f;
-		VECTOR firstPos = {};
-		VECTOR movePow = {};
+		int model = -1;				//モデルID
+		int attachNo = -1;			//アタッチ番号
+		int animIndex = 0;			//アニメーション番号
+		float speed = 0.0f;			//アニメーション速度
+		float totalTime = 0.0f;		//トータル時間
+		float step = 0.0f;			//ステップ
+		VECTOR firstPos = {};		//移動量格納
+		VECTOR movePow = {};		//座標移動無効化用
 
-		float blendRate_ = 0.0f;
-		bool isActive = false;
-	};
-
-	enum class STATE
-	{
-		NONE,
-		BLEND,
-		NORMAL
+		float blendRate = 0.0f;	//ブレンド率
+		bool isActive = false;		//アニメーションの生存状態
+		int isPriority = false;		//優先されているか
 	};
 
 	/// @brief コンストラクタ
@@ -159,16 +153,11 @@ private :
 	//シーンマネージャ
 	SceneManager& scnMng_;
 
-	//状態遷移
-	std::unordered_map<STATE, std::function<void(const float _spdScl)>>changeState_;
-
 	//状態更新
 	std::function<void(const float _spdScl)>stateUpdate_;
 
 	//更新配列
 	std::vector<std::function<void(const float _spdScl)>>stateUpdates_;
-
-	STATE state_;
 
 	//イージング
 	std::unique_ptr<Easing>easing_;
@@ -225,9 +214,6 @@ private :
 	//モデルのヒップ番号
 	int hipNum_;
 
-	//状態遷移
-	void ChangeState(const STATE _state,const float _spdScl = 1.0f);
-
 	//状態別更新
 	void UpdateNone(void);		//アニメーションブレンド
 	void UpdateBlend(void);		//アニメーションブレンド
@@ -235,6 +221,9 @@ private :
 
 	//移動量打ち消し
 	void FreezeMovementForAnimation(Animation& _anim);
+
+	//アニメーションデタッチ
+	void AnimationDettach(const int _type);
 
 };
 

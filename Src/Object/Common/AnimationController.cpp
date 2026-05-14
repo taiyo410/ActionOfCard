@@ -17,20 +17,11 @@ AnimationController::AnimationController(const int _modelId, const int _hipNum) 
 	stepEndLoopEnd_(0.0f),
 	isMidLoop_(false),
 	isEase_(false),
-	state_(STATE::NONE),
 	blendStep_(0.0f),
 	blendPer_(0.0f),
 	isBlend_(false)
 {
 	easing_ = std::make_unique<Easing>();
-
-	changeState_ = {
-		{STATE::NONE,[this](const float _sclSpd) {UpdateNone(); }},
-		{STATE::BLEND,[this](const float _sclSpd) {UpdateBlend(); }},
-		{STATE::NORMAL,[this](const float _sclSpd) {UpdateNormal(_sclSpd); }}
-	};
-
-	ChangeState(STATE::NORMAL);
 }
 
 AnimationController::~AnimationController(void)
@@ -139,93 +130,78 @@ void AnimationController::Play(int type, bool isLoop,
 
 void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, float startStep, float endStep, bool isStop, bool isForce)
 {
-	if (playType_ == type)return;
-
-	// モデルにアニメーションを付ける
-	int animIdx = 0;
-	if (MV1GetAnimNum(currentAnim_.model) > 1)
+	//優先アニメーションを探索
+	int priNo = -1;
+	for (const auto& data : animations_)
 	{
-		// アニメーションが複数保存されていたら、番号1を指定
-		animIdx = 1;
+		if (!data.second.isPriority)continue;
+
+		//優先されているアニメーションID
+		priNo = data.first;
 	}
 
-	blendPer_ = 0.0f;
+	//すでに最優先であれば処理しない
+	if (priNo == type)return;
 
-	//ブレンド中にアニメーション遷移されたら
-	if (isBlend_)
+	// 最優先アニメーションに設定するブレンド率
+	float animRate = 1.0f;
+
+	//何も優先するアニメーションがない場合、アニメーション通常再生
+	if (priNo == -1)
 	{
-		//
-		Animation& oldNext = nextAnim_;
-
-		currentAnim_.attachNo = MV1DetachAnim(
-			modelId_,
-			currentAnim_.attachNo);
-
-
-
-		currentAnim_ = oldNext;
-
-		//currentAnim_.step = 0.0f;
-
-		//blendPer_ = 1.0f - blendPer_;
-
-		MV1SetAttachAnimBlendRate(
-			modelId_,
-			currentAnim_.attachNo,
-			blendPer_);
-
-		isBlend_ = false;
+		auto& pri = animations_.at(type);
+		pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
+		pri.blendRate = animRate;
+		pri.isPriority = true;
 	}
+	else
+	{
+		//次に再生するアニメーションが決まっている
+		//かつ、まだ再生中の場合は処理を飛ばす
+		if (/*animations_.at(priNo).nextAnimNo_ != -1 &&*/
+			animations_.at(priNo).step < animations_.at(priNo).totalTime) return;
 
-	Animation cur = currentAnim_;
+		//遷移フラグ
+		isBlend_ = true;
 
-	//次アニメーション設定
-	nextAnim_ = animations_[type];
+		//すでに優先されているものがあれば、優先を切り替える
+		auto& oldPri = animations_.at(priNo);
+		oldPri.isPriority = false;
 
-	nextAnim_.attachNo = MV1AttachAnim(modelId_, animIdx, nextAnim_.model);
+		//アニメーションブレンド率計算
+		for (const auto& data : animations_)
+		{
+			//アタッチされていなければ処理を飛ばす
+			if (data.second.attachNo == -1)continue;
 
-	//初期カウントで初期化
-	nextAnim_.step = startStep;
+			animRate -= data.second.blendRate;
 
-	nextAnim_.totalTime = MV1GetAttachAnimTotalTime(modelId_, nextAnim_.attachNo);
+			//0より小さくなることはないが、念のため
+			if (animRate < 0.0f)animRate = 0.0f;
+		}
 
-	//currentAnim_.step = 0.0f;
+		//最優先アニメーション設定
 
+		//最優先ではないが、すでにアタッチされている場合
+		auto& pri = animations_.at(type);
+		if (pri.attachNo == -1)
+		{
+			//最優先アニメーションをアタッチ
+			pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
+			pri.blendRate = animRate;
+		}
+		pri.isPriority = true;
 
-	blendTime_ = blendTime;
-	isBlend_ = true;
-
-	playType_ = type;
-
-	// アニメーションループ
-	isLoop_ = isLoop;
-
-	//途中ループ
-	isMidLoop_ = false;
-
-	// アニメーションしない
-	isStop_ = isStop;
-
-	stepEndLoopStart_ = -1.0f;
-	stepEndLoopEnd_ = -1.0f;
-	switchLoopReverse_ = 1.0f;
-
-	printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
-		currentAnim_.attachNo, nextAnim_.attachNo);
-	printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
-		currentAnim_.step, nextAnim_.step);
-	printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-		blendPer_, blendStep_, blendTime_);
-
-	//状態遷移
-	ChangeState(STATE::BLEND);
+	}
 }
 
 void AnimationController::Update(const float _spdScl)
 {
 	//状態別更新
-	stateUpdate_(_spdScl);
-	//stateUpdates_.front()(_spdScl);
+	UpdateNormal();
+
+	//ブレンドアニメーション
+	UpdateBlend();
 }
 
 void AnimationController::SetEndLoop(float startStep, float endStep, float speed)
@@ -376,14 +352,6 @@ void AnimationController::GetFrameAnimAttachLocalMatrix(int modelId, int attachN
 	pos = MGetTranslateElem(mat);
 }
 
-void AnimationController::ChangeState(const STATE _state, const float _spdScl)
-{
-	if (state_ == _state)return;
-	state_ = _state;
-	stateUpdate_= changeState_[state_];
-	//stateUpdates_.push_back(changeState_[state_]);
-}
-
 void AnimationController::UpdateNone(void)
 {
 	//何もしない
@@ -391,85 +359,100 @@ void AnimationController::UpdateNone(void)
 
 void AnimationController::UpdateNormal(const float _spdScl)
 {
-
-	//printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
-	//	currentAnim_.attachNo, nextAnim_.attachNo);
-	//printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
-	//	currentAnim_.step, nextAnim_.step);
-	//printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-	//	blendPer_, blendStep_, blendTime_);
-	if (!isStop_&&!isBlend_)
+	//アタッチされていなければ再生しない
+	for (auto& anim : animations_)
 	{
-		// 経過時間の取得
-		float deltaTime = scnMng_.GetDeltaTime();
+		//アタッチされていなければ再生しない
+		if (anim.second.attachNo == -1)continue;
 
-		// 再生
-		currentAnim_.step += (deltaTime * currentAnim_.speed * switchLoopReverse_) * _spdScl;
+		//アニメーション時間の進行
+		anim.second.step += anim.second.speed * scnMng_.GetDeltaTime();
 
-		// アニメーション終了判定
-		bool isEnd = false;
-		if (switchLoopReverse_ > 0.0f)
+		if (anim.second.step > anim.second.totalTime)
 		{
-			// 通常再生の場合
-			if (currentAnim_.step > currentAnim_.totalTime)
-			{
-				isEnd = true;
-			}
-		}
-		else
-		{
-			// 逆再生の場合
-			if (currentAnim_.step < currentAnim_.totalTime && !isMidLoop_)
-			{
-				isEnd = true;
-			}
+			//とりあえずループ再生
+			anim.second.step = 0.0f;
 		}
 
-		if (isEnd)
-		{
-			// アニメーションが終了したら
-			if (isLoop_)
-			{
-				// ループ再生
-				if (stepEndLoopStart_ > 0.0f)
-				{
-					// アニメーション終了後の指定フレーム再生
-					switchLoopReverse_ *= -1.0f;
-					if (switchLoopReverse_ > 0.0f)
-					{
-						currentAnim_.step = stepEndLoopStart_;
-						currentAnim_.totalTime = stepEndLoopEnd_;
-					}
-					else
-					{
-						currentAnim_.step = stepEndLoopEnd_;
-						currentAnim_.totalTime = stepEndLoopStart_;
-					}
-					currentAnim_.speed = endLoopSpeed_;
+		//
+		//if (anim.second.attachNo == -1) continue;
 
-				}
-				else
-				{
-					// 通常のループ再生
-					currentAnim_.step = 0.0f;
-				}
-			}
-			else
-			{
-				// ループしない
-				currentAnim_.step = currentAnim_.totalTime;
-			}
-
-		}
-
+		MV1SetAttachAnimTime(modelId_, anim.second.attachNo, anim.second.step);
 	}
 
-	
-	// アニメーション設定（進行）
-	FreezeMovementForAnimation(currentAnim_);
 
-	// アニメーション設定（進行）
-	MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
+	//if (!isStop_)
+	//{
+	//	// 経過時間の取得
+	//	float deltaTime = scnMng_.GetDeltaTime();
+
+	//	// 再生
+	//	currentAnim_.step += (deltaTime * currentAnim_.speed * switchLoopReverse_) * _spdScl;
+
+	//	// アニメーション終了判定
+	//	bool isEnd = false;
+	//	if (switchLoopReverse_ > 0.0f)
+	//	{
+	//		// 通常再生の場合
+	//		if (currentAnim_.step > currentAnim_.totalTime)
+	//		{
+	//			isEnd = true;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		// 逆再生の場合
+	//		if (currentAnim_.step < currentAnim_.totalTime && !isMidLoop_)
+	//		{
+	//			isEnd = true;
+	//		}
+	//	}
+
+	//	if (isEnd)
+	//	{
+	//		// アニメーションが終了したら
+	//		if (isLoop_)
+	//		{
+	//			// ループ再生
+	//			if (stepEndLoopStart_ > 0.0f)
+	//			{
+	//				// アニメーション終了後の指定フレーム再生
+	//				switchLoopReverse_ *= -1.0f;
+	//				if (switchLoopReverse_ > 0.0f)
+	//				{
+	//					currentAnim_.step = stepEndLoopStart_;
+	//					currentAnim_.totalTime = stepEndLoopEnd_;
+	//				}
+	//				else
+	//				{
+	//					currentAnim_.step = stepEndLoopEnd_;
+	//					currentAnim_.totalTime = stepEndLoopStart_;
+	//				}
+	//				currentAnim_.speed = endLoopSpeed_;
+
+	//			}
+	//			else
+	//			{
+	//				// 通常のループ再生
+	//				currentAnim_.step = 0.0f;
+	//			}
+	//		}
+	//		else
+	//		{
+	//			// ループしない
+	//			currentAnim_.step = currentAnim_.totalTime;
+	//		}
+
+	//	}
+
+	//}
+
+	//
+	//// アニメーション設定（進行）
+	//FreezeMovementForAnimation(currentAnim_);
+
+	//// アニメーション設定（進行）
+	//MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
 
 	
 }
@@ -493,66 +476,136 @@ void AnimationController::FreezeMovementForAnimation(Animation& _anim)
 	SetFrameAnimAttachLocalMatrixPos(modelId_, nextAnim_.attachNo, hipNum_, nextAnim_.firstPos);
 }
 
+void AnimationController::AnimationDettach(const int _type)
+{
+	auto& data = animations_.at(_type);
+
+	MV1DetachAnim(modelId_, data.attachNo);
+
+	// 値をリセット
+
+	// アニメーション現在時間
+	data.step = 0.0f;
+
+	// アニメーションアタッチNo(モデルとアニメーションの管理番号)
+	data.attachNo = -1;
+
+	// ブレンド用
+	data.blendRate = 0.0f;
+
+	// 再生優先させるか
+	data.isPriority = false;
+}
+
 void AnimationController::UpdateBlend(void)
 {
-	//printfDx(L"currentAttachNo: %d  nextAttachNo: %d\n",
-	//	currentAnim_.attachNo, nextAnim_.attachNo);
-	//printfDx(L"currentStep: %.2f  nextStep: %.2f\n",
-	//	currentAnim_.step, nextAnim_.step);
-	//printfDx(L"blendPer: %.2f  blendCnt: %.2f / %.2f\n",
-	//	blendPer_, blendStep_, blendTime_);
+	if (!isBlend_)return;
 
 
 	//次のアニメーションブレンド率
 		// ブレンド率計算
 	blendPer_ = (blendStep_ >= blendTime_)? UtilityCommon::RATIO_MAX: blendStep_ / blendTime_;
 
-	//現在アニメーションのブレンド率
-	float currentAnimBlendRate = UtilityCommon::RATIO_MAX - blendPer_;
+	float blendRate = 1.0f;
+	VECTOR blendPos = {};
 
-	//現在アニメーションを更新
-	MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
+	// 最優先アニメーションNo
+	int priNo = -1;
 
-	//次アニメーションを更新
-	MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
-
-	currentAnim_.step += scnMng_.GetDeltaTime() * currentAnim_.speed;
-	nextAnim_.step += scnMng_.GetDeltaTime() * nextAnim_.speed;
-
-	//現在アニメーションのブレンド
-	MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, currentAnimBlendRate);
-
-	//次アニメーションのブレンド
-	MV1SetAttachAnimBlendRate(modelId_, nextAnim_.attachNo, blendPer_);
-
-
-	//座標固定
-	FreezeMovementForAnimation(nextAnim_);
-
-
-	//ブレンドを終えたら
-	if (blendStep_ >= blendTime_)
+	for (auto& anim : animations_)
 	{
-		blendStep_ = 0.0f;
-		blendTime_ = 0.0f;
+		//最優先アニメーションの探索
+		if (anim.second.isPriority)
+		{
+			priNo = anim.first;
+		}
 
-		//現在アニメーションをデタッチ
-		MV1DetachAnim(modelId_, currentAnim_.attachNo);
+		//アタッチされていないなら処理しない
+		if (anim.second.attachNo == -1/*||anim.second.isPriority*/)continue;
 
-		//次アニメーションをアタッチ
-		MV1AttachAnim(modelId_, nextAnim_.attachNo);
+		//とりあえず時間で引く
+		anim.second.blendRate -= scnMng_.GetDeltaTime();
+		if (anim.second.blendRate < 0.0f)
+		{
+			//ブレンド率初期化
+			anim.second.blendRate = 0.0f;
 
-		currentAnim_ = nextAnim_;
+			//アニメーションデタッチ
+			AnimationDettach(anim.first);
+		}
+		else
+		{
+			// 遷移前アニメーションのブレンド率をセット
+			MV1SetAttachAnimBlendRate(modelId_,
+				anim.second.attachNo, anim.second.blendRate);
 
-		blendStep_ = 0.0f;
-		blendTime_ = 0.0f;
-		isBlend_ = false;
-
-		ChangeState(STATE::NORMAL);
-		return;
-
+			//ブレンド率を引く
+			blendRate -= anim.second.blendRate;
+		}
 	}
 
-	//カウント更新
-	blendStep_ > blendTime_ ? blendStep_ = blendTime_ : blendStep_ += scnMng_.GetDeltaTime();
+	//念のため
+	if (priNo == -1)return;
+
+	//最優先アニメーション設定
+	auto& pri = animations_.at(priNo);
+
+	//遷移後アニメーションのブレンド率セット
+	pri.blendRate = blendRate;
+	MV1SetAttachAnimBlendRate(modelId_, pri.attachNo, pri.blendRate);
+
+	if (pri.blendRate>=1.0f)
+	{
+		isBlend_ = false;
+	}
+
+	//アニメーションブレンド率セット
+		//カウント更新
+	//blendStep_ > blendTime_ ? blendStep_ = blendTime_ : blendStep_ += scnMng_.GetDeltaTime();
+
+	////現在アニメーションのブレンド率
+	//float currentAnimBlendRate = UtilityCommon::RATIO_MAX - blendPer_;
+
+	////現在アニメーションを更新
+	//MV1SetAttachAnimTime(modelId_, currentAnim_.attachNo, currentAnim_.step);
+
+	////次アニメーションを更新
+	//MV1SetAttachAnimTime(modelId_, nextAnim_.attachNo, nextAnim_.step);
+
+	//currentAnim_.step += scnMng_.GetDeltaTime() * currentAnim_.speed;
+	//nextAnim_.step += scnMng_.GetDeltaTime() * nextAnim_.speed;
+
+	////現在アニメーションのブレンド
+	//MV1SetAttachAnimBlendRate(modelId_, currentAnim_.attachNo, currentAnimBlendRate);
+
+	////次アニメーションのブレンド
+	//MV1SetAttachAnimBlendRate(modelId_, nextAnim_.attachNo, blendPer_);
+
+
+	////座標固定
+	//FreezeMovementForAnimation(nextAnim_);
+
+
+	////ブレンドを終えたら
+	//if (blendStep_ >= blendTime_)
+	//{
+	//	blendStep_ = 0.0f;
+	//	blendTime_ = 0.0f;
+
+	//	//現在アニメーションをデタッチ
+	//	MV1DetachAnim(modelId_, currentAnim_.attachNo);
+
+	//	//次アニメーションをアタッチ
+	//	MV1AttachAnim(modelId_, nextAnim_.attachNo);
+
+	//	currentAnim_ = nextAnim_;
+
+	//	blendStep_ = 0.0f;
+	//	blendTime_ = 0.0f;
+	//	isBlend_ = false;
+	//	return;
+
+	//}
+
+
 }
