@@ -152,14 +152,15 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 		auto& pri = animations_.at(type);
 		pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
 		pri.blendRate = animRate;
+		pri.totalTime = endStep > 0.0f ? endStep : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
 		pri.isPriority = true;
 	}
 	else
 	{
 		//次に再生するアニメーションが決まっている
 		//かつ、まだ再生中の場合は処理を飛ばす
-		if (/*animations_.at(priNo).nextAnimNo_ != -1 &&*/
-			animations_.at(priNo).step < animations_.at(priNo).totalTime) return;
+		//if (/*animations_.at(priNo).nextAnimNo_ != -1 &&*/
+		//	animations_.at(priNo).step < animations_.at(priNo).totalTime) return;
 
 		//遷移フラグ
 		isBlend_ = true;
@@ -189,6 +190,7 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop, floa
 			//最優先アニメーションをアタッチ
 			pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
 			pri.blendRate = animRate;
+			pri.totalTime = endStep > 0.0f ? endStep : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
 		}
 		pri.isPriority = true;
 
