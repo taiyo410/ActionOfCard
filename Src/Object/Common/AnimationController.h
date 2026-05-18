@@ -21,7 +21,7 @@ public :
 		float speed = 0.0f;			//アニメーション速度
 		float totalTime = 0.0f;		//トータル時間
 		float step = 0.0f;			//ステップ
-		float detachSpeed = 10.0f;	//アニメーション終了後の速度
+		float detachSpeed = 1.0f;	//アニメーション終了後の速度
 		bool isLoop = true;			//ループするか
 		VECTOR invalidPos = {};		//座標移動無効化用
 		VECTOR firstPos = {};		//移動量格納
@@ -30,7 +30,7 @@ public :
 		bool isMidLoop;				//途中ループフラグ
 		//イージング使用中フラグ
 		bool isEase;
-		float switchLoopReverse;			//途中ループの切り替え用
+		float switchLoopReverse = 1.0f;			//途中ループの切り替え用
 		// アニメーション終了後に繰り返すループステップ
 		float stepEndLoopStart;
 		float stepEndLoopEnd;
@@ -54,7 +54,7 @@ public :
 	/// @param type 
 	/// @param speed 
 	/// @param modelId 
-	void Add(int type, const float speed, int modelId);
+	void Add(int type, const float speed, int modelId, const float detachSpeed=5.0f);
 
 	/// @brief アニメーション再生
 	/// @param type アニメーションタイプ
@@ -73,7 +73,7 @@ public :
 	/// @param endStep アニメーション終了位置
 	/// @param isStop 
 	/// @param isForce 
-	void PlayBlend(int type, float blendTime, bool isLoop = true, 
+	void PlayBlend(int type, bool isLoop = true, 
 		VECTOR invalidBlendPos = {}, float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
 
 	/// @brief アニメーション更新 
@@ -150,12 +150,10 @@ public :
 	/// @param pos 座標
 	void GetFrameAnimAttachLocalMatrix(int modelId, int attachNo, int frameIdx, VECTOR& scl, MATRIX& matRot, VECTOR& pos);
 
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <param name=""></param>
-	/// <returns></returns>
-	//const float GetBlendPer(void)const { return blendPer_; }
+	/// @brief 特定のアニメーションがブレンドしているか
+	/// @param type アニメーション番号
+	/// @return true：ブレンドしている false：ブレンドしていない
+	bool IsBlendAnim(const int type) const;
 
 	/// @brief 描画
 	/// @param  

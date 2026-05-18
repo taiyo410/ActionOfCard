@@ -367,7 +367,7 @@ void PlayerCardAction::UpdateReload(void)
 void PlayerCardAction::ChangeShortAttackOne(void)
 {
 	//突きアニメーションへ
-	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT),BLEND_TIME, false);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), false);
 
 	//攻撃ステータスをセット
 	atk_ = atkStatusTable_[CARD_ACT_TYPE::ATTACK_ONE_SHORT];
@@ -398,7 +398,7 @@ void PlayerCardAction::ChangeMiddleAttackOne(void)
 void PlayerCardAction::ChangeAttackTwo(void)
 {
 	//攻撃2段階目のアニメーションを再生
-	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2),BLEND_TIME, false);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2), false);
 
 	//攻撃段階を増やす
 	ChangeActionCardInit();
@@ -412,7 +412,7 @@ void PlayerCardAction::ChangeAttackTwo(void)
 void PlayerCardAction::ChangeAttackThree(void)
 {
 	//攻撃3段階目のアニメーションを再生
-	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), BLEND_TIME, false,{}, ATTACK_THREE_ANIM_START, ATTACK_THREE_ANIM_GOAL);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), false,{}, ATTACK_THREE_ANIM_START, ATTACK_THREE_ANIM_GOAL);
 
 	//カウントの初期化
 	atkThreeEndCnt_ = 0.0f;

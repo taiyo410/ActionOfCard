@@ -33,7 +33,7 @@ AnimationController::~AnimationController(void)
 	}
 }
 
-void AnimationController::Add(int type, const float speed, int modelId)
+void AnimationController::Add(int type, const float speed,int modelId, const float detachSpeed)
 {
 
 	Animation anim;
@@ -51,6 +51,7 @@ void AnimationController::Add(int type, const float speed, int modelId)
 	//anim.model = MV1LoadModel(path.c_str());
 	anim.animIndex = type;
 	anim.speed = speed;
+	anim.detachSpeed = detachSpeed;
 
 	if (animations_.count(type) == 0)
 	{
@@ -64,6 +65,7 @@ void AnimationController::Add(int type, const float speed, int modelId)
 		animations_[type].animIndex = anim.animIndex;
 		animations_[type].attachNo = anim.attachNo;
 		animations_[type].totalTime = anim.totalTime;
+		animations_[type].detachSpeed = anim.detachSpeed;
 	}
 
 }
@@ -71,7 +73,7 @@ void AnimationController::Add(int type, const float speed, int modelId)
 void AnimationController::Play(int type, bool isLoop, 
 	float startStep, float endStep, bool isStop, bool isForce)
 {
-	PlayBlend(type, 0.5f, isLoop, {}, startStep, endStep, isStop, isForce);
+	PlayBlend(type, isLoop, {}, startStep, endStep, isStop, isForce);
 	//if (isBlend_)
 	//{
 	//	int i = 0;
@@ -129,7 +131,7 @@ void AnimationController::Play(int type, bool isLoop,
 	//}
 }
 
-void AnimationController::PlayBlend(int type, float blendTime, bool isLoop,
+void AnimationController::PlayBlend(int type, bool isLoop,
 	VECTOR invalidBlendPos, float startStep, float endStep, bool isStop, bool isForce)
 {
 	//優先アニメーションを探索
@@ -196,10 +198,12 @@ void AnimationController::PlayBlend(int type, float blendTime, bool isLoop,
 		{
 			//最優先アニメーションをアタッチ
 			pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
-			pri.blendRate = animRate;
-			pri.totalTime = endStep > 0.0f ? endStep : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
 		}
 		pri.isPriority = true;
+		pri.blendRate = animRate;
+		pri.totalTime = endStep > 0.0f ? endStep : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
+		pri.isLoop = isLoop;
+		pri.invalidPos = invalidBlendPos;
 
 	}
 }
@@ -362,6 +366,12 @@ void AnimationController::GetFrameAnimAttachLocalMatrix(int modelId, int attachN
 	pos = MGetTranslateElem(mat);
 }
 
+bool AnimationController::IsBlendAnim(const int type) const
+{
+	const float blendRate = animations_.at(type).blendRate;
+	return blendRate > 0.0f && blendRate < 1.0f;
+}
+
 void AnimationController::DrawDebug(void)
 {
 	constexpr float posX = 100.0f;
@@ -370,8 +380,8 @@ void AnimationController::DrawDebug(void)
 	for(const auto& anim : animations_)
 	{
 		//DrawFormatString(posY, 10.0f, GetColor(255, 255, 255), L"AnimType:%d", anim.first);
-		//DrawFormatString(posY, 30.0f, GetColor(255, 255, 255), L"AnimStep:%f", anim.second.step);
-		DrawFormatString(posX, posY, UtilityCommon::WHITE, L"BlendRate:%f", anim.second.blendRate);
+		DrawFormatString(posX, posY, GetColor(255, 255, 255), L"AnimStep:%f", anim.second.step);
+		//DrawFormatString(posX, posY, UtilityCommon::WHITE, L"BlendRate:%f", anim.second.blendRate);
 		posY += 16;
 	}
 }
@@ -445,15 +455,10 @@ void AnimationController::UpdateNormal(const float _spdScl)
 				// ループしない
 				anim.second.step = anim.second.totalTime;
 			}
-
-			//if (anim.second.step > anim.second.totalTime && anim.second.isLoop)
-			//{
-			//	//とりあえずループ再生
-			//	anim.second.step = 0.0f;
-			//}
-
-			MV1SetAttachAnimTime(modelId_, anim.second.attachNo, anim.second.step);
 		}
+		//アニメーション設定（進行）
+		MV1SetAttachAnimTime(modelId_, anim.second.attachNo, anim.second.step);
+
 		//アニメーションによる座標の移動を無効化
 		FreezeMovementForAnimation();
 	}
@@ -544,6 +549,9 @@ void AnimationController::FreezeMovementForAnimation(void)
 	auto scl = MGetSize(mat);			// 行列から大きさを取り出す
 	auto rot = MGetRotElem(mat);		// 行列から回転を取り出す
 	auto pos = MGetTranslateElem(mat);	// 行列から移動値を取り出す
+
+	//Y軸の移動値は調整しない
+	invalidBlendPos_.y = pos.y;
 
 	// 大きさ、回転、位置をローカル行列に戻す
 	MATRIX mix = MGetIdent();
