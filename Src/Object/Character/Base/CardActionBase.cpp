@@ -46,14 +46,14 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 	if (IsCardFailure(_attackTag))return;
 
 	//コンボ入力受付
-	if (anim_.GetAnimStep() >= _status.colEndCnt - _status.bufferFrame)
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= _status.colEndCnt - _status.bufferFrame)
 	{
 		ComboInput();
 	}
 
 	//攻撃判定処理
-	if (anim_.GetAnimStep() >= _status.colStartCnt&&
-		anim_.GetAnimStep() <= _status.colEndCnt)
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= _status.colStartCnt&&
+		anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) <= _status.colEndCnt)
 	{
 		//攻撃中
 		atkPos_ = Utility3D::AddPosRotate(charaObj_.GetTransform().pos, charaObj_.GetTransform().quaRot, _localPos);
@@ -64,12 +64,12 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 		//攻撃の当たり判定消去
 		charaObj_.MakeAttackCol(charaObj_.GetCharaTag(), _attackTag, atkPos_,_status.atkRadius);
 	}
-	else if (anim_.IsEnd())		//アニメーション終了でアイドル状態変更
+	else if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)))		//アニメーション終了でアイドル状態変更
 	{
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		return;
 	}
-	else if (anim_.GetAnimStep() > _status.colEndCnt)	//攻撃終了後
+	else if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) > _status.colEndCnt)	//攻撃終了後
 	{
 		//攻撃判定無効
 		charaObj_.DeleteAttackCol(charaObj_.GetCharaTag(),_attackTag);

@@ -144,7 +144,7 @@ void Player::UpdateClearDirection(void)
 void Player::UpdateOverDirection(void)
 {
 	UpdateDirection();
-	if (animationController_->IsEnd())
+	if (animationController_->IsEnd(static_cast<int>(ANIM_TYPE::DEATH)))
 	{
 		isEndClearDirect_ = true;
 	}
@@ -228,7 +228,7 @@ void Player::DrawDebug(void)
 	//	col.second->GetGeometry().Draw();
 	//}
 
-	DrawFormatString(0, 100, UtilityCommon::WHITE, L"BlendPer(%f)", animationController_->GetBlendPer());
+	animationController_->DrawDebug();
 }
 
 #endif // _DEBUG

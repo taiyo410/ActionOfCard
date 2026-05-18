@@ -12,7 +12,8 @@ Dodge::Dodge(ActionController& _actCntl, Transform& _trans, float _spd):
 	trans_(_trans),
 	dodgeDir_({})
 {
-	speed_ = dodgeSpd_+ ADD_DODGE_SPEED;
+	//speed_ = dodgeSpd_+ ADD_DODGE_SPEED;
+	speed_ = 0.0f;
 }
 
 Dodge::~Dodge(void)
@@ -44,7 +45,7 @@ void Dodge::Init(void)
 void Dodge::Update()
 {
 	//‰ñ”ðŽžŠÔ‚ªI‚í‚Á‚½‚ç
-	if (anim_.GetAnimStep()> END_DODGE_ANIM_STEP)
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE))> END_DODGE_ANIM_STEP)
 	{
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		return;

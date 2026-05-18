@@ -186,7 +186,7 @@ void EnemyCardAction::UpdateStomp(void)
 	}
 
 	//アニメーションで足をつく動作をしたら
-	if (anim_.GetAnimStep() > atk_.colStartCnt)
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK)) > atk_.colStartCnt)
 	{
 		//キャラ情報
 		const Transform& charaTrans = charaObj_.GetTransform();
@@ -227,7 +227,7 @@ void EnemyCardAction::UpdateStomp(void)
 			atk_.atkRadius = JUMP_ATK_START_RADIUS;
 
 			//アニメーションループ終了
-			anim_.SetEndMidLoop(CharacterBase::DEFAULT_ANIM_SPEED);
+			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
 			charaObj_.DeleteEnemyRockCol();
 			charaObj_.SetIsAliveEnemyRock(false);
 
@@ -273,7 +273,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 		jumpChargeCnt_ += SceneManager::GetInstance().GetDeltaTime();
 
 		//アニメーションループ
-		anim_.SetMidLoop(JUMP_CHARGE_ANIM_LOOP_START, JUMP_CHARGE_ANIM_LOOP_END, JUMP_ATK_ANIM_LOOP_SPEED);
+		anim_.SetMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), JUMP_CHARGE_ANIM_LOOP_START, JUMP_CHARGE_ANIM_LOOP_END, JUMP_ATK_ANIM_LOOP_SPEED);
 
 		//溜めのカメラシェイク
 		scnMng_.GetCamera().lock()->SetShakeStatus(jumpChargeCnt_ / JUMP_CHARGE_TIME, JUMP_CHARGE_CAMERA_SHAKE_LIMIT);
@@ -283,7 +283,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 		if (jumpChargeCnt_ >= JUMP_CHARGE_TIME)
 		{
 			//アニメーションループ終了
-			anim_.SetEndMidLoop(CharacterBase::DEFAULT_ANIM_SPEED);
+			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
 			soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
 
 			//チャージエフェクトの消去
@@ -297,7 +297,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 	}
 
 	//ジャンプアニメーションが終わったらドーム型の攻撃をする
-	else if (anim_.GetAnimStep() > JUMP_ANIM_END)
+	else if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP)) > JUMP_ANIM_END)
 	{
 		const Transform& charaTrans = charaObj_.GetTransform();
 
@@ -331,7 +331,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 			{ atk_.atkRadius * BLAST_EFF_SCL,atk_.atkRadius * BLAST_EFF_SCL,atk_.atkRadius * BLAST_EFF_SCL });
 
 		//攻撃アニメーションループ
-		anim_.SetMidLoop(JUMP_ATK_ANIM_LOOP_START, JUMP_ATK_ANIM_LOOP_END, JUMP_ATK_ANIM_ATTACK_LOOP_SPEED);
+		anim_.SetMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), JUMP_ATK_ANIM_LOOP_START, JUMP_ATK_ANIM_LOOP_END, JUMP_ATK_ANIM_ATTACK_LOOP_SPEED);
 
 		//攻撃時間が終わったら
 		if (atkCnt_ > JUMP_ATK_CNT_MAX)
@@ -340,7 +340,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 			atk_.atkRadius = JUMP_ATK_START_RADIUS;
 
 			//アニメーションループ終了
-			anim_.SetEndMidLoop(CharacterBase::DEFAULT_ANIM_SPEED);
+			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
 
 			//当たり判定の消去
 			charaObj_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);

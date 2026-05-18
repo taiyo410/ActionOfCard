@@ -117,7 +117,7 @@ void Enemy::UpdateClearDirection(void)
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
 	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, 0, effPos);
 	effect_->Update();
-	if (animationController_->GetAnimStep() >= DEATH_BLAST_ANIM_STEP)
+	if (animationController_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= DEATH_BLAST_ANIM_STEP)
 	{
 
 		if (modelScl_ <= 0.0f)
@@ -191,7 +191,7 @@ void Enemy::UpdateRoarDirection(void)
 	{
 		isRoar_ = false;
 		animationController_->Play(static_cast<int>(ANIM_TYPE::ROAR_ATK), false);
-		float roarAnimStep = animationController_->GetAnimStep();
+		float roarAnimStep = animationController_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ROAR_ATK));
 		const float ROAR_TIME = ROAR_ANIM_END_ANIM - ROAR_ANIM_SPEED;
 		if (roarAnimStep >= ROAR_ANIM_START_ANIM)
 		{

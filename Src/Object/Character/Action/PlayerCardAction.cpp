@@ -219,7 +219,7 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 	const float delta = scnMng_.GetDeltaTime();
 
 	//攻撃判定処理
-	if (anim_.GetAnimStep() >= atk_.colStartCnt && midAtkCnt_ > 0.0f) { midAtkCnt_ -= delta; }
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= atk_.colStartCnt && midAtkCnt_ > 0.0f) { midAtkCnt_ -= delta; }
 
 	//中距離突きカウントが０以上なら
 	if (midAtkCnt_ > 0.0f && !atk_.isDamage)
@@ -261,14 +261,14 @@ void PlayerCardAction::UpdateAttackThree(void)
 	if (IsCardFailure(Collider::TAG::NML_ATK))return;
 
 	//ステップの取得
-	const float animStep = anim_.GetAnimStep();							//現在のアニメステップ
+	const float animStep = anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3));							//現在のアニメステップ
 	const float atkStartStep = atkStatusTable_[actType_].colStartCnt;	//当たり判定スタートカウント
 	const float atkEndStep = atkStatusTable_[actType_].colEndCnt;		//当たり判定終了カウント
 
 	//攻撃スタートカウント以下なら、アニメーションスピードを遅くする
 	if (animStep < atkStartStep)
 	{
-		anim_.SetAnimSpeed(ATTACK_THREE_ANIM_SPD);
+		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), ATTACK_THREE_ANIM_SPD);
 	}
 
 	//攻撃判定処理
@@ -279,7 +279,7 @@ void PlayerCardAction::UpdateAttackThree(void)
 		atkAnimLerpCnt_ += scnMng_.GetDeltaTime();
 
 		//アニメーション速度補完
-		anim_.SetAnimSpeed(CharacterBase::DEFAULT_ANIM_SPEED, true
+		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), CharacterBase::DEFAULT_ANIM_SPEED, true
 			, ATTACK_THREE_ANIM_SPD, atkAnimLerpCnt_ / ATTACK_THREE_ANIM_LERP_TIME,Easing::EASING_TYPE::QUAD_IN);
 
 		//攻撃判定有効
@@ -287,7 +287,7 @@ void PlayerCardAction::UpdateAttackThree(void)
 		charaObj_.MakeAttackCol(charaObj_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 
 	}
-	else if (anim_.IsEnd())		//アニメーション終了でアイドル状態変更
+	else if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)))		//アニメーション終了でアイドル状態変更
 	{
 		//攻撃終了時間以上なら、アイドル状態へ
 		const float ATK_END_CNT = 0.5f;
@@ -323,7 +323,7 @@ void PlayerCardAction::UpdateReload(void)
 
 		//アニメーションループ
 		constexpr float LOOP_SPD = 10.0f;
-		anim_.SetMidLoop(RELOAD_LOOP_START, RELOAD_LOOP_END, LOOP_SPD);
+		anim_.SetMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), RELOAD_LOOP_START, RELOAD_LOOP_END, LOOP_SPD);
 	}
 	else
 	{
@@ -412,7 +412,7 @@ void PlayerCardAction::ChangeAttackTwo(void)
 void PlayerCardAction::ChangeAttackThree(void)
 {
 	//攻撃3段階目のアニメーションを再生
-	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), BLEND_TIME, false, ATTACK_THREE_ANIM_START, ATTACK_THREE_ANIM_GOAL);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), BLEND_TIME, false,{}, ATTACK_THREE_ANIM_START, ATTACK_THREE_ANIM_GOAL);
 
 	//カウントの初期化
 	atkThreeEndCnt_ = 0.0f;

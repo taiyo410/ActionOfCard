@@ -21,10 +21,22 @@ public :
 		float speed = 0.0f;			//アニメーション速度
 		float totalTime = 0.0f;		//トータル時間
 		float step = 0.0f;			//ステップ
+		float detachSpeed = 10.0f;	//アニメーション終了後の速度
+		bool isLoop = true;			//ループするか
+		VECTOR invalidPos = {};		//座標移動無効化用
 		VECTOR firstPos = {};		//移動量格納
 		VECTOR movePow = {};		//座標移動無効化用
+		bool isStop;				// アニメーションを止めたままにする
+		bool isMidLoop;				//途中ループフラグ
+		//イージング使用中フラグ
+		bool isEase;
+		float switchLoopReverse;			//途中ループの切り替え用
+		// アニメーション終了後に繰り返すループステップ
+		float stepEndLoopStart;
+		float stepEndLoopEnd;
+		float endLoopSpeed;
 
-		float blendRate = 0.0f;	//ブレンド率
+		float blendRate = 0.0f;		//ブレンド率
 		bool isActive = false;		//アニメーションの生存状態
 		int isPriority = false;		//優先されているか
 	};
@@ -62,7 +74,7 @@ public :
 	/// @param isStop 
 	/// @param isForce 
 	void PlayBlend(int type, float blendTime, bool isLoop = true, 
-		float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
+		VECTOR invalidBlendPos = {}, float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
 
 	/// @brief アニメーション更新 
 	/// @param _spdScl 
@@ -72,17 +84,17 @@ public :
 	/// @param startStep スタート位置
 	/// @param endStep 終了位置
 	/// @param speed アニメーション速度
-	void SetEndLoop(float startStep, float endStep, float speed);
+	void SetEndLoop(int type,float startStep, float endStep, float speed);
 
 	/// @brief アニメーションの途中からのループ再生
 	/// @param startStep スタート位置
 	/// @param endStep 終了位置
 	/// @param _spd アニメーション速度
-	void SetMidLoop(const float startStep,const float endStep,float _spd);
+	void SetMidLoop(int type, const float startStep,const float endStep,float _spd);
 
 	/// @brief アニメーション途中ループ終了
 	/// @param _spd 元に戻した時のアニメーション速度
-	void SetEndMidLoop(const float _spd);
+	void SetEndMidLoop(int type, const float _spd);
 
 	/// @brief 再生中のアニメーションタイプの取得
 	/// @param  
@@ -92,7 +104,7 @@ public :
 	/// @brief アニメーションステップゲッタ
 	/// @param  
 	/// @return 
-	const float GetAnimStep(void)const;
+	const float GetAnimStep(const int animType)const;
 
 	/// @brief アニメーションスピードセッタ(イージングで、だんだん増やしていくのも可)
 	/// @param _spd セットしたいスピード
@@ -100,12 +112,12 @@ public :
 	/// @param _startSpd イージング使用時の始まりのスピード
 	/// @param _t 時間
 	/// @param _easeType 使用したいイージングタイプ
-	void SetAnimSpeed(const float _spd, const bool _isEase = false, const float _startSpd=0.0f, const float _t = 1.0f, Easing::EASING_TYPE _easeType = Easing::EASING_TYPE::LERP);
+	void SetAnimSpeed(int type, const float _spd, const bool _isEase = false, const float _startSpd=0.0f, const float _t = 1.0f, Easing::EASING_TYPE _easeType = Easing::EASING_TYPE::LERP);
 
 	/// @brief // 再生終了
 	/// @param  
 	/// @return 
-	bool IsEnd(void) const;
+	bool IsEnd(int type) const;
 
 	/// @brief フレームの行列ローカル座標のセット
 	/// @param _modelId モデルID
@@ -143,7 +155,11 @@ public :
 	/// </summary>
 	/// <param name=""></param>
 	/// <returns></returns>
-	const float GetBlendPer(void)const { return blendPer_; }
+	//const float GetBlendPer(void)const { return blendPer_; }
+
+	/// @brief 描画
+	/// @param  
+	void DrawDebug(void);
 
 private :
 
@@ -171,45 +187,50 @@ private :
 	//再生の種類
 	int playType_;
 
-	//アニメーションのタイプ
-	Animation currentAnim_;
-
-	//一つ前のアニメーション
-	Animation nextAnim_;
-
 	//ブレンドしているか
 	bool isBlend_;
 
-	//ブレンドカウント
-	float blendStep_;
+	// アニメーションの座標移動を無効カウするためのオフセット
+	VECTOR invalidBlendPos_;
 
-	//ブレンド時間
-	float blendTime_;
+	////アニメーションのタイプ
+	//Animation currentAnim_;
 
-	//ブレンド率
-	float blendPer_;
+	////一つ前のアニメーション
+	//Animation nextAnim_;
 
-	int debugAttachCount_ = 0;
 
-	// アニメーションをループするかしないか
-	bool isLoop_;
 
-	// アニメーションを止めたままにする
-	bool isStop_;
+	////ブレンドカウント
+	//float blendStep_;
 
-	//途中ループフラグ
-	bool isMidLoop_;
+	////ブレンド時間
+	//float blendTime_;
 
-	//イージング使用中フラグ
-	bool isEase_;
+	////ブレンド率
+	//float blendPer_;
 
-	// アニメーション終了後に繰り返すループステップ
-	float stepEndLoopStart_;
-	float stepEndLoopEnd_;
-	float endLoopSpeed_;
 
-	// 逆再生
-	float switchLoopReverse_;
+
+	//// アニメーションをループするかしないか
+	//bool isLoop_;
+
+	//// アニメーションを止めたままにする
+	//bool isStop_;
+
+	////途中ループフラグ
+	//bool isMidLoop_;
+
+	////イージング使用中フラグ
+	//bool isEase_;
+
+	//// アニメーション終了後に繰り返すループステップ
+	//float stepEndLoopStart_;
+	//float stepEndLoopEnd_;
+	//float endLoopSpeed_;
+
+	//// 逆再生
+	//float switchLoopReverse_;
 
 	//モデルのヒップ番号
 	int hipNum_;
@@ -220,7 +241,7 @@ private :
 	void UpdateNormal(const float _spdScl = 1.0f);	//通常
 
 	//移動量打ち消し
-	void FreezeMovementForAnimation(Animation& _anim);
+	void FreezeMovementForAnimation(void);
 
 	//アニメーションデタッチ
 	void AnimationDettach(const int _type);
