@@ -102,7 +102,7 @@ void CardDeck::LoadCardData(void)
 	std::vector<CardBase::CARD_STATUS> cards;
 
 	//カードデータの読み込み
-	for (const auto& card : j[charaTypeStr])
+	for (const auto& card : j[charaTypeStr]["Cards"])
 	{
 		CardBase::CARD_STATUS status;
 		//カードの強さ

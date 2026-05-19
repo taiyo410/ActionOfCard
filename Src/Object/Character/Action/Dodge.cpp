@@ -13,7 +13,7 @@ Dodge::Dodge(ActionController& _actCntl, Transform& _trans, float _spd):
 	dodgeDir_({})
 {
 	//speed_ = dodgeSpd_+ ADD_DODGE_SPEED;
-	speed_ = 0.0f;
+	speed_ = 0;
 }
 
 Dodge::~Dodge(void)

@@ -131,8 +131,8 @@ protected:
 	const std::string JSON_DATA_PATH = "Data/Json/CharaData.json";
 
 	//Jsonで読み込むキャラクターカードの文字列
-	const std::string JSON_PLAYER_STR = "PlayerCards";
-	const std::string JSON_ENEMY_STR = "EnemyCards";
+	const std::string JSON_PLAYER_STR = "Player";
+	const std::string JSON_ENEMY_STR = "Enemy";
 
 	//カードステータスの文字列
 	const std::string CARD_POWER_PATH = "pow";	//カードの強さのデータ格納文字列

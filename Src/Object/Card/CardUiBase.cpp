@@ -98,7 +98,7 @@ void CardUIBase::LoadCardData(void)
 
 	std::vector<CardBase::CARD_STATUS> cards;
 	//キャラタイプからどのJsonデータを読み取るかを決める
-	for (const auto& card : j[charaType_])
+	for (const auto& card : j[charaType_]["Cards"])
 	{
 		CardBase::CARD_STATUS status;
 		//カードの強さの読み込み

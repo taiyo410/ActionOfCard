@@ -265,14 +265,14 @@ void Enemy::AddAction(void)
 }
 void Enemy::AddAnimation(void)
 {
-	animationController_ = std::make_unique<AnimationController>(trans_.modelId, SPINE_FRAME_NO);
-	animationController_->Add(static_cast<int>(ANIM_TYPE::IDLE), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_IDLE));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::RUN), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_RUN));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::REACT), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::REACT));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::STOMP_ATK), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_STOMP_ATK));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::JUMP_ATK), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_JUMP_ATK));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::ROAR_ATK), ROAR_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_ROAR_ATK));
-	animationController_->Add(static_cast<int>(ANIM_TYPE::DEATH), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_DEATH));
+	//animationController_ = std::make_unique<AnimationController>(trans_.modelId, SPINE_FRAME_NO);
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::IDLE), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_IDLE));
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::RUN), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_RUN));
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::REACT), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::REACT));
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::STOMP_ATK), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_STOMP_ATK));
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::JUMP_ATK), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_JUMP_ATK));
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::ROAR_ATK), ROAR_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_ROAR_ATK));
+	//animationController_->Add(static_cast<int>(ANIM_TYPE::DEATH), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_DEATH));
 }
 
 #ifdef _DEBUG

@@ -112,10 +112,10 @@ private:
 	static constexpr int RELOAD_CARD_POW = -1;
 
 	//プレイヤーのカードデータが入っている文字列
-	const std::string PLAYER_CARD_PATH = "PlayerCards";
+	const std::string PLAYER_CARD_PATH = "Player";
 
 	//敵のカードデータが入っている文字列
-	const std::string ENEMY_CARD_PATH = "EnemyCards";
+	const std::string ENEMY_CARD_PATH = "Enemy";
 
 	//カードの種類のデータが入っている文字列
 	const std::string CARD_TYPE_PATH = "type";

@@ -12,33 +12,36 @@ class AnimationController
 	
 public :
 
+	//アニメーションの可変パラメータ
+	struct ANIMATION_VARIABLE
+	{
+		float speed = 0.0f;					//アニメーション速度
+		float totalTime = 0.0f;				//トータル時間
+		float detachSpeed = 1.0f;			//アニメーション終了後の速度
+		bool isLoop = true;					//ループするか
+		bool isMidLoop=false;				//途中ループフラグ
+		float switchLoopReverse = 1.0f;			//途中ループの切り替え用
+		// アニメーション終了後に繰り返すループステップ
+		float stepEndLoopStart=0.0f;
+		float stepEndLoopEnd=0.0f;
+		float endLoopSpeed=0.0f;
+	};
+
 	// アニメーションデータ
-	struct Animation
+	struct ANIMATION_PARAMETER
 	{
 		int model = -1;				//モデルID
 		int attachNo = -1;			//アタッチ番号
 		int animIndex = 0;			//アニメーション番号
-		float speed = 0.0f;			//アニメーション速度
-		float totalTime = 0.0f;		//トータル時間
-		float step = 0.0f;			//ステップ
-		float detachSpeed = 1.0f;	//アニメーション終了後の速度
-		bool isLoop = true;			//ループするか
 		VECTOR invalidPos = {};		//座標移動無効化用
 		VECTOR firstPos = {};		//移動量格納
 		VECTOR movePow = {};		//座標移動無効化用
+		float step = 0.0f;			//ステップ
 		bool isStop;				// アニメーションを止めたままにする
-		bool isMidLoop;				//途中ループフラグ
-		//イージング使用中フラグ
-		bool isEase;
-		float switchLoopReverse = 1.0f;			//途中ループの切り替え用
-		// アニメーション終了後に繰り返すループステップ
-		float stepEndLoopStart;
-		float stepEndLoopEnd;
-		float endLoopSpeed;
-
-		float blendRate = 0.0f;		//ブレンド率
-		bool isActive = false;		//アニメーションの生存状態
 		int isPriority = false;		//優先されているか
+		float blendRate = 0.0f;		//ブレンド率
+
+		ANIMATION_VARIABLE variable;		//アニメーションの可変パラメータ
 	};
 
 	/// @brief コンストラクタ
@@ -54,7 +57,7 @@ public :
 	/// @param type 
 	/// @param speed 
 	/// @param modelId 
-	void Add(int type, const float speed, int modelId, const float detachSpeed=5.0f);
+	void Add(int type, int modelId);
 
 	/// @brief アニメーション再生
 	/// @param type アニメーションタイプ
@@ -73,8 +76,8 @@ public :
 	/// @param endStep アニメーション終了位置
 	/// @param isStop 
 	/// @param isForce 
-	void PlayBlend(int type, bool isLoop = true, 
-		VECTOR invalidBlendPos = {}, float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
+	void PlayBlend(int type,float animSpeed ,float detachSpeed,bool isLoop = true, 
+		VECTOR invalidBlendPos = {}, float startStep = 0.0f, float endStep = -1.0f, bool isStop = false);
 
 	/// @brief アニメーション更新 
 	/// @param _spdScl 
@@ -180,7 +183,7 @@ private :
 	int modelId_;
 
 	// 種類別のアニメーションデータ
-	std::map<int, Animation> animations_;
+	std::map<int, ANIMATION_PARAMETER> animations_;
 
 	//再生の種類
 	int playType_;
@@ -190,45 +193,6 @@ private :
 
 	// アニメーションの座標移動を無効カウするためのオフセット
 	VECTOR invalidBlendPos_;
-
-	////アニメーションのタイプ
-	//Animation currentAnim_;
-
-	////一つ前のアニメーション
-	//Animation nextAnim_;
-
-
-
-	////ブレンドカウント
-	//float blendStep_;
-
-	////ブレンド時間
-	//float blendTime_;
-
-	////ブレンド率
-	//float blendPer_;
-
-
-
-	//// アニメーションをループするかしないか
-	//bool isLoop_;
-
-	//// アニメーションを止めたままにする
-	//bool isStop_;
-
-	////途中ループフラグ
-	//bool isMidLoop_;
-
-	////イージング使用中フラグ
-	//bool isEase_;
-
-	//// アニメーション終了後に繰り返すループステップ
-	//float stepEndLoopStart_;
-	//float stepEndLoopEnd_;
-	//float endLoopSpeed_;
-
-	//// 逆再生
-	//float switchLoopReverse_;
 
 	//モデルのヒップ番号
 	int hipNum_;

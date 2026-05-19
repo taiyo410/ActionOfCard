@@ -15,8 +15,7 @@ Run::Run(ActionController& _actCntl, const float _speed, ResourceManager::SRC _s
 	footSeDis_(_footSeDis),
 	footSECnt_()
 {
-	//speed_ = moveSpd_;
-	speed_ = 0.0f;
+	speed_ = moveSpd_;
 }
 
 Run::~Run(void)

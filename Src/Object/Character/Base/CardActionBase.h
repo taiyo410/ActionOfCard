@@ -78,6 +78,9 @@ protected:
     //攻撃座標
     VECTOR atkPos_;
 
+    //攻撃アニメーション
+	int atkAnim_;
+
     //状態遷移
     void ChangeCardAction(const CARD_ACT_TYPE& _type);
 

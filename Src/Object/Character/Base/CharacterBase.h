@@ -402,6 +402,9 @@ protected:
 	//ヒットストップ用カウンタ(フレーム)
 	int hitStopFrame_;
 
+	//アニメーションパラメータ
+	std::unordered_map<ANIM_TYPE, float> animParam_;
+
 	//移動後座標などの更新
 	void UpdatePost(void);
 

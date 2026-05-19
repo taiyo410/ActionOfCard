@@ -119,10 +119,10 @@ void HpUI::LoadJsonHpUI(void)
 	std::string charaStr = "";
 
 	//キャラによって読み込むデータを変える
-	charaType_ == CHARACTER_TYPE::PLAYER ? charaStr = "PlayerHPBar" : charaStr = "EnemyHPBar";
+	charaType_ == CHARACTER_TYPE::PLAYER ? charaStr = "Player" : charaStr = "Enemy";
 
 	//jsonのデータをそれぞれ格納
-	for (auto data : j[charaStr])
+	for (const auto& data : j[charaStr]["HpBar"])
 	{
 		//バー座標
 		if (data.contains("barPos"))
