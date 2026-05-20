@@ -33,21 +33,24 @@ Enemy::Enemy(void):
 	modelScl_(MODEL_SIZE_MULTIPLITER)
 {
 	capRadius_ = CAP_RADIUS;
-
 	characterType_ = CHARACTER_TYPE::ENEMY;
-
 	isRoar_ = false;
-
 	footSEDisCount_ = FOOT_SE_DIS;
 	footSE_ = ResourceManager::SRC::ENEMY_FOOT_SE;
-
 	logic_ = std::make_unique<EnemyLogic>(trans_);
-
 	deck_ = std::make_shared<CardDeck>(characterType_, ENEMY_NUM);
-
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
-
 	effect_ = std::make_unique<EffectController>();
+	hipBoneNo_ -= SPINE_FRAME_NO;
+	animInfo_ = {
+		{"E_IDLE",{ANIM_TYPE::IDLE, ResourceManager::SRC::E_IDLE}},
+		{"E_RUN",{ANIM_TYPE::RUN, ResourceManager::SRC::E_RUN}},
+		{"REACT",{ANIM_TYPE::REACT, ResourceManager::SRC::REACT}},
+		{"E_STOMP_ATK",{ANIM_TYPE::STOMP_ATK, ResourceManager::SRC::E_STOMP_ATK}},
+		{"E_JUMP_ATK",{ANIM_TYPE::JUMP_ATK, ResourceManager::SRC::E_JUMP_ATK}},
+		{"E_ROAR_ATK",{ANIM_TYPE::ROAR_ATK, ResourceManager::SRC::E_ROAR_ATK}},
+		{"E_DEATH",{ANIM_TYPE::DEATH, ResourceManager::SRC::E_DEATH}}
+	};
 }
 
 Enemy::~Enemy(void)
@@ -63,8 +66,8 @@ void Enemy::Load(void)
 	trans_.quaRotLocal =
 		Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
 
-	//アニメーション
-	AddAnimation();
+	//アニメーションの追加
+	LoadAddAnimation();
 
 	//エフェクト
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
@@ -214,7 +217,7 @@ void Enemy::UpdateRoarDirection(void)
 void Enemy::ChangeUpdateClearDirection(void)
 {
 	isRoar_ = false;
-	animationController_->Play(static_cast<int>(ANIM_TYPE::DEATH), false);
+	//animationController_->Play(static_cast<int>(ANIM_TYPE::DEATH), false);
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_FOOT_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
@@ -265,7 +268,7 @@ void Enemy::AddAction(void)
 }
 void Enemy::AddAnimation(void)
 {
-	//animationController_ = std::make_unique<AnimationController>(trans_.modelId, SPINE_FRAME_NO);
+	////animationController_ = std::make_unique<AnimationController>(trans_.modelId, SPINE_FRAME_NO);
 	//animationController_->Add(static_cast<int>(ANIM_TYPE::IDLE), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_IDLE));
 	//animationController_->Add(static_cast<int>(ANIM_TYPE::RUN), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_RUN));
 	//animationController_->Add(static_cast<int>(ANIM_TYPE::REACT), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::REACT));

@@ -11,7 +11,7 @@ ResourceManager::ResourceManager(void):
 	resStr_ = {
 		//ƒ‚ƒfƒ‹
 		{"STAGE",SRC::STAGE },
-		{"STAGE_WALL",SRC::STAGE_WALL  },
+		{"STAGE_WALL",SRC::STAGE_WALL},
 		{"PLAYER" ,SRC::PLAYER},
 		{"ENEMY_1",SRC::ENEMY},
 		{"SKY_DOME",SRC::SKY_DOME },

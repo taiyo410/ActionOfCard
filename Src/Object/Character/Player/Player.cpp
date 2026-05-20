@@ -34,24 +34,28 @@ Player::Player(void)
 	padNum_(),
 	stateUpdate_()
 {
-	////初めのJOYPADがkey_padなのでパッドの番号に合わせる
-	//パッド番号を設定
-	padNum_ = static_cast<InputManager::JOYPAD_NO>(playerNum_ + 1);
-
+	padNum_ = static_cast<InputManager::JOYPAD_NO>(playerNum_ + 1);//初めのJOYPADがkey_padなのでパッドの番号に合わせる
 	characterType_ = CHARACTER_TYPE::PLAYER;
-
 	footSEDisCount_ = FOOT_SE_DIS;
 	footSE_ = ResourceManager::SRC::PLAYER_FOOT_SE;
-
 	capRadius_ = CAP_RADIUS;
-
 	deck_ = std::make_shared<CardDeck>(characterType_, PLAYER_NUM);
-
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
-
 	weapon_ = std::make_unique<Weapon>(*this);
-
 	logic_ = std::make_unique<PlayerLogic>(trans_, isMoveable_, padNum_, InputManager::CONTROLL_TYPE::ALL);
+	hipBoneNo_ -= SPINE_FRAME_NO;
+	animInfo_ = {
+		{"P_IDLE",{ANIM_TYPE::IDLE, ResourceManager::SRC::P_IDLE}},
+		{"P_RUN",{ANIM_TYPE::RUN, ResourceManager::SRC::P_RUN}},
+		{"REACT",{ANIM_TYPE::REACT, ResourceManager::SRC::REACT}},
+		{"P_DODGE",{ANIM_TYPE::DODGE, ResourceManager::SRC::P_DODGE}},
+		{"P_DEATH",{ANIM_TYPE::DEATH, ResourceManager::SRC::P_DEATH}},
+		{"P_RELOAD",{ANIM_TYPE::CARD_RELOAD, ResourceManager::SRC::P_RELOAD}},
+		{"P_ATTACK_ONE_MIDDLE",{ANIM_TYPE::ATTACK_1_MIDDLE, ResourceManager::SRC::P_ATTACK_1_MIDDLE}},
+		{"P_ATTACK_ONE_SHORT",{ANIM_TYPE::ATTACK_1_SHORT, ResourceManager::SRC::P_ATTACK_1_SHORT}},
+		{"P_ATTACK_TWO",{ANIM_TYPE::ATTACK_2, ResourceManager::SRC::P_ATTACK_2}},
+		{"P_ATTACK_THREE",{ANIM_TYPE::ATTACK_3, ResourceManager::SRC::P_ATTACK_3}},
+	};
 }
 
 Player::~Player(void)
@@ -72,7 +76,7 @@ void Player::Load(void)
 	LoadStatus();
 
 	//アニメーションの追加
-	AddAnimation();
+	LoadAddAnimation();
 
 	//アクションの追加
 	AddAction();

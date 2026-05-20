@@ -63,6 +63,9 @@ protected:
     //攻撃ステータステーブル
     std::map<CARD_ACT_TYPE, ATK_STATUS>atkStatusTable_;
 
+    //攻撃アクション文字列
+    std::vector<std::string> attackActionStr_;
+
     //アタックのQueue配列
     std::queue<std::function<void(void)>>cardFuncs_;
 

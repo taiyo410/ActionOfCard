@@ -22,6 +22,17 @@ CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _chara
 	isDuelWait_(false)
 {
 	effect_ = std::make_unique<EffectController>();
+
+	//çUåÇÉAÉNÉVÉáÉìÇÃï∂éöóÒÇ∆ÇÃëŒâû
+	attackActionStr_=
+	{
+		"AttackOneShort",
+		"AttackOneMiddle",
+		"AttackTwo",
+		"AttackThree",
+		"StompAtk",
+		"JumpAtk",
+	};
 }
 
 CardActionBase::~CardActionBase(void)
@@ -129,17 +140,20 @@ void CardActionBase::ComboInput(void)
 
 void CardActionBase::LoadAttackStatus(ATK_STATUS& _atk, const std::string _dataName)
 {
-	nlohmann::json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
 
 	CHARACTER_TYPE chara = charaObj_.GetCharacterType();
 	std::string jsonStr = "";
-	chara == CHARACTER_TYPE::PLAYER ? jsonStr = "Player" : jsonStr = "Enemy";
+	chara == CHARACTER_TYPE::PLAYER ? jsonStr = "PlayerAction" : jsonStr = "EnemyAction";
 
-	for (const auto& data : j[jsonStr]["AttackAction"])
+	for (const auto& data : j[jsonStr])
 	{
-		if (data.contains(_dataName))
+		auto it=std::find(attackActionStr_.begin(),attackActionStr_.end(), _dataName);
+		if (it == attackActionStr_.end())continue;
+
+		if (data.contains(*it))
 		{
-			auto& atk = data.at(_dataName);
+			auto& atk = data.at(*it);
 			if(atk.contains("colStartAnimCnt"))
 			{
 				_atk.colStartCnt = atk.value("colStartAnimCnt", 0.0f);

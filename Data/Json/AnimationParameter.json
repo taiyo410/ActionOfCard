@@ -1,0 +1,90 @@
+{
+  "PlayerAnimation": {
+    "P_IDLE": {
+      "animSpeed": 60.0,
+      "detachSpeed": 5.0,
+      "isLoop": true
+    },
+    "P_RUN": {
+      "animSpeed": 60.0,
+      "detachSpeed": 5.0,
+      "isLoop": true
+    },
+    "DODGE": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": false
+    },
+    "DEATH": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": false
+    },
+    "ATTACK_1_MIDDLE": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": false,
+      "startStep": 13.0,
+      "endStep": 37.0
+    },
+    "ATTACK_1_SHORT": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": false
+    },
+    "ATTACK_2": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": false
+    },
+    "ATTACK_3": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": false,
+      "startStep": 60.0,
+      "endStep": 86.0
+    },
+    "RELOAD": {
+      "animSpeed": 80.0,
+      "detachSpeed": 5.0,
+      "isLoop": true,
+      "startStep": 17.0,
+      "endStep": 33.0
+    }
+  },
+  "EnemyAnimation": {
+    "E_IDLE": {
+      "animSpeed": 10.0,
+      "detachSpeed": 5.0,
+      "isLoop": true
+    }
+    "E_RUN": {
+      "animSpeed": 10.0,
+      "detachSpeed": 5.0,
+      "isLoop": true
+    },
+    "REACT": {
+      "animSpeed": 10.0,
+      "detachSpeed": 5.0,
+      "isLoop": true
+    },
+    "DEATH": {
+      "animSpeed": 10.0,
+      "detachSpeed": 5.0,
+      "isLoop": true
+    },
+    "E_STOMP_ATK" {
+      "animSpeed": 10.0,
+      "isLoop": false
+    },
+    "E_JUMP_ATK": {
+      "animSpeed": 10.0,
+      "isLoop": false
+    },
+    "E_ROAR_ATK": {
+      "animSpeed": 30.0,
+      "isLoop": false
+    }
+
+  }
+}

@@ -398,6 +398,21 @@
       "handle": "CharaData.json"
     },
     {
+      "type": "json",
+      "name": "DECK_DATA",
+      "handle": "Deck.json"
+    },
+    {
+      "type": "json",
+      "name": "ACTION_DATA",
+      "handle": "Action.json"
+    },
+    {
+      "type": "json",
+      "name": "ANIMATION_PARAMETER_DATA",
+      "handle": "AnimationParameter.json"
+    },
+    {
       "type": "pixelShader",
       "name": "STAGE_PS",
       "handle": "StagePS.cso",

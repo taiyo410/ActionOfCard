@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <unordered_map>
+#include <nlohmann/json.hpp>
 #include "../../Template/Singleton.h"
 #include "Resource.h"
 
@@ -110,7 +111,9 @@ public:
 
 		//Json
 		CHARA_DATA,						//キャラクターデータ
-
+		DECK_DATA,						//デッキデータ
+		ACTION_DATA,					//アクションデータ
+		ANIMATION_PARAMETER_DATA,		//アニメーションデータ
 		//ピクセルシェーダ
 		STAGE_PS,					//ステージ
 		SKYDOME_PS,					//スカイドーム

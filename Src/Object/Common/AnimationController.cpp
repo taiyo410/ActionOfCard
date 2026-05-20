@@ -64,7 +64,7 @@ void AnimationController::Add(int type,int modelId)
 void AnimationController::Play(int type, bool isLoop, 
 	float startStep, float endStep, bool isStop, bool isForce)
 {
-	PlayBlend(type, isLoop, {}, startStep, endStep, isStop, isForce);
+	//PlayBlend(type, isLoop, {}, startStep, endStep, isStop, isForce);
 
 }
 

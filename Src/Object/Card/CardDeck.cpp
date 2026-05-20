@@ -98,11 +98,14 @@ void CardDeck::LoadCardData(void)
 	using json = nlohmann::json;
 
 	//Jsonのデータを取得
-	json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	json j = resMng_.Load(ResourceManager::SRC::DECK_DATA).jsonData;
 	std::vector<CardBase::CARD_STATUS> cards;
 
+	//カードの種類のデータを読み込む
+	const auto& carDatas = j[charaTypeStr];
+
 	//カードデータの読み込み
-	for (const auto& card : j[charaTypeStr]["Cards"])
+	for (const auto& card : carDatas)
 	{
 		CardBase::CARD_STATUS status;
 		//カードの強さ

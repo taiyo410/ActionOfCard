@@ -121,44 +121,44 @@ void HpUI::LoadJsonHpUI(void)
 	//キャラによって読み込むデータを変える
 	charaType_ == CHARACTER_TYPE::PLAYER ? charaStr = "Player" : charaStr = "Enemy";
 
+	//HPBarデータを読み込む
+	const auto& hpBarData = j[charaStr]["HpBar"];
+
 	//jsonのデータをそれぞれ格納
-	for (const auto& data : j[charaStr]["HpBar"])
-	{
 		//バー座標
-		if (data.contains("barPos"))
-		{
-			auto& pos = data.at("barPos");
-			initBarPos_.x = pos.value("x", 0.0f);
-			initBarPos_.y = pos.value("y", 0.0f);
-		}
+	if (hpBarData.contains("barPos"))
+	{
+		auto& pos = hpBarData.at("barPos");
+		initBarPos_.x = pos.value("x", 0.0f);
+		initBarPos_.y = pos.value("y", 0.0f);
+	}
 
-		//バーの左の座標
-		if (data.contains("barColor_L")) 
-		{
-			auto& col = data.at("barColor_L");
-			barColorL_.x = col.value("red", 0.0f);
-			barColorL_.y = col.value("green", 0.0f);
-			barColorL_.z = col.value("blue", 0.0f);
-			barColorL_.w = col.value("alpha", 0.0f);
-		}
+	//バーの左の座標
+	if (hpBarData.contains("barColor_L"))
+	{
+		auto& col = hpBarData.at("barColor_L");
+		barColorL_.x = col.value("red", 0.0f);
+		barColorL_.y = col.value("green", 0.0f);
+		barColorL_.z = col.value("blue", 0.0f);
+		barColorL_.w = col.value("alpha", 0.0f);
+	}
 
-		//バーの右の座標
-		if (data.contains("barColor_R"))
-		{
-			auto& col = data.at("barColor_R");
-			barColorR_.x = col.value("red", 0.0f);
-			barColorR_.y = col.value("green", 0.0f);
-			barColorR_.z = col.value("blue", 0.0f);
-			barColorR_.w = col.value("alpha", 0.0f);
-		}
+	//バーの右の座標
+	if (hpBarData.contains("barColor_R"))
+	{
+		auto& col = hpBarData.at("barColor_R");
+		barColorR_.x = col.value("red", 0.0f);
+		barColorR_.y = col.value("green", 0.0f);
+		barColorR_.z = col.value("blue", 0.0f);
+		barColorR_.w = col.value("alpha", 0.0f);
+	}
 
-		//カバーの座標
-		if (data.contains("coverPos"))
-		{
-			auto& pos = data.at("coverPos");
-			initCoverPos_.x = pos.value("x",0.0f);
-			initCoverPos_.y = pos.value("y", 0.0f);
-		}
+	//カバーの座標
+	if (hpBarData.contains("coverPos"))
+	{
+		auto& pos = hpBarData.at("coverPos");
+		initCoverPos_.x = pos.value("x", 0.0f);
+		initCoverPos_.y = pos.value("y", 0.0f);
 	}
 }
 

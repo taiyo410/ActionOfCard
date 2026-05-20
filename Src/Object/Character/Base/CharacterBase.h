@@ -4,6 +4,7 @@
 #include "../../Card/CardBase.h"
 #include "../../Card/CardPresenter.h"
 #include "../Base/CharacterOnHitBase.h"
+#include "../../Object/Common/AnimationController.h"
 #include "../Player/ActionController.h"
 #include "../Base/CardActionBase.h"
 #include "../UIData/CharacterUIData.h"
@@ -71,6 +72,13 @@ public:
 		JUMP_ATK,			//ジャンプ攻撃
 		RUSH_ATK			//突進
 
+	};
+
+	//アニメーション情報
+	struct ANIMATION_INFO
+	{
+		ANIM_TYPE type;	//対応したアニメーションタイプ
+		ResourceManager::SRC animSrc;	//アニメーションの素材
 	};
 
 	//角度
@@ -316,8 +324,8 @@ protected:
 	static constexpr float CENTER_POS_Z_OFFSET = 600.0f;
 
 	//キャラステータスのデータパス
-	const std::string PLAYER_STATUS_DATA = "PlayerStatus";	//プレイヤー
-	const std::string ENEMY_STATUS_DATA = "EnemyStatus";	//敵
+	const std::string PLAYER_STATUS_DATA = "Player";	//プレイヤー
+	const std::string ENEMY_STATUS_DATA = "Enemy";		//敵
 
 	//入力
 	std::unique_ptr<LogicBase>logic_;
@@ -336,6 +344,9 @@ protected:
 
 	//敵のスタンプ攻撃時に発生する岩
 	std::vector<std::unique_ptr<EnemyRock>>rock_;
+
+	//アニメーションタイプの文字列対応表
+	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;
 
 	//使う足音
 	SoundManager::SRC footSE_;
@@ -393,6 +404,9 @@ protected:
 	//クリア演出が終わったか
 	bool isEndClearDirect_;
 
+	//腰のボーン番号
+	int hipBoneNo_;
+
 	//Hpのデータ
 	HP_DATA hpData_;
 
@@ -404,6 +418,15 @@ protected:
 
 	//アニメーションパラメータ
 	std::unordered_map<ANIM_TYPE, float> animParam_;
+
+	//アクションの文字列
+	std::vector<std::string> actionStr_;
+
+	//追加アニメーションの文字列
+	std::unordered_map<std::string, ANIMATION_INFO> animInfo_;
+
+	//アクションごとのアニメーション再生データテーブル
+	std::unordered_map<ANIM_TYPE,AnimationController::ANIMATION_VARIABLE> actionAnimTable_;
 
 	//移動後座標などの更新
 	void UpdatePost(void);
@@ -421,7 +444,10 @@ protected:
 	virtual void AddAnimation(void) = 0;
 
 	//コライダ作成
-	virtual void MakeColliderGeometry(void) = 0;;
+	virtual void MakeColliderGeometry(void) = 0;
+
+	//アニメーションを外部からロード
+	void LoadAddAnimation(void);
 
 	//更新フェーズ	
 	void UpdateNone(void);							//何もしない

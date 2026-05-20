@@ -170,6 +170,8 @@ protected:
 	//Œ»İ‚ÌUŒ‚
 	ATK_STATUS atk_;
 
+	//
+
 private:
 
 	// ‰ñ“]Š®—¹‚Ü‚Å‚ÌŠÔ

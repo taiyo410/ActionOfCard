@@ -1,0 +1,69 @@
+{
+  "PlayerAction": {
+    "Idle": {
+      "useAnim": "P_IDLE"
+    },
+    "Run": {
+      "useAnim": "P_RUN"
+    },
+    "Dodge": {
+      "useAnim": "P_DODGE",
+      "addDodgeSpeed": 16.0,
+      "endDodgeAnimFrame": 30.0
+    },
+    "Death": {
+      "useAnim": "P_DEATH"
+    },
+    "AttackOneShort": {
+      "colStartAnimCnt": 24.0,
+      "colEndAnimCnt": 36.0,
+      "bufferFrame": 20.0,
+      "attackPoint": 10.0,
+      "useAnim": "P_ATTACK_ONE_SHORT"
+    },
+    "AttackOneMiddle": {
+      "colStartAnimCnt": 16.0,
+      "colEndAnimCnt": 35.0,
+      "bufferFrame": 20.0,
+      "attackPoint": 10.0,
+      "useAnim": "P_ATTACK_ONE_MIDDLE"
+    },
+    "AttackTwo": {
+      "colStartAnimCnt": 23.0,
+      "colEndAnimCnt": 35.0,
+      "bufferFrame": 20.0,
+      "attackPoint": 15.0,
+      "useAnim": "P_ATTACK_TWO"
+    },
+    "AttackThree": {
+      "colStartAnimCnt": 73.0,
+      "colEndAnimCnt": 83.0,
+      "bufferFrame": 20.0,
+      "attackPoint": 25.0,
+      "useAnim": "P_ATTACK_THREE"
+    },
+    "Reload": {
+      "useAnim": "P_RELOAD"
+    }
+  },
+
+  "EnemyAction": {
+    "Idle": {
+      "useAnim": "E_IDLE"
+    },
+    "Run": {
+      "useAnim": "E_RUN"
+    },
+    "StompAttack": {
+      "colStartAnimCnt": 22.0,
+      "colEndAnimCnt": 46.0,
+      "attackPoint": 10.0,
+      "useAnim": "E_STOMP_ATTACK"
+    },
+    "JumpAttack": {
+      "attackPoint": 40.0,
+      "attackRadius": 30.0,
+      "useAnim": "E_JUMP_ATTACK"
+    }
+  }
+}

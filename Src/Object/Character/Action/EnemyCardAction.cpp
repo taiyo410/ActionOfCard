@@ -168,9 +168,6 @@ void EnemyCardAction::ChangeReload(void)
 	//現在使っているカードを捨てる
 	cardPresent_.EnemyCardReload();
 
-	//アニメーションの再生
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::RUSH_ATK), true);
-
 	cardFuncs_.push([this]() {UpdateReload(); });
 }
 

@@ -109,7 +109,7 @@ public:
 private:
 
 	//定数
-	//プレイヤーの腰のフレーム番号
+	//敵の腰のフレーム番号
 	static constexpr int SPINE_FRAME_NO = 1;
 
 	//胸のフレーム

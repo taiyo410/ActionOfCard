@@ -36,6 +36,20 @@ CharacterBase::CharacterBase(void) :
 		{UPDATE_PHASE::OVER_DIRECTION, [this]() {ChangeUpdateOverDirection(); }},
 		{UPDATE_PHASE::HIT_STOP,[this]() {ChangeUpdateHitStop(); } }
 	};
+
+	animStrTable_= {
+		{"Idle", ANIM_TYPE::IDLE},
+		{"Run", ANIM_TYPE::RUN},
+		{"React", ANIM_TYPE::REACT},
+		{"Dodge", ANIM_TYPE::DODGE},
+		{"Death", ANIM_TYPE::DEATH},
+		{"Attack_1_Middle", ANIM_TYPE::ATTACK_1_MIDDLE},
+		{"Attack_1_Short", ANIM_TYPE::ATTACK_1_SHORT},
+		{"Attack_2", ANIM_TYPE::ATTACK_2},
+		{"Attack_3", ANIM_TYPE::ATTACK_3},
+		{"Jump", ANIM_TYPE::JUMP},
+		{"Card_Reload", ANIM_TYPE::CARD_RELOAD}
+	};
 }
 
 CharacterBase::~CharacterBase(void)
@@ -108,7 +122,7 @@ void CharacterBase::LoadStatus(void)
 												: statusPath = ENEMY_STATUS_DATA;
 
 	//データを格納
-	for (const auto& data : j[statusPath])
+	for (const auto& data : j[statusPath]["Status"])
 	{
 		if(data.contains("HP"))
 		{ 
@@ -320,6 +334,40 @@ void CharacterBase::EnemyRockUpdate(void)
 const bool CharacterBase::GetIsHitTarget(void) const
 {
 	return onHit_->GetIsHitTarget();
+}
+
+void CharacterBase::LoadAddAnimation(void)
+{
+	//アニメーションコントローラーの生成
+	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
+
+	//データ読み込み
+	nlohmann::json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+
+	//キャラクターごとでパスを変える
+	std::string statusPath = "";
+	characterType_ == CHARACTER_TYPE::PLAYER ? statusPath = PLAYER_STATUS_DATA
+		: statusPath = ENEMY_STATUS_DATA;
+
+	const auto& actionData = j[statusPath]["Action"];
+
+	// アクションごとの使用アニメーションを読み取って
+	// アニメーションコントローラーに追加する
+	for(const auto& [actionName,action] : actionData.items())
+	{
+		//Jsonのリストからアクション名を取得
+		std::string useAnim = action["useAnim"].value("useAnim", "");
+
+		//Jsonのリストと同じ文字列を探索する
+		auto actIt = animInfo_.find(actionName);
+
+		//見つかったらアニメーション配列に追加
+		if (actIt != animInfo_.end())
+		{
+			animationController_->Add(static_cast<int>(actIt->second.type),resMng_.LoadModelDuplicate(actIt->second.animSrc));
+		}
+
+	}
 }
 
 void CharacterBase::UpdateNone(void)
