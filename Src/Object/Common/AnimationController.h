@@ -21,10 +21,13 @@ public :
 		bool isLoop = true;					//ループするか
 		bool isMidLoop=false;				//途中ループフラグ
 		float switchLoopReverse = 1.0f;			//途中ループの切り替え用
+		float step = 0.0f;			//ステップ
 		// アニメーション終了後に繰り返すループステップ
 		float stepEndLoopStart=0.0f;
 		float stepEndLoopEnd=0.0f;
 		float endLoopSpeed=0.0f;
+		VECTOR invalidPos = {};		//座標移動無効化用
+		bool isStop;				// アニメーションを止めたままにする
 	};
 
 	// アニメーションデータ
@@ -36,7 +39,6 @@ public :
 		VECTOR invalidPos = {};		//座標移動無効化用
 		VECTOR firstPos = {};		//移動量格納
 		VECTOR movePow = {};		//座標移動無効化用
-		float step = 0.0f;			//ステップ
 		bool isStop;				// アニメーションを止めたままにする
 		int isPriority = false;		//優先されているか
 		float blendRate = 0.0f;		//ブレンド率
@@ -52,6 +54,10 @@ public :
 	/// @brief デストラクタ
 	/// @param  
 	~AnimationController(void);
+
+	/// @brief アニメーションパラメータの読み込み
+	/// @param animName 
+	void LoadData(const std::string& animName);
 
 	/// @brief アニメーション追加
 	/// @param type 
@@ -76,8 +82,9 @@ public :
 	/// @param endStep アニメーション終了位置
 	/// @param isStop 
 	/// @param isForce 
-	void PlayBlend(int type,float animSpeed ,float detachSpeed,bool isLoop = true, 
-		VECTOR invalidBlendPos = {}, float startStep = 0.0f, float endStep = -1.0f, bool isStop = false);
+	//void PlayBlend(int type,float animSpeed ,float detachSpeed,bool isLoop = true, 
+	//	VECTOR invalidBlendPos = {}, float startStep = 0.0f, float endStep = -1.0f, bool isStop = false);
+	void PlayBlend(int type,ANIMATION_VARIABLE animVariable);
 
 	/// @brief アニメーション更新 
 	/// @param _spdScl 

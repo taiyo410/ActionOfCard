@@ -189,6 +189,10 @@ public:
 	/// @return サウンドの配列
 	std::vector<const ResourceData*> GetSoundResources(ResourceData::SOUND_TYPE _soundType=ResourceData::SOUND_TYPE::MAX)const;
 
+	/// @brief 文字列からリソース名を取得
+	/// @param _str 取得したい文字列
+	/// @return 
+	const SRC GetSrcFromString(const std::string& _str) const;
 private:
 
 	//カード番号画像

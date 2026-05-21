@@ -120,6 +120,8 @@
       "name": "E_DEATH",
       "handle": "Animation/Enemy/Mutant Dying.mv1"
     },
+
+
     {
       "type": "image",
       "name": "TITLE_BACK_IMG",
@@ -210,6 +212,8 @@
       "name": "CARD_REVOLVER_L_ARROW",
       "handle": "CardDirArrowLeft.png"
     },
+
+
     {
       "type": "images",
       "name": "NUMBERS_IMGS",
@@ -392,6 +396,8 @@
       "name": "GAME_START_SE",
       "handle": "DesideButton.mp3"
     },
+
+
     {
       "type": "json",
       "name": "CHARA_DATA",
@@ -412,6 +418,8 @@
       "name": "ANIMATION_PARAMETER_DATA",
       "handle": "AnimationParameter.json"
     },
+
+
     {
       "type": "pixelShader",
       "name": "STAGE_PS",

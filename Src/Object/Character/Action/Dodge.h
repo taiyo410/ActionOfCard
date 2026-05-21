@@ -12,7 +12,7 @@ public:
     /// @param _actCntl アクションコントローラ
     /// @param _trans モデル情報
     /// @param _spd 回避速度
-    Dodge(ActionController& _actCntl,Transform& _trans,float _spd);
+    Dodge(ActionController& _actCntl, CharacterBase& _character, Transform& _trans,float _spd);
 
     /// @brief デストラクタ
     /// @param  

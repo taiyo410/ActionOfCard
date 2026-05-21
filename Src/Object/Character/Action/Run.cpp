@@ -8,8 +8,8 @@
 #include"../../Common/AnimationController.h"
 #include "Run.h"
 
-Run::Run(ActionController& _actCntl, const float _speed, ResourceManager::SRC _src, const float  _footSeDis):
-	ActionBase(_actCntl),
+Run::Run(ActionController& _actCntl, CharacterBase& _character, const float _speed, ResourceManager::SRC _src, const float  _footSeDis):
+	ActionBase(_actCntl,_character),
 	moveSpd_(_speed),
 	footSESrc_(_src),
 	footSeDis_(_footSeDis),
@@ -31,6 +31,7 @@ void Run::Init(void)
 {
 	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::RUN));
 	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::RUN),BLEND_TIME);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::RUN);
 	footSECnt_ = 0.0f;
 }
 

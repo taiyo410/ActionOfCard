@@ -125,7 +125,7 @@ void HpUI::LoadJsonHpUI(void)
 	const auto& hpBarData = j[charaStr]["HpBar"];
 
 	//jsonのデータをそれぞれ格納
-		//バー座標
+	//バー座標
 	if (hpBarData.contains("barPos"))
 	{
 		auto& pos = hpBarData.at("barPos");

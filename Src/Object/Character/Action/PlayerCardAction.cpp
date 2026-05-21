@@ -68,7 +68,7 @@ void PlayerCardAction::Init(void)
 	isCombo_ = false;
 
 	//キーによる移動はしない
-	charaObj_.SetIsCanMoveable(false);
+	character_.SetIsCanMoveable(false);
 
 	if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::ATTACK)
 	{
@@ -107,8 +107,8 @@ void PlayerCardAction::Release(void)
 	cardPresent_.ChangeAction();
 
 	//当たり判定削除
-	charaObj_.DeleteAttackCol(Collider::TAG::PLAYER1,Collider::TAG::NML_ATK);
-	charaObj_.SetIsCanMoveable(true);
+	character_.DeleteAttackCol(Collider::TAG::PLAYER1,Collider::TAG::NML_ATK);
+	character_.SetIsCanMoveable(true);
 
 	//リロード中にアクションが中断された場合
 	if (actType_ == CARD_ACT_TYPE::RELOAD)
@@ -215,7 +215,7 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 	ComboInput();
 
 	//キャラ同士で当たったか
-	const bool isHitTarget = charaObj_.GetIsHitTarget();
+	const bool isHitTarget = character_.GetIsHitTarget();
 	const float delta = scnMng_.GetDeltaTime();
 
 	//攻撃判定処理
@@ -230,9 +230,9 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 			, Easing::EASING_TYPE::QUAD_OUT);
 
 		//攻撃判定生成
-		charaObj_.MakeAttackCol(charaObj_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
+		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 	}
-	else if (midAtkCnt_ <= 0.0f || charaObj_.GetIsDamage())		//アニメーション終了でアイドル状態変更
+	else if (midAtkCnt_ <= 0.0f || character_.GetIsDamage())		//アニメーション終了でアイドル状態変更
 	{
 		//カウントダウン
 		midAtkOverCnt_ -= delta;
@@ -241,7 +241,7 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 		speed_ = 0.0f;
 
 		//攻撃判定消去
-		charaObj_.DeleteAttackCol(charaObj_.GetCharaTag(), Collider::TAG::NML_ATK);
+		character_.DeleteAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK);
 
 		//中距離突きが終了したら
 		if (midAtkOverCnt_ < 0.0f)
@@ -284,7 +284,7 @@ void PlayerCardAction::UpdateAttackThree(void)
 
 		//攻撃判定有効
 		isAliveAtkCol_ = true;
-		charaObj_.MakeAttackCol(charaObj_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
+		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 
 	}
 	else if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)))		//アニメーション終了でアイドル状態変更
@@ -307,7 +307,7 @@ void PlayerCardAction::UpdateAttackThree(void)
 	else if (animStep > atkEndStep)	//攻撃終了後
 	{
 		//攻撃判定無効
-		charaObj_.DeleteAttackCol(charaObj_.GetCharaTag(), Collider::TAG::NML_ATK);
+		character_.DeleteAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK);
 	}
 }
 
@@ -351,7 +351,7 @@ void PlayerCardAction::UpdateReload(void)
 		effect_->Delete(EffectController::EFF_TYPE::RELOAD, 0);
 
 		//リロード終了エフェクトを再生
-		const Transform& trans = charaObj_.GetTransform();
+		const Transform& trans = character_.GetTransform();
 		effect_->Play(EffectController::EFF_TYPE::RELOAD_END, trans.pos, trans.quaRot, { EFF_SCL ,EFF_SCL ,EFF_SCL });
 
 		//カードリロード音停止、完了音再生
@@ -368,6 +368,7 @@ void PlayerCardAction::ChangeShortAttackOne(void)
 {
 	//突きアニメーションへ
 	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), false);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
 
 	//攻撃ステータスをセット
@@ -382,9 +383,10 @@ void PlayerCardAction::ChangeMiddleAttackOne(void)
 	midAtkCnt_ = ATTACK_ONE_MID_TIME;
 
 	////近距離攻撃のアニメーションをセット
-	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE), false
-	//	, ATTACK_ONE_MID_ANIM_START, ATTACK_ONE_MID_ANIM_END,false);
+	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE), false
+		, ATTACK_ONE_MID_ANIM_START, ATTACK_ONE_MID_ANIM_END,false);
 	//	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE);
 
 	//攻撃ステータス
 	atk_ = atkStatusTable_[CARD_ACT_TYPE::ATTACK_ONE_MIDDLE];
@@ -401,6 +403,7 @@ void PlayerCardAction::ChangeAttackTwo(void)
 {
 	//攻撃2段階目のアニメーションを再生
 	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2), false);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_2);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2);
 	//攻撃段階を増やす
 	ChangeActionCardInit();
@@ -416,6 +419,7 @@ void PlayerCardAction::ChangeAttackThree(void)
 	//攻撃3段階目のアニメーションを再生
 	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)
 	// , false,{}, ATTACK_THREE_ANIM_START, ATTACK_THREE_ANIM_GOAL);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_3);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3);
 
 	//カウントの初期化
@@ -445,14 +449,15 @@ void PlayerCardAction::ChangeReload(void)
 	cardPresent_.ChangeUIState(CardUIBase::CARD_SELECT::RELOAD_WAIT);
 
 	//カードリロードのアニメーション再生(溜めるようなモーション)
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), true, RELOAD_START_STEP, RELOAD_END_STEP);
+	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), true, RELOAD_START_STEP, RELOAD_END_STEP);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::CARD_RELOAD);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD);
 
 	//リロード音再生
 	soundMng_.Play(ResourceManager::SRC::CARD_RELOAD_SE, SoundManager::PLAYTYPE::LOOP);
 
 	//リロードエフェクトの再生
-	const Transform& trans = charaObj_.GetTransform();
+	const Transform& trans = character_.GetTransform();
 	effect_->Play(EffectController::EFF_TYPE::RELOAD, trans.pos, trans.quaRot, { RELOD_EFF_SCL,RELOD_EFF_SCL,RELOD_EFF_SCL }, true);
 
 	cardFuncs_.push([this]() {UpdateReload(); });

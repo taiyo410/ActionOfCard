@@ -1,5 +1,5 @@
 {
-  "PlayerAnimation": {
+  "Player": {
     "P_IDLE": {
       "animSpeed": 60.0,
       "detachSpeed": 5.0,
@@ -52,12 +52,12 @@
       "endStep": 33.0
     }
   },
-  "EnemyAnimation": {
+  "Enemy": {
     "E_IDLE": {
       "animSpeed": 10.0,
       "detachSpeed": 5.0,
       "isLoop": true
-    }
+    },
     "E_RUN": {
       "animSpeed": 10.0,
       "detachSpeed": 5.0,
@@ -73,7 +73,7 @@
       "detachSpeed": 5.0,
       "isLoop": true
     },
-    "E_STOMP_ATK" {
+    "E_STOMP_ATK": {
       "animSpeed": 10.0,
       "isLoop": false
     },
@@ -85,6 +85,5 @@
       "animSpeed": 30.0,
       "isLoop": false
     }
-
   }
 }

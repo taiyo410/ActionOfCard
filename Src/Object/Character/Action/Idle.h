@@ -9,7 +9,7 @@ public:
 
     /// @brief コンストラクタ
 	/// @param _actCntl アクションコントローラー
-    Idle(ActionController& _actCntl);
+    Idle(ActionController& _actCntl, CharacterBase& _character);
 
     /// @brief デストラクタ
     /// @param  

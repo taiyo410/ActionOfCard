@@ -74,13 +74,6 @@ public:
 
 	};
 
-	//アニメーション情報
-	struct ANIMATION_INFO
-	{
-		ANIM_TYPE type;	//対応したアニメーションタイプ
-		ResourceManager::SRC animSrc;	//アニメーションの素材
-	};
-
 	//角度
 	struct ROTATION
 	{
@@ -309,6 +302,10 @@ public:
 	/// @return キャラクター種類
 	const CHARACTER_TYPE GetCharacterType(void){ return characterType_; }
 
+	/// @brief キャラクターのアニメーション再生
+	/// @param _animType 再生したいアニメーションの種類
+	void PlayCharacterAnim(const ANIM_TYPE _animType);
+
 protected:
 
 	//移動量ラインオフセット
@@ -347,6 +344,9 @@ protected:
 
 	//アニメーションタイプの文字列対応表
 	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;
+
+	//使用アニメーション
+	std::unordered_map<ANIM_TYPE, AnimationController::ANIMATION_VARIABLE>useAnim_;
 
 	//使う足音
 	SoundManager::SRC footSE_;
@@ -421,9 +421,6 @@ protected:
 
 	//アクションの文字列
 	std::vector<std::string> actionStr_;
-
-	//追加アニメーションの文字列
-	std::unordered_map<std::string, ANIMATION_INFO> animInfo_;
 
 	//アクションごとのアニメーション再生データテーブル
 	std::unordered_map<ANIM_TYPE,AnimationController::ANIMATION_VARIABLE> actionAnimTable_;

@@ -37,18 +37,21 @@ CharacterBase::CharacterBase(void) :
 		{UPDATE_PHASE::HIT_STOP,[this]() {ChangeUpdateHitStop(); } }
 	};
 
-	animStrTable_= {
-		{"Idle", ANIM_TYPE::IDLE},
-		{"Run", ANIM_TYPE::RUN},
-		{"React", ANIM_TYPE::REACT},
-		{"Dodge", ANIM_TYPE::DODGE},
-		{"Death", ANIM_TYPE::DEATH},
-		{"Attack_1_Middle", ANIM_TYPE::ATTACK_1_MIDDLE},
-		{"Attack_1_Short", ANIM_TYPE::ATTACK_1_SHORT},
-		{"Attack_2", ANIM_TYPE::ATTACK_2},
-		{"Attack_3", ANIM_TYPE::ATTACK_3},
-		{"Jump", ANIM_TYPE::JUMP},
-		{"Card_Reload", ANIM_TYPE::CARD_RELOAD}
+	animStrTable_ = {
+	{"Idle", ANIM_TYPE::IDLE},
+	{"Run", ANIM_TYPE::RUN},
+	{"React", ANIM_TYPE::REACT},
+	{"Dodge", ANIM_TYPE::DODGE},
+	{"Death", ANIM_TYPE::DEATH},
+	{"React", ANIM_TYPE::REACT},
+	{"Attack_1_Middle", ANIM_TYPE::ATTACK_1_MIDDLE},
+	{"Attack_1_Short", ANIM_TYPE::ATTACK_1_SHORT},
+	{"Attack_2", ANIM_TYPE::ATTACK_2},
+	{"Attack_3", ANIM_TYPE::ATTACK_3},
+	{"Reload", ANIM_TYPE::CARD_RELOAD},
+	{"StompAttack", ANIM_TYPE::STOMP_ATK},
+	{"JumpAttack", ANIM_TYPE::JUMP_ATK},
+	{"Rush_Atk", ANIM_TYPE::RUSH_ATK},
 	};
 }
 
@@ -118,20 +121,19 @@ void CharacterBase::LoadStatus(void)
 
 	std::string statusPath = "";
 
-	characterType_ == CHARACTER_TYPE::PLAYER ? statusPath = PLAYER_STATUS_DATA 
-												: statusPath = ENEMY_STATUS_DATA;
+	characterType_ == CHARACTER_TYPE::PLAYER ? statusPath = PLAYER_STATUS_DATA
+		: statusPath = ENEMY_STATUS_DATA;
+
+	const auto& data = j[statusPath]["Status"];
 
 	//データを格納
-	for (const auto& data : j[statusPath]["Status"])
+	if (data.contains("HP"))
 	{
-		if(data.contains("HP"))
-		{ 
-			maxStatus_.hp = data["HP"]; 
-		}
-		if (data.contains("SPD")) 
-		{
-			maxStatus_.speed = data["SPD"];
-		}
+		maxStatus_.hp = data["HP"];
+	}
+	if (data.contains("SPD"))
+	{
+		maxStatus_.speed = data["SPD"];
 	}
 
 	//現在ステータスを最大値にセット
@@ -199,6 +201,11 @@ void CharacterBase::ChangeDirectToNormal(void)
 {
 	animationController_->Play(static_cast<int>(ANIM_TYPE::IDLE));
 	phazeUpdate_ = [this]() {UpdateNormal(); };
+}
+
+void CharacterBase::PlayCharacterAnim(const ANIM_TYPE _animType)
+{
+	animationController_->PlayBlend(static_cast<int>(_animType), useAnim_[_animType]);
 }
 
 void CharacterBase::ChangeUpdateClearDirection(void)
@@ -342,31 +349,75 @@ void CharacterBase::LoadAddAnimation(void)
 	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
 
 	//データ読み込み
-	nlohmann::json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
 
 	//キャラクターごとでパスを変える
 	std::string statusPath = "";
 	characterType_ == CHARACTER_TYPE::PLAYER ? statusPath = PLAYER_STATUS_DATA
 		: statusPath = ENEMY_STATUS_DATA;
 
-	const auto& actionData = j[statusPath]["Action"];
+	const auto& actionData = j[statusPath];
 
 	// アクションごとの使用アニメーションを読み取って
 	// アニメーションコントローラーに追加する
-	for(const auto& [actionName,action] : actionData.items())
+	for (const auto& [name,data] : actionData.items())
 	{
-		//Jsonのリストからアクション名を取得
-		std::string useAnim = action["useAnim"].value("useAnim", "");
+		//animationが見つからなければ飛ばす
+		if (!data.contains("animation"))continue;
 
-		//Jsonのリストと同じ文字列を探索する
-		auto actIt = animInfo_.find(actionName);
+		//アニメーションデータの取得
+		const auto& animData = data["animation"];
 
-		//見つかったらアニメーション配列に追加
-		if (actIt != animInfo_.end())
+		////Jsonのリスト名と登録情報が一致しているかを調べる
+		////使用アニメーションの取得
+		std::string useAnim = animData.value("useAnim", "");
+		auto nameIt=animStrTable_.find(name);
+		if (nameIt == animStrTable_.end())continue;
+
+		//使用するリソースを取得
+		ResourceManager::SRC useSrc=resMng_.GetSrcFromString(useAnim);
+
+		//再生するときのパラメータを格納
+		AnimationController::ANIMATION_VARIABLE animVariable = {};
+
+		//リソースが見つかったらアニメーションに追加
+		if (useSrc!=ResourceManager::SRC::NONE)
 		{
-			animationController_->Add(static_cast<int>(actIt->second.type),resMng_.LoadModelDuplicate(actIt->second.animSrc));
+			//アニメーションに追加
+			animationController_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
 		}
 
+		//アニメーション速度の取得
+		if (animData.contains("animSpeed"))
+		{
+			animVariable.speed = animData.value("animSpeed", 0.0f);
+		}
+
+		//デタッチスピードの取得
+		if (animData.contains("detachSpeed"))
+		{
+			animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
+		}
+
+		//ループフラグの格納
+		if (animData.contains("isLoop"))
+		{
+			animVariable.isLoop = animData.value("isLoop",false);
+		}
+
+		//スタートステップの取得
+		if (animData.contains("startStep"))
+		{
+			animVariable.step = animData.value("startStep", 0.0f);
+		}
+
+		//終了ステップの取得
+		if (animData.contains("endStep"))
+		{
+			animVariable.step = animData.value("endStep", 0.0f);
+		}
+
+		useAnim_.emplace(nameIt->second, animVariable);
 	}
 }
 

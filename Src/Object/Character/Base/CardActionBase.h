@@ -48,9 +48,6 @@ protected:
     //カードデッキ
     CardPresenter& cardPresent_;
 
-    //オブジェクト
-    CharacterBase& charaObj_;
-
     //カードアクション関数ポインタ
     std::function<void(void)> cardActFunc_;
 

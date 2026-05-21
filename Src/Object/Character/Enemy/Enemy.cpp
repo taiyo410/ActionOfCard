@@ -41,16 +41,7 @@ Enemy::Enemy(void):
 	deck_ = std::make_shared<CardDeck>(characterType_, ENEMY_NUM);
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
 	effect_ = std::make_unique<EffectController>();
-	hipBoneNo_ -= SPINE_FRAME_NO;
-	animInfo_ = {
-		{"E_IDLE",{ANIM_TYPE::IDLE, ResourceManager::SRC::E_IDLE}},
-		{"E_RUN",{ANIM_TYPE::RUN, ResourceManager::SRC::E_RUN}},
-		{"REACT",{ANIM_TYPE::REACT, ResourceManager::SRC::REACT}},
-		{"E_STOMP_ATK",{ANIM_TYPE::STOMP_ATK, ResourceManager::SRC::E_STOMP_ATK}},
-		{"E_JUMP_ATK",{ANIM_TYPE::JUMP_ATK, ResourceManager::SRC::E_JUMP_ATK}},
-		{"E_ROAR_ATK",{ANIM_TYPE::ROAR_ATK, ResourceManager::SRC::E_ROAR_ATK}},
-		{"E_DEATH",{ANIM_TYPE::DEATH, ResourceManager::SRC::E_DEATH}}
-	};
+	hipBoneNo_ = SPINE_FRAME_NO;
 }
 
 Enemy::~Enemy(void)
@@ -77,6 +68,9 @@ void Enemy::Load(void)
 
 	//アクションの追加
 	AddAction();
+
+	//アニメーションの追加
+	LoadAddAnimation();
 
 	action_->Load();
 }

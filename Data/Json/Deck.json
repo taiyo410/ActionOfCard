@@ -1,5 +1,5 @@
 {
-  "PlayerDeck": [
+  "Player": [
     {
       "type": "Attack",
       "pow": 1
@@ -81,7 +81,7 @@
       "pow": 6
     }
   ],
-  "EnemyDeck": [
+  "Enemy": [
     {
       "type": "Attack",
       "pow": 1
@@ -162,6 +162,5 @@
       "type": "Attack",
       "pow": 6
     }
-  ],
-  "
+  ]
 }	

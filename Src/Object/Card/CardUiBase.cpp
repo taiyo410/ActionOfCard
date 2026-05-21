@@ -94,7 +94,7 @@ void CardUIBase::LoadCardData(void)
 	using json = nlohmann::json;
 	
 	//Jsonデータの取得
-	json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	json j = resMng_.Load(ResourceManager::SRC::DECK_DATA).jsonData;
 
 	std::vector<CardBase::CARD_STATUS> cards;
 	//キャラタイプからどのJsonデータを読み取るかを決める

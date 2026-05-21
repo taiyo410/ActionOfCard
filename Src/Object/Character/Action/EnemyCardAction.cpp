@@ -38,7 +38,7 @@ jampCardNum_()
 	};
 
 	//岩の生成
-	charaObj_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
+	character_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
 }
 
 EnemyCardAction::~EnemyCardAction(void)
@@ -57,7 +57,7 @@ void EnemyCardAction::Load(void)
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::E_JUMP_CHARGE_EFF).handleId_,EffectController::EFF_TYPE::E_JUMP_CHARGE);
 
 	//敵の岩生成
-	charaObj_.LoadEnemyRock();
+	character_.LoadEnemyRock();
 
 	//攻撃ステータスロード
 	LoadStatus();
@@ -96,8 +96,8 @@ void EnemyCardAction::Update(void)
 void EnemyCardAction::Release(void)
 {
 	//当たり判定の消去
-	charaObj_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
-	charaObj_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::JUMP_ATK);
+	character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
+	character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::JUMP_ATK);
 	
 	//カメラシェイクを元に戻す
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
@@ -130,7 +130,8 @@ void EnemyCardAction::ChangeStomp(void)
 	atk_ = atkStatusTable_[CARD_ACT_TYPE::STOMP_ATK];
 
 	//スタンプアニメーション再生
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), false);
+	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), false);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::STOMP_ATK);
 
 	cardFuncs_.push([this]() {UpdateStomp(); });
 }
@@ -149,8 +150,8 @@ void EnemyCardAction::ChangeJumpAtk(void)
 
 	//溜めジャンプエフェクト再生
 	effect_->Play(EffectController::EFF_TYPE::E_JUMP_CHARGE,
-		charaObj_.GetTransform().pos,
-		charaObj_.GetTransform().quaRot,
+		character_.GetTransform().pos,
+		character_.GetTransform().quaRot,
 		{ JUMP_CHARGE_EFF_SCL,
 		JUMP_CHARGE_EFF_SCL ,
 		JUMP_CHARGE_EFF_SCL });
@@ -177,8 +178,8 @@ void EnemyCardAction::UpdateStomp(void)
 	if (IsCardFailure(Collider::TAG::NML_ATK))
 	{
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
-		charaObj_.DeleteEnemyRockCol();
-		charaObj_.SetIsAliveEnemyRock(false);
+		character_.DeleteEnemyRockCol();
+		character_.SetIsAliveEnemyRock(false);
 		return;
 	}
 
@@ -186,7 +187,7 @@ void EnemyCardAction::UpdateStomp(void)
 	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK)) > atk_.colStartCnt)
 	{
 		//キャラ情報
-		const Transform& charaTrans = charaObj_.GetTransform();
+		const Transform& charaTrans = character_.GetTransform();
 
 		//攻撃中
 		atk_.pos = Utility3D::AddPosRotate(charaTrans.pos, charaTrans.quaRot, { 0.0f,0.0f,0.0f });
@@ -209,12 +210,12 @@ void EnemyCardAction::UpdateStomp(void)
 		//地面から岩の玉を生成してあらゆる方向に飛ばす
 		if (!isGenerateRock_)
 		{
-			charaObj_.SetIsAliveEnemyRock(true);
+			character_.SetIsAliveEnemyRock(true);
 			isGenerateRock_ = true;
 		}
 		else
 		{
-			charaObj_.EnemyRockUpdate();
+			character_.EnemyRockUpdate();
 		}
 
 		//ため時間が終わったら
@@ -225,12 +226,12 @@ void EnemyCardAction::UpdateStomp(void)
 
 			//アニメーションループ終了
 			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
-			charaObj_.DeleteEnemyRockCol();
-			charaObj_.SetIsAliveEnemyRock(false);
+			character_.DeleteEnemyRockCol();
+			character_.SetIsAliveEnemyRock(false);
 
 			//敵の岩の攻撃判定終了
-			charaObj_.DeleteEnemyRockCol();
-			charaObj_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
+			character_.DeleteEnemyRockCol();
+			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
 			//エフェクトの終了
 			effect_->Stop(EffectController::EFF_TYPE::JUMP, 0);
@@ -296,7 +297,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 	//ジャンプアニメーションが終わったらドーム型の攻撃をする
 	else if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP)) > JUMP_ANIM_END)
 	{
-		const Transform& charaTrans = charaObj_.GetTransform();
+		const Transform& charaTrans = character_.GetTransform();
 
 		//攻撃カウント
 		atkCnt_ += SceneManager::GetInstance().GetDeltaTime();
@@ -306,11 +307,11 @@ void EnemyCardAction::UpdateJumpAtk(void)
 
 		//攻撃判定有効
 		isAliveAtkCol_ = true;
-		charaObj_.MakeAttackCol(charaObj_.GetCharaTag(), Collider::TAG::NML_ATK, atk_.pos, atk_.atkRadius);
+		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, atk_.pos, atk_.atkRadius);
 
 		//攻撃範囲拡大
 		atk_.atkRadius = easing_->EaseFunc(JUMP_ATK_START_RADIUS, JUMP_ATK_GOAL_RADIUS, atkCnt_ / JUMP_ATK_CNT_MAX, Easing::EASING_TYPE::QUAD_IN);
-		charaObj_.UpdateAttackCol(atk_.atkRadius);
+		character_.UpdateAttackCol(atk_.atkRadius);
 
 		//溜めのカメラシェイク()
 		scnMng_.GetCamera().lock()->SetShakeStatus(atkCnt_ / JUMP_ATK_CNT_MAX, JUMP_ATTACK_CAMERA_SHAKE_LIMIT);
@@ -340,7 +341,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
 
 			//当たり判定の消去
-			charaObj_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
+			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
 			//エフェクトの消去
 			effect_->Delete(EffectController::EFF_TYPE::BLAST,static_cast<int>(EFF_TYPE::BLAST));

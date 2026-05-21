@@ -8,8 +8,8 @@
 
 #include "React.h"
 
-React::React(ActionController& _actCntl):
-	ActionBase(_actCntl)
+React::React(ActionController& _actCntl, CharacterBase& _character):
+	ActionBase(_actCntl,_character)
 {
 	isTurnable_ = false;
 }
@@ -30,6 +30,7 @@ void React::Init(void)
 		isLoop = true;
 	}
 	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::REACT), isLoop, ANIM_START, LOOP_END);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::REACT);
 }
 
 void React::Update(void)

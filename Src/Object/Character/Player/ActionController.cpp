@@ -43,10 +43,10 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	const float& speed = charaObj_.GetStatus().speed;
 	VECTOR dir = trans_.GetForward();
 	actionTable_ = {
-		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this)); }},
-		{ACTION_TYPE::MOVE, [this,speed,footSE,footSEDisCount]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,speed,footSE,footSEDisCount)); }},
-		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,trans_,charaObj_.GetStatus().speed)); }},
-		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this)); }},
+		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,charaObj_)); }},
+		{ACTION_TYPE::MOVE, [this,speed,footSE,footSEDisCount]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,charaObj_,speed,footSE,footSEDisCount)); }},
+		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,charaObj_,trans_,charaObj_.GetStatus().speed)); }},
+		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,charaObj_)); }},
 		{ACTION_TYPE::CARD_ACTION,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
@@ -141,7 +141,7 @@ void ActionController::ChangeAction(const ACTION_TYPE _act)
 
 void ActionController::CardMove(void)
 {
-	//CardUIBase& cardUI = charaObj_.GetCardUI();
+	//CardUIBase& cardUI = character_.GetCardUI();
 	CardUIBase::CARD_SELECT uiState = cardPresent_.GetCardUIState();
 	if (uiState == CardUIBase::CARD_SELECT::DISITION
 		|| uiState == CardUIBase::CARD_SELECT::LEFT

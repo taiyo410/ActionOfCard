@@ -1,69 +1,143 @@
 {
-  "PlayerAction": {
+  "Player": {
     "Idle": {
-      "useAnim": "P_IDLE"
+      "animation": {
+        "useAnim": "P_IDLE",
+        "animSpeed": 40.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
+      }
     },
     "Run": {
-      "useAnim": "P_RUN"
+      "animation": {
+        "useAnim": "P_RUN",
+        "animSpeed": 40.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
+      }
     },
     "Dodge": {
-      "useAnim": "P_DODGE",
+      "animation": {
+        "useAnim": "P_DODGE",
+        "animSpeed": 80.0,
+        "detachSpeed": 5.0,
+        "isLoop": false
+      },
       "addDodgeSpeed": 16.0,
       "endDodgeAnimFrame": 30.0
     },
     "Death": {
-      "useAnim": "P_DEATH"
+      "animation": {
+        "useAnim": "P_DEATH",
+        "animSpeed": 80.0,
+        "detachSpeed": 5.0,
+        "isLoop": false
+      }
     },
-    "AttackOneShort": {
+    "React": {
+      "animation": {
+        "useAnim": "P_REACT",
+        "animSpeed": 8.0,
+        "detachSpeed": 5.0,
+        "startStep": 3.0,
+        "endStep": 16.0,
+        "isLoop": false
+      }
+    },
+    "Attack_1_Middle": {
       "colStartAnimCnt": 24.0,
       "colEndAnimCnt": 36.0,
       "bufferFrame": 20.0,
       "attackPoint": 10.0,
-      "useAnim": "P_ATTACK_ONE_SHORT"
+      "animation": {
+        "useAnim": "P_ATTACK_1_MIDDLE",
+        "animSpeed": 80.0,
+        "detachSpeed": 5.0,
+        "isLoop": false,
+        "startStep": 13.0,
+        "endStep": 37.0
+      }
     },
-    "AttackOneMiddle": {
+    "Attack_1_Short": {
       "colStartAnimCnt": 16.0,
       "colEndAnimCnt": 35.0,
       "bufferFrame": 20.0,
       "attackPoint": 10.0,
-      "useAnim": "P_ATTACK_ONE_MIDDLE"
+      "animation": {
+        "useAnim": "P_ATTACK_1_SHORT",
+        "animSpeed": 40.0,
+        "detachSpeed": 5.0,
+        "isLoop": false
+      }
     },
-    "AttackTwo": {
+    "Attack_2": {
       "colStartAnimCnt": 23.0,
       "colEndAnimCnt": 35.0,
       "bufferFrame": 20.0,
       "attackPoint": 15.0,
-      "useAnim": "P_ATTACK_TWO"
+      "animation": {
+        "useAnim": "P_ATTACK_2",
+        "animSpeed": 40.0,
+        "detachSpeed": 5.0,
+        "isLoop": false
+      }
     },
-    "AttackThree": {
+    "Attack_3": {
       "colStartAnimCnt": 73.0,
       "colEndAnimCnt": 83.0,
       "bufferFrame": 20.0,
       "attackPoint": 25.0,
-      "useAnim": "P_ATTACK_THREE"
+      "animation": {
+        "useAnim": "P_ATTACK_3",
+        "animSpeed": 40.0,
+        "detachSpeed": 5.0,
+        "isLoop": false,
+        "startStep": 60.0,
+        "endStep": 86.0
+      }
+
     },
     "Reload": {
-      "useAnim": "P_RELOAD"
+      "useAnim": "P_RELOAD",
+      "startStep": 17.0,
+      "endStep": 33.0
     }
   },
 
-  "EnemyAction": {
+  "Enemy": {
     "Idle": {
-      "useAnim": "E_IDLE"
-    },
+      "animation": {
+        "useAnim": "E_IDLE"
+      }
+
+      },
     "Run": {
-      "useAnim": "E_RUN"
+      "animation": {
+        "useAnim": "E_RUN"
+      }
+
+    },
+    "React": {
+      "animation": {
+        "useAnim": "E_REACT"
+      }
     },
     "StompAttack": {
       "colStartAnimCnt": 22.0,
       "colEndAnimCnt": 46.0,
       "attackPoint": 10.0,
-      "useAnim": "E_STOMP_ATTACK"
-    },
+      "animation": {
+        "useAnim": "E_STOMP_ATTACK"
+      }
+
+      },
     "JumpAttack": {
       "attackPoint": 40.0,
       "attackRadius": 30.0,
-      "useAnim": "E_JUMP_ATTACK"
+      "animation": {
+        "useAnim": "E_JUMP_ATTACK"
+      }
+
     }
   }
 }

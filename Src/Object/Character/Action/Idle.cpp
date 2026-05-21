@@ -5,8 +5,8 @@
 #include"../Base/LogicBase.h"
 #include "Idle.h"
 
-Idle::Idle(ActionController& _actCntl):
-	ActionBase(_actCntl)
+Idle::Idle(ActionController& _actCntl,CharacterBase& _character):
+	ActionBase(_actCntl,_character)
 {
 }
 
@@ -20,8 +20,9 @@ void Idle::Load(void)
 
 void Idle::Init(void)
 {
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE));
+	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE));
 	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE), BLEND_TIME);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::IDLE);
 }
 
 void Idle::Update(void)

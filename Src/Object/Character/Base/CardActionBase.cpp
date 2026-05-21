@@ -14,8 +14,7 @@
 #include "CardActionBase.h"
 
 CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
-	ActionBase(_actCntl),
-	charaObj_(_charaObj),
+	ActionBase(_actCntl,_charaObj),
 	cardPresent_(_deck),
 	atkPos_(Utility3D::VECTOR_ZERO),
 	isCombo_(false),
@@ -67,13 +66,13 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 		anim_.GetAnimStep(atkAnim_) <= _status.colEndCnt)
 	{
 		//UŒ‚’†
-		atkPos_ = Utility3D::AddPosRotate(charaObj_.GetTransform().pos, charaObj_.GetTransform().quaRot, _localPos);
+		atkPos_ = Utility3D::AddPosRotate(character_.GetTransform().pos, character_.GetTransform().quaRot, _localPos);
 
 		//UŒ‚”»’è—LŒø
 		isAliveAtkCol_ = true;
 
 		//UŒ‚‚Ì“–‚½‚è”»’èÁ‹
-		charaObj_.MakeAttackCol(charaObj_.GetCharaTag(), _attackTag, atkPos_,_status.atkRadius);
+		character_.MakeAttackCol(character_.GetCharaTag(), _attackTag, atkPos_,_status.atkRadius);
 	}
 	else if (anim_.IsEnd(atkAnim_))		//ƒAƒjƒ[ƒVƒ‡ƒ“I—¹‚ÅƒAƒCƒhƒ‹ó‘Ô•ÏX
 	{
@@ -83,7 +82,7 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 	else if (anim_.GetAnimStep(atkAnim_) > _status.colEndCnt)	//UŒ‚I—¹Œã
 	{
 		//UŒ‚”»’è–³Œø
-		charaObj_.DeleteAttackCol(charaObj_.GetCharaTag(),_attackTag);
+		character_.DeleteAttackCol(character_.GetCharaTag(),_attackTag);
 
 		//Ÿ‚ÌUŒ‚‚É‚Â‚È‚°‚é
 		ChangeComboAction();
@@ -112,7 +111,7 @@ void CardActionBase::FinishFailureAttack(const Collider::TAG _attackCol)
 	cardPresent_.FailureCard();
 
 	//UŒ‚”»’è–³Œø
-	charaObj_.DeleteAttackCol(charaObj_.GetCharaTag(), _attackCol);
+	character_.DeleteAttackCol(character_.GetCharaTag(), _attackCol);
 	actType_ = CARD_ACT_TYPE::NONE;
 	cardFuncs_.pop();
 
@@ -142,7 +141,7 @@ void CardActionBase::LoadAttackStatus(ATK_STATUS& _atk, const std::string _dataN
 {
 	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
 
-	CHARACTER_TYPE chara = charaObj_.GetCharacterType();
+	CHARACTER_TYPE chara = character_.GetCharacterType();
 	std::string jsonStr = "";
 	chara == CHARACTER_TYPE::PLAYER ? jsonStr = "PlayerAction" : jsonStr = "EnemyAction";
 

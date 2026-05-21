@@ -22,6 +22,11 @@ AnimationController::~AnimationController(void)
 	}
 }
 
+void AnimationController::LoadData(const std::string& animName)
+{
+
+}
+
 void AnimationController::Add(int type,int modelId)
 {
 
@@ -68,8 +73,9 @@ void AnimationController::Play(int type, bool isLoop,
 
 }
 
-void AnimationController::PlayBlend(int type, float animSpeed, float detachSpeed, bool isLoop,
-	VECTOR invalidBlendPos, float startStep, float endStep, bool isStop)
+//void AnimationController::PlayBlend(int type, float animSpeed, float detachSpeed, bool isLoop,
+//	VECTOR invalidBlendPos, float startStep, float endStep, bool isStop)
+void AnimationController::PlayBlend(int type, ANIMATION_VARIABLE animVariable)
 {
 	//優先アニメーションを探索
 	int priNo = -1;
@@ -92,17 +98,17 @@ void AnimationController::PlayBlend(int type, float animSpeed, float detachSpeed
 	{
 		auto& pri = animations_.at(type);
 		pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
-		pri.step = startStep;
+		pri.variable.step = animVariable.step;
 		pri.blendRate = animRate;
-		pri.variable.totalTime = endStep > 0.0f ? endStep : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
-		pri.variable.isLoop = isLoop;
-		pri.invalidPos = invalidBlendPos;
+		pri.variable.totalTime = animVariable.totalTime > 0.0f ? animVariable.totalTime : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
+		pri.variable.isLoop = animVariable.isLoop;
+		pri.invalidPos = animVariable.invalidPos;
 		pri.variable.isMidLoop = false;
-		pri.isStop = isStop;
+		pri.isStop = animVariable.isStop;
 		pri.isPriority = true;
 
-		pri.variable.speed = animSpeed;
-		pri.variable.detachSpeed = detachSpeed;
+		pri.variable.speed = animVariable.speed;
+		pri.variable.detachSpeed = animVariable.detachSpeed;
 	}
 	else
 	{
@@ -142,12 +148,14 @@ void AnimationController::PlayBlend(int type, float animSpeed, float detachSpeed
 			//最優先アニメーションをアタッチ
 			pri.attachNo = MV1AttachAnim(modelId_, 0, pri.model);
 		}
-		pri.step = startStep;
+		pri.variable.step = animVariable.step;
 		pri.isPriority = true;
 		pri.blendRate = animRate;
-		pri.variable.totalTime = endStep > 0.0f ? endStep : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
-		pri.variable.isLoop = isLoop;
-		pri.invalidPos = invalidBlendPos;
+		pri.variable.totalTime = animVariable.totalTime > 0.0f ? animVariable.totalTime : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
+		pri.variable.isLoop = animVariable.isLoop;
+		pri.invalidPos = animVariable.invalidPos;
+		pri.variable.speed = animVariable.speed;
+		pri.variable.detachSpeed = animVariable.detachSpeed;
 
 	}
 }
@@ -174,12 +182,12 @@ void AnimationController::SetEndLoop(int type, float startStep, float endStep, f
 void AnimationController::SetMidLoop(int type, const float startStep, const float endStep, float _spd)
 {
 	animations_.at(type).variable.isMidLoop = true;
-	if (animations_.at(type).step >= endStep)
+	if (animations_.at(type).variable.step >= endStep)
 	{
 		animations_.at(type).variable.speed = _spd;
 		animations_.at(type).variable.switchLoopReverse = -1.0f;
 	}
-	else if (animations_.at(type).variable.switchLoopReverse == -1.0f && animations_.at(type).step < startStep)
+	else if (animations_.at(type).variable.switchLoopReverse == -1.0f && animations_.at(type).variable.step < startStep)
 	{
 		animations_.at(type).variable.speed = _spd;
 		animations_.at(type).variable.switchLoopReverse = 1.0f;
@@ -200,7 +208,7 @@ int AnimationController::GetPlayType(void) const
 
 const float AnimationController::GetAnimStep(const int animType) const
 {
-	return animations_.at(animType).step;
+	return animations_.at(animType).variable.step;
 }
 
 void AnimationController::SetAnimSpeed(int type, const float _spd, const bool _isEase, const float _startSpd, const float _t, Easing::EASING_TYPE _easeType)
@@ -227,7 +235,7 @@ bool AnimationController::IsEnd(int type) const
 		return ret;
 	}
 
-	if (animations_.at(type).step >= animations_.at(type).variable.totalTime)
+	if (animations_.at(type).variable.step >= animations_.at(type).variable.totalTime)
 	{
 		// 再生時間を過ぎたらtrue
 		return true;
@@ -327,7 +335,7 @@ void AnimationController::DrawDebug(void)
 	for(const auto& anim : animations_)
 	{
 		//DrawFormatString(posY, 10.0f, GetColor(255, 255, 255), L"AnimType:%d", anim.first);
-		DrawFormatString(posX, posY, GetColor(255, 255, 255), L"AnimStep:%f", anim.second.step);
+		DrawFormatString(posX, posY, GetColor(255, 255, 255), L"AnimStep:%f", anim.second.variable.step);
 		//DrawFormatString(posX, posY, UtilityCommon::WHITE, L"BlendRate:%f", anim.second.blendRate);
 		posY += 16;
 	}
@@ -347,14 +355,14 @@ void AnimationController::UpdateNormal(const float _spdScl)
 		if (anim.second.attachNo == -1)continue;
 
 		//アニメーション時間の進行
-		anim.second.step += anim.second.variable.speed * scnMng_.GetDeltaTime();
+		anim.second.variable.step += anim.second.variable.speed * scnMng_.GetDeltaTime();
 
 		//	// アニメーション終了判定
 		bool isEnd = false;
 		if (anim.second.variable.switchLoopReverse > 0.0f)
 		{
 			// 通常再生の場合
-			if (anim.second.step > anim.second.variable.totalTime)
+			if (anim.second.variable.step > anim.second.variable.totalTime)
 			{
 				isEnd = true;
 			}
@@ -362,7 +370,7 @@ void AnimationController::UpdateNormal(const float _spdScl)
 		else
 		{
 			// 逆再生の場合
-			if (anim.second.step < anim.second.variable.totalTime && !anim.second.variable.isMidLoop)
+			if (anim.second.variable.step < anim.second.variable.totalTime && !anim.second.variable.isMidLoop)
 			{
 				isEnd = true;
 			}
@@ -380,12 +388,12 @@ void AnimationController::UpdateNormal(const float _spdScl)
 					anim.second.variable.switchLoopReverse *= -1.0f;
 					if (anim.second.variable.switchLoopReverse > 0.0f)
 					{
-						anim.second.step = anim.second.variable.stepEndLoopStart;
+						anim.second.variable.step = anim.second.variable.stepEndLoopStart;
 						anim.second.variable.totalTime = anim.second.variable.stepEndLoopEnd;
 					}
 					else
 					{
-						anim.second.step = anim.second.variable.stepEndLoopEnd;
+						anim.second.variable.step = anim.second.variable.stepEndLoopEnd;
 						anim.second.variable.totalTime = anim.second.variable.stepEndLoopStart;
 					}
 					anim.second.variable.speed = anim.second.variable.endLoopSpeed;
@@ -394,17 +402,17 @@ void AnimationController::UpdateNormal(const float _spdScl)
 				else
 				{
 					// 通常のループ再生
-					anim.second.step = 0.0f;
+					anim.second.variable.step = 0.0f;
 				}
 			}
 			else
 			{
 				// ループしない
-				anim.second.step = anim.second.variable.totalTime;
+				anim.second.variable.step = anim.second.variable.totalTime;
 			}
 		}
 		//アニメーション設定（進行）
-		MV1SetAttachAnimTime(modelId_, anim.second.attachNo, anim.second.step);
+		MV1SetAttachAnimTime(modelId_, anim.second.attachNo, anim.second.variable.step);
 	}
 }
 
@@ -449,7 +457,7 @@ void AnimationController::AnimationDettach(const int _type)
 	// 値をリセット
 
 	// アニメーション現在時間
-	data.step = 0.0f;
+	data.variable.step = 0.0f;
 
 	// アニメーションアタッチNo(モデルとアニメーションの管理番号)
 	data.attachNo = -1;

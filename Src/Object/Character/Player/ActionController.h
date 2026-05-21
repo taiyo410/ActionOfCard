@@ -36,21 +36,12 @@ public:
 	//プレイヤーの入力される種類
 	enum class ACTION_TYPE
 	{
-		IDLE,		//何もしてない
-		MOVE,		//移動
-		REACT,	//パンチされた状態
-		JUMP,		//ジャンプ
+		IDLE,			//何もしてない
+		MOVE,			//移動
+		REACT,			//パンチされた状態
+		JUMP,			//ジャンプ
 		CARD_ACTION,	//カードアクション
 		DODGE,
-	};
-
-	enum class ACT_SE
-	{
-		DASH,	//ダッシュ
-		JUMP,	//ジャンプ
-		PUNCH,	//パンチ
-		PUNCH_HIT,//パンチヒット
-		SLIME,	//スライム
 	};
 
 	/// @brief コンストラクタ

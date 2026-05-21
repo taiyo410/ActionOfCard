@@ -8,12 +8,13 @@
 #include"../Base/LogicBase.h"
 #include "ActionBase.h"
 
-ActionBase::ActionBase(ActionController& _actCntl):
-	scnMng_(SceneManager::GetInstance()),
+ActionBase::ActionBase(ActionController& _actCntl,CharacterBase& _character):
+	scnMng_(SceneManager::GetInstance()),	
 	actionCntl_(_actCntl),
 	anim_(_actCntl.GetAnimation()),
 	soundMng_(SoundManager::GetInstance()),
 	resMng_(ResourceManager::GetInstance()),
+	character_(_character),
 	isTurnable_(true),
 	isAliveAtkCol_(false),
 	speed_(0.0f),

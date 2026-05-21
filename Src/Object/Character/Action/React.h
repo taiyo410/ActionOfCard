@@ -9,7 +9,7 @@ public:
 
     /// @brief コンストラクタ
 	/// @param _actCntl アクションコントローラー
-    React(ActionController& _actCntl);
+    React(ActionController& _actCntl, CharacterBase& _character);
 
 	/// @brief デストラクタ
     /// @param  

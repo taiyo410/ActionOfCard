@@ -6,14 +6,14 @@
 #include"../Base/LogicBase.h"
 #include "Dodge.h"
 
-Dodge::Dodge(ActionController& _actCntl, Transform& _trans, float _spd):
-	ActionBase(_actCntl),
+Dodge::Dodge(ActionController& _actCntl, CharacterBase& _character, Transform& _trans, float _spd):
+	ActionBase(_actCntl, _character),
 	dodgeSpd_(_spd),
 	trans_(_trans),
 	dodgeDir_({})
 {
-	speed_ = dodgeSpd_+ ADD_DODGE_SPEED;
-	//speed_ = 0;
+	//speed_ = dodgeSpd_+ ADD_DODGE_SPEED;
+	speed_ = 0;
 }
 
 Dodge::~Dodge(void)
@@ -26,7 +26,8 @@ void Dodge::Load(void)
 
 void Dodge::Init(void)
 {
-	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE),false);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::DODGE);
+
 
 	//方向入力されている場合は入力方向、
 	//そうでない場合はプレイヤーの前方向に回避

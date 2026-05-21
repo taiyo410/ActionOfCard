@@ -7,6 +7,7 @@ class SceneManager;
 class SoundManager;
 class ActionController;
 class AnimationController;
+class CharacterBase;
 class PlayerLogic;
 
 class ActionBase
@@ -59,7 +60,7 @@ public:
 
 	/// @brief コンストラクタ
 	/// @param _actCntl アクションコントローラー
-	ActionBase(ActionController& _actCntl);
+	ActionBase(ActionController& _actCntl,CharacterBase& _character);
 
 	/// @brief デストラクタ
 	/// @param  
@@ -155,6 +156,9 @@ protected:
 	//アニメーション
 	AnimationController& anim_;
 
+	//キャラクター
+	CharacterBase& character_;
+
 	//方向転換可能かどうか
 	bool isTurnable_;
 
@@ -169,6 +173,9 @@ protected:
 
 	//現在の攻撃
 	ATK_STATUS atk_;
+
+	//使用アニメーション
+	std::vector<int> useAnimTypes_;
 
 	//
 

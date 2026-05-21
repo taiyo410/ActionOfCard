@@ -91,6 +91,9 @@ ResourceManager::ResourceManager(void):
 		{"GAME_START_SE",SRC::GAME_START_SE},
 		//Json
 		{"CHARA_DATA" ,SRC::CHARA_DATA},
+		{"DECK_DATA" ,SRC::DECK_DATA},
+		{"ACTION_DATA" ,SRC::ACTION_DATA},
+		{"ANIMATION_PARAMETER_DATA" ,SRC::ANIMATION_PARAMETER_DATA},
 		//ピクセルシェーダ
 		{"STAGE_PS",SRC::STAGE_PS},
 		{"SKYDOME_PS",SRC::SKYDOME_PS},
@@ -140,10 +143,6 @@ void ResourceManager::Init(void)
 		ResourceData::TYPE type = resTypeStr_[data["type"]].resType;
 		loadDataFunc_[type](data);
 	}
-
-	//Jsonを読み込み終わったので、関連の情報は解放する
-	resTypeStr_.clear();
-	resStr_.clear();
 }
 
 void ResourceManager::SceneChangeRelease(void)
@@ -217,6 +216,19 @@ std::vector<const ResourceData*> ResourceManager::GetSoundResources(ResourceData
 	}
 
 	return retArray;
+}
+
+const ResourceManager::SRC ResourceManager::GetSrcFromString(const std::string& _str) const
+{
+	auto it = resStr_.find(_str);
+
+	if (it != resStr_.end())
+	{
+		return it->second;
+	}
+
+	//見つからなかった場合はNONEを返す
+	return SRC::NONE;
 }
 
 ResourceManager::~ResourceManager(void)
