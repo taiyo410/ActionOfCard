@@ -181,16 +181,17 @@ void AnimationController::SetEndLoop(int type, float startStep, float endStep, f
 
 void AnimationController::SetMidLoop(int type, const float startStep, const float endStep, float _spd)
 {
-	animations_.at(type).variable.isMidLoop = true;
-	if (animations_.at(type).variable.step >= endStep)
+	ANIMATION_VARIABLE& var = animations_.at(type).variable;
+	var.isMidLoop = true;
+	if (var.step >= endStep)
 	{
-		animations_.at(type).variable.speed = _spd;
-		animations_.at(type).variable.switchLoopReverse = -1.0f;
+		var.speed = _spd;
+		var.switchLoopReverse = -1.0f;
 	}
-	else if (animations_.at(type).variable.switchLoopReverse == -1.0f && animations_.at(type).variable.step < startStep)
+	else if (var.switchLoopReverse == -1.0f && var.step < startStep)
 	{
-		animations_.at(type).variable.speed = _spd;
-		animations_.at(type).variable.switchLoopReverse = 1.0f;
+		var.speed = _spd;
+		var.switchLoopReverse = 1.0f;
 	}
 }
 
@@ -354,15 +355,18 @@ void AnimationController::UpdateNormal(const float _spdScl)
 		//アタッチされていなければ再生しない
 		if (anim.second.attachNo == -1)continue;
 
+		//アニメーション可変の情報
+		ANIMATION_VARIABLE& animVar = anim.second.variable;
+
 		//アニメーション時間の進行
-		anim.second.variable.step += anim.second.variable.speed * scnMng_.GetDeltaTime();
+		animVar.step += animVar.speed * scnMng_.GetDeltaTime() * _spdScl * animVar.switchLoopReverse;
 
 		//	// アニメーション終了判定
 		bool isEnd = false;
-		if (anim.second.variable.switchLoopReverse > 0.0f)
+		if (animVar.switchLoopReverse > 0.0f)
 		{
 			// 通常再生の場合
-			if (anim.second.variable.step > anim.second.variable.totalTime)
+			if (animVar.step > animVar.totalTime)
 			{
 				isEnd = true;
 			}
@@ -370,7 +374,7 @@ void AnimationController::UpdateNormal(const float _spdScl)
 		else
 		{
 			// 逆再生の場合
-			if (anim.second.variable.step < anim.second.variable.totalTime && !anim.second.variable.isMidLoop)
+			if (animVar.step < animVar.totalTime && !animVar.isMidLoop)
 			{
 				isEnd = true;
 			}
@@ -379,40 +383,40 @@ void AnimationController::UpdateNormal(const float _spdScl)
 		if (isEnd)
 		{
 			// アニメーションが終了したら
-			if (anim.second.variable.isLoop)
+			if (animVar.isLoop)
 			{
 				// ループ再生
-				if (anim.second.variable.stepEndLoopStart > 0.0f)
+				if (animVar.stepEndLoopStart > 0.0f)
 				{
 					// アニメーション終了後の指定フレーム再生
-					anim.second.variable.switchLoopReverse *= -1.0f;
-					if (anim.second.variable.switchLoopReverse > 0.0f)
+					animVar.switchLoopReverse *= -1.0f;
+					if (animVar.switchLoopReverse > 0.0f)
 					{
-						anim.second.variable.step = anim.second.variable.stepEndLoopStart;
-						anim.second.variable.totalTime = anim.second.variable.stepEndLoopEnd;
+						animVar.step = animVar.stepEndLoopStart;
+						animVar.totalTime = animVar.stepEndLoopEnd;
 					}
 					else
 					{
-						anim.second.variable.step = anim.second.variable.stepEndLoopEnd;
-						anim.second.variable.totalTime = anim.second.variable.stepEndLoopStart;
+						animVar.step = animVar.stepEndLoopEnd;
+						animVar.totalTime = animVar.stepEndLoopStart;
 					}
-					anim.second.variable.speed = anim.second.variable.endLoopSpeed;
+					animVar.speed = animVar.endLoopSpeed;
 
 				}
 				else
 				{
 					// 通常のループ再生
-					anim.second.variable.step = 0.0f;
+					animVar.step = 0.0f;
 				}
 			}
 			else
 			{
 				// ループしない
-				anim.second.variable.step = anim.second.variable.totalTime;
+				animVar.step = animVar.totalTime;
 			}
 		}
 		//アニメーション設定（進行）
-		MV1SetAttachAnimTime(modelId_, anim.second.attachNo, anim.second.variable.step);
+		MV1SetAttachAnimTime(modelId_, anim.second.attachNo, animVar.step);
 	}
 }
 
