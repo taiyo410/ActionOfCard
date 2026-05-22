@@ -130,7 +130,6 @@ void EnemyCardAction::ChangeStomp(void)
 	atk_ = atkStatusTable_[CARD_ACT_TYPE::STOMP_ATK];
 
 	//スタンプアニメーション再生
-	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), false);
 	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::STOMP_ATK);
 
 	cardFuncs_.push([this]() {UpdateStomp(); });
@@ -139,7 +138,8 @@ void EnemyCardAction::ChangeStomp(void)
 void EnemyCardAction::ChangeJumpAtk(void)
 {
 	//ジャンプアニメーション再生
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), false);
+	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), false);
+	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::JUMP_ATK);
 	jumpChargeCnt_ = 0.0f;
 
 	//溜めジャンプSE再生
