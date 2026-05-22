@@ -27,10 +27,10 @@ PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _c
 		{ CARD_ACT_TYPE::RELOAD, [this]() {ChangeReload(); }},
 	};
 	atkStatusStrTable_ = {
-		{CARD_ACT_TYPE::ATTACK_ONE_SHORT,"AttackOneShort"},
-		{CARD_ACT_TYPE::ATTACK_ONE_MIDDLE,"AttackOneMiddle"},
-		{CARD_ACT_TYPE::ATTACK_TWO,"AttackTwo"},
-		{CARD_ACT_TYPE::ATTACK_THREE,"AttackThree"}
+		{CARD_ACT_TYPE::ATTACK_ONE_SHORT,"Attack_1_Short"},
+		{CARD_ACT_TYPE::ATTACK_ONE_MIDDLE,"Attack_1_Middle"},
+		{CARD_ACT_TYPE::ATTACK_TWO,"Attack_2"},
+		{CARD_ACT_TYPE::ATTACK_THREE,"Attack_3"}
 	};
 	atk_ = {};
 	easing_ = std::make_unique<Easing>();
@@ -57,7 +57,7 @@ void PlayerCardAction::Load(void)
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_END_EFF).handleId_, EffectController::EFF_TYPE::RELOAD_END);
 
 	//攻撃ステータスロード
-	LoadAttack();
+ 	LoadAttack();
 }
 
 void PlayerCardAction::Init(void)
@@ -194,10 +194,7 @@ void PlayerCardAction::SetUIReloadCnt(void)
 
 void PlayerCardAction::LoadAttack(void)
 {
-	for (const auto& atk : atkStatusStrTable_)
-	{
-		LoadAttackStatus(atkStatusTable_[atk.first], atk.second);
-	}
+	LoadAttackStatus();
 }
 
 void PlayerCardAction::UpdateAttack(void)

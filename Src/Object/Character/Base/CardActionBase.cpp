@@ -25,12 +25,12 @@ CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _chara
 	//UŒ‚ƒAƒNƒVƒ‡ƒ“‚Ì•¶š—ñ‚Æ‚Ì‘Î‰
 	attackActionStr_=
 	{
-		"AttackOneShort",
-		"AttackOneMiddle",
-		"AttackTwo",
-		"AttackThree",
-		"StompAtk",
-		"JumpAtk",
+		{"Attack_1_Short", CARD_ACT_TYPE::ATTACK_ONE_SHORT},
+		{"Attack_1_Middle", CARD_ACT_TYPE::ATTACK_ONE_MIDDLE},
+		{"Attack_2", CARD_ACT_TYPE::ATTACK_TWO},
+		{"Attack_3", CARD_ACT_TYPE::ATTACK_THREE},
+		{"StompAttack", CARD_ACT_TYPE::STOMP_ATK},
+		{"JumpAttack", CARD_ACT_TYPE::JUMP_ATK}
 	};
 }
 
@@ -137,52 +137,52 @@ void CardActionBase::ComboInput(void)
 	}
 }
 
-void CardActionBase::LoadAttackStatus(ATK_STATUS& _atk, const std::string _dataName)
+void CardActionBase::LoadAttackStatus(void)
 {
 	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
 
 	CHARACTER_TYPE chara = character_.GetCharacterType();
 	std::string jsonStr = "";
-	chara == CHARACTER_TYPE::PLAYER ? jsonStr = "PlayerAction" : jsonStr = "EnemyAction";
+	chara == CHARACTER_TYPE::PLAYER ? jsonStr = "Player" : jsonStr = "Enemy";
 
-	for (const auto& data : j[jsonStr])
+	for (const auto& [name, data] : j[jsonStr].items())
 	{
-		auto it=std::find(attackActionStr_.begin(),attackActionStr_.end(), _dataName);
-		if (it == attackActionStr_.end())continue;
+		auto it = attackActionStr_.find(name);
+		if (it == attackActionStr_.end()) continue;
 
-		if (data.contains(*it))
+		std::string dataName = it->first;
+		//æ“¾ƒf[ƒ^
+		auto& atkData = data[name];
+
+		auto& atk = atkStatusTable_[it->second];
+		if (data.contains("colStartAnimCnt"))
 		{
-			auto& atk = data.at(*it);
-			if(atk.contains("colStartAnimCnt"))
-			{
-				_atk.colStartCnt = atk.value("colStartAnimCnt", 0.0f);
-			}
-			if (atk.contains("colEndAnimCnt"))
-			{
-				_atk.colEndCnt = atk.value("colEndAnimCnt", 0.0f);
-			}
-			if (atk.contains("bufferFrame"))
-			{
-				_atk.bufferFrame = atk.value("bufferFrame", 0.0f);
-			}
-			if (atk.contains("attackRadius"))
-			{
-				_atk.atkRadius = atk.value("attackRadius", 0.0f);
-			}
-			if (atk.contains("attackPoint"))
-			{
-				_atk.atkPoint = atk.value("attackPoint", 0.0f);
-			}
+			atk.colStartCnt = data.value("colStartAnimCnt", 0.0f);
 		}
+		if (data.contains("colEndAnimCnt"))
+		{
+			atk.colEndCnt = data.value("colEndAnimCnt", 0.0f);
+		}
+		if (data.contains("bufferFrame"))
+		{
+			atk.bufferFrame = data.value("bufferFrame", 0.0f);
+		}
+		if (data.contains("attackRadius"))
+		{
+			atk.atkRadius = data.value("attackRadius", 0.0f);
+		}
+		if (data.contains("attackPoint"))
+		{
+			atk.atkPoint = data.value("attackPoint", 0.0f);
+		}
+		//UŒ‚ƒqƒbƒg”»’è‚Ífalse‚ÅŠi”[‚·‚é
+		atk.isDamage = false;
+
 	}
-	//UŒ‚ƒqƒbƒg”»’è‚Ífalse‚ÅŠi”[‚·‚é
-	_atk.isDamage = false;
+
 }
 
 void CardActionBase::LoadStatus(void)
 {
-	for (const auto& atk : atkStatusStrTable_)
-	{
-		LoadAttackStatus(atkStatusTable_[atk.first], atk.second);
-	}
+	LoadAttackStatus();
 }

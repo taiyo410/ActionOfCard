@@ -61,7 +61,7 @@ protected:
     std::map<CARD_ACT_TYPE, ATK_STATUS>atkStatusTable_;
 
     //攻撃アクション文字列
-    std::vector<std::string> attackActionStr_;
+    std::unordered_map<std::string,CARD_ACT_TYPE> attackActionStr_;
 
     //アタックのQueue配列
     std::queue<std::function<void(void)>>cardFuncs_;
@@ -107,7 +107,7 @@ protected:
     /// @brief 攻撃アクションステータスを外部ファイルから取得
     /// @param _atk 格納する攻撃ステータス
     /// @param _dataName 取得したいデータ名
-    void LoadAttackStatus(ATK_STATUS& _atk,const std::string _dataName);
+    void LoadAttackStatus(void);
 
     /// @brief 攻撃ステータスを個数分ロード
     /// @param  

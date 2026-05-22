@@ -380,7 +380,6 @@ void CharacterBase::LoadAddAnimation(void)
 		//再生するときのパラメータを格納
 		AnimationController::ANIMATION_VARIABLE animVariable = {};
 
-		//リソースが見つかったらアニメーションに追加
 		if (useSrc!=ResourceManager::SRC::NONE)
 		{
 			//アニメーションに追加
@@ -414,7 +413,7 @@ void CharacterBase::LoadAddAnimation(void)
 		//終了ステップの取得
 		if (animData.contains("endStep"))
 		{
-			animVariable.step = animData.value("endStep", 0.0f);
+			animVariable.totalTime = animData.value("endStep", 0.0f);
 		}
 
 		useAnim_.emplace(nameIt->second, animVariable);
