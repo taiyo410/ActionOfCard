@@ -57,9 +57,6 @@ void Enemy::Load(void)
 	trans_.quaRotLocal =
 		Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
 
-	//アニメーションの追加
-	LoadAddAnimation();
-
 	//エフェクト
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
 
@@ -242,14 +239,20 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	//animationController_->Update();
-	//logic_->Update();
+	//ロジックの更新
+	logic_->Update();
+
+	//アクションの更新
 	action_->Update();
+
+	//アニメーションの更新
+	animationController_->Update();
 
 	//回転の同期
 	UpdatePost();
-	trans_.quaRot = charaRot_.playerRotY_;
 
+	//Transformの更新
+	trans_.quaRot = charaRot_.playerRotY_;
 	trans_.Update();
 }
 void Enemy::AddAction(void)

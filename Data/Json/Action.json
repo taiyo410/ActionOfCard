@@ -113,19 +113,28 @@
   "Enemy": {
     "Idle": {
       "animation": {
-        "useAnim": "E_IDLE"
+        "useAnim": "E_IDLE",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
       }
 
       },
     "Run": {
       "animation": {
-        "useAnim": "E_RUN"
+        "useAnim": "E_RUN",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
       }
 
     },
     "React": {
       "animation": {
-        "useAnim": "REACT"
+        "useAnim": "REACT",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
       }
     },
     "StompAttack": {
