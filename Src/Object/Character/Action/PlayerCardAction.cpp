@@ -19,18 +19,19 @@ PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _c
 	pushReloadCnt_()
 {
 	isTurnable_ = false;
-	changeAction_={
-		{ CARD_ACT_TYPE::ATTACK_ONE_SHORT, [this]() {ChangeShortAttackOne(); }},
-		{ CARD_ACT_TYPE::ATTACK_ONE_MIDDLE, [this]() {ChangeMiddleAttackOne(); }},
-		{ CARD_ACT_TYPE::ATTACK_TWO, [this]() {ChangeAttackTwo(); }},
-		{ CARD_ACT_TYPE::ATTACK_THREE, [this]() {ChangeAttackThree(); }},
-		{ CARD_ACT_TYPE::RELOAD, [this]() {ChangeReload(); }},
+	changeCardAction_ ={
+		{ CARD_ACTION_TYPE::ATTACK_ONE_SHORT, [this]() {ChangeShortAttackOne(); }},
+		{ CARD_ACTION_TYPE::ATTACK_ONE_MIDDLE, [this]() {ChangeMiddleAttackOne(); }},
+		{ CARD_ACTION_TYPE::ATTACK_TWO, [this]() {ChangeAttackTwo(); }},
+		{ CARD_ACTION_TYPE::ATTACK_THREE, [this]() {ChangeAttackThree(); }},
+		{ CARD_ACTION_TYPE::RELOAD, [this]() {ChangeReload(); }},
 	};
-	atkStatusStrTable_ = {
-		{CARD_ACT_TYPE::ATTACK_ONE_SHORT,"Attack_1_Short"},
-		{CARD_ACT_TYPE::ATTACK_ONE_MIDDLE,"Attack_1_Middle"},
-		{CARD_ACT_TYPE::ATTACK_TWO,"Attack_2"},
-		{CARD_ACT_TYPE::ATTACK_THREE,"Attack_3"}
+	attackActionStr_ = {
+		{"Attack_1_Short", CARD_ACTION_TYPE::ATTACK_ONE_SHORT},
+		{"Attack_1_Middle", CARD_ACTION_TYPE::ATTACK_ONE_MIDDLE},
+		{"Attack_2", CARD_ACTION_TYPE::ATTACK_TWO},
+		{"Attack_3", CARD_ACTION_TYPE::ATTACK_THREE},
+		{"Reload", CARD_ACTION_TYPE::RELOAD}
 	};
 	atk_ = {};
 	easing_ = std::make_unique<Easing>();
@@ -38,7 +39,7 @@ PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _c
 
 PlayerCardAction::~PlayerCardAction(void)
 {
-	changeAction_.clear();
+	changeCardAction_.clear();
 
 	//カード機能配列の解放
 	std::queue<std::function<void(void)>> empty;
@@ -55,9 +56,6 @@ void PlayerCardAction::Load(void)
 	//使用エフェクトの追加
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_EFF).handleId_, EffectController::EFF_TYPE::RELOAD);
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_END_EFF).handleId_, EffectController::EFF_TYPE::RELOAD_END);
-
-	//攻撃ステータスロード
- 	LoadAttack();
 }
 
 void PlayerCardAction::Init(void)
@@ -84,7 +82,7 @@ void PlayerCardAction::Init(void)
 	else if (cardPresent_.GetCardType()==CardBase::CARD_TYPE::RELOAD)
 	{
 		//リロード処理へ
-		ChangeCardAction(CARD_ACT_TYPE::RELOAD);
+		ChangeCardAction(CARD_ACTION_TYPE::RELOAD);
 	}
 }
 
@@ -111,7 +109,7 @@ void PlayerCardAction::Release(void)
 	character_.SetIsCanMoveable(true);
 
 	//リロード中にアクションが中断された場合
-	if (actType_ == CARD_ACT_TYPE::RELOAD)
+	if (cardActType_ == CARD_ACTION_TYPE::RELOAD)
 	{
 		//リロードSEの停止
 		soundMng_.Stop(ResourceManager::SRC::CARD_RELOAD_SE);
@@ -133,7 +131,7 @@ void PlayerCardAction::Release(void)
 		cardFuncs_.pop();
 	}
 
-	actType_ = CARD_ACT_TYPE::NONE;
+	cardActType_ = CARD_ACTION_TYPE::NONE;
 }
 
 void PlayerCardAction::ReleaseReloadResource(void)
@@ -144,7 +142,39 @@ void PlayerCardAction::ReleaseReloadResource(void)
 	//エフェクトの停止
 	effect_->Stop(EffectController::EFF_TYPE::RELOAD, 0);
 	effect_->Delete(EffectController::EFF_TYPE::RELOAD, 0);
-	actType_ = CARD_ACT_TYPE::NONE;
+	cardActType_ = CARD_ACTION_TYPE::NONE;
+}
+
+const bool PlayerCardAction::IsReloading(void)const
+{
+	return cardActType_ == CARD_ACTION_TYPE::RELOAD;
+}
+
+void PlayerCardAction::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+{
+	const auto it = attackActionStr_.find(_data.name);
+	if (it == attackActionStr_.end())return;
+
+	atkAnimVals_[it->second] = _data.animVariable;
+
+	auto& atk = atkStatusTable_[it->second];
+	auto& jsonData = _data.jsonData;
+	LoadAttackStatus(jsonData, atk);
+
+}
+
+void PlayerCardAction::ChangeCardAction(const CARD_ACTION_TYPE _type)
+{
+	if (cardActType_ == _type)return;
+	cardActType_ = _type;
+
+	//攻撃ステータスのセット
+	atk_ = atkStatusTable_[cardActType_];
+
+	//アニメーション変数のセット
+	animVar_ = atkAnimVals_[cardActType_];
+
+	changeCardAction_[cardActType_]();
 }
 
 bool PlayerCardAction::IsAttackable(void)
@@ -171,11 +201,11 @@ void PlayerCardAction::DecideAttackOne(void)
 	//距離によって攻撃アクション遷移
 	if (dis >= MIDDLE_DIS)
 	{
-		ChangeCardAction(CARD_ACT_TYPE::ATTACK_ONE_MIDDLE);
+		ChangeCardAction(CARD_ACTION_TYPE::ATTACK_ONE_MIDDLE);
 	}
 	else
 	{
-		ChangeCardAction(CARD_ACT_TYPE::ATTACK_ONE_SHORT);
+		ChangeCardAction(CARD_ACTION_TYPE::ATTACK_ONE_SHORT);
 	}
 }
 
@@ -192,21 +222,28 @@ void PlayerCardAction::SetUIReloadCnt(void)
 	cardPresent_.SetUIReloadCount(per);
 }
 
-void PlayerCardAction::LoadAttack(void)
-{
-	LoadAttackStatus();
-}
-
 void PlayerCardAction::UpdateAttack(void)
 {
+	//攻撃中にカード負けしたら処理を飛ばす
+	if (IsCardFailure(Collider::TAG::NML_ATK))
+	{
+		cardActType_ = CARD_ACTION_TYPE::NONE;
+		return;
+	}
+
 	//攻撃の更新
-	AttackMotion(atkStatusTable_[actType_],Collider::TAG::NML_ATK ,ATK_ONE_LOCAL);
+	AttackMotion(atkStatusTable_[cardActType_],Collider::TAG::NML_ATK ,ATK_ONE_LOCAL);
 }
 
 void PlayerCardAction::UpdateMiddleAttack(void)
 {
 	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))return;
+	if (IsCardFailure(Collider::TAG::NML_ATK))
+	{
+		cardActType_ = CARD_ACTION_TYPE::NONE;
+		return;
+	}
+		
 
 	//コンボ先行受付
 	ComboInput();
@@ -255,12 +292,16 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 void PlayerCardAction::UpdateAttackThree(void)
 {
 	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))return;
+	if (IsCardFailure(Collider::TAG::NML_ATK))
+	{
+		cardActType_ = CARD_ACTION_TYPE::NONE;
+		return;
+	}
 
 	//ステップの取得
 	const float animStep = anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3));							//現在のアニメステップ
-	const float atkStartStep = atkStatusTable_[actType_].colStartCnt;	//当たり判定スタートカウント
-	const float atkEndStep = atkStatusTable_[actType_].colEndCnt;		//当たり判定終了カウント
+	const float atkStartStep = atkStatusTable_[cardActType_].colStartCnt;	//当たり判定スタートカウント
+	const float atkEndStep = atkStatusTable_[cardActType_].colEndCnt;		//当たり判定終了カウント
 
 	//攻撃スタートカウント以下なら、アニメーションスピードを遅くする
 	if (animStep < atkStartStep)
@@ -334,7 +375,7 @@ void PlayerCardAction::UpdateReload(void)
 	{
 		cardPresent_.DeckReload();
 		cardFuncs_.pop();
-		actType_ = CARD_ACT_TYPE::NONE;
+		cardActType_ = CARD_ACTION_TYPE::NONE;
 
 		//カードUIのリロードカウントの初期化
 		pushReloadCnt_ = 0.0f;
@@ -364,12 +405,7 @@ void PlayerCardAction::UpdateReload(void)
 void PlayerCardAction::ChangeShortAttackOne(void)
 {
 	//突きアニメーションへ
-	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), false);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
-	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
-
-	//攻撃ステータスをセット
-	atk_ = atkStatusTable_[CARD_ACT_TYPE::ATTACK_ONE_SHORT];
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), animVar_);
 
 	cardFuncs_.push([this]() {UpdateAttack(); });
 }
@@ -379,14 +415,9 @@ void PlayerCardAction::ChangeMiddleAttackOne(void)
 	//カウントのセット
 	midAtkCnt_ = ATTACK_ONE_MID_TIME;
 
-	////近距離攻撃のアニメーションをセット
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE), false
-		, ATTACK_ONE_MID_ANIM_START, ATTACK_ONE_MID_ANIM_END,false);
-	//	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE);
+	//近距離攻撃のアニメーションをセット
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE), animVar_);
 
-	//攻撃ステータス
-	atk_ = atkStatusTable_[CARD_ACT_TYPE::ATTACK_ONE_MIDDLE];
 	midAtkOverCnt_ = ATTACK_ONE_MID_COMBO_TIME;
 
 	//突き攻撃の方向に向く
@@ -399,14 +430,12 @@ void PlayerCardAction::ChangeMiddleAttackOne(void)
 void PlayerCardAction::ChangeAttackTwo(void)
 {
 	//攻撃2段階目のアニメーションを再生
-	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2), false);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_2);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2), animVar_);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2);
+	
 	//攻撃段階を増やす
 	ChangeActionCardInit();
 
-	//攻撃2段階目のステータスをセット
-	atk_ = atkStatusTable_[CARD_ACT_TYPE::ATTACK_TWO];
 
 	cardFuncs_.push([this]() {UpdateAttack(); });
 }
@@ -414,17 +443,11 @@ void PlayerCardAction::ChangeAttackTwo(void)
 void PlayerCardAction::ChangeAttackThree(void)
 {
 	//攻撃3段階目のアニメーションを再生
-	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)
-	// , false,{}, ATTACK_THREE_ANIM_START, ATTACK_THREE_ANIM_GOAL);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::ATTACK_3);
-	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), animVar_);
 
 	//カウントの初期化
 	atkThreeEndCnt_ = 0.0f;
 	atkAnimLerpCnt_ = 0.0f;
-
-	//攻撃3段階目のステータスをセット
-	atk_ = atkStatusTable_[CARD_ACT_TYPE::ATTACK_THREE];
 
 	//カード初期化
 	ChangeActionCardInit();
@@ -477,11 +500,11 @@ void PlayerCardAction::ChangeComboAction(void)
 		//段階によって遷移する
 		if (attackStageNum_ == ATTACK_ONE)
 		{
-			ChangeCardAction(CARD_ACT_TYPE::ATTACK_TWO);
+			ChangeCardAction(CARD_ACTION_TYPE::ATTACK_TWO);
 		}
 		else if (attackStageNum_ == ATTACK_TWO)
 		{
-			ChangeCardAction(CARD_ACT_TYPE::ATTACK_THREE);
+			ChangeCardAction(CARD_ACTION_TYPE::ATTACK_THREE);
 		}
 	}
 }

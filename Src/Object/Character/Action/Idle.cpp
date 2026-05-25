@@ -21,8 +21,7 @@ void Idle::Load(void)
 void Idle::Init(void)
 {
 	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE));
-	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE), BLEND_TIME);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::IDLE);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE), animVar_);
 }
 
 void Idle::Update(void)
@@ -45,4 +44,11 @@ void Idle::Update(void)
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
 		return;
 	}
+}
+
+void Idle::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+{
+	if(_data.name!="Idle")return;
+
+	animVar_ = _data.animVariable;
 }

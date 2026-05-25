@@ -12,8 +12,6 @@ Dodge::Dodge(ActionController& _actCntl, CharacterBase& _character, Transform& _
 	trans_(_trans),
 	dodgeDir_({})
 {
-	//speed_ = dodgeSpd_+ ADD_DODGE_SPEED;
-	speed_ = 0;
 }
 
 Dodge::~Dodge(void)
@@ -26,8 +24,10 @@ void Dodge::Load(void)
 
 void Dodge::Init(void)
 {
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::DODGE);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE), animVar_);
 
+	//回避スピードは通常移動スピードに加算する
+	speed_ = character_.GetStatus().speed + dodgeSpdAdd_;
 
 	//方向入力されている場合は入力方向、
 	//そうでない場合はプレイヤーの前方向に回避
@@ -46,7 +46,7 @@ void Dodge::Init(void)
 void Dodge::Update()
 {
 	//回避時間が終わったら
-	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE))> END_DODGE_ANIM_STEP)
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DODGE))> dodgeAnimStep_)
 	{
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		return;
@@ -54,4 +54,13 @@ void Dodge::Update()
 
 	//回避中はInputクラスへプレイヤーの前情報をセットする
 	actionCntl_.GetInput().SetMoveDir(dodgeDir_);
+}
+
+void Dodge::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+{
+	if (_data.name != "Dodge")return;
+
+	animVar_ = _data.animVariable;
+	dodgeAnimStep_ = _data.jsonData.value("endDodgeAnimStep", 0.0f);
+	dodgeSpdAdd_ = _data.jsonData.value("addDodgeSpeed", 0.0f);
 }

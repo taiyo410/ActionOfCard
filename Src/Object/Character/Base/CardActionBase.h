@@ -51,17 +51,14 @@ protected:
     //カードアクション関数ポインタ
     std::function<void(void)> cardActFunc_;
 
-    //カードアクション遷移
-    std::map<CARD_ACT_TYPE, std::function<void(void)>>changeAction_;
+    ////カードアクション遷移
+    //std::map<CARD_ACT_TYPE, std::function<void(void)>>changeAction_;
 
-    //攻撃アクションの文字列との対応
-    std::unordered_map<CARD_ACT_TYPE, std::string>atkStatusStrTable_;
+    ////攻撃ステータステーブル
+    //std::map<CARD_ACT_TYPE, ATK_STATUS>atkStatusTable_;
 
-    //攻撃ステータステーブル
-    std::map<CARD_ACT_TYPE, ATK_STATUS>atkStatusTable_;
-
-    //攻撃アクション文字列
-    std::unordered_map<std::string,CARD_ACT_TYPE> attackActionStr_;
+    ////攻撃アクション文字列
+    //std::unordered_map<std::string,CARD_ACT_TYPE> attackActionStr_;
 
     //アタックのQueue配列
     std::queue<std::function<void(void)>>cardFuncs_;
@@ -81,8 +78,7 @@ protected:
     //攻撃アニメーション
 	int atkAnim_;
 
-    //状態遷移
-    void ChangeCardAction(const CARD_ACT_TYPE& _type);
+    void LoadAttackStatus(const nlohmann::json& _jsonData, ATK_STATUS& _atkStatus);
 
     //攻撃モーション
     void AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag,const VECTOR& _localPos);
@@ -103,14 +99,5 @@ protected:
 
 	//コンボ入力受付
 	void ComboInput(void);
-
-    /// @brief 攻撃アクションステータスを外部ファイルから取得
-    /// @param _atk 格納する攻撃ステータス
-    /// @param _dataName 取得したいデータ名
-    void LoadAttackStatus(void);
-
-    /// @brief 攻撃ステータスを個数分ロード
-    /// @param  
-    void LoadStatus(void);
 };
 

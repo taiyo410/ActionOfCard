@@ -270,9 +270,9 @@ void CharacterBase::SetFlinchCnt(const float _flichCnt)
 	action_->SetFlinchCnt(_flichCnt);
 }
 
-const CardActionBase::CARD_ACT_TYPE& CharacterBase::GetCardAction(void) const
+const bool CharacterBase::GetIsJumpAtk(void) const
 {
-	return action_->GetCardAction();
+	return action_->GetMainAction().IsJumpAtk();
 }
 
 const ActionBase& CharacterBase::GetMainAction(void) const
@@ -343,10 +343,9 @@ const bool CharacterBase::GetIsHitTarget(void) const
 	return onHit_->GetIsHitTarget();
 }
 
-void CharacterBase::LoadAddAnimation(void)
+void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 {
-	//アニメーションコントローラーの生成
-	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
+
 
 	//データ読み込み
 	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
@@ -362,61 +361,70 @@ void CharacterBase::LoadAddAnimation(void)
 	// アニメーションコントローラーに追加する
 	for (const auto& [name,data] : actionData.items())
 	{
-		//animationが見つからなければ飛ばす
-		if (!data.contains("animation"))continue;
+		ACTION_LOAD_DATA actionLoadData = {name, {}, data};
 
-		//アニメーションデータの取得
-		const auto& animData = data["animation"];
-
-		////Jsonのリスト名と登録情報が一致しているかを調べる
-		////使用アニメーションの取得
-		std::string useAnim = animData.value("useAnim", "");
-		auto nameIt=animStrTable_.find(name);
-		if (nameIt == animStrTable_.end())continue;
-
-		//使用するリソースを取得
-		ResourceManager::SRC useSrc=resMng_.GetSrcFromString(useAnim);
-
-		//再生するときのパラメータを格納
-		AnimationController::ANIMATION_VARIABLE animVariable = {};
-
-		if (useSrc!=ResourceManager::SRC::NONE)
+		//animationのデータがあれば格納する
+		if (data.contains("animation"))
 		{
-			//アニメーションに追加
-			animationController_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
+			//アニメーションデータの取得
+			const auto& animData = data["animation"];
+
+			////Jsonのリスト名と登録情報が一致しているかを調べる
+			////使用アニメーションの取得
+			std::string useAnim = animData.value("useAnim", "");
+			auto nameIt = animStrTable_.find(name);
+			if (nameIt == animStrTable_.end())continue;
+
+			//使用するリソースを取得
+			ResourceManager::SRC useSrc = resMng_.GetSrcFromString(useAnim);
+
+			//再生するときのパラメータを格納
+			AnimationController::ANIMATION_VARIABLE animVariable = {};
+
+			if (useSrc != ResourceManager::SRC::NONE)
+			{
+				//アニメーションに追加
+				animationController_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
+			}
+
+			//アニメーション速度の取得
+			if (animData.contains("animSpeed"))
+			{
+				animVariable.speed = animData.value("animSpeed", 0.0f);
+			}
+
+			//デタッチスピードの取得
+			if (animData.contains("detachSpeed"))
+			{
+				animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
+			}
+
+			//ループフラグの格納
+			if (animData.contains("isLoop"))
+			{
+				animVariable.isLoop = animData.value("isLoop", false);
+			}
+
+			//スタートステップの取得
+			if (animData.contains("startStep"))
+			{
+				animVariable.step = animData.value("startStep", 0.0f);
+			}
+
+			//終了ステップの取得
+			if (animData.contains("endStep"))
+			{
+				animVariable.totalTime = animData.value("endStep", 0.0f);
+			}
+
+			actionLoadData.animVariable = animVariable;
 		}
 
-		//アニメーション速度の取得
-		if (animData.contains("animSpeed"))
+		if(callBack)
 		{
-			animVariable.speed = animData.value("animSpeed", 0.0f);
+			callBack(actionLoadData);
 		}
 
-		//デタッチスピードの取得
-		if (animData.contains("detachSpeed"))
-		{
-			animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
-		}
-
-		//ループフラグの格納
-		if (animData.contains("isLoop"))
-		{
-			animVariable.isLoop = animData.value("isLoop",false);
-		}
-
-		//スタートステップの取得
-		if (animData.contains("startStep"))
-		{
-			animVariable.step = animData.value("startStep", 0.0f);
-		}
-
-		//終了ステップの取得
-		if (animData.contains("endStep"))
-		{
-			animVariable.totalTime = animData.value("endStep", 0.0f);
-		}
-
-		useAnim_.emplace(nameIt->second, animVariable);
 	}
 }
 

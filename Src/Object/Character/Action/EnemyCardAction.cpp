@@ -21,20 +21,21 @@ atkCnt_(),
 jampCardNum_()
 {
 	isTurnable_ = false;
-	changeAction_ = {
-		{ CARD_ACT_TYPE::STOMP_ATK, [this]() {ChangeStomp(); }},
-		{ CARD_ACT_TYPE::JUMP_ATK, [this]() {ChangeJumpAtk(); }},
-		{ CARD_ACT_TYPE::RELOAD, [this]() {ChangeReload(); }},
-	};
 
 	changeCardAction_ = {
-		{LogicBase::ENEMY_ATTACK_TYPE::STOMP,[this]() {ChangeCardAction(CARD_ACT_TYPE::STOMP_ATK); }},
-		{LogicBase::ENEMY_ATTACK_TYPE::JUMP,[this]() {ChangeCardAction(CARD_ACT_TYPE::JUMP_ATK); }},
+		{CARD_ACTION_TYPE::STOMP_ATK,[this]() {ChangeStomp(); }},
+		{CARD_ACTION_TYPE::JUMP_ATK,[this]() {ChangeJumpAtk(); }},
+		{CARD_ACTION_TYPE::RELOAD,[this]() {ChangeReload(); }},
 	};
 
-	atkStatusStrTable_ = {
-	{CARD_ACT_TYPE::JUMP_ATK,"JumpAttack"},
-	{CARD_ACT_TYPE::STOMP_ATK,"StompAttack"}
+	attackActionStr_={
+		{"StompAtk",CARD_ACTION_TYPE::STOMP_ATK},
+		{"JumpAtk",CARD_ACTION_TYPE::JUMP_ATK}
+	};
+
+	enemyAttackTypeToCardActionType_={
+		{LogicBase::ENEMY_ATTACK_TYPE::STOMP, CARD_ACTION_TYPE::STOMP_ATK},
+		{LogicBase::ENEMY_ATTACK_TYPE::JUMP, CARD_ACTION_TYPE::JUMP_ATK},
 	};
 
 	//岩の生成
@@ -59,14 +60,11 @@ void EnemyCardAction::Load(void)
 	//敵の岩生成
 	character_.LoadEnemyRock();
 
-	//攻撃ステータスロード
-	LoadStatus();
-
 }
 
 void EnemyCardAction::Init(void)
 {
-	actType_ = CARD_ACT_TYPE::NONE;
+	cardActType_ = CARD_ACTION_TYPE::NONE;
 	easing_ = std::make_unique<Easing>();
 
 	atkCnt_ = 0.0f;
@@ -80,11 +78,12 @@ void EnemyCardAction::Init(void)
 	{
 		cardPresent_.PutCard();
 		LogicBase::ENEMY_ATTACK_TYPE attackType = actionCntl_.GetInput().GetAttackType();
-		changeCardAction_[attackType]();
+		CARD_ACTION_TYPE cardActionType = enemyAttackTypeToCardActionType_[attackType];
+		changeCardAction_[cardActionType]();
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
 	{
-		ChangeCardAction(CARD_ACT_TYPE::RELOAD);
+		ChangeCardAction(CARD_ACTION_TYPE::RELOAD);
 	}
 }
 
@@ -121,13 +120,43 @@ const bool EnemyCardAction::IsJumpAtkCharge(void) const
 	return jumpChargeCnt_ < JUMP_CHARGE_TIME; 
 }
 
+const bool EnemyCardAction::IsReloading(void)const
+{
+	return cardActType_ == CARD_ACTION_TYPE::RELOAD;
+}
+
+const bool EnemyCardAction::IsJumpAtk(void) const
+{
+	return cardActType_==CARD_ACTION_TYPE::JUMP_ATK;
+}
+
+void EnemyCardAction::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+{
+	const auto it = attackActionStr_.find(_data.name);
+	if (it == attackActionStr_.end())return;
+
+	atkAnimVals_[it->second] = _data.animVariable;
+
+	auto& atk = atkStatusTable_[it->second];
+	auto& jsonData = _data.jsonData;
+	LoadAttackStatus(jsonData, atk);
+}
+
+void EnemyCardAction::ChangeCardAction(const CARD_ACTION_TYPE& _type)
+{
+	if( cardActType_== _type)return;
+
+	cardActType_ = _type;
+	changeCardAction_[cardActType_]();
+
+	//攻撃ステータスのセット
+	atk_ = atkStatusTable_[cardActType_];
+}
+
 void EnemyCardAction::ChangeStomp(void)
 {
 	//岩生成フラグの初期化
 	isGenerateRock_ = false;
-
-	//ジャンプ攻撃処理
-	atk_ = atkStatusTable_[CARD_ACT_TYPE::STOMP_ATK];
 
 	//スタンプアニメーション再生
 	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::STOMP_ATK);
@@ -138,15 +167,11 @@ void EnemyCardAction::ChangeStomp(void)
 void EnemyCardAction::ChangeJumpAtk(void)
 {
 	//ジャンプアニメーション再生
-	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), false);
 	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::JUMP_ATK);
 	jumpChargeCnt_ = 0.0f;
 
 	//溜めジャンプSE再生
 	soundMng_.Play(ResourceManager::SRC::ENEMY_CHARGE_SE, SoundManager::PLAYTYPE::LOOP);
-
-	//ジャンプ攻撃処理
-	atk_ = atkStatusTable_[CARD_ACT_TYPE::JUMP_ATK];
 
 	//溜めジャンプエフェクト再生
 	effect_->Play(EffectController::EFF_TYPE::E_JUMP_CHARGE,
@@ -180,6 +205,7 @@ void EnemyCardAction::UpdateStomp(void)
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
 		character_.DeleteEnemyRockCol();
 		character_.SetIsAliveEnemyRock(false);
+		cardActType_ = CARD_ACTION_TYPE::NONE;
 		return;
 	}
 
@@ -256,6 +282,8 @@ void EnemyCardAction::UpdateJumpAtk(void)
 
 		//音を止める
 		soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
+
+		cardActType_ = CARD_ACTION_TYPE::NONE;
 
 		//エフェクトを消去
 		const int JUMP_CHARGE_EFF_ARRAY = 0;
@@ -355,7 +383,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 void EnemyCardAction::UpdateReload(void)
 {
 	cardPresent_.EnemyCardReload();
-	actType_ = CARD_ACT_TYPE::NONE;
+	cardActType_ = CARD_ACTION_TYPE::NONE;
 	actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 }
 

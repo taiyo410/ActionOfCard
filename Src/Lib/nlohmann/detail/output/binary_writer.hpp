@@ -1743,7 +1743,7 @@ class binary_writer
     /*
     @brief write a number to output input
     @param[in] n number of type @a NumberType
-    @param[in] OutputIsLittleEndian Set to true if output data is
+    @param[in] OutputIsLittleEndian Set to true if output jsonData is
                                  required to be little endian
     @tparam NumberType the type of the number
 

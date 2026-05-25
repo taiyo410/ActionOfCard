@@ -8,6 +8,7 @@
 #include"../Manager/Generic/InputManager.h"
 #include"../Base/ActionBase.h"
 #include"../Object/Common/Transform.h"
+#include"../UIData/CharacterUIData.h"
 
 class CharacterBase;
 class Player;
@@ -78,11 +79,6 @@ public:
 	/// @param  
 	/// @return 移動量
 	const VECTOR& GetMovePow(void)const { return movePow_; }
-
-	/// @brief カードアクションの取得
-	/// @param  
-	/// @return カードアクション
-	const ActionBase::CARD_ACT_TYPE& GetCardAction(void)const;
 	
 	/// @brief 入力クラスの取得
 	/// @param  
@@ -125,6 +121,14 @@ public:
 	/// @param  
 	/// @return 
 	ActionBase& GetMainAction(void);
+
+	/// @brief 
+	/// @param  
+	/// @return 
+	const bool GetIsJumpAtk(void)const;
+
+	//アクションごとのアニメーションのロードの通知
+	void AnimLoadNotify(const ACTION_LOAD_DATA& animVar);
 
 #ifdef _DEBUG
 	//デバッグb

@@ -1,11 +1,12 @@
 #pragma once
 #include<map>
+#include <nlohmann/json.hpp>
 #include "../Manager/Resource/SoundManager.h"
 #include "../../Card/CardBase.h"
 #include "../../Card/CardPresenter.h"
 #include "../Base/CharacterOnHitBase.h"
 #include "../../Object/Common/AnimationController.h"
-#include "../Player/ActionController.h"
+//#include "../Player/ActionController.h"
 #include "../Base/CardActionBase.h"
 #include "../UIData/CharacterUIData.h"
 #include "../Base/ActionBase.h"
@@ -74,23 +75,6 @@ public:
 
 	};
 
-	//角度
-	struct ROTATION
-	{
-		//回転
-		Quaternion playerRotY_;		//プレイヤーY角度
-		Quaternion goalQuaRot_;		//目的の回転
-		float stepRotTime_;			//補完時間
-		VECTOR dir_;			//方向
-	};
-
-	//各ステータス
-	struct STATUS
-	{
-		float speed;		//移動速度
-		float hp = HP_MAX;	//体力
-	};
-
 	//アクションの種類
 	enum class ACTION_TYPE
 	{
@@ -120,6 +104,23 @@ public:
 		ATK,
 		DEF,
 		SPD,
+	};
+
+	//角度
+	struct ROTATION
+	{
+		//回転
+		Quaternion playerRotY_;		//プレイヤーY角度
+		Quaternion goalQuaRot_;		//目的の回転
+		float stepRotTime_;			//補完時間
+		VECTOR dir_;			//方向
+	};
+
+	//各ステータス
+	struct STATUS
+	{
+		float speed;		//移動速度
+		float hp = HP_MAX;	//体力
 	};
 
 	/// @brief コンストラクタ
@@ -234,7 +235,7 @@ public:
 	/// @brief カードアクションの取得
 	/// @param  
 	/// @return 
-	const CardActionBase::CARD_ACT_TYPE& GetCardAction(void)const;
+	const bool GetIsJumpAtk(void)const;
 
 	/// @brief 敵のジャンプチャージ中取得
 	/// @param  
@@ -282,7 +283,6 @@ public:
 
 	//カードを使用済みにする(自分の攻撃中、敵の攻撃に当たった時)
 	void SetUsedCard(void);
-
 
 	/// @brief 遷移先の更新フェーズ設定
 	/// @param _phase どの更新フェーズにするか
@@ -444,7 +444,8 @@ protected:
 	virtual void MakeColliderGeometry(void) = 0;
 
 	//アニメーションを外部からロード
-	void LoadAddAnimation(void);
+	using OnActionDataLoaded = std::function<void(ACTION_LOAD_DATA&)>;
+	void LoadAddAnimation(OnActionDataLoaded callBack=nullptr);
 
 	//更新フェーズ	
 	void UpdateNone(void);							//何もしない

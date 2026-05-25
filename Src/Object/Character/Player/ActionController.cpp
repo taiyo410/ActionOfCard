@@ -139,6 +139,15 @@ void ActionController::ChangeAction(const ACTION_TYPE _act)
 	mainAction_[act_]->Init();
 }
 
+void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
+{
+	//全行動クラス一斉に通知する
+	for(auto& [type,action]:mainAction_)
+	{
+		action->LoadAnimVar(animVar);
+	}
+}
+
 void ActionController::CardMove(void)
 {
 	//CardUIBase& cardUI = character_.GetCardUI();
@@ -198,29 +207,25 @@ void ActionController::DirAndMovePowUpdate(void)
 const bool ActionController::IsCardLeftMoveable(void)
 {
 	//カードアクション種類
-	const ActionBase::CARD_ACT_TYPE cardAct = mainAction_.at(act_)->GetCardAction();
+	const bool isReloading = mainAction_.at(act_)->IsReloading();
 
 	//カードUIの選択状態
 	const CardUIBase::CARD_SELECT selectState = cardPresent_.GetCardUIState();
 
 	return logic_.GetIsAct().isCardMoveLeft 
-		&& cardAct != ActionBase::CARD_ACT_TYPE::RELOAD
-		&& selectState !=CardUIBase::CARD_SELECT::RELOAD;
+		&& !isReloading
+		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
 }
 const bool ActionController::IsCardRightMoveable(void)
 {
 	//カードアクション種類
-	const ActionBase::CARD_ACT_TYPE cardAct = mainAction_.at(act_)->GetCardAction();
+	const bool isReloading = mainAction_.at(act_)->IsReloading();
 
 	//カードUIの選択状態
 	CardUIBase::CARD_SELECT selectState = cardPresent_.GetCardUIState();
 
 	return logic_.GetIsAct().isCardMoveRight 
-		&& cardAct != ActionBase::CARD_ACT_TYPE::RELOAD
+		&& !isReloading
 		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
-}
-const ActionBase::CARD_ACT_TYPE& ActionController::GetCardAction(void)const
-{
-	return mainAction_.at(act_)->GetCardAction();
 }
 

@@ -13,6 +13,17 @@ class PlayerCardAction :
 
 public:
 
+	//カードアクションの種類
+    enum class CARD_ACTION_TYPE
+    {
+        NONE = -1,
+        ATTACK_ONE_SHORT,	//攻撃アクション1回目(近距離)
+        ATTACK_ONE_MIDDLE,	//攻撃アクション1回目(中距離)
+        ATTACK_TWO,			//攻撃アクション2回目
+        ATTACK_THREE,		//攻撃アクション3回目		
+        RELOAD,				//リロード
+	};
+
     /// @brief コンストラクタ
     /// @param _actCntl アクションコントローラ
 	/// @param _charaObj キャラクターオブジェクト
@@ -42,6 +53,14 @@ public:
 	/// @brief リロードエフェクトの解放
 	/// @param  
 	void ReleaseReloadResource(void)override;
+
+	/// @brief リロード中かどうか
+	/// @param
+	const bool IsReloading(void)const override;
+
+    /// @brief アニメーション情報のロード
+    /// @param jsonData アクションロードデータ
+    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
 
 private:
 
@@ -84,6 +103,21 @@ private:
     //カードリロード中の音量
     static constexpr float CARD_RELOAD_VOL = 0.6f;
 
+    //カードアクション
+	CARD_ACTION_TYPE cardActType_;
+
+    //カードアクション遷移
+	std::unordered_map<CARD_ACTION_TYPE, std::function<void(void)>>changeCardAction_;
+
+	//攻撃ステータステーブル
+    std::unordered_map<CARD_ACTION_TYPE, ATK_STATUS>atkStatusTable_;
+
+	//攻撃アクション文字列
+	std::unordered_map<std::string, CARD_ACTION_TYPE> attackActionStr_;
+
+    //攻撃アクションごとのアニメーション
+	std::unordered_map<CARD_ACTION_TYPE, AnimationController::ANIMATION_VARIABLE>atkAnimVals_;
+
     //攻撃の当たり判定始まりカウント
     float attackStartAnimcnt_;
 
@@ -109,6 +143,9 @@ private:
     //イージング
     std::unique_ptr<Easing>easing_;
 
+    //カードアクション遷移
+	void ChangeCardAction(const CARD_ACTION_TYPE _type);
+
     //攻撃条件
     bool IsAttackable(void);
 
@@ -123,9 +160,6 @@ private:
 
     //リロードカウントのセット
 	void SetUIReloadCnt(void);
-
-    //攻撃のステータスロード
-    void LoadAttack(void);
 
     //更新系
 	void UpdateAttack(void);                   //攻撃アクション

@@ -45,7 +45,7 @@ Player::Player(void)
 	logic_ = std::make_unique<PlayerLogic>(trans_, isMoveable_, padNum_, InputManager::CONTROLL_TYPE::ALL);
 	hipBoneNo_ = SPINE_FRAME_NO;
 
-	
+
 
 }
 
@@ -63,14 +63,20 @@ void Player::Load(void)
 	trans_.pos = { 0.0f,0.0f,-CENTER_POS_Z_OFFSET };
 	trans_.localPos = { 0.0f,Player::CAP_RADIUS,0.0f };
 
+	//アニメーションコントローラーの生成
+	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
+
 	//ステータスのロード
 	LoadStatus();
 
-	//アニメーションの追加
-	LoadAddAnimation();
-
 	//アクションの追加
 	AddAction();
+
+	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
+		{
+			//アクションコントローラーの全行動クラスに通知
+			action_->AnimLoadNotify(animVar);
+		});
 	
 	action_->Load();
 	weapon_->Load();

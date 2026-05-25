@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include"../Common/Quaternion.h"
+#include"../UIData/CharacterUIData.h"	
 
 class ResourceManager;
 class SceneManager;
@@ -106,8 +107,19 @@ public:
 	/// @return 技攻撃力
 	const float& GetAtkPoint(void)const { return atk_.atkPoint; }
 
-	//カードアクションの取得
-	const CARD_ACT_TYPE& GetCardAction(void)const { return actType_; }
+	////カードアクションの取得
+	//const CARD_ACT_TYPE& GetCardAction(void)const { return actType_; }
+
+	/// @brief リロード中かどうかの取得
+	/// @param  
+	/// @return  リロード中かどうか
+	virtual const bool IsReloading(void)const { return false; }
+
+	/// @brief ジャンプ攻撃かどうかの取得
+	/// @param  
+	/// @return ジャンプ攻撃かどうか
+	virtual const bool IsJumpAtk(void)const { return false; }
+
 
 	/// @brief ジャンプ攻撃チャージ
 	/// @param  
@@ -126,6 +138,11 @@ public:
 	/// @brief ダメージを与えたことをセット
 	/// @param  
 	void SetIsDamage(void) { atk_.isDamage = true; }
+
+	/// @brief アニメーション情報のロード
+	/// @param name アニメーション名
+	/// @param animVar アニメーション変数
+	virtual void LoadAnimVar(const ACTION_LOAD_DATA& animVar) {}
 
 protected:
 
@@ -168,16 +185,11 @@ protected:
 	//攻撃の当たり判定中か
 	bool isAliveAtkCol_;
 
-	//状態
-	CARD_ACT_TYPE actType_;
-
 	//現在の攻撃
 	ATK_STATUS atk_;
 
-	//使用アニメーション
-	std::vector<int> useAnimTypes_;
-
-	//
+	////使用アニメーション
+	AnimationController::ANIMATION_VARIABLE animVar_;
 
 private:
 

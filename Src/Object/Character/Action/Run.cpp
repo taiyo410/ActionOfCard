@@ -30,7 +30,7 @@ void Run::Load(void)
 void Run::Init(void)
 {
 	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::RUN));
-	//anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::RUN),BLEND_TIME);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::RUN),animVar_);
 	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::RUN);
 	footSECnt_ = 0.0f;
 }
@@ -74,4 +74,11 @@ void Run::Update(void)
 	{
 		footSECnt_ -= scnMng_.GetDeltaTime();
 	}
+}
+
+void Run::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+{
+	if (_data.name != "Run")return;
+
+	animVar_=_data.animVariable;
 }

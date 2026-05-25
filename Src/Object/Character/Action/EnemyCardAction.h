@@ -18,16 +18,11 @@ class EnemyCardAction :
 public:
 
     //アクションの種類
-    enum class ACT_TYPE
+	enum class CARD_ACTION_TYPE
     {
         NONE = -1,
-        SWIP_ATK, //ひっかき攻撃
-        ROAR,     //咆哮
-        JUMP_ATK, //攻撃アクション3回目
-		RUSH_ATK, //ロール攻撃
-		CALL_PROJECTILE, //射撃物呼び出し
-		DOUBLE_SPHERE_ATK, //ダブルスフィア攻撃
-        SHOT_CUTTER,     //斬撃飛ばし
+        STOMP_ATK, //ひっかき攻撃
+        JUMP_ATK, //ジャンプ攻撃
         RELOAD, //リロード
     };
 
@@ -72,6 +67,17 @@ public:
     /// @param  
     /// @return 
     virtual const int GetJumpCardNum(void)const override { return jampCardNum_; }
+
+
+    /// @brief リロード中かどうか
+    /// @param
+    const bool IsReloading(void)const override;
+
+	const bool IsJumpAtk(void)const override;
+
+    /// @brief アニメーション情報のロード
+    /// @param jsonData アクションロードデータ
+    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
     
 private:
 
@@ -142,8 +148,29 @@ private:
     //イージング
     std::unique_ptr<Easing>easing_;
 
-    //状態遷移
-    std::unordered_map<LogicBase::ENEMY_ATTACK_TYPE, std::function<void(void)>>changeCardAction_;
+    ////状態遷移
+    //std::unordered_map<LogicBase::ENEMY_ATTACK_TYPE, std::function<void(void)>>changeCardAction_;
+
+	//敵の攻撃タイプからカードアクションの種類への変換テーブル
+    std::unordered_map<LogicBase::ENEMY_ATTACK_TYPE, CARD_ACTION_TYPE> enemyAttackTypeToCardActionType_;
+
+    //カードアクション
+    CARD_ACTION_TYPE cardActType_;
+
+    //カードアクション遷移
+    std::unordered_map<CARD_ACTION_TYPE, std::function<void(void)>>changeCardAction_;
+
+    //攻撃ステータステーブル
+    std::unordered_map<CARD_ACTION_TYPE, ATK_STATUS>atkStatusTable_;
+
+    //攻撃アクション文字列
+    std::unordered_map< std::string, CARD_ACTION_TYPE> attackActionStr_;
+
+    //攻撃アクションごとのアニメーション
+    std::unordered_map<CARD_ACTION_TYPE, AnimationController::ANIMATION_VARIABLE>atkAnimVals_;
+
+    //カードアクション遷移
+	void ChangeCardAction(const CARD_ACTION_TYPE& _type);
 
     //遷移
     void ChangeStomp(void);             //踏みつけ
@@ -154,9 +181,6 @@ private:
     void UpdateStomp(void);             //踏みつけ      
     void UpdateJumpAtk(void);           //ジャンプ攻撃
     void UpdateReload(void);            //リロード
-
-    //攻撃別の当たり判定情報
-    std::map<ACT_TYPE, ATK_STATUS>atkTable_;
 
     //岩生成フラグ
     bool isGenerateRock_;

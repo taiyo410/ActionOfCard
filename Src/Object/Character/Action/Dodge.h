@@ -29,6 +29,10 @@ public:
 	/// @param
     void Update(void) override;
 
+    /// @brief アニメーション情報のロード
+    /// @param jsonData アクションロードデータ
+    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
+
 private:
 
     //通常移動スピードにプラスする
@@ -42,6 +46,12 @@ private:
 
     //回避スピード
     float& dodgeSpd_;
+
+	//回避アニメーションの変数
+    float dodgeAnimStep_;
+
+	//回避速度の加減
+	float dodgeSpdAdd_;
 
     //キャラの向いている方向
     Transform& trans_;

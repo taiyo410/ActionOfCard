@@ -29,7 +29,7 @@ void React::Init(void)
 	{
 		isLoop = true;
 	}
-	anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::REACT), isLoop, ANIM_START, LOOP_END);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::REACT), animVar_);
 	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::REACT);
 }
 
@@ -53,4 +53,11 @@ void React::Update(void)
 		//のけぞり中はアニメーションループ
 		anim_.SetEndLoop(static_cast<int>(CharacterBase::ANIM_TYPE::REACT), LOOP_START, LOOP_END, LOOP_SPD);
 	}
+}
+
+void React::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+{
+	if (_data.name != "React")return;
+
+	animVar_ = _data.animVariable;
 }

@@ -24,7 +24,7 @@
         "isLoop": false
       },
       "addDodgeSpeed": 16.0,
-      "endDodgeAnimFrame": 30.0
+      "endDodgeAnimStep": 30.0
     },
     "Death": {
       "animation": {
@@ -142,7 +142,10 @@
       "colEndAnimCnt": 46.0,
       "attackPoint": 10.0,
       "animation": {
-        "useAnim": "E_STOMP_ATK"
+        "useAnim": "E_STOMP_ATK",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
       }
 
       },
@@ -150,7 +153,10 @@
       "attackPoint": 40.0,
       "attackRadius": 30.0,
       "animation": {
-        "useAnim": "E_JUMP_ATK"
+        "useAnim": "E_JUMP_ATK",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": true
       }
 
     }

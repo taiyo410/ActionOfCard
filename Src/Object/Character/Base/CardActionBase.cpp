@@ -21,39 +21,26 @@ CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _chara
 	isDuelWait_(false)
 {
 	effect_ = std::make_unique<EffectController>();
-
-	//攻撃アクションの文字列との対応
-	attackActionStr_=
-	{
-		{"Attack_1_Short", CARD_ACT_TYPE::ATTACK_ONE_SHORT},
-		{"Attack_1_Middle", CARD_ACT_TYPE::ATTACK_ONE_MIDDLE},
-		{"Attack_2", CARD_ACT_TYPE::ATTACK_TWO},
-		{"Attack_3", CARD_ACT_TYPE::ATTACK_THREE},
-		{"StompAttack", CARD_ACT_TYPE::STOMP_ATK},
-		{"JumpAttack", CARD_ACT_TYPE::JUMP_ATK}
-	};
 }
 
 CardActionBase::~CardActionBase(void)
 {
-	atkStatusTable_.clear();
+	//atkStatusTable_.clear();
 }
 
-void CardActionBase::ChangeCardAction(const CARD_ACT_TYPE& _type)
-{
-	//同じ状態が入ってきたら抜ける
-	if (actType_ == _type)return;
-	actType_ = _type;
-	changeAction_[actType_]();
-
-	//当たり判定情報を変える
-	atkStatusTable_[actType_];
-}
+//void CardActionBase::ChangeCardAction(const CARD_ACT_TYPE& _type)
+//{
+//	//同じ状態が入ってきたら抜ける
+//	if (actType_ == _type)return;
+//	actType_ = _type;
+//	changeAction_[actType_]();
+//
+//	//当たり判定情報を変える
+//	atkStatusTable_[actType_];
+//}
 
 void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag, const VECTOR& _localPos)
 {
-	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(_attackTag))return;
 
 	//コンボ入力受付
 	if (anim_.GetAnimStep(atkAnim_) >= _status.colEndCnt - _status.bufferFrame)
@@ -112,7 +99,6 @@ void CardActionBase::FinishFailureAttack(const Collider::TAG _attackCol)
 
 	//攻撃判定無効
 	character_.DeleteAttackCol(character_.GetCharaTag(), _attackCol);
-	actType_ = CARD_ACT_TYPE::NONE;
 	cardFuncs_.pop();
 
 	//ダメージリアクション状態に移行
@@ -137,52 +123,30 @@ void CardActionBase::ComboInput(void)
 	}
 }
 
-void CardActionBase::LoadAttackStatus(void)
+
+
+void CardActionBase::LoadAttackStatus(const nlohmann::json& _jsonData, ATK_STATUS& _atkStatus)
 {
-	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
-
-	CHARACTER_TYPE chara = character_.GetCharacterType();
-	std::string jsonStr = "";
-	chara == CHARACTER_TYPE::PLAYER ? jsonStr = "Player" : jsonStr = "Enemy";
-
-	for (const auto& [name, data] : j[jsonStr].items())
+	if (_jsonData.contains("colStartAnimCnt"))
 	{
-		auto it = attackActionStr_.find(name);
-		if (it == attackActionStr_.end()) continue;
-
-		std::string dataName = it->first;
-		//取得データ
-		auto& atkData = data[name];
-
-		auto& atk = atkStatusTable_[it->second];
-		if (data.contains("colStartAnimCnt"))
-		{
-			atk.colStartCnt = data.value("colStartAnimCnt", 0.0f);
-		}
-		if (data.contains("colEndAnimCnt"))
-		{
-			atk.colEndCnt = data.value("colEndAnimCnt", 0.0f);
-		}
-		if (data.contains("bufferFrame"))
-		{
-			atk.bufferFrame = data.value("bufferFrame", 0.0f);
-		}
-		if (data.contains("attackRadius"))
-		{
-			atk.atkRadius = data.value("attackRadius", 0.0f);
-		}
-		if (data.contains("attackPoint"))
-		{
-			atk.atkPoint = data.value("attackPoint", 0.0f);
-		}
-		//攻撃ヒット判定はfalseで格納する
-		atk.isDamage = false;
-
+		_atkStatus.colStartCnt = _jsonData.value("colStartAnimCnt", 0.0f);
 	}
-
-}
-
-void CardActionBase::LoadStatus(void)
-{
-	LoadAttackStatus();
+	if (_jsonData.contains("colEndAnimCnt"))
+	{
+		_atkStatus.colEndCnt = _jsonData.value("colEndAnimCnt", 0.0f);
+	}
+	if (_jsonData.contains("bufferFrame"))
+	{
+		_atkStatus.bufferFrame = _jsonData.value("bufferFrame", 0.0f);
+	}
+	if (_jsonData.contains("attackRadius"))
+	{
+		_atkStatus.atkRadius = _jsonData.value("attackRadius", 0.0f);
+	}
+	if (_jsonData.contains("attackPoint"))
+	{
+		_atkStatus.atkPoint = _jsonData.value("attackPoint", 0.0f);
+	}
+	//攻撃ヒット判定はfalseで格納する
+	_atkStatus.isDamage = false;
 }

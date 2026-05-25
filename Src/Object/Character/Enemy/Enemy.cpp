@@ -57,6 +57,9 @@ void Enemy::Load(void)
 	trans_.quaRotLocal =
 		Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
 
+	//アニメーションコントローラーの生成
+	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
+
 	//エフェクト
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
 
@@ -66,8 +69,12 @@ void Enemy::Load(void)
 	//アクションの追加
 	AddAction();
 
-	//アニメーションの追加
-	LoadAddAnimation();
+	//Jsonからアクションごとのデータのロード
+	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
+		{
+			//アクションコントローラーの全行動クラスに通知
+			action_->AnimLoadNotify(animVar);
+		});
 
 	action_->Load();
 }
@@ -239,11 +246,11 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	//ロジックの更新
-	logic_->Update();
+	////ロジックの更新
+	//logic_->Update();
 
-	//アクションの更新
-	action_->Update();
+	////アクションの更新
+	//action_->Update();
 
 	//アニメーションの更新
 	animationController_->Update();
