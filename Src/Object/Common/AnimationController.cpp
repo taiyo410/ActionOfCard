@@ -66,15 +66,6 @@ void AnimationController::Add(int type,int modelId)
 	}
 }
 
-void AnimationController::Play(int type, bool isLoop, 
-	float startStep, float endStep, bool isStop, bool isForce)
-{
-	//PlayBlend(type, isLoop, {}, startStep, endStep, isStop, isForce);
-
-}
-
-//void AnimationController::PlayBlend(int type, float animSpeed, float detachSpeed, bool isLoop,
-//	VECTOR invalidBlendPos, float startStep, float endStep, bool isStop)
 void AnimationController::PlayBlend(int type, ANIMATION_VARIABLE animVariable)
 {
 	//優先アニメーションを探索

@@ -302,10 +302,6 @@ public:
 	/// @return キャラクター種類
 	const CHARACTER_TYPE GetCharacterType(void){ return characterType_; }
 
-	/// @brief キャラクターのアニメーション再生
-	/// @param _animType 再生したいアニメーションの種類
-	void PlayCharacterAnim(const ANIM_TYPE _animType);
-
 protected:
 
 	//移動量ラインオフセット
@@ -344,9 +340,6 @@ protected:
 
 	//アニメーションタイプの文字列対応表
 	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;
-
-	//使用アニメーション
-	std::unordered_map<ANIM_TYPE, AnimationController::ANIMATION_VARIABLE>useAnim_;
 
 	//使う足音
 	SoundManager::SRC footSE_;
@@ -424,6 +417,12 @@ protected:
 
 	//アクションごとのアニメーション再生データテーブル
 	std::unordered_map<ANIM_TYPE,AnimationController::ANIMATION_VARIABLE> actionAnimTable_;
+
+	//演出用アニメーションのパラメータ
+	AnimationController::ANIMATION_VARIABLE deathAnim_;		//死亡アニメーション
+	AnimationController::ANIMATION_VARIABLE clearAnim_;		//クリア演出アニメーション
+	AnimationController::ANIMATION_VARIABLE overAnim_;		//ゲームオーバー演出アニメーション
+	AnimationController::ANIMATION_VARIABLE idleAnim_;		//アイドルアニメーション
 
 	//移動後座標などの更新
 	void UpdatePost(void);

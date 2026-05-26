@@ -142,6 +142,9 @@ private:
 	//咆哮状態かどうか
 	bool isRoar_;
 
+	//咆哮アニメーション
+	AnimationController::ANIMATION_VARIABLE roarAnim_;
+
 	//コライダ作成
 	void MakeColliderGeometry(void)override;
 

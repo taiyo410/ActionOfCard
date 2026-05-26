@@ -74,6 +74,18 @@ void Enemy::Load(void)
 		{
 			//アクションコントローラーの全行動クラスに通知
 			action_->AnimLoadNotify(animVar);
+			if (animVar.name == "Death")
+			{
+				deathAnim_ = animVar.animVariable;
+			}
+			else if (animVar.name == "Idle")
+			{
+				idleAnim_ = animVar.animVariable;
+			}
+			else if (animVar.name == "Roar")
+			{
+				roarAnim_ = animVar.animVariable;
+			}
 		});
 
 	action_->Load();
@@ -103,9 +115,14 @@ void Enemy::Init(void)
 
 void Enemy::UpdateDirection(void)
 {
-	animationController_->Update();
+	//方向の更新
 	action_->Update();
+
+	//咆哮演出の更新
 	UpdateRoarDirection();
+
+	//アニメーションの更新
+	animationController_->Update();
 
 	//Transformの更新
 	trans_.quaRot = charaRot_.playerRotY_;
@@ -191,7 +208,7 @@ void Enemy::UpdateRoarDirection(void)
 	if (scnMng_.GetCamera().lock()->GetDirectionMode() == Camera::DIRECTION_MODE::ENEMY_ROAR_VIEW)
 	{
 		isRoar_ = false;
-		animationController_->Play(static_cast<int>(ANIM_TYPE::ROAR_ATK), false);
+		animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::ROAR_ATK), roarAnim_);
 		float roarAnimStep = animationController_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ROAR_ATK));
 		const float ROAR_TIME = ROAR_ANIM_END_ANIM - ROAR_ANIM_SPEED;
 		if (roarAnimStep >= ROAR_ANIM_START_ANIM)
@@ -208,14 +225,13 @@ void Enemy::UpdateRoarDirection(void)
 	else
 	{
 		isRoar_ = false;
-		animationController_->Play(static_cast<int>(ANIM_TYPE::IDLE), false);
+		animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::IDLE), idleAnim_);
 	}
 }
 
 void Enemy::ChangeUpdateClearDirection(void)
 {
 	isRoar_ = false;
-	//animationController_->Play(static_cast<int>(ANIM_TYPE::DEATH), false);
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_FOOT_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
@@ -246,11 +262,11 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	////ロジックの更新
-	//logic_->Update();
+	//ロジックの更新
+	logic_->Update();
 
-	////アクションの更新
-	//action_->Update();
+	//アクションの更新
+	action_->Update();
 
 	//アニメーションの更新
 	animationController_->Update();

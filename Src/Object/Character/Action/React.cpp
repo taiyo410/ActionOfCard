@@ -30,7 +30,6 @@ void React::Init(void)
 		isLoop = true;
 	}
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::REACT), animVar_);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::REACT);
 }
 
 void React::Update(void)

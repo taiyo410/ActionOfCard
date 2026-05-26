@@ -66,7 +66,7 @@ public:
     /// @brief 敵のジャンプチャージ中のカード勝負数
     /// @param  
     /// @return 
-    virtual const int GetJumpCardNum(void)const override { return jampCardNum_; }
+    virtual const int GetJumpCardNum(void)const override { return jumpCardNum_; }
 
 
     /// @brief リロード中かどうか
@@ -93,9 +93,6 @@ private:
 
     //ジャンプチャージ時間
     static constexpr float JUMP_CHARGE_TIME = 6.0f;
-
-    //ジャンプ高さ
-    static constexpr float JUMP_HEIGHT = 100.0f;
 
     //ジャンプ攻撃アニメーション
     static constexpr float JUMP_ANIM_START = 16.4f;
@@ -143,7 +140,7 @@ private:
     float jumpChargeCnt_;
 
     //ジャンプチャージ中のカード勝敗数カウント
-    int jampCardNum_;
+    int jumpCardNum_;
 
     //イージング
     std::unique_ptr<Easing>easing_;

@@ -65,16 +65,6 @@ public :
 	/// @param modelId 
 	void Add(int type, int modelId);
 
-	/// @brief アニメーション再生
-	/// @param type アニメーションタイプ
-	/// @param isLoop ループするかしないか
-	/// @param startStep アニメーションスタート位置
-	/// @param endStep アニメーション終了位置
-	/// @param isStop 
-	/// @param isForce 
-	void Play(int type, bool isLoop = true, 
-		float startStep = 0.0f, float endStep = -1.0f, bool isStop = false, bool isForce = false);
-
 	/// @brief ブレンドアニメーション用再生
 	/// @param type アニメーションタイプ
 	/// @param isLoop ループするかしないか

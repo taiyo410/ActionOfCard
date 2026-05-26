@@ -469,8 +469,7 @@ void PlayerCardAction::ChangeReload(void)
 	cardPresent_.ChangeUIState(CardUIBase::CARD_SELECT::RELOAD_WAIT);
 
 	//カードリロードのアニメーション再生(溜めるようなモーション)
-	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), true, RELOAD_START_STEP, RELOAD_END_STEP);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::CARD_RELOAD);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), animVar_);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD);
 
 	//リロード音再生

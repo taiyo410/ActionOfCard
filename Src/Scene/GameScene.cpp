@@ -88,8 +88,7 @@ void GameScene::Init(void)
 	updatePhase_ = UPDATE_PHASE::NONE;
 
 	//ââèoÇ÷
-	//ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
-	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
+	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
 
 	CharacterManager::GetInstance().Init();
 	UIManager::GetInstance().Init();
@@ -382,7 +381,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//ââèoèÛë‘Ç÷à⁄çs
-	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
+	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
 }
 void GameScene::Skip(void)
 {

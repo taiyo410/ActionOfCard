@@ -44,9 +44,6 @@ Player::Player(void)
 	weapon_ = std::make_unique<Weapon>(*this);
 	logic_ = std::make_unique<PlayerLogic>(trans_, isMoveable_, padNum_, InputManager::CONTROLL_TYPE::ALL);
 	hipBoneNo_ = SPINE_FRAME_NO;
-
-
-
 }
 
 Player::~Player(void)
@@ -76,6 +73,14 @@ void Player::Load(void)
 		{
 			//アクションコントローラーの全行動クラスに通知
 			action_->AnimLoadNotify(animVar);
+			if(animVar.name=="Death")
+			{
+				deathAnim_ = animVar.animVariable;
+			}
+			else if(animVar.name=="Idle")
+			{
+				idleAnim_ = animVar.animVariable;
+			}
 		});
 	
 	action_->Load();
@@ -108,17 +113,15 @@ void Player::Init(void)
 
 void Player::UpdateDirection(void)
 {
-	//Transformの更新
-	trans_.quaRot = charaRot_.playerRotY_;
-	trans_.Update();
-
 	//アニメーションの更新
 	animationController_->Update();
 
 	//武器の更新
 	weapon_->Update();
 
-
+	//Transformの更新
+	trans_.quaRot = charaRot_.playerRotY_;
+	trans_.Update();
 }
 
 void Player::UpdateNormal(void)
@@ -153,7 +156,7 @@ void Player::UpdateOverDirection(void)
 
 void Player::ChangeUpdateOverDirection(void)
 {
-	animationController_->Play(static_cast<int>(ANIM_TYPE::DEATH),false);
+	animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
 	CharacterBase::ChangeUpdateOverDirection();
 }
 

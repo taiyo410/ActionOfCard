@@ -29,9 +29,7 @@ void Run::Load(void)
 
 void Run::Init(void)
 {
-	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::RUN));
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::RUN),animVar_);
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::RUN);
 	footSECnt_ = 0.0f;
 }
 

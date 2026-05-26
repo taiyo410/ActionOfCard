@@ -18,7 +18,7 @@
 EnemyCardAction::EnemyCardAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
 CardActionBase(_actCntl, _charaObj, _deck),
 atkCnt_(),
-jampCardNum_()
+jumpCardNum_()
 {
 	isTurnable_ = false;
 
@@ -29,8 +29,8 @@ jampCardNum_()
 	};
 
 	attackActionStr_={
-		{"StompAtk",CARD_ACTION_TYPE::STOMP_ATK},
-		{"JumpAtk",CARD_ACTION_TYPE::JUMP_ATK}
+		{"StompAttack",CARD_ACTION_TYPE::STOMP_ATK},
+		{"JumpAttack",CARD_ACTION_TYPE::JUMP_ATK}
 	};
 
 	enemyAttackTypeToCardActionType_={
@@ -69,7 +69,7 @@ void EnemyCardAction::Init(void)
 
 	atkCnt_ = 0.0f;
 	speed_ = 0.0f;
-	jampCardNum_ = 0;
+	jumpCardNum_ = 0;
 	atk_ = {};
 	atk_.isDamage = false;
 
@@ -79,7 +79,7 @@ void EnemyCardAction::Init(void)
 		cardPresent_.PutCard();
 		LogicBase::ENEMY_ATTACK_TYPE attackType = actionCntl_.GetInput().GetAttackType();
 		CARD_ACTION_TYPE cardActionType = enemyAttackTypeToCardActionType_[attackType];
-		changeCardAction_[cardActionType]();
+		ChangeCardAction(cardActionType);
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
 	{
@@ -147,10 +147,16 @@ void EnemyCardAction::ChangeCardAction(const CARD_ACTION_TYPE& _type)
 	if( cardActType_== _type)return;
 
 	cardActType_ = _type;
-	changeCardAction_[cardActType_]();
 
 	//攻撃ステータスのセット
 	atk_ = atkStatusTable_[cardActType_];
+
+	//アニメーションの可変パラメータのセット
+	if (atkAnimVals_.find(cardActType_) != atkAnimVals_.end())
+	{
+		animVar_ = atkAnimVals_[cardActType_];
+	}
+	changeCardAction_[cardActType_]();
 }
 
 void EnemyCardAction::ChangeStomp(void)
@@ -159,7 +165,7 @@ void EnemyCardAction::ChangeStomp(void)
 	isGenerateRock_ = false;
 
 	//スタンプアニメーション再生
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::STOMP_ATK);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), animVar_);
 
 	cardFuncs_.push([this]() {UpdateStomp(); });
 }
@@ -167,7 +173,7 @@ void EnemyCardAction::ChangeStomp(void)
 void EnemyCardAction::ChangeJumpAtk(void)
 {
 	//ジャンプアニメーション再生
-	character_.PlayCharacterAnim(CharacterBase::ANIM_TYPE::JUMP_ATK);
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK), animVar_);
 	jumpChargeCnt_ = 0.0f;
 
 	//溜めジャンプSE再生
@@ -227,8 +233,8 @@ void EnemyCardAction::UpdateStomp(void)
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::SHAKE);
 
 		//地響き音再生
-		const bool isPlayStompSE_ = soundMng_.IsPlay(ResourceManager::SRC::ENEMY_STOMP_SE);
-		if (!isPlayStompSE_)
+		const bool isPlayStompSE = soundMng_.IsPlay(ResourceManager::SRC::ENEMY_STOMP_SE);
+		if (!isPlayStompSE)
 		{
 			soundMng_.Play(ResourceManager::SRC::ENEMY_STOMP_SE, SoundManager::PLAYTYPE::BACK);
 		}
@@ -323,7 +329,7 @@ void EnemyCardAction::UpdateJumpAtk(void)
 	}
 
 	//ジャンプアニメーションが終わったらドーム型の攻撃をする
-	else if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP)) > JUMP_ANIM_END)
+	else if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::JUMP_ATK)) > JUMP_ANIM_END)
 	{
 		const Transform& charaTrans = character_.GetTransform();
 

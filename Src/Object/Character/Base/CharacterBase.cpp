@@ -52,6 +52,7 @@ CharacterBase::CharacterBase(void) :
 	{"StompAttack", ANIM_TYPE::STOMP_ATK},
 	{"JumpAttack", ANIM_TYPE::JUMP_ATK},
 	{"Rush_Atk", ANIM_TYPE::RUSH_ATK},
+	{"Roar", ANIM_TYPE::ROAR_ATK},
 	};
 }
 
@@ -199,13 +200,8 @@ void CharacterBase::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 
 void CharacterBase::ChangeDirectToNormal(void)
 {
-	animationController_->Play(static_cast<int>(ANIM_TYPE::IDLE));
+	animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::IDLE),idleAnim_);
 	phazeUpdate_ = [this]() {UpdateNormal(); };
-}
-
-void CharacterBase::PlayCharacterAnim(const ANIM_TYPE _animType)
-{
-	animationController_->PlayBlend(static_cast<int>(_animType), useAnim_[_animType]);
 }
 
 void CharacterBase::ChangeUpdateClearDirection(void)
@@ -345,8 +341,6 @@ const bool CharacterBase::GetIsHitTarget(void) const
 
 void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 {
-
-
 	//ÉfÅ[É^ì«Ç›çûÇ›
 	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
 
