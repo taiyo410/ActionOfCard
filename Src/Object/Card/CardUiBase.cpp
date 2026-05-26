@@ -32,7 +32,8 @@ disitionCnt_(),
 reloadPer_()
 {
 	cardTypeMap_ = {
-		{"Attack", CardBase::CARD_TYPE::ATTACK}
+		{"Attack", CardBase::CARD_TYPE::ATTACK},
+		{"Fire", CardBase::CARD_TYPE::FIRE}
 	};
 }
 
@@ -301,6 +302,9 @@ const int CardUIBase::GetTypeImg(const CardBase::CARD_STATUS _status)
 	{
 	case CardBase::CARD_TYPE::ATTACK:
 		typeImg = atkCardImg_;
+		break;
+	case CardBase::CARD_TYPE::FIRE:
+		typeImg = fireCardImg_;
 		break;
 	case CardBase::CARD_TYPE::RELOAD:
 		typeImg = reloadCardImg_;

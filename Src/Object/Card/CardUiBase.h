@@ -205,6 +205,9 @@ protected:
 	//攻撃カード画像
 	int atkCardImg_;
 
+	//火炎カード画像
+	int fireCardImg_;
+
 	//リロードカード画像
 	int reloadCardImg_;
 

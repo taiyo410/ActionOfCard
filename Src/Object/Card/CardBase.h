@@ -11,8 +11,7 @@ public:
 	enum class CARD_TYPE
 	{
 		ATTACK
-		,MAGIC
-		,ITEM
+		,FIRE
 		,RELOAD
 	};
 

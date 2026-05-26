@@ -49,6 +49,8 @@ void PlayerCardUI::Load(void)
 
 	//リソースのロード
 	atkCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_ATK_CARD_IMG).handleId_;
+	fireCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_FIRE_CARD_IMG).handleId_;
+
 	reloadCardImg_ = resMng_.Load(ResourceManager::SRC::RELOAD_CARD_IMG).handleId_;
 	reloadGauge_ = resMng_.Load(ResourceManager::SRC::RELOAD_GAUGE).handleId_;
 	cardNumFrameImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_FRAME).handleId_;

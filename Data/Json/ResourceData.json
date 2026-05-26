@@ -149,6 +149,11 @@
     },
     {
       "type": "image",
+      "name": "PLAYER_FIRE_CARD_IMG",
+      "handle": "PlayerFireCard.png"
+    },
+    {
+      "type": "image",
       "name": "ENEMY_ATK_CARD_IMG",
       "handle": "EnemyAttackCard.png"
     },

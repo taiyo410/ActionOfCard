@@ -53,6 +53,7 @@ public:
 		GAME_OVER_IMG,				//ゲームオーバーイメージ
 		GAME_CLEAR_IMG,
 		PLAYER_ATK_CARD_IMG,		//番号なしアタックカード
+		PLAYER_FIRE_CARD_IMG,		//番号なしアタックカード
 		ENEMY_ATK_CARD_IMG,			//敵番号なしアタックカード
 		RELOAD_CARD_IMG,			//リロードカード
 		RELOAD_GAUGE,				//リロードゲージ
