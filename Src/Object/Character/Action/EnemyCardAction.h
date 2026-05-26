@@ -95,7 +95,6 @@ private:
     static constexpr float JUMP_CHARGE_TIME = 6.0f;
 
     //ジャンプ攻撃アニメーション
-    static constexpr float JUMP_ANIM_START = 16.4f;
     static constexpr float JUMP_ANIM_END = 52.0f;
 
     //ジャンプ攻撃ローカル座標

@@ -10,9 +10,8 @@ public:
 
     /// @brief コンストラクタ
     /// @param _actCntl アクションコントローラ
-    /// @param _trans モデル情報
     /// @param _spd 回避速度
-    Dodge(ActionController& _actCntl, CharacterBase& _character, Transform& _trans,float _spd);
+    Dodge(ActionController& _actCntl, CharacterBase& _character);
 
     /// @brief デストラクタ
     /// @param  
@@ -44,16 +43,10 @@ private:
     //回避方向
     VECTOR dodgeDir_;
 
-    //回避スピード
-    float& dodgeSpd_;
-
 	//回避アニメーションの変数
     float dodgeAnimStep_;
 
 	//回避速度の加減
 	float dodgeSpdAdd_;
-
-    //キャラの向いている方向
-    Transform& trans_;
 };
 

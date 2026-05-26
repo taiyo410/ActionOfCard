@@ -76,4 +76,7 @@ void GameOverScene::OnSceneEnter(void)
 	//処理変更
 	updateFunc_ = [this]() {NormalUpdate(); };
 	drawFunc_ = [this]() {NormalDraw(); };
+
+	//念のためカメラのモードを変更
+	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::FIXED_POINT);
 }

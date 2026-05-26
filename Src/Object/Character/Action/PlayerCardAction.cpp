@@ -16,7 +16,8 @@
 
 PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
 	CardActionBase(_actCntl, _charaObj, _deck),
-	pushReloadCnt_()
+	pushReloadCnt_(),
+	cardActType_(CARD_ACTION_TYPE::NONE)
 {
 	isTurnable_ = false;
 	changeCardAction_ ={
@@ -406,7 +407,7 @@ void PlayerCardAction::ChangeShortAttackOne(void)
 {
 	//突きアニメーションへ
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), animVar_);
-
+	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
 	cardFuncs_.push([this]() {UpdateAttack(); });
 }
 

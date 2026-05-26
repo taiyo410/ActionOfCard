@@ -169,7 +169,8 @@ void GameScene::NormalUpdate(void)
 		return;
 	}
 	//自分が倒れたらゲームオーバーシーンへ
-	else if (CharacterManager::GetInstance().IsSceneChangeGameOverCondition())
+	//else if (CharacterManager::GetInstance().IsSceneChangeGameOverCondition())
+	if (inputMng_.IsTrgDown(KEY_INPUT_SPACE))
 	{
 		ChangeUpdatePhase(UPDATE_PHASE::OVER_DIRECTION);
 		return;

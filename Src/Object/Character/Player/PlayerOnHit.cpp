@@ -131,7 +131,7 @@ void PlayerOnHit::CollRock(const std::weak_ptr<Collider> _hitCol)
 	if (rock.GetIsDamaged())return;
 
 	//ダメージを計算
-	float damage = rock.GetAttackPow();
+	int damage = static_cast<int>(rock.GetAttackPow());
 
 	//ダメージを与える
 	charaObj_.Damage(damage);

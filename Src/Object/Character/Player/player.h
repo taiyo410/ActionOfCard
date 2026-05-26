@@ -177,9 +177,6 @@ private:
 	void DrawDebug(void);
 #endif // _DEBUG
 
-	//アニメーションの追加
-	void AddAnimation(void)override;
-
 	//アクションの追加
 	void AddAction(void)override;
 

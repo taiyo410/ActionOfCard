@@ -35,8 +35,6 @@ Enemy::Enemy(void):
 	capRadius_ = CAP_RADIUS;
 	characterType_ = CHARACTER_TYPE::ENEMY;
 	isRoar_ = false;
-	footSEDisCount_ = FOOT_SE_DIS;
-	footSE_ = ResourceManager::SRC::ENEMY_FOOT_SE;
 	logic_ = std::make_unique<EnemyLogic>(trans_);
 	deck_ = std::make_shared<CardDeck>(characterType_, ENEMY_NUM);
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
@@ -237,6 +235,7 @@ void Enemy::ChangeUpdateClearDirection(void)
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
 	effect_->Play(EffectController::EFF_TYPE::E_DEATH, effPos, trans_.quaRot, DEATH_EFF_SCL_VEC);
+	animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
 	CharacterBase::ChangeUpdateClearDirection();
 }
 
@@ -285,17 +284,6 @@ void Enemy::AddAction(void)
 	//使用するアクションを追加
 	action_->AddAction({ ACTION_TYPE::IDLE,ACTION_TYPE::MOVE
 		,ACTION_TYPE::REACT,ACTION_TYPE::CARD_ACTION });
-}
-void Enemy::AddAnimation(void)
-{
-	////animationController_ = std::make_unique<AnimationController>(trans_.modelId, SPINE_FRAME_NO);
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::IDLE), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_IDLE));
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::RUN), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_RUN));
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::REACT), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::REACT));
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::STOMP_ATK), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_STOMP_ATK));
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::JUMP_ATK), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_JUMP_ATK));
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::ROAR_ATK), ROAR_ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_ROAR_ATK));
-	//animationController_->Add(static_cast<int>(ANIM_TYPE::DEATH), ANIM_SPEED, resMng_.LoadModelDuplicate(ResourceManager::SRC::E_DEATH));
 }
 
 #ifdef _DEBUG

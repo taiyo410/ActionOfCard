@@ -9,6 +9,8 @@
       }
     },
     "Run": {
+      "footSE": "P_FOOT_SE",
+      "footSEDisCount": 0.2,
       "animation": {
         "useAnim": "P_RUN",
         "animSpeed": 40.0,
@@ -17,19 +19,19 @@
       }
     },
     "Dodge": {
+      "addDodgeSpeed": 16.0,
+      "endDodgeAnimStep": 30.0,
       "animation": {
         "useAnim": "P_DODGE",
         "animSpeed": 80.0,
         "detachSpeed": 5.0,
         "isLoop": false
-      },
-      "addDodgeSpeed": 16.0,
-      "endDodgeAnimStep": 30.0
+      }
     },
     "Death": {
       "animation": {
         "useAnim": "P_DEATH",
-        "animSpeed": 40.0,
+        "animSpeed": 30.0,
         "detachSpeed": 5.0,
         "isLoop": false
       }
@@ -121,6 +123,8 @@
 
     },
     "Run": {
+      "footSE": "E_FOOT_SE",
+      "footSEDisCount": 0.6,
       "animation": {
         "useAnim": "E_RUN",
         "animSpeed": 10.0,
@@ -137,6 +141,14 @@
         "isLoop": false
       }
     },
+    "Death": {
+      "animation": {
+        "useAnim": "E_DEATH",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": false
+      }
+    },
     "StompAttack": {
       "colStartAnimCnt": 22.0,
       "colEndAnimCnt": 46.0,
@@ -147,7 +159,6 @@
         "detachSpeed": 5.0,
         "isLoop": true
       }
-
     },
     "JumpAttack": {
       "attackPoint": 40.0,

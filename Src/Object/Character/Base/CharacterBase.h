@@ -222,16 +222,6 @@ public:
 	/// @return 
 	inline const STATUS& GetStatus(void)const { return status_; }
 
-	/// @brief 足音の間隔時間の取得
-	/// @param  
-	/// @return 足音の間隔時間
-	inline const float& GetFootSEDisCount(void)const { return footSEDisCount_; }
-
-	/// @brief 足音素材の取得
-	/// @param  
-	/// @return 足音素材
-	inline const ResourceManager::SRC& GetFootSE(void)const { return footSE_; }
-
 	/// @brief カードアクションの取得
 	/// @param  
 	/// @return 
@@ -341,12 +331,6 @@ protected:
 	//アニメーションタイプの文字列対応表
 	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;
 
-	//使う足音
-	SoundManager::SRC footSE_;
-
-	//足音の再生間隔のディスカウント
-	float footSEDisCount_;	
-
 	//当たり判定の要素
 	VECTOR movedPos_;		//移動後座標
 	VECTOR moveDiff_;		//移動前座標
@@ -435,9 +419,6 @@ protected:
 
 	//アクションの追加
 	virtual void AddAction(void) = 0;
-
-	//アニメーションの追加
-	virtual void AddAnimation(void) = 0;
 
 	//コライダ作成
 	virtual void MakeColliderGeometry(void) = 0;

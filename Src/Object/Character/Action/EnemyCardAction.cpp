@@ -77,7 +77,8 @@ void EnemyCardAction::Init(void)
 	if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::ATTACK)
 	{
 		cardPresent_.PutCard();
-		LogicBase::ENEMY_ATTACK_TYPE attackType = actionCntl_.GetInput().GetAttackType();
+		//LogicBase::ENEMY_ATTACK_TYPE attackType = actionCntl_.GetInput().GetAttackType();
+		LogicBase::ENEMY_ATTACK_TYPE attackType = LogicBase::ENEMY_ATTACK_TYPE::STOMP;
 		CARD_ACTION_TYPE cardActionType = enemyAttackTypeToCardActionType_[attackType];
 		ChangeCardAction(cardActionType);
 	}

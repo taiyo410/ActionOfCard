@@ -7,6 +7,7 @@
 #include "../Manager/Generic/InputManager.h"
 #include "../Manager/Generic/InputManagerS.h"
 #include "../Manager/Generic/ButtonUIManager.h"
+#include "../Manager/Generic/Camera.h"
 #include "../Manager/Generic/DataBank.h"
 #include "../Manager/Generic/MenuController.h"
 #include "../Manager/Resource/ResourceManager.h"

@@ -91,17 +91,15 @@ void EnemyRock::DeleteRockCollider(void)
 
 void EnemyRock::LoadAttackPow(void)
 {
-	nlohmann::json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
-	const std::string DATA_NAME = "EnemyAttack";
-	for (const auto& data : j[DATA_NAME])
+	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
+	const std::string DATA_NAME = "Enemy";
+
+	if(j[DATA_NAME].contains("StompAttack"))
 	{
-		if (data.contains("StompAttack"))
+		auto& atk = j[DATA_NAME]["StompAttack"];
+		if (atk.contains("attackPoint"))
 		{
-			auto& atk = data.at("StompAttack");
-			if (atk.contains("attackPoint"))
-			{
-				atkPow_ = atk.value("attackPoint", 0.0f);
-			}
+			atkPow_ = atk.value("attackPoint", 0.0f);
 		}
 	}
 }

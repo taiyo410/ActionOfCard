@@ -51,15 +51,6 @@ protected:
     //カードアクション関数ポインタ
     std::function<void(void)> cardActFunc_;
 
-    ////カードアクション遷移
-    //std::map<CARD_ACT_TYPE, std::function<void(void)>>changeAction_;
-
-    ////攻撃ステータステーブル
-    //std::map<CARD_ACT_TYPE, ATK_STATUS>atkStatusTable_;
-
-    ////攻撃アクション文字列
-    //std::unordered_map<std::string,CARD_ACT_TYPE> attackActionStr_;
-
     //アタックのQueue配列
     std::queue<std::function<void(void)>>cardFuncs_;
 
@@ -78,6 +69,8 @@ protected:
     //攻撃アニメーション
 	int atkAnim_;
 
+
+    //攻撃のステータスロード
     void LoadAttackStatus(const nlohmann::json& _jsonData, ATK_STATUS& _atkStatus);
 
     //攻撃モーション

@@ -330,51 +330,51 @@
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "PLAYER_FOOT_SE",
+      "name": "P_FOOT_SE",
       "handle": "PlayerFoot.mp3"
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "PLAYER_ATTACK_SE",
+      "name": "P_ATTACK_SE",
       "handle": "Blade_Atk.mp3",
       "pitch": -1000.0
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "PLAYER_HIT_SE",
+      "name": "P_HIT_SE",
       "handle": "KeyBladeHit.mp3",
       "pitch": -1000.0
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "ENEMY_FOOT_SE",
+      "name": "E_FOOT_SE",
       "handle": "EnemyFoot.mp3"
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "ENEMY_STOMP_SE",
+      "name": "E_STOMP_SE",
       "handle": "EnemyStomp.mp3"
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "ENEMY_CHARGE_SE",
+      "name": "E_CHARGE_SE",
       "handle": "EnemyCharge.mp3"
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "ENEMY_JUMP_LAND_SE",
+      "name": "E_JUMP_LAND_SE",
       "handle": "Enemy_Bomb2.mp3"
     },
     {
       "type": "sound",
       "soundtype": "SE",
-      "name": "ENEMY_HIT_SE",
+      "name": "E_HIT_SE",
       "handle": "PlayerDamage.mp3",
       "volume": 0.8
     },

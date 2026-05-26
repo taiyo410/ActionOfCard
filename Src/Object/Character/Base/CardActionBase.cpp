@@ -13,9 +13,9 @@
 #include "../Base/LogicBase.h"
 #include "CardActionBase.h"
 
-CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
+CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresent):
 	ActionBase(_actCntl,_charaObj),
-	cardPresent_(_deck),
+	cardPresent_(_cardPresent),
 	atkPos_(Utility3D::VECTOR_ZERO),
 	isCombo_(false),
 	isDuelWait_(false)
@@ -27,17 +27,6 @@ CardActionBase::~CardActionBase(void)
 {
 	//atkStatusTable_.clear();
 }
-
-//void CardActionBase::ChangeCardAction(const CARD_ACT_TYPE& _type)
-//{
-//	//“¯‚¶ó‘Ô‚ª“ü‚Á‚Ä‚«‚½‚ç”²‚¯‚é
-//	if (actType_ == _type)return;
-//	actType_ = _type;
-//	changeAction_[actType_]();
-//
-//	//“–‚½‚è”»’èî•ñ‚ğ•Ï‚¦‚é
-//	atkStatusTable_[actType_];
-//}
 
 void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag, const VECTOR& _localPos)
 {

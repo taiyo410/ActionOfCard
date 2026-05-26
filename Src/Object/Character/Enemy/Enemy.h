@@ -80,21 +80,16 @@ public:
 	/// @param  
 	void Draw2D(void) override;
 
-	/// <summary>
-	/// オブジェクトに当たった時の処理
-	/// </summary>
+	/// @brief オブジェクトに当たった時の処理
+	/// @param _hitCol 
 	void OnHit(const std::weak_ptr<Collider> _hitCol)override;
 
-	/// <summary>
-	/// 入力方向に応じて方向を決める
-	/// </summary>
-	/// <param name=""></param>
+	/// @brief 入力方向に応じて方向を決める
+	/// @param  
 	void MoveDirFromInput(void)override;
 
-	/// <summary>
-	/// ゴール角度をセット
-	/// </summary>
-	/// <param name="_deg"></param>
+	/// @brief ゴール角度をセット
+	/// @param  
 	void SetGoalRotate(void)override;
 
 	/// @brief 咆哮演出時の更新
@@ -160,9 +155,6 @@ private:
 
 	//アクションの追加
 	void AddAction(void)override;
-
-	//アニメーションの追加
-	void AddAnimation(void)override;
 
 #ifdef _DEBUG
 	void DrawDebug(void);

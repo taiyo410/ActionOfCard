@@ -25,8 +25,7 @@ CharacterBase::CharacterBase(void) :
 	updatePhase_(UPDATE_PHASE::NONE),
 	uiMng_(UIManager::GetInstance()),
 	hitStopFrame_(HIT_STOP_FRAME),
-	isEndClearDirect_(false),
-	footSEDisCount_(0.0f)
+	isEndClearDirect_(false)
 {
 	changeUpdate_ = {
 		{UPDATE_PHASE::NONE,[this]() {ChangeUpdateNone(); }},
@@ -38,21 +37,21 @@ CharacterBase::CharacterBase(void) :
 	};
 
 	animStrTable_ = {
-	{"Idle", ANIM_TYPE::IDLE},
-	{"Run", ANIM_TYPE::RUN},
-	{"React", ANIM_TYPE::REACT},
-	{"Dodge", ANIM_TYPE::DODGE},
-	{"Death", ANIM_TYPE::DEATH},
-	{"React", ANIM_TYPE::REACT},
-	{"Attack_1_Middle", ANIM_TYPE::ATTACK_1_MIDDLE},
-	{"Attack_1_Short", ANIM_TYPE::ATTACK_1_SHORT},
-	{"Attack_2", ANIM_TYPE::ATTACK_2},
-	{"Attack_3", ANIM_TYPE::ATTACK_3},
-	{"Reload", ANIM_TYPE::CARD_RELOAD},
-	{"StompAttack", ANIM_TYPE::STOMP_ATK},
-	{"JumpAttack", ANIM_TYPE::JUMP_ATK},
-	{"Rush_Atk", ANIM_TYPE::RUSH_ATK},
-	{"Roar", ANIM_TYPE::ROAR_ATK},
+		{"Idle", ANIM_TYPE::IDLE},
+		{"Run", ANIM_TYPE::RUN},
+		{"React", ANIM_TYPE::REACT},
+		{"Dodge", ANIM_TYPE::DODGE},
+		{"Death", ANIM_TYPE::DEATH},
+		{"React", ANIM_TYPE::REACT},
+		{"Attack_1_Middle", ANIM_TYPE::ATTACK_1_MIDDLE},
+		{"Attack_1_Short", ANIM_TYPE::ATTACK_1_SHORT},
+		{"Attack_2", ANIM_TYPE::ATTACK_2},
+		{"Attack_3", ANIM_TYPE::ATTACK_3},
+		{"Reload", ANIM_TYPE::CARD_RELOAD},
+		{"StompAttack", ANIM_TYPE::STOMP_ATK},
+		{"JumpAttack", ANIM_TYPE::JUMP_ATK},
+		{"Rush_Atk", ANIM_TYPE::RUSH_ATK},
+		{"Roar", ANIM_TYPE::ROAR_ATK},
 	};
 }
 

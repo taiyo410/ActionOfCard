@@ -112,7 +112,6 @@ void Camera::SetBeforeDraw(void)
 
 void Camera::Draw(void)
 {
-
 }
 
 void Camera::ChangeSub(const  SUB_MODE _subMode)
@@ -482,6 +481,8 @@ void Camera::ChangeTargetCamera(void)
 }
 void Camera::ChangeStartDirection(void)
 {
+	//演出開始時、カメラを初期化してからプレイヤーと敵の両方を映すカメラモードにする
+	SetDefault();
 	directionMode_ = DIRECTION_MODE::NONE;
 	ChangeDirectionMode(DIRECTION_MODE::PLAYER_AND_ENEMY_VIEW);
 	modeUpdate_ = [this]() {SetBeforeDrawStartDirection(); };

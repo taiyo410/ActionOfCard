@@ -14,6 +14,7 @@ public:
     /// @brief デストラクタ
     /// @param  
     ~EnemyRock(void)override;
+
     /// @brief ロード
     /// @param  
     void Load(void)override;

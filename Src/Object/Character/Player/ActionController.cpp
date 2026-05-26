@@ -37,15 +37,10 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	, moveDir_(Utility3D::VECTOR_ZERO)
 	,dir_(Utility3D::VECTOR_ZERO)
 {
-	//エフェクト
-	ResourceManager::SRC footSE = charaObj_.GetFootSE();
-	const float& footSEDisCount = charaObj_.GetFootSEDisCount();
-	const float& speed = charaObj_.GetStatus().speed;
-	VECTOR dir = trans_.GetForward();
 	actionTable_ = {
 		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,charaObj_)); }},
-		{ACTION_TYPE::MOVE, [this,speed,footSE,footSEDisCount]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,charaObj_,speed,footSE,footSEDisCount)); }},
-		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,charaObj_,trans_,charaObj_.GetStatus().speed)); }},
+		{ACTION_TYPE::MOVE, [this]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,charaObj_)); }},
+		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,charaObj_)); }},
 		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,charaObj_)); }},
 		{ACTION_TYPE::CARD_ACTION,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)

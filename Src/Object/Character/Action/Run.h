@@ -13,7 +13,7 @@ public:
     /// @param _speed 速度
     /// @param _src 足音
     /// @param _footSeDis 足音の間隔 
-    Run(ActionController& _actCntl, CharacterBase& _character,const float _speed, ResourceManager::SRC _src,const float _footSeDis);
+    Run(ActionController& _actCntl, CharacterBase& _character);
 
     /// @brief デストラクタ
     /// @param  
@@ -36,9 +36,6 @@ public:
     void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
 
 public:
-
-    //移動速度
-    const float moveSpd_;
 
     //足音間隔
 	float footSECnt_;

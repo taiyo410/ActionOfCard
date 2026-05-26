@@ -6,10 +6,8 @@
 #include"../Base/LogicBase.h"
 #include "Dodge.h"
 
-Dodge::Dodge(ActionController& _actCntl, CharacterBase& _character, Transform& _trans, float _spd):
+Dodge::Dodge(ActionController& _actCntl, CharacterBase& _character):
 	ActionBase(_actCntl, _character),
-	dodgeSpd_(_spd),
-	trans_(_trans),
 	dodgeDir_({})
 {
 }
@@ -38,7 +36,7 @@ void Dodge::Init(void)
 	}
 	else
 	{
-		dodgeDir_ = trans_.GetForward();
+		dodgeDir_ = character_.GetTransform().GetForward();
 	}
 
 }

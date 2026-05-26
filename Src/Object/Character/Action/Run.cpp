@@ -8,14 +8,12 @@
 #include"../../Common/AnimationController.h"
 #include "Run.h"
 
-Run::Run(ActionController& _actCntl, CharacterBase& _character, const float _speed, ResourceManager::SRC _src, const float  _footSeDis):
+Run::Run(ActionController& _actCntl, CharacterBase& _character):
 	ActionBase(_actCntl,_character),
-	moveSpd_(_speed),
-	footSESrc_(_src),
-	footSeDis_(_footSeDis),
-	footSECnt_()
+	footSESrc_(ResourceManager::SRC::NONE),
+	footSeDis_(0.0f),
+	footSECnt_(0.0f)
 {
-	speed_ = moveSpd_;
 }
 
 Run::~Run(void)
@@ -30,6 +28,7 @@ void Run::Load(void)
 void Run::Init(void)
 {
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::RUN),animVar_);
+	speed_ = character_.GetStatus().speed;
 	footSECnt_ = 0.0f;
 }
 
@@ -79,4 +78,6 @@ void Run::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "Run")return;
 
 	animVar_=_data.animVariable;
+	footSESrc_ = resMng_.GetSrcFromString(_data.jsonData.value("footSE", ""));
+	footSeDis_ = _data.jsonData.value("footSEDisCount", 0.0f);
 }
