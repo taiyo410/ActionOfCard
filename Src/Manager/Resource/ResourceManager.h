@@ -34,6 +34,7 @@ public:
 		P_ATTACK_1_MIDDLE,			//攻撃1(中距離)
 		P_ATTACK_2,					//攻撃2
 		P_ATTACK_3,					//攻撃3
+		P_FIRE_MAGIC,				//炎魔法
 		P_DODGE,					//回避
 		P_RELOAD,					//リロード
 		P_DEATH,					//プレイヤー倒れ

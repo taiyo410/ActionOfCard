@@ -83,7 +83,6 @@ void Player::Load(void)
 	
 	action_->Load();
 	weapon_->Load();
-
 	resMng_.Load(SoundManager::SRC::ENEMY_HIT_SE);
 }
 

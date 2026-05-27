@@ -47,6 +47,7 @@ CharacterBase::CharacterBase(void) :
 		{"Attack_1_Short", ANIM_TYPE::ATTACK_1_SHORT},
 		{"Attack_2", ANIM_TYPE::ATTACK_2},
 		{"Attack_3", ANIM_TYPE::ATTACK_3},
+		{"FireMagic", ANIM_TYPE::MAGIC_FIRE},
 		{"Reload", ANIM_TYPE::CARD_RELOAD},
 		{"StompAttack", ANIM_TYPE::STOMP_ATK},
 		{"JumpAttack", ANIM_TYPE::JUMP_ATK},

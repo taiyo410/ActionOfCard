@@ -16,37 +16,6 @@ class ActionBase
 
 public:
 
-	//アクションタイプ
-	enum TYPE
-	{
-		NONE = -1,
-		IDLE,
-		WALK,
-		RUN,
-		JUMP,
-		ATTACK,
-		DAMAGE,
-		DEAD,
-		MAX
-	};
-
-	//カードアクション種類
-	enum class CARD_ACT_TYPE
-	{
-		NONE = -1,
-		//プレイヤーのアクション
-		ATTACK_ONE_SHORT,	//攻撃アクション1回目(近距離)
-		ATTACK_ONE_MIDDLE,	//攻撃アクション1回目(中距離)
-		ATTACK_TWO,			//攻撃アクション2回目
-		ATTACK_THREE,		//攻撃アクション3回目		
-		//敵のアクション
-		STOMP_ATK,			//ひっかき攻撃
-		JUMP_ATK,			//ジャンプ攻撃
-		//共通
-		RELOAD, //リロード
-		NUM,
-	};
-
 	//攻撃のステータス(どちらも使用するステータス)
 	struct ATK_STATUS
 	{
@@ -119,7 +88,6 @@ public:
 	/// @param  
 	/// @return ジャンプ攻撃かどうか
 	virtual const bool IsJumpAtk(void)const { return false; }
-
 
 	/// @brief ジャンプ攻撃チャージ
 	/// @param  

@@ -1,74 +1,58 @@
 #pragma once
-#include<functional>
-#include<queue>
+
 #include "../Base/CardActionBase.h"
 
-class Easing;
-class CardDeck;
-class CharacterBase;
-class PlayerFireMagicAction;
-class PlayerCardAttackAction;
-
-class PlayerCardAction :
+class PlayerCardAttackAction :
     public CardActionBase
 {
 
 public:
 
-	//カードアクションの種類
-    enum class CARD_ACTION_TYPE
-    {
-        NONE = -1,
-        ATTACK_ONE_SHORT,	//攻撃アクション1回目(近距離)
-        ATTACK_ONE_MIDDLE,	//攻撃アクション1回目(中距離)
-        ATTACK_TWO,			//攻撃アクション2回目
-        ATTACK_THREE,		//攻撃アクション3回目
-        MAGIC_FIRE,         //炎魔法
-        RELOAD,				//リロード
-	};
-
     /// @brief コンストラクタ
     /// @param _actCntl アクションコントローラ
-	/// @param _charaObj キャラクターオブジェクト
+    /// @param _charaObj キャラクターオブジェクト
     /// @param _deck デッキ
-    PlayerCardAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck);
+    PlayerCardAttackAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck);
 
     /// @brief デストラクタ
     /// @param  
-    ~PlayerCardAction(void)override;
+    ~PlayerCardAttackAction(void)override;
 
-	/// @brief ロード
-	/// @param  
-	void Load(void) override;
+    /// @brief ロード
+    /// @param  
+    void Load(void) override;
 
     /// @brief 初期化
     /// @param  
     void Init(void) override;
 
-	/// @brief 更新
+    /// @brief 更新
     /// @param  
     void Update(void) override;
 
-	/// @brief 解放
-	/// @param
+    /// @brief 解放
+    /// @param
     void Release(void)override;
 
-	/// @brief リロードエフェクトの解放
-	/// @param  
-	void ReleaseReloadResource(void)override;
+    /// @brief アクションデータのロード
+    /// @param animVar 
+    void LoadAnimVar(const ACTION_LOAD_DATA& animVar) override;
 
-	/// @brief リロード中かどうか
-	/// @param
-	const bool IsReloading(void)const override;
+    ////カードアクション遷移
+    //void ChangeCardAction(const CARD_ACTION_TYPE _type);
 
-    /// @brief アニメーション情報のロード
-    /// @param jsonData アクションロードデータ
-    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
+    //遷移系
+    void ChangeShortAttackOne(void);            //攻撃アクション1回目(近距離)
+    void ChangeMiddleAttackOne(void);           //攻撃アクション1回目(中距離)
+    void ChangeAttackTwo(void);                 //攻撃アクション2回目
+    void ChangeAttackThree(void);               //攻撃アクション3回目
+    //void ChangeMagicFire(void);                 //炎魔法
+    void ChangeReload(void);                    //リロード
 
 private:
 
     //カプセル球の半径(プレイヤーは武器のコライダを持っているため不要)
-    static constexpr float ATK_SPHERE_RADIUS = 0.0f;				    
+    static constexpr float ATK_SPHERE_RADIUS = 0.0f;
 
     //攻撃1段目判定(中距離)
     static constexpr float ATTACK_ONE_MID_COMBO_TIME = 0.2f;            //コンボ受付時間
@@ -100,26 +84,20 @@ private:
     //カードリロード中の音量
     static constexpr float CARD_RELOAD_VOL = 0.6f;
 
-    //カードアクション
-	CARD_ACTION_TYPE cardActType_;
+    ////カードアクション
+    //CARD_ACTION_TYPE cardActType_;
 
-    //カードアクション遷移
-	std::unordered_map<CARD_ACTION_TYPE, std::function<void(void)>> changeCardAction_;
+    ////カードアクション遷移
+    //std::unordered_map<CARD_ACTION_TYPE, std::function<void(void)>> changeCardAction_;
 
-	//攻撃ステータステーブル
-    std::unordered_map<CARD_ACTION_TYPE, ATK_STATUS> atkStatusTable_;
+    ////攻撃ステータステーブル
+    //std::unordered_map<CARD_ACTION_TYPE, ATK_STATUS> atkStatusTable_;
 
-	//攻撃アクション文字列
-	std::unordered_map<std::string, CARD_ACTION_TYPE> attackActionStr_;
+    ////攻撃アクション文字列
+    //std::unordered_map<std::string, CARD_ACTION_TYPE> attackActionStr_;
 
     //攻撃アクションごとのアニメーション
-	std::unordered_map<CARD_ACTION_TYPE, AnimationController::ANIMATION_VARIABLE>atkAnimVals_;
-
-    //炎魔法アクション
-    std::unique_ptr<PlayerFireMagicAction> magicFire_;
-
-    //通常攻撃
-    std::unique_ptr<PlayerCardAttackAction> attack_;
+    std::unordered_map<CARD_ACTION_TYPE, AnimationController::ANIMATION_VARIABLE>atkAnimVals_;
 
     //攻撃の当たり判定始まりカウント
     float attackStartAnimcnt_;
@@ -146,38 +124,23 @@ private:
     //イージング
     std::unique_ptr<Easing>easing_;
 
-    //カードアクション遷移
-	void ChangeCardAction(const CARD_ACTION_TYPE _type);
-
-    //攻撃条件
-    bool IsAttackable(void);
-
-    //連続攻撃条件
-    bool IsCanComboAttack(void);
-
-    //１段目を中距離攻撃アクションか近距離攻撃アクションかを決める
-    void DecideAttackOne(void);
+    //リロードカウントのセット
+    void SetUIReloadCnt(void);
 
     //攻撃状態遷移時のカード初期化
     void ChangeActionCardInit(void);
 
-    //リロードカウントのセット
-	void SetUIReloadCnt(void);
-
     //更新系
-	void UpdateAttack(void);                    //攻撃アクション
+    void UpdateAttack(void);                    //攻撃アクション
     void UpdateMiddleAttack(void);              //中距離攻撃アクション１回目(中距離)
     void UpdateAttackThree(void);               //攻撃アクション３段階目(１，２段目とは違う演出を入れる)
+    //void UpdateFireMagic(void);                 //炎魔法
     void UpdateReload(void);                    //リロード
 
-    //遷移系
-	void ChangeShortAttackOne(void);            //攻撃アクション1回目(近距離)
-	void ChangeMiddleAttackOne(void);           //攻撃アクション1回目(中距離)
-	void ChangeAttackTwo(void);                 //攻撃アクション2回目
-	void ChangeAttackThree(void);               //攻撃アクション3回目
-    void ChangeReload(void);                    //リロード
+
 
     //コンボアクション遷移(あれば実装する)
     void ChangeComboAction(void)override;
+
 };
 

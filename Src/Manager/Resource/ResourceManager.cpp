@@ -23,6 +23,7 @@ ResourceManager::ResourceManager(void):
 		{"P_ATTACK_1_MIDDLE" ,SRC::P_ATTACK_1_MIDDLE},
 		{"P_ATTACK_2",SRC::P_ATTACK_2 },
 		{"P_ATTACK_3",SRC::P_ATTACK_3 },
+		{"P_FIRE_MAGIC",SRC::P_FIRE_MAGIC },
 		{"P_DODGE",SRC::P_DODGE },
 		{"P_RELOAD",SRC::P_RELOAD },
 		{"P_DEATH" ,SRC::P_DEATH},

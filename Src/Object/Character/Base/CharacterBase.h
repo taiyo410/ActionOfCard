@@ -6,7 +6,6 @@
 #include "../../Card/CardPresenter.h"
 #include "../Base/CharacterOnHitBase.h"
 #include "../../Object/Common/AnimationController.h"
-//#include "../Player/ActionController.h"
 #include "../Base/CardActionBase.h"
 #include "../UIData/CharacterUIData.h"
 #include "../Base/ActionBase.h"
@@ -24,6 +23,7 @@ class LogicBase;
 class PlayerOnHit;
 class EnemyOnHit;
 class EnemyRock;
+class PlayerMagicFire;
 
 class CharacterBase 
 	: public ObjectBase
@@ -64,6 +64,7 @@ public:
 		ATTACK_1_SHORT,		//近距離攻撃
 		ATTACK_2,			//攻撃2段目
 		ATTACK_3,			//攻撃3段目
+		MAGIC_FIRE,			//炎魔法
 		JUMP,				//ジャンプ
 		DODGE,				//回避
 		CARD_RELOAD,		//カードリロード
@@ -271,7 +272,8 @@ public:
 	/// @param _isCanMoveable true:操作可能	false:操作不可能
 	void SetIsCanMoveable(const bool _isCanMoveable) { isMoveable_ = _isCanMoveable; }
 
-	//カードを使用済みにする(自分の攻撃中、敵の攻撃に当たった時)
+	/// @brief カードを使用済みにする(自分の攻撃中、敵の攻撃に当たった時)
+	/// @param  
 	void SetUsedCard(void);
 
 	/// @brief 遷移先の更新フェーズ設定

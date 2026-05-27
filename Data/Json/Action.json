@@ -99,7 +99,20 @@
         "startStep": 60.0,
         "endStep": 86.0
       }
-
+    },
+    "FireMagic": {
+      "bufferFrame": 20.0,
+      "attackPoint": 20.0,
+      "fireRadius": 30.0,
+      "moveSpeed": 0.5,
+      "animation": {
+        "useAnim": "P_FIRE_MAGIC",
+        "animSpeed": 40.0,
+        "detachSpeed": 5.0,
+        "isLoop": false,
+        "startStep": 15.0,
+        "endStep": 36.0
+      }
     },
     "Reload": {
       "animation": {

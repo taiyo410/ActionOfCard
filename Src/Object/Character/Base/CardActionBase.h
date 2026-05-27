@@ -1,6 +1,7 @@
 #pragma once
 #include<queue>
 #include<map>
+#include "../Object/Common/Collider.h"
 #include "ActionBase.h"
 
 class CardPresenter;

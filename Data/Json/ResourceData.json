@@ -67,6 +67,11 @@
     },
     {
       "type": "model",
+      "name": "P_FIRE_MAGIC",
+      "handle": "Animation/Player/PlayerFireMagic.mv1"
+    },
+    {
+      "type": "model",
       "name": "P_DODGE",
       "handle": "Animation/Player/PlayerDodge.mv1"
     },

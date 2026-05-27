@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Character\Action\PlayerCardAttackAction.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\PlayerFireMagicAction.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\PlayerMagicFIre.cpp" />
     <ClCompile Include="Src\Manager\Generic\MenuController.cpp" />
     <ClCompile Include="Src\Object\Card\CardPresenter.cpp" />
     <ClCompile Include="Src\Manager\Generic\ButtonUIManager.cpp" />
@@ -112,6 +115,9 @@
     <ClCompile Include="Src\Manager\Generic\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Character\Action\PlayerCardAttackAction.h" />
+    <ClInclude Include="Src\Object\Character\Action\PlayerFireMagicAction.h" />
+    <ClInclude Include="Src\Object\Character\Player\PlayerMagicFIre.h" />
     <ClInclude Include="Src\Manager\Generic\MenuController.h" />
     <ClInclude Include="Src\Object\Card\CardPresenter.h" />
     <ClInclude Include="Src\Manager\Generic\ButtonUIManager.h" />

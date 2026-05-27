@@ -5,6 +5,7 @@
 
 class ObjectBase;
 class CharacterBase;
+
 class Collider
 {
 
@@ -20,6 +21,7 @@ public :
 		JUMP_ATK,		//ジャンプ
 		STAGE,			//ステージ
 		ROCK,			//敵の攻撃用岩
+		FIRE,			//プレイヤーの炎魔法
 		CAMERA,			//カメラ
 	};
 
