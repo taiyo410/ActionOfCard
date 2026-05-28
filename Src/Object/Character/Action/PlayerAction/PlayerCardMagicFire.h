@@ -4,7 +4,7 @@
 
 class PlayerMagicFire;
 
-class PlayerFireMagicAction :
+class PlayerCardMagicFire :
     public CardActionBase
 {
 
@@ -14,11 +14,11 @@ public:
      /// @param _actCntl アクションコントローラ
      /// @param _charaObj キャラクターオブジェクト
      /// @param _deck デッキ
-    PlayerFireMagicAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck);
+    PlayerCardMagicFire(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck);
 
     /// @brief デストラクタ
     /// @param  
-    ~PlayerFireMagicAction(void)override;
+    ~PlayerCardMagicFire(void)override;
 
     /// @brief ロード
     /// @param  

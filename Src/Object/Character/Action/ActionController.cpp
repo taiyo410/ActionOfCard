@@ -19,6 +19,8 @@
 #include"../Action/PlayerAction/PlayerCardAttackOneMiddle.h"
 #include"../Action/PlayerAction/PlayerCardAttackTwo.h"
 #include"../Action/PlayerAction/PlayerCardAttackThree.h"
+#include"../Action/PlayerAction/PlayerCardMagicFire.h"
+#include"../Action/PlayerAction/PlayerCardReload.h"
 #include"../Action/EnemyCardAction.h"
 
 #include "ActionController.h"
@@ -49,7 +51,7 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		{ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackOneMiddle>(*this,charaObj_,cardPresent_));
 			}
 			else
 			{
@@ -59,11 +61,36 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		{ACTION_TYPE::CARD_ATTACK_ONE_SHORT,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackOneShort>(*this,charaObj_,cardPresent_));
 			}
 		}},
+		{ACTION_TYPE::CARD_ATTACK_TWO,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackTwo>(*this,charaObj_,cardPresent_));
+			}
+		}},
+		{ACTION_TYPE::CARD_ATTACK_THREE,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackThree>(*this,charaObj_,cardPresent_));
+			}
+		}},
+		{ACTION_TYPE::CARD_MAGIC_FIRE,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardMagicFire>(*this,charaObj_,cardPresent_));
+			}
+		}},
+		{ACTION_TYPE::CARD_RELOAD,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardReload>(*this,charaObj_,cardPresent_));
+			}
+		}}
 	};
-}
+
+};
 
 ActionController::~ActionController(void)
 {

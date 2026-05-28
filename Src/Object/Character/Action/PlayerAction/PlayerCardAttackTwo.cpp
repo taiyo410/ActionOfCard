@@ -6,7 +6,7 @@
 #include "../../../Common/AnimationController.h"
 #include "../ActionController.h"
 #include "PlayerCardAttackOneShort.h"
-#include "PlayerAttackCardTwo.h"
+#include "PlayerCardAttackTwo.h"
 
 PlayerCardAttackTwo::PlayerCardAttackTwo(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
 	CardActionBase(_actCntl,_charaObj,_cardPresenter)

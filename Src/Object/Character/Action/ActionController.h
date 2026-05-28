@@ -28,7 +28,7 @@ class PlayerCardAttackOneMiddle;
 class PlayerCardAttackOneShort;
 class PlayerCardAttackTwo;
 class PlayerCardAttackThree;
-class PlayerCardFire;
+class PlayerCardMagicFire;
 class EnemyCardAction;
 
 class ActionController

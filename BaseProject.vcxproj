@@ -20,11 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.cpp" />
-    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerAttackCardTwo.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackTwo.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneMiddle.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneShort.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardReload.cpp" />
-    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerFireMagicAction.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicFire.cpp" />
     <ClCompile Include="Src\Object\Character\Player\PlayerMagicFIre.cpp" />
     <ClCompile Include="Src\Manager\Generic\MenuController.cpp" />
     <ClCompile Include="Src\Object\Card\CardPresenter.cpp" />
@@ -120,11 +120,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.h" />
-    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerAttackCardTwo.h" />
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackTwo.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneMiddle.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneShort.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardReload.h" />
-    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerFireMagicAction.h" />
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicFire.h" />
     <ClInclude Include="Src\Object\Character\Player\PlayerMagicFIre.h" />
     <ClInclude Include="Src\Manager\Generic\MenuController.h" />
     <ClInclude Include="Src\Object\Card\CardPresenter.h" />
