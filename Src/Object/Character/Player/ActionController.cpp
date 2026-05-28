@@ -42,14 +42,14 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		{ACTION_TYPE::MOVE, [this]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,charaObj_)); }},
 		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,charaObj_)); }},
 		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,charaObj_)); }},
-		{ACTION_TYPE::CARD_ACTION,[this]() {
+		{ACTION_TYPE::CARD_ATTACK,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ACTION,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
 			}
 			else
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ACTION,std::make_unique<EnemyCardAction>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK,std::make_unique<EnemyCardAction>(*this,charaObj_,cardPresent_));
 			}
 		}},
 	};
@@ -143,6 +143,22 @@ void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
 	}
 }
 
+void ActionController::ChangeCardAction(void)
+{
+	//if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::ATTACK)
+	//{
+	//	ChangeAction(ACTION_TYPE::CARD_ATTACK);
+	//}
+	//else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
+	//{
+	//	ChangeAction(ACTION_TYPE::CARD_MAGIC_FIRE);
+	//}
+	//else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	//{
+	//	//ÉäÉçÅ[ÉhèàóùÇ÷
+	//	ChangeCardAction(ACTION_TYPE::CARD_RELOAD);
+	//}
+}
 void ActionController::CardMove(void)
 {
 	//CardUIBase& cardUI = character_.GetCardUI();

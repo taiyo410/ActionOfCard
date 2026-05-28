@@ -283,7 +283,7 @@ void Enemy::AddAction(void)
 	using ACTION_TYPE = ActionController::ACTION_TYPE;
 	//使用するアクションを追加
 	action_->AddAction({ ACTION_TYPE::IDLE,ACTION_TYPE::MOVE
-		,ACTION_TYPE::REACT,ACTION_TYPE::CARD_ACTION });
+		,ACTION_TYPE::REACT,ACTION_TYPE::CARD_ATTACK });
 }
 
 #ifdef _DEBUG

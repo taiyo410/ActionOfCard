@@ -6,7 +6,6 @@
 #include "../Object/Common/EffectController.h"
 #include "../Player/ActionController.h"
 #include "../Action/PlayerFireMagicAction.h"
-#include "../Action/PlayerCardAttackAction.h"
 #include "../../Common/AnimationController.h"
 #include "../../Card/CardDeck.h"
 #include "../../Card/CardBase.h"
@@ -22,19 +21,19 @@ PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _c
 	cardActType_(CARD_ACTION_TYPE::NONE)
 {
 
-	//炎魔法の生成
-	magicFire_ = std::make_unique<PlayerFireMagicAction>(actionCntl_, character_, cardPresent_);
+	////炎魔法の生成
+	//magicFire_ = std::make_unique<PlayerFireMagicAction>(actionCntl_, character_, cardPresent_);
 
-	//通常攻撃
-	attack_ = std::make_unique<PlayerCardAttackAction>(actionCntl_, character_, cardPresent_);
+	////通常攻撃
+	//attack_ = std::make_unique<PlayerCardAttackAction>(actionCntl_, character_, cardPresent_,*this);
 	isTurnable_ = false;
 	changeCardAction_ ={
-		{ CARD_ACTION_TYPE::ATTACK_ONE_SHORT, [this]() {attack_->ChangeShortAttackOne(); }},
-		{ CARD_ACTION_TYPE::ATTACK_ONE_MIDDLE, [this]() {attack_->ChangeMiddleAttackOne(); }},
-		{ CARD_ACTION_TYPE::ATTACK_TWO, [this]() {attack_->ChangeAttackTwo(); }},
-		{ CARD_ACTION_TYPE::ATTACK_THREE, [this]() {attack_->ChangeAttackThree(); }},
+		{ CARD_ACTION_TYPE::ATTACK_ONE_SHORT, [this]() {ChangeShortAttackOne(); }},
+		{ CARD_ACTION_TYPE::ATTACK_ONE_MIDDLE, [this]() {ChangeMiddleAttackOne(); }},
+		{ CARD_ACTION_TYPE::ATTACK_TWO, [this]() {ChangeAttackTwo(); }},
+		{ CARD_ACTION_TYPE::ATTACK_THREE, [this]() {ChangeAttackThree(); }},
 		//{ CARD_ACTION_TYPE::MAGIC_FIRE, [this]() {ChangeMagicFire(); }},
-		{ CARD_ACTION_TYPE::RELOAD, [this]() {attack_->ChangeReload(); }},
+		{ CARD_ACTION_TYPE::RELOAD, [this]() {ChangeReload(); }},
 	};
 	attackActionStr_ = {
 		{"Attack_1_Short", CARD_ACTION_TYPE::ATTACK_ONE_SHORT},
@@ -46,8 +45,6 @@ PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _c
 	};
 	atk_ = {};
 	easing_ = std::make_unique<Easing>();
-
-
 }
 
 PlayerCardAction::~PlayerCardAction(void)
@@ -65,8 +62,7 @@ void PlayerCardAction::Load(void)
 	resMng_.Load(ResourceManager::SRC::CARD_RELOAD_SE);
 	resMng_.Load(ResourceManager::SRC::CARD_RELOAD_FINISH_SE);
 	resMng_.Load(ResourceManager::SRC::CARD_PUT_SE);
-
-	//使用エフェクトの追加
+	////使用エフェクトの追加
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_EFF).handleId_, EffectController::EFF_TYPE::RELOAD);
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_END_EFF).handleId_, EffectController::EFF_TYPE::RELOAD_END);
 }
@@ -182,7 +178,15 @@ void PlayerCardAction::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	{
 		magicFire_->LoadAnimVar(_data);
 	}
+}
 
+const CardActionBase::ATK_STATUS& PlayerCardAction::GetAttackStatus(const CARD_ACTION_TYPE& _atkType)
+{
+	if (_atkType == CARD_ACTION_TYPE::NONE)
+	{
+		return atkStatusTable_[cardActType_];
+	}
+	 return atkStatusTable_[_atkType];
 }
 
 void PlayerCardAction::ChangeCardAction(const CARD_ACTION_TYPE _type)
@@ -539,4 +543,9 @@ void PlayerCardAction::ChangeComboAction(void)
 			ChangeCardAction(CARD_ACTION_TYPE::ATTACK_THREE);
 		}
 	}
+}
+
+void PlayerCardAction::PushCardFuncs(const std::function<void(void)>& _cardFunc)
+{
+	cardFuncs_.push(_cardFunc);
 }

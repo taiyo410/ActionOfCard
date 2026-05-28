@@ -41,6 +41,11 @@ public:
     /// @param  
     virtual void ReleaseReloadResource(void);
 
+    /// @brief カードの勝敗を常に監視する。負けたらtrueを返し、のけぞり状態にする
+    /// @param _attackTag 使っている当たり判定タグ
+    /// @return 
+    bool IsCardFailure(const Collider::TAG& _attackTag);
+
 protected:
 
     //ジャンプ溜め中のカード出した回数
@@ -77,10 +82,7 @@ protected:
     //攻撃モーション
     void AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag,const VECTOR& _localPos);
 
-    /// @brief カードの勝敗を常に監視する。負けたらtrueを返し、のけぞり状態にする
-    /// @param _attackTag 使っている当たり判定タグ
-    /// @return 
-    bool IsCardFailure(const Collider::TAG& _attackTag);
+
 
 	//負けて攻撃が終了
 	void FinishFailureAttack(const Collider::TAG _attackCol);

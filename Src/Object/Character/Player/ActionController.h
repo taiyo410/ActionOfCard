@@ -24,6 +24,7 @@ class Run;
 class Jump;
 class React;
 class PlayerCardAction;
+class PlayerCardFire;
 class EnemyCardAction;
 
 class ActionController
@@ -41,7 +42,9 @@ public:
 		MOVE,			//移動
 		REACT,			//パンチされた状態
 		JUMP,			//ジャンプ
-		CARD_ACTION,	//カードアクション
+		CARD_ATTACK,	//カードアクション
+		CARD_RELOAD,	//カードリロード
+		CARD_MAGIC_FIRE,//カードによる炎魔法
 		DODGE,
 	};
 
@@ -129,6 +132,10 @@ public:
 
 	//アクションごとのアニメーションのロードの通知
 	void AnimLoadNotify(const ACTION_LOAD_DATA& animVar);
+
+	/// @brief カードの種類を受け取ってカードのアクションを決める
+	/// @param  
+	void ChangeCardAction(void);
 
 #ifdef _DEBUG
 	//デバッグb

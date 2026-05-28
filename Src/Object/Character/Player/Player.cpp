@@ -239,7 +239,7 @@ void Player::AddAction(void)
 	//ƒAƒNƒVƒ‡ƒ“
 	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animationController_, padNum_);
 	using ACTION_TYPE = ActionController::ACTION_TYPE;
-	action_->AddAction({ ACTION_TYPE::IDLE, ACTION_TYPE::MOVE,ACTION_TYPE::REACT,  ACTION_TYPE::CARD_ACTION,ACTION_TYPE::DODGE });
+	action_->AddAction({ ACTION_TYPE::IDLE, ACTION_TYPE::MOVE,ACTION_TYPE::REACT,  ACTION_TYPE::CARD_ATTACK,ACTION_TYPE::DODGE });
 }
 
 void Player::MakeColliderGeometry(void)

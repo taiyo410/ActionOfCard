@@ -7,7 +7,6 @@ class Easing;
 class CardDeck;
 class CharacterBase;
 class PlayerFireMagicAction;
-class PlayerCardAttackAction;
 
 class PlayerCardAction :
     public CardActionBase
@@ -65,6 +64,29 @@ public:
     /// @param jsonData アクションロードデータ
     void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
 
+    /// @brief 攻撃ステータスの取得
+    /// @param _atkType 取得したいステータスの攻撃タイプ(指定なしで、現在の攻撃タイプのステータス取得)
+    /// @return 攻撃ステータス
+    const ATK_STATUS& GetAttackStatus(const CARD_ACTION_TYPE& _atkType = CARD_ACTION_TYPE::NONE);
+
+    /// @brief 現在攻撃中のカードアクションタイプをリセット
+    /// @param  
+    void ResetAttackType(void) { cardActType_ = CARD_ACTION_TYPE::NONE; }
+
+    /// @brief カードアクション遷移
+    /// @param _type 遷移したい攻撃タイプ
+    void ChangeCardAction(const CARD_ACTION_TYPE _type);
+
+    //コンボアクション遷移(あれば実装する)
+    void ChangeComboAction(void)override;
+
+    /// @brief 更新処理にプッシュ
+    /// @param _cardFunc 
+    void PushCardFuncs(const std::function<void(void)>& _cardFunc);
+
+    //攻撃状態遷移時のカード初期化
+    void ChangeActionCardInit(void);
+
 private:
 
     //カプセル球の半径(プレイヤーは武器のコライダを持っているため不要)
@@ -118,9 +140,6 @@ private:
     //炎魔法アクション
     std::unique_ptr<PlayerFireMagicAction> magicFire_;
 
-    //通常攻撃
-    std::unique_ptr<PlayerCardAttackAction> attack_;
-
     //攻撃の当たり判定始まりカウント
     float attackStartAnimcnt_;
 
@@ -146,8 +165,6 @@ private:
     //イージング
     std::unique_ptr<Easing>easing_;
 
-    //カードアクション遷移
-	void ChangeCardAction(const CARD_ACTION_TYPE _type);
 
     //攻撃条件
     bool IsAttackable(void);
@@ -157,9 +174,6 @@ private:
 
     //１段目を中距離攻撃アクションか近距離攻撃アクションかを決める
     void DecideAttackOne(void);
-
-    //攻撃状態遷移時のカード初期化
-    void ChangeActionCardInit(void);
 
     //リロードカウントのセット
 	void SetUIReloadCnt(void);
@@ -177,7 +191,5 @@ private:
 	void ChangeAttackThree(void);               //攻撃アクション3回目
     void ChangeReload(void);                    //リロード
 
-    //コンボアクション遷移(あれば実装する)
-    void ChangeComboAction(void)override;
 };
 

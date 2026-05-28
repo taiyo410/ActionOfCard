@@ -35,7 +35,7 @@ void Idle::Update(void)
 	//カード使用
 	if (actionCntl_.IsCardDecisionControl()&&actionCntl_.GetInput().GetIsAct().isCardUse)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::CARD_ACTION);
+		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::CARD_ATTACK);
 		return;
 	}
 	//回避

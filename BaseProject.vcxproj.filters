@@ -321,7 +321,7 @@
     <ClCompile Include="Src\Object\Character\Action\PlayerFireMagicAction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\PlayerCardAttackAction.cpp">
+    <ClCompile Include="Src\Object\Character\Action\PlayerCardReload.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -734,7 +734,7 @@
     <ClInclude Include="Src\Object\Character\Action\PlayerFireMagicAction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\PlayerCardAttackAction.h">
+    <ClInclude Include="Src\Object\Character\Action\PlayerCardReload.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
