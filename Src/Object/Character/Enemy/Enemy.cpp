@@ -20,7 +20,7 @@
 #include "../Object/Card/EnemyCardUI.h"
 #include "../Object/Card/CardPresenter.h"
 #include "../Object/Common/EffectController.h"
-#include "../Player/ActionController.h"
+#include "../Action/ActionController.h"
 #include "../Base/ActionBase.h"
 #include "../Action/Idle.h"
 #include "../Action/Run.h"
@@ -261,11 +261,11 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	//ロジックの更新
-	logic_->Update();
+	////ロジックの更新
+	//logic_->Update();
 
-	//アクションの更新
-	action_->Update();
+	////アクションの更新
+	//action_->Update();
 
 	//アニメーションの更新
 	animationController_->Update();
@@ -283,7 +283,7 @@ void Enemy::AddAction(void)
 	using ACTION_TYPE = ActionController::ACTION_TYPE;
 	//使用するアクションを追加
 	action_->AddAction({ ACTION_TYPE::IDLE,ACTION_TYPE::MOVE
-		,ACTION_TYPE::REACT,ACTION_TYPE::CARD_ATTACK });
+		,ACTION_TYPE::REACT,ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE });
 }
 
 #ifdef _DEBUG

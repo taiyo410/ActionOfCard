@@ -1,4 +1,4 @@
-#include"../Player/ActionController.h"
+#include"./ActionController.h"
 #include"../../Common/AnimationController.h"
 #include"../Base/CharacterBase.h"
 #include"../Utility/Utility3D.h"
@@ -35,7 +35,7 @@ void Idle::Update(void)
 	//カード使用
 	if (actionCntl_.IsCardDecisionControl()&&actionCntl_.GetInput().GetIsAct().isCardUse)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::CARD_ATTACK);
+		actionCntl_.DesideCardAction();
 		return;
 	}
 	//回避

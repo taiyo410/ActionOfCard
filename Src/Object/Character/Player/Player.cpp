@@ -15,7 +15,7 @@
 #include "../../Card/CardPresenter.h"
 #include"../Object/Card/PlayerCardUI.h"
 #include "../../../Object/Common/AnimationController.h"
-#include"./ActionController.h"
+#include"../Action/ActionController.h"
 #include"../Base/CharacterOnHitBase.h"
 #include"./PlayerOnHit.h"
 #include "./Weapon.h"
@@ -24,7 +24,7 @@
 #include"../Action/Run.h"
 #include"../Action/React.h"
 #include"../Action/Dodge.h"
-#include"../Action/PlayerCardAction.h"
+#include"../Action/PlayerAction/PlayerCardAction.h"
 #include "./PlayerLogic.h"
 #include "Player.h"
 
@@ -239,7 +239,9 @@ void Player::AddAction(void)
 	//ƒAƒNƒVƒ‡ƒ“
 	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animationController_, padNum_);
 	using ACTION_TYPE = ActionController::ACTION_TYPE;
-	action_->AddAction({ ACTION_TYPE::IDLE, ACTION_TYPE::MOVE,ACTION_TYPE::REACT,  ACTION_TYPE::CARD_ATTACK,ACTION_TYPE::DODGE });
+	action_->AddAction({ ACTION_TYPE::IDLE, ACTION_TYPE::MOVE,ACTION_TYPE::REACT, ACTION_TYPE::DODGE
+		,ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE, ACTION_TYPE::CARD_ATTACK_ONE_SHORT
+		,ACTION_TYPE::CARD_ATTACK_TWO,ACTION_TYPE::CARD_ATTACK_THREE,ACTION_TYPE::CARD_MAGIC_FIRE,ACTION_TYPE::CARD_RELOAD });
 }
 
 void Player::MakeColliderGeometry(void)

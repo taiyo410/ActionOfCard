@@ -1,8 +1,9 @@
 #pragma once
-#include<DxLib.h>
-#include<memory>
-#include<functional>
-#include<map>
+#include <DxLib.h>
+#include <memory>
+#include <functional>
+#include <map>
+#include <queue>
 #include"../Utility/UtilityCommon.h"
 #include"../Utility/Utility3D.h"
 #include"../Manager/Generic/InputManager.h"
@@ -23,7 +24,10 @@ class Idle;
 class Run;
 class Jump;
 class React;
-class PlayerCardAction;
+class PlayerCardAttackOneMiddle;
+class PlayerCardAttackOneShort;
+class PlayerCardAttackTwo;
+class PlayerCardAttackThree;
 class PlayerCardFire;
 class EnemyCardAction;
 
@@ -42,9 +46,13 @@ public:
 		MOVE,			//移動
 		REACT,			//パンチされた状態
 		JUMP,			//ジャンプ
-		CARD_ATTACK,	//カードアクション
+		CARD_ATTACK_ONE_MIDDLE,	//カードアクション
+		CARD_ATTACK_ONE_SHORT,	//カードアクション
+		CARD_ATTACK_TWO,	//カードアクション
+		CARD_ATTACK_THREE,	//カードアクション
 		CARD_RELOAD,	//カードリロード
 		CARD_MAGIC_FIRE,//カードによる炎魔法
+		ENEMY_CARD_ATTACK,
 		DODGE,
 	};
 
@@ -133,9 +141,16 @@ public:
 	//アクションごとのアニメーションのロードの通知
 	void AnimLoadNotify(const ACTION_LOAD_DATA& animVar);
 
-	/// @brief カードの種類を受け取ってカードのアクションを決める
+	/// @brief カードアクションを決める
 	/// @param  
-	void ChangeCardAction(void);
+	void DesideCardAction(void);
+
+	/// @brief 通常攻撃のコンボ
+	/// @param  
+	void ChangeComboCardAttack(void);
+
+	//コンボ入力の受付
+	void ComboInput(void);
 
 #ifdef _DEBUG
 	//デバッグb
@@ -168,11 +183,20 @@ private:
 	//アクション関数ポインタ
 	std::unordered_map<ACTION_TYPE, std::function<void(void)>>actionTable_;
 
+	//先行入力を受けつける溜めの攻撃配列
+	std::queue<ACTION_TYPE>atkCombos_;
+
 	//カードデッキ
 	CardPresenter& cardPresent_;
 
 	//オブジェクト(当たり判定用)
 	CharacterBase& charaObj_;
+
+	//モデル情報
+	Transform& trans_;
+
+	//各キャラクターの入力情報
+	LogicBase& logic_;
 
 	//状態
 	ACTION_TYPE act_;
@@ -183,12 +207,6 @@ private:
 	//カード関連
 	bool isCardAct_;	//カードアクション中かどうか
 	float cardActTime_; //カードアクション時間(デバッグ用)
-
-	//モデル情報
-	Transform& trans_;	
-
-	//各キャラクターの入力情報
-	LogicBase& logic_;	
 
 	//移動関連
 	float speed_;			// 移動スピード

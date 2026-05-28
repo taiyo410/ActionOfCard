@@ -141,7 +141,7 @@
     <ClCompile Include="Src\Object\Character\Player\Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Player\ActionController.cpp">
+    <ClCompile Include="Src\Object\Character\Action\ActionController.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Manager\Generic\DataBank.cpp">
@@ -174,7 +174,7 @@
     <ClCompile Include="Src\Object\Character\Action\Idle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\PlayerCardAction.cpp">
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Object\Character\Base\CharacterBase.cpp">
@@ -318,10 +318,22 @@
     <ClCompile Include="Src\Object\Character\Player\PlayerMagicFIre.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\PlayerFireMagicAction.cpp">
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerFireMagicAction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\PlayerCardReload.cpp">
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardReload.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneShort.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneMiddle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerAttackCardTwo.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -554,7 +566,7 @@
     <ClInclude Include="Src\Object\Character\Player\Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Player\ActionController.h">
+    <ClInclude Include="Src\Object\Character\Action\ActionController.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Manager\Generic\DataBank.h">
@@ -587,7 +599,7 @@
     <ClInclude Include="Src\Object\Character\Action\Idle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\PlayerCardAction.h">
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Object\Character\Base\CharacterBase.h">
@@ -731,10 +743,22 @@
     <ClInclude Include="Src\Object\Character\Player\PlayerMagicFIre.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\PlayerFireMagicAction.h">
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerFireMagicAction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\PlayerCardReload.h">
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardReload.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneShort.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneMiddle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerAttackCardTwo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

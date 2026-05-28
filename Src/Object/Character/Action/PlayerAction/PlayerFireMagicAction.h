@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Base/CardActionBase.h"
+#include "../../Base/CardActionBase.h"
 
 class PlayerMagicFire;
 
@@ -38,12 +38,12 @@ public:
 
 	/// @brief アクションデータのロード
 	/// @param animVar 
-	void LoadAnimVar(const ACTION_LOAD_DATA& animVar) override;
+	void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
 
 private:
 
     //炎
-    std::unique_ptr<PlayerMagicFire>fireBall_;
+    //std::unique_ptr<PlayerMagicFire>fireBall_;
 
 
 };

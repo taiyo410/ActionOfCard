@@ -19,8 +19,8 @@ public:
 	//攻撃のステータス(どちらも使用するステータス)
 	struct ATK_STATUS
 	{
-		float colStartCnt = 0.0f;	//当たり判定発生の時間
-		float colEndCnt = 0.0f;		//当たり判定終了の時間
+		float colStartStep = 0.0f;	//当たり判定発生の時間
+		float colEndStep = 0.0f;		//当たり判定終了の時間
 		float bufferFrame = 0.0f;	//コンボ入力のバッファ
 		float atkRadius = 0.0f;		//攻撃範囲
 		float atkPoint = 0.0f;		//攻撃力

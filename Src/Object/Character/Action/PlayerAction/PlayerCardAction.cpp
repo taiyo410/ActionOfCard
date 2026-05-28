@@ -4,15 +4,14 @@
 #include "../Manager/Generic/Camera.h"
 #include "../Manager/Resource/ResourceManager.h"
 #include "../Object/Common/EffectController.h"
-#include "../Player/ActionController.h"
-#include "../Action/PlayerFireMagicAction.h"
-#include "../../Common/AnimationController.h"
-#include "../../Card/CardDeck.h"
-#include "../../Card/CardBase.h"
-#include "../../Card/CardUIBase.h"
-#include "../../Card/CardSystem.h"
-#include "../Base/CharacterBase.h"
-#include "../Base/LogicBase.h"
+#include "../ActionController.h"
+#include "../../../Common/AnimationController.h"
+#include "../../../Card/CardDeck.h"
+#include "../../../Card/CardBase.h"
+#include "../../../Card/CardUIBase.h"
+#include "../../../Card/CardSystem.h"
+#include "../../Base/CharacterBase.h"
+#include "../../Base/LogicBase.h"
 #include "PlayerCardAction.h"
 
 PlayerCardAction::PlayerCardAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
@@ -173,20 +172,6 @@ void PlayerCardAction::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	auto& atk = atkStatusTable_[it->second];
 	auto& jsonData = _data.jsonData;
 	LoadAttackStatus(jsonData, atk);
-
-	if (_data.name == "FireMagic")
-	{
-		magicFire_->LoadAnimVar(_data);
-	}
-}
-
-const CardActionBase::ATK_STATUS& PlayerCardAction::GetAttackStatus(const CARD_ACTION_TYPE& _atkType)
-{
-	if (_atkType == CARD_ACTION_TYPE::NONE)
-	{
-		return atkStatusTable_[cardActType_];
-	}
-	 return atkStatusTable_[_atkType];
 }
 
 void PlayerCardAction::ChangeCardAction(const CARD_ACTION_TYPE _type)
@@ -278,7 +263,7 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 	const float delta = scnMng_.GetDeltaTime();
 
 	//攻撃判定処理
-	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= atk_.colStartCnt && midAtkCnt_ > 0.0f) { midAtkCnt_ -= delta; }
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= atk_.colStartStep && midAtkCnt_ > 0.0f) { midAtkCnt_ -= delta; }
 
 	//中距離突きカウントが０以上なら
 	if (midAtkCnt_ > 0.0f && !atk_.isDamage)
@@ -316,62 +301,6 @@ void PlayerCardAction::UpdateMiddleAttack(void)
 
 void PlayerCardAction::UpdateAttackThree(void)
 {
-	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))
-	{
-		cardActType_ = CARD_ACTION_TYPE::NONE;
-		return;
-	}
-
-	//ステップの取得
-	const float animStep = anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3));							//現在のアニメステップ
-	const float atkStartStep = atkStatusTable_[cardActType_].colStartCnt;	//当たり判定スタートカウント
-	const float atkEndStep = atkStatusTable_[cardActType_].colEndCnt;		//当たり判定終了カウント
-
-	//攻撃スタートカウント以下なら、アニメーションスピードを遅くする
-	if (animStep < atkStartStep)
-	{
-		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), ATTACK_THREE_ANIM_SPD);
-	}
-
-	//攻撃判定処理
-	else if (animStep >= atkStartStep &&
-		animStep <= atkEndStep)
-	{
-		//速度を自然に見せるための補完
-		atkAnimLerpCnt_ += scnMng_.GetDeltaTime();
-
-		//アニメーション速度補完
-		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), CharacterBase::DEFAULT_ANIM_SPEED, true
-			, ATTACK_THREE_ANIM_SPD, atkAnimLerpCnt_ / ATTACK_THREE_ANIM_LERP_TIME,Easing::EASING_TYPE::QUAD_IN);
-
-		//攻撃判定有効
-		isAliveAtkCol_ = true;
-		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
-
-	}
-	else if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)))		//アニメーション終了でアイドル状態変更
-	{
-		//攻撃終了時間以上なら、アイドル状態へ
-		const float ATK_END_CNT = 0.5f;
-		if (atkThreeEndCnt_ > ATK_END_CNT)
-		{
-			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
-			return;
-		}
-
-		//攻撃３段階カのウント
-		atkThreeEndCnt_+= scnMng_.GetDeltaTime();
-
-		//カメラシェイク
-		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / ATK_END_CNT, 50.0f, Easing::EASING_TYPE::ELASTIC_BACK);
-		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::ONE_SHAKE);
-	}
-	else if (animStep > atkEndStep)	//攻撃終了後
-	{
-		//攻撃判定無効
-		character_.DeleteAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK);
-	}
 }
 
 //void PlayerCardAction::UpdateFireMagic(void)

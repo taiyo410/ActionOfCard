@@ -2,7 +2,7 @@
 #include "../Utility/Utility3D.h"
 #include "ActionBase.h"
 #include "../Manager/Generic/SceneManager.h"
-#include "../Player/ActionController.h"
+#include "../Action/ActionController.h"
 #include "../../Common/AnimationController.h"
 #include "../Object/Common/EffectController.h"
 #include "../../Card/CardDeck.h"
@@ -32,14 +32,14 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 {
 
 	//ƒRƒ“ƒ{“ü—Íó•t
-	if (anim_.GetAnimStep(atkAnim_) >= _status.colEndCnt - _status.bufferFrame)
+	if (anim_.GetAnimStep(atkAnim_) >= _status.colEndStep - _status.bufferFrame)
 	{
 		ComboInput();
 	}
 
 	//UŒ‚”»’èˆ—
-	if (anim_.GetAnimStep(atkAnim_) >= _status.colStartCnt&&
-		anim_.GetAnimStep(atkAnim_) <= _status.colEndCnt)
+	if (anim_.GetAnimStep(atkAnim_) >= _status.colStartStep&&
+		anim_.GetAnimStep(atkAnim_) <= _status.colEndStep)
 	{
 		//UŒ‚’†
 		atkPos_ = Utility3D::AddPosRotate(character_.GetTransform().pos, character_.GetTransform().quaRot, _localPos);
@@ -55,13 +55,13 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		return;
 	}
-	else if (anim_.GetAnimStep(atkAnim_) > _status.colEndCnt)	//UŒ‚I—¹Œã
+	else if (anim_.GetAnimStep(atkAnim_) > _status.colEndStep)	//UŒ‚I—¹Œã
 	{
 		//UŒ‚”»’è–³Œø
 		character_.DeleteAttackCol(character_.GetCharaTag(),_attackTag);
 
 		//Ÿ‚ÌUŒ‚‚É‚Â‚È‚°‚é
-		ChangeComboAction();
+		actionCntl_.ChangeComboCardAttack();
 	}
 }
 
@@ -118,11 +118,11 @@ void CardActionBase::LoadAttackStatus(const nlohmann::json& _jsonData, ATK_STATU
 {
 	if (_jsonData.contains("colStartAnimCnt"))
 	{
-		_atkStatus.colStartCnt = _jsonData.value("colStartAnimCnt", 0.0f);
+		_atkStatus.colStartStep = _jsonData.value("colStartAnimCnt", 0.0f);
 	}
 	if (_jsonData.contains("colEndAnimCnt"))
 	{
-		_atkStatus.colEndCnt = _jsonData.value("colEndAnimCnt", 0.0f);
+		_atkStatus.colEndStep = _jsonData.value("colEndAnimCnt", 0.0f);
 	}
 	if (_jsonData.contains("bufferFrame"))
 	{

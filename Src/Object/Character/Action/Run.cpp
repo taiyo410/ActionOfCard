@@ -3,7 +3,7 @@
 #include "../Base/ActionBase.h"
 #include"../Base/LogicBase.h"
 #include"../Utility/Utility3D.h"
-#include"../Player/ActionController.h"
+#include"./ActionController.h"
 #include"../Base/CharacterBase.h"
 #include"../../Common/AnimationController.h"
 #include "Run.h"
@@ -44,7 +44,7 @@ void Run::Update(void)
 	//カードを場に出す処理
 	if (actionCntl_.IsCardDecisionControl() && actionCntl_.GetInput().GetIsAct().isCardUse)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::CARD_ATTACK);
+		actionCntl_.DesideCardAction();
 		return;
 	}
 

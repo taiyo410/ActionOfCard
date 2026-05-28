@@ -1,7 +1,7 @@
 #include"../Utility/Utility3D.h"
 #include"../Utility/UtilityCommon.h"
-#include"Player.h"
-#include"./PlayerLogic.h"
+#include"../Player/Player.h"
+#include"../Player/PlayerLogic.h"
 #include "../../../Manager/Generic/Camera.h"
 #include "../../../Manager/Generic/SceneManager.h"
 #include "../../../Manager/Resource/ResourceManager.h"
@@ -15,41 +15,51 @@
 #include"../Action/Run.h"
 #include"../Action/React.h"
 #include"../Action/Dodge.h"
-#include"../Action/PlayerCardAction.h"
+#include"../Action/PlayerAction/PlayerCardAttackOneShort.h"
+#include"../Action/PlayerAction/PlayerCardAttackOneMiddle.h"
+#include"../Action/PlayerAction/PlayerCardAttackTwo.h"
+#include"../Action/PlayerAction/PlayerCardAttackThree.h"
 #include"../Action/EnemyCardAction.h"
 
 #include "ActionController.h"
 
 ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, Transform& _trans, CardPresenter& _deck, AnimationController& _anim, InputManager::JOYPAD_NO _padNum) :
-	charaObj_(_charaObj)
-	, logic_(_input)
-	, trans_(_trans)
-	, cardPresent_(_deck)
-	, anim_(_anim)
-	, padNum_(_padNum)
-	, scnMng_(SceneManager::GetInstance())
-	, act_(ACTION_TYPE::IDLE)
-	, cardActTime_(0.0f)
-	, isCardAct_(false)
-	, stepRotTime_(0.0f)
-	, speed_(0.0f)
-	, movePow_(Utility3D::VECTOR_ZERO)
-	, moveDir_(Utility3D::VECTOR_ZERO)
-	,dir_(Utility3D::VECTOR_ZERO)
+	charaObj_(_charaObj),
+	logic_(_input),
+	trans_(_trans),
+	cardPresent_(_deck),
+	anim_(_anim),
+	padNum_(_padNum),
+	scnMng_(SceneManager::GetInstance()),
+	act_(ACTION_TYPE::IDLE),
+	cardActTime_(0.0f),
+	isCardAct_(false),
+	stepRotTime_(0.0f),
+	speed_(0.0f),
+	atkCombos_(),
+	movePow_(Utility3D::VECTOR_ZERO),
+	moveDir_(Utility3D::VECTOR_ZERO),
+	dir_(Utility3D::VECTOR_ZERO)
 {
 	actionTable_ = {
 		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,charaObj_)); }},
 		{ACTION_TYPE::MOVE, [this]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,charaObj_)); }},
 		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,charaObj_)); }},
 		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,charaObj_)); }},
-		{ACTION_TYPE::CARD_ATTACK,[this]() {
+		{ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
 			}
 			else
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK,std::make_unique<EnemyCardAction>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<EnemyCardAction>(*this,charaObj_,cardPresent_));
+			}
+		}},
+		{ACTION_TYPE::CARD_ATTACK_ONE_SHORT,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAction>(*this,charaObj_,cardPresent_));
 			}
 		}},
 	};
@@ -143,22 +153,64 @@ void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
 	}
 }
 
-void ActionController::ChangeCardAction(void)
+void ActionController::DesideCardAction(void)
 {
-	//if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::ATTACK)
-	//{
-	//	ChangeAction(ACTION_TYPE::CARD_ATTACK);
-	//}
-	//else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
-	//{
-	//	ChangeAction(ACTION_TYPE::CARD_MAGIC_FIRE);
-	//}
-	//else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
-	//{
-	//	//リロード処理へ
-	//	ChangeCardAction(ACTION_TYPE::CARD_RELOAD);
-	//}
+	//敵はカード攻撃処理へ
+	if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
+	{
+		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE);
+		return;
+	}
+
+	//プレイヤーはカードによって攻撃を遷移する
+	if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::ATTACK)
+	{
+		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE);
+	}
+	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
+	{
+		ChangeAction(ACTION_TYPE::CARD_MAGIC_FIRE);
+	}
 }
+void ActionController::ChangeComboCardAttack(void)
+{
+	//空の場合は処理を飛ばす
+	if (atkCombos_.empty())
+	{
+		//コンボ情報がなければアイドル状態へ
+		ChangeAction(ACTION_TYPE::IDLE);
+		return;
+	}
+
+	cardPresent_.ChangeCard();
+
+	const ACTION_TYPE& atkType = atkCombos_.front();
+
+	if (atkType == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || atkType == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE)
+	{
+		ChangeAction(ACTION_TYPE::CARD_ATTACK_TWO);
+	}
+	else if (atkType == ACTION_TYPE::CARD_ATTACK_TWO)
+	{
+		ChangeAction(ACTION_TYPE::CARD_ATTACK_THREE);
+	}
+
+	//コンボ情報をポップ
+	atkCombos_.pop();
+}
+
+void ActionController::ComboInput(void)
+{
+	if (act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE)
+	{
+		atkCombos_.push(ACTION_TYPE::CARD_ATTACK_TWO);
+	}
+	else if (act_ == ACTION_TYPE::CARD_ATTACK_TWO)
+	{
+		atkCombos_.push(ACTION_TYPE::CARD_ATTACK_THREE);
+	}
+}
+
 void ActionController::CardMove(void)
 {
 	//CardUIBase& cardUI = character_.GetCardUI();

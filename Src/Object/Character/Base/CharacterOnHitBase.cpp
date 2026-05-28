@@ -7,7 +7,7 @@
 #include"../../../Object/Common/Geometry/Model.h"
 #include "../Object/Character/Base/CharacterBase.h"
 #include "../../../Utility/Utility3D.h"
-#include "../Object/Character/Player/ActionController.h"
+#include "../Action/ActionController.h"
 #include "CharacterOnHitBase.h"
 
 CharacterOnHitBase::CharacterOnHitBase(CharacterBase& _chara, VECTOR& _movedPos,VECTOR& _moveDiff,

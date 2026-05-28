@@ -1,6 +1,6 @@
 #include "../Utility/Utility3D.h"
 #include "../Common/Easing.h"
-#include"../Player/ActionController.h"
+#include"./ActionController.h"
 #include "../Base/CharacterBase.h"
 #include"../Enemy/EnemyLogic.h"
 #include"../Enemy/EnemyRock.h"
@@ -217,7 +217,7 @@ void EnemyCardAction::UpdateStomp(void)
 	}
 
 	//アニメーションで足をつく動作をしたら
-	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK)) > atk_.colStartCnt)
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK)) > atk_.colStartStep)
 	{
 		//キャラ情報
 		const Transform& charaTrans = character_.GetTransform();

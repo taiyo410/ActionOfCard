@@ -1,7 +1,7 @@
 #pragma once
 #include<functional>
 #include<queue>
-#include "../Base/CardActionBase.h"
+#include "../../Base/CardActionBase.h"
 
 class Easing;
 class CardDeck;
@@ -52,6 +52,10 @@ public:
 	/// @param
     void Release(void)override;
 
+    /// @brief アニメーション情報のロード
+    /// @param jsonData アクションロードデータ
+    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
+
 	/// @brief リロードエフェクトの解放
 	/// @param  
 	void ReleaseReloadResource(void)override;
@@ -59,19 +63,6 @@ public:
 	/// @brief リロード中かどうか
 	/// @param
 	const bool IsReloading(void)const override;
-
-    /// @brief アニメーション情報のロード
-    /// @param jsonData アクションロードデータ
-    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
-
-    /// @brief 攻撃ステータスの取得
-    /// @param _atkType 取得したいステータスの攻撃タイプ(指定なしで、現在の攻撃タイプのステータス取得)
-    /// @return 攻撃ステータス
-    const ATK_STATUS& GetAttackStatus(const CARD_ACTION_TYPE& _atkType = CARD_ACTION_TYPE::NONE);
-
-    /// @brief 現在攻撃中のカードアクションタイプをリセット
-    /// @param  
-    void ResetAttackType(void) { cardActType_ = CARD_ACTION_TYPE::NONE; }
 
     /// @brief カードアクション遷移
     /// @param _type 遷移したい攻撃タイプ
@@ -136,9 +127,6 @@ private:
 
     //攻撃アクションごとのアニメーション
 	std::unordered_map<CARD_ACTION_TYPE, AnimationController::ANIMATION_VARIABLE>atkAnimVals_;
-
-    //炎魔法アクション
-    std::unique_ptr<PlayerFireMagicAction> magicFire_;
 
     //攻撃の当たり判定始まりカウント
     float attackStartAnimcnt_;

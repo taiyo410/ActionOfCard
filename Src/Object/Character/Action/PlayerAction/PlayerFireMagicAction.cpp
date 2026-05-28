@@ -1,5 +1,4 @@
 #include "../pch.h"
-#include "../Player/PlayerMagicFire.h"
 #include "PlayerFireMagicAction.h"
 
 PlayerFireMagicAction::PlayerFireMagicAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
@@ -29,7 +28,10 @@ void PlayerFireMagicAction::Release(void)
 {
 }
 
-void PlayerFireMagicAction::LoadAnimVar(const ACTION_LOAD_DATA& animVar)
+void PlayerFireMagicAction::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 {
-	//fireBall_->LoadJsonData(animVar.jsonData);
+	if (_data.name != "FireMagic")return;
+
+	animVar_ = _data.animVariable;
+	LoadAttackStatus(_data.jsonData, atkStatus_);
 }
