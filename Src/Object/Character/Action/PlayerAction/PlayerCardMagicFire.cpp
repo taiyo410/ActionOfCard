@@ -33,5 +33,5 @@ void PlayerCardMagicFire::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "FireMagic")return;
 
 	animVar_ = _data.animVariable;
-	LoadAttackStatus(_data.jsonData, atkStatus_);
+	LoadAttackStatus(_data.jsonData, atk_);
 }

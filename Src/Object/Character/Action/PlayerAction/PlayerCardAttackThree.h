@@ -34,6 +34,10 @@ public:
     /// @param jsonData アクションロードデータ
     void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
 
+    /// @brief 遷移時の解放
+    /// @param  
+    void Release(void) override;
+
 private:
 
     //攻撃3段目判定

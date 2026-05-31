@@ -34,7 +34,7 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 	//ƒRƒ“ƒ{“ü—Íó•t
 	if (anim_.GetAnimStep(atkAnim_) >= _status.colEndStep - _status.bufferFrame)
 	{
-		ComboInput();
+		actionCntl_.ComboInput();
 	}
 
 	//UŒ‚”»’èˆ—
@@ -79,6 +79,7 @@ bool CardActionBase::IsCardFailure(const Collider::TAG& _attackTag)
 
 void CardActionBase::ReleaseReloadResource(void)
 {
+
 }
 
 void CardActionBase::FinishFailureAttack(const Collider::TAG _attackCol)

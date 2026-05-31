@@ -65,7 +65,7 @@ void PlayerCardAttackOneMiddle::Update(void)
 		//攻撃判定生成
 		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 	}
-	else if (midAtkCnt_ <= 0.0f || character_.GetIsDamage())		//アニメーション終了でアイドル状態変更
+	else if (midAtkCnt_ <= 0.0f/* || character_.GetIsDamage()*/)		//アニメーション終了でアイドル状態変更
 	{
 		//カウントダウン
 		midAtkOverCnt_ -= delta;
@@ -88,10 +88,20 @@ void PlayerCardAttackOneMiddle::Update(void)
 	}
 }
 
+void PlayerCardAttackOneMiddle::Release(void)
+{
+	//現在使っているカードを捨てる
+	cardPresent_.ChangeAction();
+
+	////当たり判定削除
+	//character_.DeleteAttackCol(Collider::TAG::PLAYER1, Collider::TAG::NML_ATK);
+	//character_.SetIsCanMoveable(true);
+}
+
 void PlayerCardAttackOneMiddle::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Attack_1_Middle")return;
 
 	animVar_ = _data.animVariable;
-	LoadAttackStatus(_data.jsonData, atkStatus_);
+	LoadAttackStatus(_data.jsonData, atk_);
 }

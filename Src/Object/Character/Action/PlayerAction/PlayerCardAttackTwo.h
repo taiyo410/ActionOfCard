@@ -28,6 +28,10 @@ public:
     /// @param  
     void Update(void) override;
 
+    /// @brief 遷移時の解放
+    /// @param  
+    void Release(void) override;
+
     /// @brief アニメーション情報のロード
     /// @param jsonData アクションロードデータ
     void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;

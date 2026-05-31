@@ -63,10 +63,6 @@ protected:
     //エフェクトコントローラ
     std::unique_ptr<EffectController>effect_;
 
-    //攻撃ステータス
-    ActionBase::ATK_STATUS atkStatus_;
-
-
     //コンボフラグ
     bool isCombo_;
 

@@ -27,9 +27,6 @@ void PlayerCardAttackThree::Init(void)
 	//カウントの初期化
 	atkThreeEndCnt_ = 0.0f;
 	atkAnimLerpCnt_ = 0.0f;
-
-	//カード初期化
-	//ChangeActionCardInit();
 }
 
 void PlayerCardAttackThree::Update(void)
@@ -44,14 +41,14 @@ void PlayerCardAttackThree::Update(void)
 	const float animStep = anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3));		//現在のアニメステップ
 
 	//攻撃スタートカウント以下なら、アニメーションスピードを遅くする
-	if (animStep < atkStatus_.colStartStep)
+	if (animStep < atk_.colStartStep)
 	{
 		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), ATTACK_ANIM_SPD);
 	}
 
 	//攻撃判定処理
-	else if (animStep >= atkStatus_.colStartStep &&
-		animStep <= atkStatus_.colEndStep)
+	else if (animStep >= atk_.colStartStep &&
+		animStep <= atk_.colEndStep)
 	{
 		//速度を自然に見せるための補完
 		atkAnimLerpCnt_ += scnMng_.GetDeltaTime();
@@ -82,7 +79,7 @@ void PlayerCardAttackThree::Update(void)
 		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / ATK_END_CNT, 50.0f, Easing::EASING_TYPE::ELASTIC_BACK);
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::ONE_SHAKE);
 	}
-	else if (animStep > atkStatus_.colEndStep)	//攻撃終了後
+	else if (animStep > atk_.colEndStep)	//攻撃終了後
 	{
 		//攻撃判定無効
 		character_.DeleteAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK);
@@ -94,5 +91,11 @@ void PlayerCardAttackThree::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "Attack_3")return;
 
 	animVar_ = _data.animVariable;
-	LoadAttackStatus(_data.jsonData, atkStatus_);
+	LoadAttackStatus(_data.jsonData, atk_);
+}
+
+void PlayerCardAttackThree::Release(void)
+{
+	//現在使っているカードを捨てる
+	cardPresent_.ChangeAction();
 }

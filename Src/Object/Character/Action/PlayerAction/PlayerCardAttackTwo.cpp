@@ -40,7 +40,13 @@ void PlayerCardAttackTwo::Update(void)
 	}
 
 	//攻撃の更新
-	AttackMotion(atkStatus_, Collider::TAG::NML_ATK, {});
+	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
+}
+
+void PlayerCardAttackTwo::Release(void)
+{
+	//現在使っているカードを捨てる
+	cardPresent_.ChangeAction();
 }
 
 void PlayerCardAttackTwo::LoadAnimVar(const ACTION_LOAD_DATA& _data)
@@ -48,5 +54,5 @@ void PlayerCardAttackTwo::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "Attack_2")return;
 
 	animVar_ = _data.animVariable;
-	LoadAttackStatus(_data.jsonData, atkStatus_);
+	LoadAttackStatus(_data.jsonData, atk_);
 }

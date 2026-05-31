@@ -382,7 +382,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//‰‰oó‘Ô‚ÖˆÚs
-	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
+	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
 }
 void GameScene::Skip(void)
 {

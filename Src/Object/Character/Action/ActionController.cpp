@@ -61,31 +61,31 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		{ACTION_TYPE::CARD_ATTACK_ONE_SHORT,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackOneShort>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_SHORT,std::make_unique<PlayerCardAttackOneShort>(*this,charaObj_,cardPresent_));
 			}
 		}},
 		{ACTION_TYPE::CARD_ATTACK_TWO,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackTwo>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_TWO,std::make_unique<PlayerCardAttackTwo>(*this,charaObj_,cardPresent_));
 			}
 		}},
 		{ACTION_TYPE::CARD_ATTACK_THREE,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackThree>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_THREE,std::make_unique<PlayerCardAttackThree>(*this,charaObj_,cardPresent_));
 			}
 		}},
 		{ACTION_TYPE::CARD_MAGIC_FIRE,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardMagicFire>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_FIRE,std::make_unique<PlayerCardMagicFire>(*this,charaObj_,cardPresent_));
 			}
 		}},
 		{ACTION_TYPE::CARD_RELOAD,[this]() {
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardReload>(*this,charaObj_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD,std::make_unique<PlayerCardReload>(*this,charaObj_,cardPresent_));
 			}
 		}}
 	};
@@ -192,6 +192,8 @@ void ActionController::DesideCardAction(void)
 	//プレイヤーはカードによって攻撃を遷移する
 	if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::ATTACK)
 	{
+		//手札に移動
+		cardPresent_.PutCard();
 		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE);
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
@@ -209,18 +211,11 @@ void ActionController::ChangeComboCardAttack(void)
 		return;
 	}
 
-	cardPresent_.ChangeCard();
+	cardPresent_.PutCard();
 
+	//次の攻撃アクションに遷移
 	const ACTION_TYPE& atkType = atkCombos_.front();
-
-	if (atkType == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || atkType == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE)
-	{
-		ChangeAction(ACTION_TYPE::CARD_ATTACK_TWO);
-	}
-	else if (atkType == ACTION_TYPE::CARD_ATTACK_TWO)
-	{
-		ChangeAction(ACTION_TYPE::CARD_ATTACK_THREE);
-	}
+	ChangeAction(atkType);
 
 	//コンボ情報をポップ
 	atkCombos_.pop();
@@ -228,6 +223,10 @@ void ActionController::ChangeComboCardAttack(void)
 
 void ActionController::ComboInput(void)
 {
+	//入力されていない、または、コンボ配列に何か挿入されている時は処理を飛ばす
+	if (!logic_.GetIsAct().isCardUse||!atkCombos_.empty())return;
+
+	//次の段階の攻撃を入れる
 	if (act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE)
 	{
 		atkCombos_.push(ACTION_TYPE::CARD_ATTACK_TWO);
