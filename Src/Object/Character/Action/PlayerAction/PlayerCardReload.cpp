@@ -24,6 +24,7 @@ void PlayerCardReload::Load(void)
 	resMng_.Load(ResourceManager::SRC::CARD_RELOAD_SE);
 	resMng_.Load(ResourceManager::SRC::CARD_RELOAD_FINISH_SE);
 	resMng_.Load(ResourceManager::SRC::CARD_PUT_SE);
+
 	////使用エフェクトの追加
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_EFF).handleId_, EffectController::EFF_TYPE::RELOAD);
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_END_EFF).handleId_, EffectController::EFF_TYPE::RELOAD_END);

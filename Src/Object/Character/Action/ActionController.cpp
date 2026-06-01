@@ -240,17 +240,31 @@ void ActionController::ChangeComboCardAttack(void)
 
 void ActionController::ComboInput(void)
 {
+	//現在のカードの種類を取得
+	const CardBase::CARD_TYPE type = cardPresent_.GetCardType();
+
 	//入力されていない、または、コンボ配列に何か挿入されている時は処理を飛ばす
-	if (!logic_.GetIsAct().isCardUse||!atkCombos_.empty())return;
+	if (!logic_.GetIsAct().isCardUse||!atkCombos_.empty()||type==CardBase::CARD_TYPE::RELOAD)return;
 
 	//次の段階の攻撃を入れる
-	if (act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || act_ == ACTION_TYPE::CARD_ATTACK_ONE_SHORT)
+	if(type==CardBase::CARD_TYPE::ATTACK)
 	{
-		atkCombos_.push(ACTION_TYPE::CARD_ATTACK_TWO);
+		if(act_==ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE||act_==ACTION_TYPE::CARD_ATTACK_ONE_SHORT)
+		{
+			atkCombos_.push(ACTION_TYPE::CARD_ATTACK_TWO);
+		}
+		else if(act_ == ACTION_TYPE::CARD_ATTACK_TWO)
+		{
+			atkCombos_.push(ACTION_TYPE::CARD_ATTACK_THREE);
+		}
 	}
-	else if (act_ == ACTION_TYPE::CARD_ATTACK_TWO)
+	else if(type==CardBase::CARD_TYPE::FIRE)
 	{
 		atkCombos_.push(ACTION_TYPE::CARD_ATTACK_THREE);
+	}
+	else
+	{
+		return;
 	}
 }
 
