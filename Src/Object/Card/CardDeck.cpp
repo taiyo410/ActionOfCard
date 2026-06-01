@@ -81,6 +81,7 @@ void CardDeck::Update(void)
 
 void CardDeck::Draw(void)
 {
+	DrawFormatString(10, 64, GetColor(255, 255, 255), L"DrawPileSize:%d", static_cast<int>(drawPile_[currentNum_]->GetCardStatus().pow));
 }
 
 void CardDeck::AddDrawPile(const CardBase::CARD_STATUS& _status)

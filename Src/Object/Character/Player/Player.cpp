@@ -230,6 +230,8 @@ void Player::DrawDebug(void)
 	//}
 
 	animationController_->DrawDebug();
+
+	cardPresent_->DrawCardDeckError();
 }
 
 #endif // _DEBUG

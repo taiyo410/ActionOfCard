@@ -219,7 +219,7 @@ void ActionController::DesideCardAction(void)
 void ActionController::ChangeComboCardAttack(void)
 {
 	//空の場合は処理を飛ばす
-	if (atkCombos_.empty())
+	if (atkCombos_.empty()||!IsAttacable())
 	{
 		//コンボ情報がなければアイドル状態へ
 		ChangeAction(ACTION_TYPE::IDLE);
@@ -323,26 +323,18 @@ void ActionController::DirAndMovePowUpdate(void)
 }
 const bool ActionController::IsCardLeftMoveable(void)
 {
-	//カードアクション種類
-	const bool isReloading = mainAction_.at(act_)->IsReloading();
-
 	//カードUIの選択状態
 	const CardUIBase::CARD_SELECT selectState = cardPresent_.GetCardUIState();
 
 	return logic_.GetIsAct().isCardMoveLeft 
-		&& !isReloading
 		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
 }
 const bool ActionController::IsCardRightMoveable(void)
 {
-	//カードアクション種類
-	const bool isReloading = mainAction_.at(act_)->IsReloading();
-
 	//カードUIの選択状態
 	CardUIBase::CARD_SELECT selectState = cardPresent_.GetCardUIState();
 
 	return logic_.GetIsAct().isCardMoveRight 
-		&& !isReloading
 		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
 }
 
@@ -401,5 +393,16 @@ void ActionController::DesideEnemyCardAction(void)
 		}	
 	}
 	logic_.SetIsActioning(true);
+}
+
+const bool ActionController::IsAttacable(void)
+{
+	std::vector<CardBase::CARD_TYPE>cardTypes = cardPresent_.GetHandCardType();
+	int handCardTypeSize = static_cast<int>(cardPresent_.GetHandCardType().size());
+	return handCardTypeSize == 1 && cardTypes[0] == CardBase::CARD_TYPE::ATTACK
+		&&cardPresent_.GetCardUIState() != CardUIBase::CARD_SELECT::DISITION
+		&& IsCardDecisionControl();
+		
+
 }
 

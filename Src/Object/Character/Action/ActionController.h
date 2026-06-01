@@ -259,4 +259,9 @@ private:
 
 	//敵のアクションをランダムで決める
 	void DesideEnemyCardAction(void);
+
+	/// @brief 攻撃可能かどうかの判定
+	/// @param  
+	/// @return 
+	const bool IsAttacable(void);
 };

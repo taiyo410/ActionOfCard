@@ -116,6 +116,11 @@ void CardPresenter::ChangeUIState(const CardUIBase::CARD_SELECT _select)
 	uiMng_.GetCardUI(type_).ChangeSelectState(_select);
 }
 
+void CardPresenter::DrawCardDeckError(void)
+{
+	deck_.Draw();
+}
+
 const CardUIBase::CARD_SELECT CardPresenter::GetCardUIState(void) const
 {
 	return uiMng_.GetCardUI(type_).GetSelectState();

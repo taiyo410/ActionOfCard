@@ -74,6 +74,11 @@ public:
 	/// @param _select 変更したい状態
 	void ChangeUIState(const CardUIBase::CARD_SELECT _select);
 
+	/// @brief カードUIとカードデッキのエラーを検出
+	/// @param  
+	/// @return 
+	void DrawCardDeckError(void);
+
 	/// @brief カードUIの状態の取得
 	/// @param  
 	/// @return 
