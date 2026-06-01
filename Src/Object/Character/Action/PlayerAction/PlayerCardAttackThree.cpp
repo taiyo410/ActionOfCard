@@ -7,7 +7,7 @@
 #include "PlayerCardAttackThree.h"
 
 PlayerCardAttackThree::PlayerCardAttackThree(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
-	CardActionBase(_actCntl, _charaObj, _cardPresenter)
+	PlayerCardAttackBase(_actCntl, _charaObj, _cardPresenter)
 {
 }
 
@@ -15,11 +15,7 @@ PlayerCardAttackThree::~PlayerCardAttackThree(void)
 {
 }
 
-void PlayerCardAttackThree::Load(void)
-{
-}
-
-void PlayerCardAttackThree::Init(void)
+void PlayerCardAttackThree::InitAttack(void)
 {
 	//攻撃3段階目のアニメーションを再生
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), animVar_);
@@ -29,14 +25,8 @@ void PlayerCardAttackThree::Init(void)
 	atkAnimLerpCnt_ = 0.0f;
 }
 
-void PlayerCardAttackThree::Update(void)
+void PlayerCardAttackThree::AttackUpdate(void)
 {
-	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))
-	{
-		return;
-	}
-
 	//ステップの取得
 	const float animStep = anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3));		//現在のアニメステップ
 
@@ -92,10 +82,4 @@ void PlayerCardAttackThree::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 
 	animVar_ = _data.animVariable;
 	LoadAttackStatus(_data.jsonData, atk_);
-}
-
-void PlayerCardAttackThree::Release(void)
-{
-	//現在使っているカードを捨てる
-	cardPresent_.ChangeAction();
 }

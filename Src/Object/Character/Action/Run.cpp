@@ -34,24 +34,20 @@ void Run::Init(void)
 
 void Run::Update(void)
 {
+	//カードを場に出す処理
+	if (actionCntl_.GetInput().GetIsAct().isCardUse)
+	{
+		if (actionCntl_.IsCardDecisionControl())
+		{
+			actionCntl_.DesideCardAction();
+			return;
+		}
+	}
+
 	//入力方向が0だった場合、アイドル状態移行
 	if (!actionCntl_.GetInput().GetIsAct().isRun)
 	{
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
-		return;
-	}
-
-	//カードを場に出す処理
-	if (actionCntl_.IsCardDecisionControl() && actionCntl_.GetInput().GetIsAct().isCardUse)
-	{
-		actionCntl_.DesideCardAction();
-		return;
-	}
-
-	//ジャンプ入力があった場合、ジャンプ状態へ移行
-	if (actionCntl_.GetInput().GetIsAct().isJump)
-	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::JUMP);
 		return;
 	}
 

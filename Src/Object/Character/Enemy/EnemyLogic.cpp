@@ -57,9 +57,8 @@ void EnemyLogic::Update(void)
 	}
 
 	//硬直がなかったらカード使用可能
-	if (freezeCnt_ <= 0.0f)
+	if (freezeCnt_ <= 0.0f && !isActioning_)
 	{
-		DecideAction();
 		isAct_.isCardUse = true;
 		cardCoolCnt_ = CARD_COOL_TIME;
 	}
@@ -99,46 +98,6 @@ void EnemyLogic::DebugDraw(void)
 }
 #endif // _DEBUG
 
-void EnemyLogic::DecideAction(void)
-{
-
-	const float distance = GetTargetDis();
-
-	//ランダムの数値取得
-	int rand = GetRand(UtilityCommon::PERCENT_MAX);
-	
-	if (distance > ATK_DISTANCE)
-	{
-		//遠距離時
-		if (rand > weight_.stomp)
-		{
-			//通常攻撃
-			attackType_ = ENEMY_ATTACK_TYPE::STOMP;
-		}
-		else if(rand > weight_.jump)
-		{
-			//ジャンプ
-			attackType_ = ENEMY_ATTACK_TYPE::JUMP;
-		}
-	}
-	else
-	{
-		if (rand > weight_.stomp)
-		{
-			//通常攻撃
-			attackType_ = ENEMY_ATTACK_TYPE::STOMP;
-		}
-		else
-		{
-			//ジャンプ攻撃
-			attackType_ = ENEMY_ATTACK_TYPE::JUMP;
-		}
-	}
-
-	//前回の攻撃を代入する
-	prevAttackType_ = attackType_;
-	isActioning_ = true;
-}
 
 void EnemyLogic::SetFreezeCntByAttackType(void)
 {

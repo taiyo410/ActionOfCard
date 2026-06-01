@@ -21,7 +21,8 @@
 #include"../Action/PlayerAction/PlayerCardAttackThree.h"
 #include"../Action/PlayerAction/PlayerCardMagicFire.h"
 #include"../Action/PlayerAction/PlayerCardReload.h"
-#include"../Action/EnemyCardAction.h"
+#include"../Action/EnemyAction/EnemyCardAttackJump.h"
+#include"../Action/EnemyAction/EnemyCardAttackStomp.h"
 
 #include "ActionController.h"
 
@@ -34,7 +35,6 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	padNum_(_padNum),
 	scnMng_(SceneManager::GetInstance()),
 	act_(ACTION_TYPE::IDLE),
-	cardActTime_(0.0f),
 	isCardAct_(false),
 	stepRotTime_(0.0f),
 	speed_(0.0f),
@@ -52,10 +52,6 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
 			{
 				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackOneMiddle>(*this,charaObj_,cardPresent_));
-			}
-			else
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<EnemyCardAction>(*this,charaObj_,cardPresent_));
 			}
 		}},
 		{ACTION_TYPE::CARD_ATTACK_ONE_SHORT,[this]() {
@@ -87,6 +83,18 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 			{
 				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD,std::make_unique<PlayerCardReload>(*this,charaObj_,cardPresent_));
 			}
+		}},
+		{ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,std::make_unique<EnemyCardAttackJump>(*this,charaObj_,cardPresent_));
+			}
+		}},
+		{ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,[this]() {
+			if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,std::make_unique<EnemyCardAttackStomp>(*this,charaObj_,cardPresent_));
+			}
 		}}
 	};
 
@@ -102,14 +110,12 @@ ActionController::~ActionController(void)
 
 void ActionController::Init(void)
 {
-
 	auto cntl = InputManager::CONTROLL_TYPE::ALL;
 
 	//èâä˙âªÇÃëOÇ…í«â¡ÇµÇΩÉAÉNÉVÉáÉìÇÃèâä˙âª
 	mainAction_[act_]->Init();
 
 	isCardAct_ = false;
-	cardActTime_ = 0.0f;
 }
 
 void ActionController::Load(void)
@@ -185,7 +191,10 @@ void ActionController::DesideCardAction(void)
 	//ìGÇÕÉJÅ[ÉhçUåÇèàóùÇ÷
 	if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
 	{
-		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE);
+		//éËéDÇ…à⁄ìÆ
+		cardPresent_.PutCard();
+
+		DesideEnemyCardAction();
 		return;
 	}
 
@@ -194,11 +203,17 @@ void ActionController::DesideCardAction(void)
 	{
 		//éËéDÇ…à⁄ìÆ
 		cardPresent_.PutCard();
-		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE);
+
+		//çUåÇÉAÉNÉVÉáÉìÇÃëJà⁄
+		DesideAttackOne();
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
 	{
 		ChangeAction(ACTION_TYPE::CARD_MAGIC_FIRE);
+	}
+	else if(cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	{
+		ChangeAction(ACTION_TYPE::CARD_RELOAD);
 	}
 }
 void ActionController::ChangeComboCardAttack(void)
@@ -211,11 +226,13 @@ void ActionController::ChangeComboCardAttack(void)
 		return;
 	}
 
-	cardPresent_.PutCard();
-
 	//éüÇÃçUåÇÉAÉNÉVÉáÉìÇ…ëJà⁄
 	const ACTION_TYPE& atkType = atkCombos_.front();
 	ChangeAction(atkType);
+
+	//çUåÇÇ…égópÇµÇΩÉJÅ[ÉhÇéËéDÇ…ñﬂÇ∑
+	cardPresent_.PutCard();
+
 
 	//ÉRÉìÉ{èÓïÒÇÉ|ÉbÉv
 	atkCombos_.pop();
@@ -227,7 +244,7 @@ void ActionController::ComboInput(void)
 	if (!logic_.GetIsAct().isCardUse||!atkCombos_.empty())return;
 
 	//éüÇÃíiäKÇÃçUåÇÇì¸ÇÍÇÈ
-	if (act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE)
+	if (act_ == ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE || act_ == ACTION_TYPE::CARD_ATTACK_ONE_SHORT)
 	{
 		atkCombos_.push(ACTION_TYPE::CARD_ATTACK_TWO);
 	}
@@ -237,9 +254,18 @@ void ActionController::ComboInput(void)
 	}
 }
 
+void ActionController::CancelCardActionByDodge(void)
+{
+	//âÒîÇ≈ÉAÉNÉVÉáÉìÇíÜíf
+	if (logic_.GetIsAct().isDodge
+		&& cardPresent_.GetCardUIState() != CardUIBase::CARD_SELECT::DISITION)
+	{
+		ChangeAction(ActionController::ACTION_TYPE::DODGE);
+	}
+}
+
 void ActionController::CardMove(void)
 {
-	//CardUIBase& cardUI = character_.GetCardUI();
 	CardUIBase::CARD_SELECT uiState = cardPresent_.GetCardUIState();
 	if (uiState == CardUIBase::CARD_SELECT::DISITION
 		|| uiState == CardUIBase::CARD_SELECT::LEFT
@@ -316,5 +342,62 @@ const bool ActionController::IsCardRightMoveable(void)
 	return logic_.GetIsAct().isCardMoveRight 
 		&& !isReloading
 		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
+}
+
+void ActionController::DesideAttackOne(void)
+{
+	//ëäéËÇ∆ÇÃãóó£ÇéÊìæ
+	const float dis = logic_.GetTargetDis();
+
+	//ëäéËÇ∆ÇÃãóó£Ç™àÍíËà»â∫Ç»ÇÁçUåÇÇ∑ÇÈ
+	const float MIDDLE_DIS = 300.0f;
+
+	//ãóó£Ç…ÇÊÇ¡ÇƒçUåÇÉAÉNÉVÉáÉìëJà⁄
+	if (dis >= MIDDLE_DIS)
+	{
+		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE);
+	}
+	else
+	{
+		ChangeAction(ACTION_TYPE::CARD_ATTACK_ONE_SHORT);
+	}
+}
+
+void ActionController::DesideEnemyCardAction(void)
+{
+	const float distance = logic_.GetTargetDis();
+
+	//ÉâÉìÉ_ÉÄÇÃêîíléÊìæ
+	int rand = GetRand(UtilityCommon::PERCENT_MAX);
+
+	if (distance > ATK_DISTANCE)
+	{
+		//âìãóó£éû
+		if (rand > STOMP_WEIGHT)
+		{
+			//í èÌçUåÇ
+			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
+		}
+		else if (rand < JUMP_WEIGHT)
+		{
+			//ÉWÉÉÉìÉv
+			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
+		}
+	}
+	else
+	{
+		//ãﬂãóó£éû
+		if (rand > STOMP_WEIGHT)
+		{
+			//í èÌçUåÇ
+			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
+		}
+		else if (rand < JUMP_WEIGHT)
+		{
+			//ÉWÉÉÉìÉv
+			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
+		}	
+	}
+	logic_.SetIsActioning(true);
 }
 

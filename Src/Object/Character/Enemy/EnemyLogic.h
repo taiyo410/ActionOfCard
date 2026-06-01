@@ -83,7 +83,4 @@ private:
 	
 	//‘O‰ñ‚ÌUŒ‚í—Ş
 	ENEMY_ATTACK_TYPE prevAttackType_;
-
-	//UŒ‚‚ğŒˆ‚ß‚é
-	void DecideAction(void);
 };

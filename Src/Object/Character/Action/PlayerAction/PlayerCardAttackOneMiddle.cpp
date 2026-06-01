@@ -8,7 +8,7 @@
 #include "PlayerCardAttackOneMiddle.h"
 
 PlayerCardAttackOneMiddle::PlayerCardAttackOneMiddle(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
-	CardActionBase(_actCntl,_charaObj,_cardPresenter)
+	PlayerCardAttackBase(_actCntl,_charaObj,_cardPresenter)
 {
 	easing_ = std::make_unique<Easing>();
 }
@@ -17,11 +17,7 @@ PlayerCardAttackOneMiddle::~PlayerCardAttackOneMiddle(void)
 {
 }
 
-void PlayerCardAttackOneMiddle::Load(void)
-{
-}
-
-void PlayerCardAttackOneMiddle::Init(void)
+void PlayerCardAttackOneMiddle::InitAttack(void)
 {
 	//カウントのセット
 	midAtkCnt_ = ATTACK_ONE_MID_TIME;
@@ -36,14 +32,8 @@ void PlayerCardAttackOneMiddle::Init(void)
 	isTurnable_ = true;
 }
 
-void PlayerCardAttackOneMiddle::Update(void)
+void PlayerCardAttackOneMiddle::AttackUpdate(void)
 {
-	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))
-	{
-		return;
-	}
-
 	//コンボ先行受付
 	actionCntl_.ComboInput();
 
@@ -65,7 +55,7 @@ void PlayerCardAttackOneMiddle::Update(void)
 		//攻撃判定生成
 		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 	}
-	else if (midAtkCnt_ <= 0.0f/* || character_.GetIsDamage()*/)		//アニメーション終了でアイドル状態変更
+	else if (midAtkCnt_ <= 0.0f || atk_.isDamage)		//アニメーション終了でアイドル状態変更
 	{
 		//カウントダウン
 		midAtkOverCnt_ -= delta;
@@ -88,14 +78,9 @@ void PlayerCardAttackOneMiddle::Update(void)
 	}
 }
 
-void PlayerCardAttackOneMiddle::Release(void)
+void PlayerCardAttackOneMiddle::AttackRelease(void)
 {
-	//現在使っているカードを捨てる
-	cardPresent_.ChangeAction();
 
-	////当たり判定削除
-	//character_.DeleteAttackCol(Collider::TAG::PLAYER1, Collider::TAG::NML_ATK);
-	//character_.SetIsCanMoveable(true);
 }
 
 void PlayerCardAttackOneMiddle::LoadAnimVar(const ACTION_LOAD_DATA& _data)

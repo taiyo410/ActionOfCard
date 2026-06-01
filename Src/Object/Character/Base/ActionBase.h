@@ -38,7 +38,7 @@ public:
 
 	/// @brief ƒ[ƒh
 	/// @param  
-	virtual void Load(void) = 0;
+	virtual void Load(void) {}
 
 	/// @brief ‰Šú‰»
 	/// @param  

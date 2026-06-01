@@ -31,7 +31,7 @@
 
 		"Status": {
 			"HP": 200,
-			"SPD": 15.0
+			"SPD": 9.0
 		},
 		"HpBar": {
 			"barPos": {

@@ -1,18 +1,18 @@
 #include "../Utility/Utility3D.h"
 #include "../Common/Easing.h"
-#include"./ActionController.h"
-#include "../Base/CharacterBase.h"
-#include"../Enemy/EnemyLogic.h"
-#include"../Enemy/EnemyRock.h"
-#include "../../Common/AnimationController.h"
+#include"../ActionController.h"
+#include "../../Base/CharacterBase.h"
+#include"../../Enemy/EnemyLogic.h"
+#include"../../Enemy/EnemyRock.h"
+#include "../../../Common/AnimationController.h"
 #include "../Object/Common/EffectController.h"
 #include "../Manager/Generic/Camera.h"
 #include "../Manager/Resource/ResourceManager.h"
 #include "../Manager/Generic/SceneManager.h"
-#include "../../Card/CardDeck.h"
-#include "../../Card/CardBase.h"
-#include "../../Card/CardUIBase.h"
-#include "../../Card/CardSystem.h"
+#include "../../../Card/CardDeck.h"
+#include "../../../Card/CardBase.h"
+#include "../../../Card/CardUIBase.h"
+#include "../../../Card/CardSystem.h"
 #include "EnemyCardAction.h"
 
 EnemyCardAction::EnemyCardAction(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
@@ -102,7 +102,7 @@ void EnemyCardAction::Release(void)
 	//カメラシェイクを元に戻す
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
 
-	actionCntl_.GetInput().IsActioningSet();
+	actionCntl_.GetInput().SetIsActioning(false);
 	//カード機能配列の解放
 	if (!cardFuncs_.empty())
 	{
@@ -281,7 +281,7 @@ void EnemyCardAction::UpdateStomp(void)
 
 void EnemyCardAction::UpdateJumpAtk(void)
 {
-	////負けたら終了
+	//負けたら終了
 	if (IsCardFailure(Collider::TAG::NML_ATK))
 	{
 		//カメラシェイクを止める

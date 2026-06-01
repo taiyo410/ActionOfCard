@@ -1,8 +1,9 @@
 #include "../pch.h"
+#include "../ActionController.h"
 #include "PlayerCardMagicFire.h"
 
 PlayerCardMagicFire::PlayerCardMagicFire(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
-	CardActionBase(_actCntl, _charaObj, _deck)
+	PlayerCardAttackBase(_actCntl, _charaObj, _deck)
 {
 	//fireBall_ = std::make_unique<PlayerMagicFire>(character_, resMng_, scnMng_, soundMng_);
 }
@@ -15,16 +16,17 @@ void PlayerCardMagicFire::Load(void)
 {
 }
 
-void PlayerCardMagicFire::Init(void)
+void PlayerCardMagicFire::InitAttack(void)
 {
 }
 
-void PlayerCardMagicFire::Update(void)
+void PlayerCardMagicFire::AttackUpdate(void)
 {
-	//if(anim_.)
+	//Ç¢Ç¡ÇΩÇÒÉAÉCÉhÉãèÛë‘Ç÷
+	actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 }
 
-void PlayerCardMagicFire::Release(void)
+void PlayerCardMagicFire::AttackRelease(void)
 {
 }
 

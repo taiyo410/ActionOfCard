@@ -1,9 +1,9 @@
 #pragma once
 #include<functional>
 #include<queue>
-#include "../Base/LogicBase.h"
-#include "../Base/ActionBase.h"
-#include "../Base/CardActionBase.h"
+#include "../../Base/LogicBase.h"
+#include "../../Base/ActionBase.h"
+#include "../../Base/CardActionBase.h"
 
 class Easing;
 class CardDeck;

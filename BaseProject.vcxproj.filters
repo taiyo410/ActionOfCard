@@ -225,7 +225,7 @@
     <ClCompile Include="Src\Manager\Game\CharacterManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\EnemyCardAction.cpp">
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\pch.cpp">
@@ -334,6 +334,18 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackJump.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackStomp.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -650,7 +662,7 @@
     <ClInclude Include="Src\Manager\Game\CharacterManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\EnemyCardAction.h">
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\pch.h">
@@ -759,6 +771,18 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackJump.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackStomp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

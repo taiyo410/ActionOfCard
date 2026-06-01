@@ -1,7 +1,7 @@
 {
   "Player": [
     {
-      "type": "Fire",
+      "type": "Attack",
       "pow": 1
     },
     {
@@ -21,7 +21,7 @@
       "pow": 7
     },
     {
-      "type": "Attack",
+      "type": "Fire",
       "pow": 3
     },
     {

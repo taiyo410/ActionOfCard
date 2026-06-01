@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackStomp.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackJump.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackBase.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackBase.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackTwo.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneMiddle.cpp" />
@@ -52,7 +56,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\EnemyCardAction.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAction.cpp" />
     <ClCompile Include="Src\Manager\Game\CharacterManager.cpp" />
     <ClCompile Include="Src\Manager\Resource\SoundManager.cpp" />
     <ClCompile Include="Src\Renderer\ModelMaterial.cpp" />
@@ -119,6 +123,10 @@
     <ClCompile Include="Src\Manager\Generic\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackStomp.h" />
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackJump.h" />
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackBase.h" />
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackBase.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackThree.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackTwo.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneMiddle.h" />
@@ -147,7 +155,7 @@
     <ClInclude Include="Src\Object\Character\Base\CardActionBase.h" />
     <ClInclude Include="Src\Object\SkyDome\SkyDome.h" />
     <ClInclude Include="Src\pch.h" />
-    <ClInclude Include="Src\Object\Character\Action\EnemyCardAction.h" />
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAction.h" />
     <ClInclude Include="Src\Manager\Game\CharacterManager.h" />
     <ClInclude Include="Src\Manager\Resource\SoundManager.h" />
     <ClInclude Include="Src\Renderer\ModelMaterial.h" />

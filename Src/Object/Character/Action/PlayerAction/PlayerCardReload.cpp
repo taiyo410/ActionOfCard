@@ -9,7 +9,8 @@
 #include "PlayerCardReload.h"
 
 PlayerCardReload::PlayerCardReload(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
-	CardActionBase(_actCntl, _charaObj,_cardPresenter)
+	CardActionBase(_actCntl, _charaObj,_cardPresenter),
+	pushReloadCnt_(0.0f)
 {
 }
 
@@ -19,15 +20,17 @@ PlayerCardReload::~PlayerCardReload(void)
 
 void PlayerCardReload::Load(void)
 {
+	//リソースの更新
+	resMng_.Load(ResourceManager::SRC::CARD_RELOAD_SE);
+	resMng_.Load(ResourceManager::SRC::CARD_RELOAD_FINISH_SE);
+	resMng_.Load(ResourceManager::SRC::CARD_PUT_SE);
+	////使用エフェクトの追加
+	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_EFF).handleId_, EffectController::EFF_TYPE::RELOAD);
+	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::RELOAD_END_EFF).handleId_, EffectController::EFF_TYPE::RELOAD_END);
 }
 
 void PlayerCardReload::Init(void)
 {
-	//if (!cardFuncs_.empty())
-	//{
-	//	cardFuncs_.pop();
-	//}
-
 	//現在使っているカードを捨てる
 	cardPresent_.FinishCard();
 
@@ -62,8 +65,6 @@ void PlayerCardReload::Update(void)
 	}
 	else
 	{
-		//アクションをポップし、アイドル状態へ
-		cardFuncs_.pop();
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 	}
 
@@ -71,7 +72,6 @@ void PlayerCardReload::Update(void)
 	if (pushReloadCnt_ >= RELOAD_TIME)
 	{
 		cardPresent_.DeckReload();
-		cardFuncs_.pop();
 
 		//カードUIのリロードカウントの初期化
 		pushReloadCnt_ = 0.0f;
@@ -95,6 +95,23 @@ void PlayerCardReload::Update(void)
 		//アイドル状態へ
 		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 	}
+}
+
+void PlayerCardReload::Release(void)
+{
+	//リロードSEの停止
+	soundMng_.Stop(ResourceManager::SRC::CARD_RELOAD_SE);
+
+	//エフェクトの消去
+	effect_->Stop(EffectController::EFF_TYPE::RELOAD, 0);
+	effect_->Delete(EffectController::EFF_TYPE::RELOAD, 0);
+
+	//UIの状態をNONEへ
+	if (cardPresent_.GetCardUIState() == CardUIBase::CARD_SELECT::RELOAD_WAIT)
+	{
+		cardPresent_.ChangeUIState(CardUIBase::CARD_SELECT::NONE);
+	}
+
 }
 
 void PlayerCardReload::LoadAnimVar(const ACTION_LOAD_DATA& _data)

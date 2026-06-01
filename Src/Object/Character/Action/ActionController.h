@@ -29,7 +29,9 @@ class PlayerCardAttackOneShort;
 class PlayerCardAttackTwo;
 class PlayerCardAttackThree;
 class PlayerCardMagicFire;
-class EnemyCardAction;
+class EnemyCardAttackJump;
+class EnemyCardAttackStomp;
+
 
 class ActionController
 {
@@ -52,7 +54,8 @@ public:
 		CARD_ATTACK_THREE,	//カードアクション
 		CARD_RELOAD,	//カードリロード
 		CARD_MAGIC_FIRE,//カードによる炎魔法
-		ENEMY_CARD_ATTACK,
+		CARD_ATTACK_ENEMY_JUMP,
+		CARD_ATTACK_ENEMY_STOMP,
 		DODGE,
 	};
 
@@ -149,8 +152,13 @@ public:
 	/// @param  
 	void ChangeComboCardAttack(void);
 
-	//コンボ入力の受付
+	/// @brief コンボ入力の受付
+	/// @param  
 	void ComboInput(void);
+
+	/// @brief 回避によるカードアクション中断
+	/// @param  
+	void CancelCardActionByDodge(void);
 
 #ifdef _DEBUG
 	//デバッグb
@@ -167,6 +175,13 @@ private:
 
 	// 回転完了までの時間
 	static constexpr float TIME_ROT = 0.0f;
+
+	//CPUの思考ウェイト(高いほど出す頻度が高い)
+	static constexpr int STOMP_WEIGHT = 50;	//通常攻撃
+	static constexpr int JUMP_WEIGHT = 50;		//ジャンプ攻撃
+
+	//プレイヤーに攻撃を仕掛けるプレイヤーとの距離
+	static constexpr float ATK_DISTANCE = 250.0f;
 
 	// シーンマネージャ参照
 	SceneManager& scnMng_;
@@ -206,7 +221,6 @@ private:
 
 	//カード関連
 	bool isCardAct_;	//カードアクション中かどうか
-	float cardActTime_; //カードアクション時間(デバッグ用)
 
 	//移動関連
 	float speed_;			// 移動スピード
@@ -239,4 +253,10 @@ private:
 
 	//カードを左に動かせるか判定
 	const bool IsCardRightMoveable(void);
+
+	//敵との距離で1段階目の攻撃を決める
+	void DesideAttackOne(void);
+
+	//敵のアクションをランダムで決める
+	void DesideEnemyCardAction(void);
 };

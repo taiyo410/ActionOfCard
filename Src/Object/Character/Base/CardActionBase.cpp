@@ -30,13 +30,6 @@ CardActionBase::~CardActionBase(void)
 
 void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag, const VECTOR& _localPos)
 {
-
-	//コンボ入力受付
-	if (anim_.GetAnimStep(atkAnim_) >= _status.colEndStep - _status.bufferFrame)
-	{
-		actionCntl_.ComboInput();
-	}
-
 	//攻撃判定処理
 	if (anim_.GetAnimStep(atkAnim_) >= _status.colStartStep&&
 		anim_.GetAnimStep(atkAnim_) <= _status.colEndStep)
@@ -70,8 +63,6 @@ bool CardActionBase::IsCardFailure(const Collider::TAG& _attackTag)
 	//相手のカードに負けたらノックバックする
 	if (cardPresent_.IsCardFailure())
 	{
-		//攻撃判定無効
-		FinishFailureAttack(_attackTag);
 		return true;
 	}
 	return false;
@@ -89,11 +80,10 @@ void CardActionBase::FinishFailureAttack(const Collider::TAG _attackCol)
 
 	//攻撃判定無効
 	character_.DeleteAttackCol(character_.GetCharaTag(), _attackCol);
-	cardFuncs_.pop();
 
 	//ダメージリアクション状態に移行
 	actionCntl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
-	actionCntl_.GetInput().IsActioningSet();
+	actionCntl_.GetInput().SetIsActioning(false);
 }
 
 void CardActionBase::SetAtk(const ATK_STATUS& _atkStatus)

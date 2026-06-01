@@ -9,7 +9,7 @@
 #include "PlayerCardAttackTwo.h"
 
 PlayerCardAttackTwo::PlayerCardAttackTwo(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
-	CardActionBase(_actCntl,_charaObj,_cardPresenter)
+	PlayerCardAttackBase(_actCntl,_charaObj,_cardPresenter)
 {
 }
 
@@ -17,36 +17,20 @@ PlayerCardAttackTwo::~PlayerCardAttackTwo(void)
 {
 }
 
-void PlayerCardAttackTwo::Load(void)
-{
-}
-
-void PlayerCardAttackTwo::Init(void)
+void PlayerCardAttackTwo::InitAttack(void)
 {
 	//攻撃2段階目のアニメーションを再生
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2), animVar_);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2);
-
-	//攻撃段階を増やす
-	//ChangeActionCardInit();
 }
 
-void PlayerCardAttackTwo::Update(void)
+void PlayerCardAttackTwo::AttackUpdate(void)
 {
-	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))
-	{
-		return;
-	}
+	//コンボ入力受付
+	actionCntl_.ComboInput();
 
 	//攻撃の更新
 	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
-}
-
-void PlayerCardAttackTwo::Release(void)
-{
-	//現在使っているカードを捨てる
-	cardPresent_.ChangeAction();
 }
 
 void PlayerCardAttackTwo::LoadAnimVar(const ACTION_LOAD_DATA& _data)

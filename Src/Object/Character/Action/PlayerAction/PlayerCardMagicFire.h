@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../../Base/CardActionBase.h"
+#include "./PlayerCardAttackBase.h"
 
 class PlayerMagicFire;
 
 class PlayerCardMagicFire :
-    public CardActionBase
+    public PlayerCardAttackBase
 {
 
 public:
@@ -26,15 +26,15 @@ public:
 
     /// @brief 初期化
     /// @param  
-    void Init(void) override;
+    void InitAttack(void) override;
 
     /// @brief 更新
     /// @param  
-    void Update(void) override;
+    void AttackUpdate(void) override;
 
     /// @brief 解放
     /// @param
-    void Release(void)override;
+    void AttackRelease(void) override;
 
 	/// @brief アクションデータのロード
 	/// @param animVar 

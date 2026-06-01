@@ -7,7 +7,7 @@
 #include "PlayerCardAttackOneShort.h"
 
 PlayerCardAttackOneShort::PlayerCardAttackOneShort(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
-	CardActionBase(_actCntl, _charaObj, _cardPresenter)
+	PlayerCardAttackBase(_actCntl, _charaObj, _cardPresenter)
 {
 }
 
@@ -19,29 +19,19 @@ void PlayerCardAttackOneShort::Load(void)
 {
 }
 
-void PlayerCardAttackOneShort::Init(void)
+void PlayerCardAttackOneShort::InitAttack(void)
 {
 	//突きアニメーションへ
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), animVar_);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
 }
 
-void PlayerCardAttackOneShort::Update(void)
+void PlayerCardAttackOneShort::AttackUpdate(void)
 {
-	//攻撃中にカード負けしたら処理を飛ばす
-	if (IsCardFailure(Collider::TAG::NML_ATK))
-	{
-		return;
-	}
-
 	//攻撃の更新
-	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
-}
+	actionCntl_.ComboInput();
 
-void PlayerCardAttackOneShort::Release(void)
-{
-	//現在使っているカードを捨てる
-	cardPresent_.ChangeAction();
+	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
 }
 
 void PlayerCardAttackOneShort::LoadAnimVar(const ACTION_LOAD_DATA& _data)

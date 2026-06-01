@@ -123,7 +123,7 @@ public:
 
 	/// @brief アクション中フラグセット
 	/// @param  
-	void IsActioningSet(void) { isActioning_ = false; }
+	void SetIsActioning(const bool _isActioning) { isActioning_ = _isActioning; }
 
     /// @brief 攻撃種類によって硬直時間をセット
     /// @param  
