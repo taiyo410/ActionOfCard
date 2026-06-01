@@ -267,9 +267,11 @@ void ActionController::CancelCardActionByDodge(void)
 void ActionController::CardMove(void)
 {
 	CardUIBase::CARD_SELECT uiState = cardPresent_.GetCardUIState();
-	if (uiState == CardUIBase::CARD_SELECT::DISITION
-		|| uiState == CardUIBase::CARD_SELECT::LEFT
-		|| uiState == CardUIBase::CARD_SELECT::RIGHT)return;
+	//if (uiState == CardUIBase::CARD_SELECT::DISITION
+	//	|| uiState == CardUIBase::CARD_SELECT::LEFT
+	//	|| uiState == CardUIBase::CARD_SELECT::RIGHT
+	//	|| uiState == CardUIBase::CARD_SELECT::RELOAD)return;
+	if (uiState != CardUIBase::CARD_SELECT::NONE)return;
 	if (IsCardLeftMoveable())
 	{
 		cardPresent_.RoleRevolver(CardUIBase::CARD_SELECT::LEFT);
