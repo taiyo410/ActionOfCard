@@ -218,9 +218,11 @@ void ActionController::DesideCardAction(void)
 }
 void ActionController::ChangeComboCardAttack(void)
 {
-	//空の場合は処理を飛ばす
-	if (atkCombos_.empty()||!IsAttacable())
+	//空の場合、攻撃不可能な場合はアイドル状態へ
+	if (atkCombos_.empty()||!IsAttacable()||cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
 	{
+		//コンボ情報を空にする
+		if(!atkCombos_.empty()) atkCombos_.pop();
 		//コンボ情報がなければアイドル状態へ
 		ChangeAction(ACTION_TYPE::IDLE);
 		return;

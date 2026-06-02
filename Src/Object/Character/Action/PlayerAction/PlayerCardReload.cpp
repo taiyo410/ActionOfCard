@@ -81,10 +81,6 @@ void PlayerCardReload::Update(void)
 		//UIのリロードカウントを初期化
 		SetUIReloadCnt();
 
-		//エフェクトの消去
-		effect_->Stop(EffectController::EFF_TYPE::RELOAD, 0);
-		effect_->Delete(EffectController::EFF_TYPE::RELOAD, 0);
-
 		//リロード終了エフェクトを再生
 		const Transform& trans = character_.GetTransform();
 		effect_->Play(EffectController::EFF_TYPE::RELOAD_END, trans.pos, trans.quaRot, { EFF_SCL ,EFF_SCL ,EFF_SCL });
@@ -100,6 +96,7 @@ void PlayerCardReload::Update(void)
 
 void PlayerCardReload::Release(void)
 {
+
 	//リロードSEの停止
 	soundMng_.Stop(ResourceManager::SRC::CARD_RELOAD_SE);
 
