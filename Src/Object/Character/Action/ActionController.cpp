@@ -416,7 +416,5 @@ const bool ActionController::IsAttacable(void)
 	return handCardTypeSize == 1 && cardTypes[0] == CardBase::CARD_TYPE::ATTACK
 		&&cardPresent_.GetCardUIState() != CardUIBase::CARD_SELECT::DISITION
 		&& IsCardDecisionControl();
-		
-
 }
 
