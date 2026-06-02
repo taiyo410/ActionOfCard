@@ -16,6 +16,9 @@ PlayerCardReload::PlayerCardReload(ActionController& _actCntl, CharacterBase& _c
 
 PlayerCardReload::~PlayerCardReload(void)
 {
+	effect_->AllStop();
+	//ƒŠƒ\[ƒX‚Ì‰ð•ú
+	effect_->AllDelete();
 }
 
 void PlayerCardReload::Load(void)

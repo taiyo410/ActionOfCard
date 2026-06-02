@@ -91,5 +91,9 @@ private:
 	//ジャンプチャージカウント
 	float jumpChargeCnt_;
 
+    //エフェクト再生番号
+	int jumpChargeEffNum_;
+	int blastEffNum_;
+
 };
 

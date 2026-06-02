@@ -11,13 +11,18 @@
 #include "EnemyCardAttackJump.h"
 
 EnemyCardAttackJump::EnemyCardAttackJump(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresent):
-	EnemyCardAttackBase(_actCntl, _charaObj, _cardPresent)
+	EnemyCardAttackBase(_actCntl, _charaObj, _cardPresent),
+	jumpChargeEffNum_(-1),
+	blastEffNum_(-1)
 {
 	easing_ = std::make_unique<Easing>();
 }
 
 EnemyCardAttackJump::~EnemyCardAttackJump(void)
 {
+	effect_->AllStop();
+	//リソースの解放
+	effect_->AllDelete();
 }
 
 void EnemyCardAttackJump::Load(void)
@@ -41,7 +46,7 @@ void EnemyCardAttackJump::InitAttack(void)
 	soundMng_.Play(ResourceManager::SRC::ENEMY_CHARGE_SE, SoundManager::PLAYTYPE::LOOP);
 
 	//溜めジャンプエフェクト再生
-	effect_->Play(EffectController::EFF_TYPE::E_JUMP_CHARGE,
+	jumpChargeEffNum_ = effect_->Play(EffectController::EFF_TYPE::E_JUMP_CHARGE,
 		character_.GetTransform().pos,
 		character_.GetTransform().quaRot,
 		{ JUMP_CHARGE_EFF_SCL,
@@ -73,8 +78,8 @@ void EnemyCardAttackJump::AttackUpdate(void)
 
 			//チャージエフェクトの消去
 			const int JUMP_CHARGE_EFF_ARRAY = 0;
-			effect_->Stop(EffectController::EFF_TYPE::E_JUMP_CHARGE, JUMP_CHARGE_EFF_ARRAY);
-			effect_->Delete(EffectController::EFF_TYPE::E_JUMP_CHARGE, JUMP_CHARGE_EFF_ARRAY);
+			effect_->Stop(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
+			effect_->Delete(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
 
 			//カードを終了状態にし、プレイヤーの攻撃で中断できないようにする
 			cardPresent_.FinishCard();
@@ -108,7 +113,7 @@ void EnemyCardAttackJump::AttackUpdate(void)
 		if (!soundMng_.IsPlay(ResourceManager::SRC::ENEMY_JUMP_LAND_SE))
 		{
 			soundMng_.Play(ResourceManager::SRC::ENEMY_JUMP_LAND_SE, SoundManager::PLAYTYPE::BACK);
-			effect_->Play(EffectController::EFF_TYPE::BLAST, atk_.pos, {}, { atk_.atkRadius,atk_.atkRadius,atk_.atkRadius }, true);
+			blastEffNum_ = effect_->Play(EffectController::EFF_TYPE::BLAST, atk_.pos, {}, { atk_.atkRadius,atk_.atkRadius,atk_.atkRadius }, true);
 		}
 
 		//エフェクトの大きさを大きくしていく
@@ -130,9 +135,6 @@ void EnemyCardAttackJump::AttackUpdate(void)
 			//当たり判定の消去
 			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
-			//エフェクトの消去
-			effect_->Delete(EffectController::EFF_TYPE::BLAST, 0);
-
 			//アイドル状態へ移行
 			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		}
@@ -147,10 +149,13 @@ void EnemyCardAttackJump::AttackRelease(void)
 	//音を止める
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
 
-	//エフェクトを消去
+	//チャージエフェクトの消去
 	const int JUMP_CHARGE_EFF_ARRAY = 0;
-	effect_->Stop(EffectController::EFF_TYPE::E_JUMP_CHARGE, JUMP_CHARGE_EFF_ARRAY);
-	effect_->Delete(EffectController::EFF_TYPE::E_JUMP_CHARGE, JUMP_CHARGE_EFF_ARRAY);
+	effect_->Stop(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
+	effect_->Delete(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
+
+	effect_->Stop(EffectController::EFF_TYPE::BLAST, blastEffNum_);
+	effect_->Delete(EffectController::EFF_TYPE::BLAST, blastEffNum_);
 }
 
 void EnemyCardAttackJump::LoadAnimVar(const ACTION_LOAD_DATA& _data)

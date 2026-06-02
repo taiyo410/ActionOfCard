@@ -260,11 +260,11 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	////ロジックの更新
-	//logic_->Update();
+	//ロジックの更新
+	logic_->Update();
 
-	////アクションの更新
-	//action_->Update();
+	//アクションの更新
+	action_->Update();
 
 	//アニメーションの更新
 	animationController_->Update();
