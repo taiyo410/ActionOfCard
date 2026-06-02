@@ -44,5 +44,8 @@ private:
 
 	//岩生成フラグ
 	bool isGenerateRock_;
+
+	//敵のスタンプ攻撃時に発生する岩
+	std::vector<std::shared_ptr<EnemyRock>>rock_;
 };
 

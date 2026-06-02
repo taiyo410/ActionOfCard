@@ -204,6 +204,21 @@ void CharacterBase::ChangeDirectToNormal(void)
 	phazeUpdate_ = [this]() {UpdateNormal(); };
 }
 
+void CharacterBase::RegisterDrawableRocks(const std::weak_ptr<EnemyRock> _rock)
+{
+	//õ–½‚ªØ‚ê‚Ä‚¢‚éŠâ‚Í“o˜^‚µ‚È‚¢
+	if (_rock.expired())return;
+
+	//Šâ‚ğ“o˜^‚·‚é
+	drawableRocks_.emplace_back(_rock);
+}
+
+void CharacterBase::UnregisterDrawableRocks(void)
+{
+	//Šâ‚ğíœ‚·‚é
+	drawableRocks_.clear();
+}
+
 void CharacterBase::ChangeUpdateClearDirection(void)
 {
 	phazeUpdate_ = [this]() {UpdateClearDirection(); };
@@ -286,54 +301,6 @@ void CharacterBase::SetLogicTargetCharacter(std::shared_ptr<CharacterBase> _targ
 	logic_->SetTargetCharacter(_targetChara);
 }
 
-void CharacterBase::AddEnemyRock(const int _num, VECTOR& _atkPos)
-{
-	for (int i = 0; i < _num; i++)
-	{
-		std::unique_ptr<EnemyRock> rock = std::make_unique<EnemyRock>(i, _atkPos);
-		rock_.emplace_back(std::move(rock));
-	}
-}
-
-void CharacterBase::LoadEnemyRock(void)
-{
-	if (rock_.empty())return;
-	for (auto& rock : rock_)
-	{
-		rock->Load();
-	}
-}
-
-void CharacterBase::DeleteEnemyRockCol(void)
-{
-	if (rock_.empty())return;
-	for (auto& rock : rock_)
-	{
-		rock->DeleteRockCollider();
-	}
-}
-
-void CharacterBase::SetIsAliveEnemyRock(const bool _isAlive)
-{
-	if (rock_.empty())return;
-	for (auto& rock : rock_)
-	{
-		rock->SetIsAlive(_isAlive);
-		if (_isAlive)
-		{
-			rock->Init();
-		}
-	}
-}
-
-void CharacterBase::EnemyRockUpdate(void)
-{
-	if (rock_.empty())return;
-	for (auto& rock : rock_)
-	{
-		rock->Update();
-	}
-}
 const bool CharacterBase::GetIsHitTarget(void) const
 {
 	return onHit_->GetIsHitTarget();

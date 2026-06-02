@@ -241,27 +241,6 @@ public:
 	/// @brief ロジッククラスにターゲットをセット
 	/// @param _targetChara ターゲット
 	void SetLogicTargetCharacter(std::shared_ptr<CharacterBase>_targetChara);
-	
-	/// @brief 岩配列
-	/// @param _num 岩の生成数
-	/// @param _atkPos 攻撃座標
-	void AddEnemyRock(const int _num,VECTOR& _atkPos);
-
-	/// @brief 岩配列ロード
-	/// @param  
-	void LoadEnemyRock(void);
-
-	/// @brief 岩の当たり判定削除
-	/// @param  
-	void DeleteEnemyRockCol(void);
-
-	/// @brief 岩の生存フラグセット
-	/// @param _isAlive セットしたいフラグ
-	void SetIsAliveEnemyRock(const bool _isAlive);
-
-	/// @brief 岩配列更新
-	/// @param  
-	void EnemyRockUpdate(void);
 
 	/// @brief ターゲットと当たったかどうかの取得
 	/// @param  
@@ -293,6 +272,14 @@ public:
 	/// @param  
 	/// @return キャラクター種類
 	const CHARACTER_TYPE GetCharacterType(void){ return characterType_; }
+
+	/// @brief スタンプ攻撃の岩の描画配列の登録
+	/// @param _rock 
+	void RegisterDrawableRocks(const std::weak_ptr<EnemyRock> _rock);
+
+	/// @brief スタンプ攻撃の岩の描画配列の登録解除
+	/// @param _rock 解除する岩
+	void UnregisterDrawableRocks(void);
 
 protected:
 
@@ -327,8 +314,8 @@ protected:
 	//当たった時の処理
 	std::unique_ptr<CharacterOnHitBase>onHit_;
 
-	//敵のスタンプ攻撃時に発生する岩
-	std::vector<std::unique_ptr<EnemyRock>>rock_;
+	//描画する岩の配列
+	std::vector<std::weak_ptr<EnemyRock>>drawableRocks_;	
 
 	//アニメーションタイプの文字列対応表
 	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;

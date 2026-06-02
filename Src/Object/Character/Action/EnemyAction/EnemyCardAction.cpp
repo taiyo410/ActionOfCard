@@ -39,7 +39,7 @@ jumpCardNum_()
 	};
 
 	//岩の生成
-	character_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
+	//character_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
 }
 
 EnemyCardAction::~EnemyCardAction(void)
@@ -58,7 +58,7 @@ void EnemyCardAction::Load(void)
 	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::E_JUMP_CHARGE_EFF).handleId_,EffectController::EFF_TYPE::E_JUMP_CHARGE);
 
 	//敵の岩生成
-	character_.LoadEnemyRock();
+	//character_.LoadEnemyRock();
 
 }
 
@@ -210,8 +210,8 @@ void EnemyCardAction::UpdateStomp(void)
 	if (IsCardFailure(Collider::TAG::NML_ATK))
 	{
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
-		character_.DeleteEnemyRockCol();
-		character_.SetIsAliveEnemyRock(false);
+		//character_.DeleteEnemyRockCol();
+		//character_.SetIsAliveEnemyRock(false);
 		cardActType_ = CARD_ACTION_TYPE::NONE;
 		return;
 	}
@@ -243,12 +243,12 @@ void EnemyCardAction::UpdateStomp(void)
 		//地面から岩の玉を生成してあらゆる方向に飛ばす
 		if (!isGenerateRock_)
 		{
-			character_.SetIsAliveEnemyRock(true);
+			//character_.SetIsAliveEnemyRock(true);
 			isGenerateRock_ = true;
 		}
 		else
 		{
-			character_.EnemyRockUpdate();
+			//character_.EnemyRockUpdate();
 		}
 
 		//ため時間が終わったら
@@ -259,11 +259,11 @@ void EnemyCardAction::UpdateStomp(void)
 
 			//アニメーションループ終了
 			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
-			character_.DeleteEnemyRockCol();
-			character_.SetIsAliveEnemyRock(false);
+			//character_.DeleteEnemyRockCol();
+			//character_.SetIsAliveEnemyRock(false);
 
 			//敵の岩の攻撃判定終了
-			character_.DeleteEnemyRockCol();
+			//character_.DeleteEnemyRockCol();
 			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
 			//エフェクトの終了

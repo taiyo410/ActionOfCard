@@ -45,7 +45,6 @@ Enemy::~Enemy(void)
 {
 	collider_.clear();
 	effect_->AllStop();
-	rock_.clear();
 }
 void Enemy::Load(void)
 {
@@ -158,11 +157,11 @@ void Enemy::Draw(void)
 	MV1DrawModel(trans_.modelId);
 
 	//Šâ‚Ì•`‰æ
-	if (!rock_.empty())
+	if (!drawableRocks_.empty())
 	{
-		for (auto& rock : rock_)
+		for (auto& rock : drawableRocks_)
 		{
-			rock->Draw();
+			rock.lock()->Draw();
 		}
 	}
 }

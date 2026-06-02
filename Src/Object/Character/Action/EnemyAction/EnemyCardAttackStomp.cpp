@@ -1,6 +1,5 @@
 #include "../pch.h"
 #include "../../../Common/AnimationController.h"
-#include "../Object/Common/EffectController.h"
 #include "../Utility/Utility3D.h"
 #include "../Manager/Generic/Camera.h"
 #include "../Manager/Resource/ResourceManager.h"
@@ -8,6 +7,8 @@
 #include "../Manager/Generic/SceneManager.h"
 #include "../ActionController.h"
 #include "../../Base/CharacterBase.h"
+#include "../Object/Common/EffectController.h"
+#include "../Object/Character/Enemy/EnemyRock.h"
 #include "EnemyCardAttackStomp.h"
 
 EnemyCardAttackStomp::EnemyCardAttackStomp(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresent):
@@ -25,7 +26,11 @@ void EnemyCardAttackStomp::Load(void)
 	resMng_.Load(ResourceManager::SRC::ENEMY_STOMP_SE);
 
 	//敵の岩生成
-	character_.LoadEnemyRock();
+	//character_.LoadEnemyRock();
+	for(const auto& rock : rock_)
+	{
+		rock->Load();
+	}
 }
 
 void EnemyCardAttackStomp::InitAttack(void)
@@ -66,12 +71,24 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 		//地面から岩の玉を生成してあらゆる方向に飛ばす
 		if (!isGenerateRock_)
 		{
-			character_.SetIsAliveEnemyRock(true);
+			//character_.SetIsAliveEnemyRock(true);
+			for (auto& rock : rock_)
+			{
+				rock->SetIsAlive(true);
+				rock->Init();
+
+				//キャラクター側に岩の描画登録
+				character_.RegisterDrawableRocks(rock);
+			}
 			isGenerateRock_ = true;
 		}
 		else
 		{
-			character_.EnemyRockUpdate();
+			//character_.EnemyRockUpdate();
+			for (auto& rock : rock_)
+			{
+				rock->Update();
+			}
 		}
 
 		//ため時間が終わったら
@@ -82,11 +99,11 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 
 			//アニメーションループ終了
 			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
-			character_.DeleteEnemyRockCol();
-			character_.SetIsAliveEnemyRock(false);
+			//character_.DeleteEnemyRockCol();
+			//character_.SetIsAliveEnemyRock(false);
 
 			//敵の岩の攻撃判定終了
-			character_.DeleteEnemyRockCol();
+			//character_.DeleteEnemyRockCol();
 			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
 			//エフェクトの終了
@@ -105,8 +122,13 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 void EnemyCardAttackStomp::AttackRelease(void)
 {
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
-	character_.DeleteEnemyRockCol();
-	character_.SetIsAliveEnemyRock(false);
+	//character_.DeleteEnemyRockCol();
+	//敵の岩の攻撃判定終了
+	for (auto& rock : rock_)
+	{
+		rock->DeleteRockCollider();
+	}
+	//character_.SetIsAliveEnemyRock(false);
 }
 
 void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
@@ -117,5 +139,10 @@ void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	LoadAttackStatus(_data.jsonData, atk_);
 
 	//岩の生成
-	character_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
+	//character_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
+	for (int i = 0; i < STOMP_ATK_ROCK_NUM; i++)
+	{
+		std::shared_ptr<EnemyRock> rock = std::make_shared<EnemyRock>(i, atk_.pos);
+		rock_.emplace_back(rock);
+	}
 }
