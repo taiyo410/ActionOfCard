@@ -374,8 +374,7 @@ void ActionController::DesideEnemyCardAction(void)
 	const float distance = logic_.GetTargetDis();
 
 	//ƒ‰ƒ“ƒ_ƒ€‚Ì”’lŽæ“¾
-	//int rand = GetRand(UtilityCommon::PERCENT_MAX);
-	int rand = 20;
+	int rand = GetRand(UtilityCommon::PERCENT_MAX);
 
 	if (distance > ATK_DISTANCE)
 	{
