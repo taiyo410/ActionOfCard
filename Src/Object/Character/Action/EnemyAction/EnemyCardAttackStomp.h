@@ -47,5 +47,9 @@ private:
 
 	//敵のスタンプ攻撃時に発生する岩
 	std::vector<std::shared_ptr<EnemyRock>>rock_;
+
+	//外部読み込み
+	float cameraShakeTime_;			//カメラシェイク時間
+	float rockNum_;					//岩の数
 };
 
