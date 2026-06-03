@@ -35,16 +35,20 @@ public:
 
 private:
 
-    //中距離攻撃
-    static constexpr float ATTACK_ONE_MID_TIME = 1.0f;                  //中距離移動時間
-    static constexpr float ATTACK_ONE_MID_SPD = 30.0f;                  //中距離初期速度
-
-    //攻撃1段目判定(中距離)
-    static constexpr float ATTACK_ONE_MID_COMBO_TIME = 0.2f;            //コンボ受付時間
-
     //中距離攻撃突きカウント
     float midAtkCnt_;
+
+	//中距離攻撃突きオーバーカウント
     float midAtkOverCnt_;
+
+    //中距離移動時間
+	float attackTime_;
+
+	//中距離初期速度
+	float initVelocity_;
+
+	//中距離移動コンボ受付時間
+	float comboTIme_;
 
     //イージング
     std::unique_ptr<Easing>easing_;

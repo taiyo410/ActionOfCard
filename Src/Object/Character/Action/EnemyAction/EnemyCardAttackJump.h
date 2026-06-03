@@ -24,6 +24,10 @@ public:
 	/// @param  
 	void InitAttack(void) override;
 
+	///// @brief 更新(挙動ため時間が終わった後はのけぞらないため継承)
+	///// @param  
+	//void Update(void) override;
+
 	/// @brief 攻撃アクションの内容
 	/// @param  
 	void AttackUpdate(void) override;
@@ -38,53 +42,6 @@ public:
 
 private:
 
-    //攻撃半径広がるスピード
-    static constexpr float JUMP_ATK_COL_SPD = 5.0f;
-
-    //広がる時間
-    static constexpr float JUMP_ATK_CNT_MAX = 2.5f;
-
-    //ジャンプチャージ時間
-    static constexpr float JUMP_CHARGE_TIME = 6.0f;
-
-    //ジャンプ攻撃アニメーション
-    static constexpr float JUMP_ANIM_END = 52.0f;
-
-    //ジャンプ攻撃ローカル座標
-    static constexpr VECTOR JUMP_ATK_LOCAL = { 0.0f,100.0f,0.0f };
-
-    //ジャンプ攻撃範囲
-    static constexpr float JUMP_ATK_GOAL_RADIUS = 2500.0f;
-
-    //ジャンプ溜めカメラシェイク
-    static constexpr float JUMP_CHARGE_SHAKE_LIMIT = 10.0f;
-    static constexpr float JUMP_ATK_SHAKE_LIMIT = 30.0f;
-
-    //ジャンプアニメーションループ(溜めアニメーション)
-    static constexpr float JUMP_CHARGE_ANIM_LOOP_START = 12.0f;
-    static constexpr float JUMP_CHARGE_ANIM_LOOP_END = 13.0f;
-    static constexpr float JUMP_ATK_ANIM_LOOP_SPEED = 5.0f;
-
-    //ジャンプアニメーションループ(攻撃アニメーション)
-    static constexpr float JUMP_ATK_ANIM_LOOP_START = 53.0f;
-    static constexpr float JUMP_ATK_ANIM_LOOP_END = 69.0f;
-
-    //ジャンプアニメーションループ速度
-    static constexpr float JUMP_ATK_ANIM_ATTACK_LOOP_SPEED = 10.0f;
-
-    //ジャンプチャージ時のカメラシェイク可動範囲
-    static constexpr float JUMP_CHARGE_CAMERA_SHAKE_LIMIT = 10.0f;
-
-    //ジャンプ攻撃時のカメラシェイク可動範囲
-    static constexpr float JUMP_ATTACK_CAMERA_SHAKE_LIMIT = 30.0f;
-
-    //ジャンプ攻撃初期の半径
-    static constexpr float JUMP_ATK_START_RADIUS = 30.0f;
-
-    //エフェクトサイズ
-    static constexpr float BLAST_EFF_SCL = 1.4f;            //爆発
-    static constexpr float JUMP_CHARGE_EFF_SCL = 500.0f;      //ジャンプチャージ
-
     //イージング
     std::unique_ptr<Easing>easing_;
 
@@ -94,6 +51,29 @@ private:
     //エフェクト再生番号
 	int jumpChargeEffNum_;
 	int blastEffNum_;
+
+	//外部読み込み関連
+	//溜め状態関連
+	float chargeEffScale_;				//溜め状態エフェクト大きさ
+	float chargeTime_;					//溜め時間
+	float chargeAnimLoopStartStep_;		//溜めアニメーションループ初期ステップ
+	float chargeAnimLoopEndStep_;		//溜めアニメーションループ終わりステップ
+	float chargeAnimLoopSpd_;			//溜めアニメーションループ速度
+	float chargeCameraShakeLimit_;		//溜め時のカメラシェイク可動範囲
+	float jumpAnimEndStep_;				//ジャンプ終了アニメーションステップ
+	
+	//攻撃状態
+	VECTOR atkLocalPos_;				//攻撃ローカル座標
+	float atkStartRadius_;				//攻撃開始時の攻撃範囲
+	float atkEndRadius_;				//攻撃終了時の攻撃範囲
+	float atkExpandSpd_;				//攻撃範囲の広がる速度
+	float atkExpandTime_;				//攻撃範囲の広がる時間
+	float atkAnimLoopStartStep_;		//攻撃アニメーションループ開始ステップ
+	float atkAnimLoopEndStep_;			//攻撃アニメーションループ終了ステップ
+	float atkAnimLoopSpd_;				//攻撃アニメーションループ速度
+	float atkCameraShakeLimit_;			//攻撃時のカメラシェイク範囲
+	float atkEffScale_;					//攻撃エフェクトの大きさ
+
 
 };
 

@@ -26,7 +26,6 @@ void EnemyCardAttackStomp::Load(void)
 	resMng_.Load(ResourceManager::SRC::ENEMY_STOMP_SE);
 
 	//ìGÇÃä‚ê∂ê¨
-	//character_.LoadEnemyRock();
 	for(const auto& rock : rock_)
 	{
 		rock->Load();
@@ -92,7 +91,7 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 		}
 
 		//ÇΩÇﬂéûä‘Ç™èIÇÌÇ¡ÇΩÇÁ
-		if (atkCnt_ > STOMP_ATK_SHAKE_CNT)
+		if (atkCnt_ > cameraShakeTime_)
 		{
 			atkCnt_ = 0.0f;
 			atk_.atkRadius = 0.0f;
@@ -128,7 +127,9 @@ void EnemyCardAttackStomp::AttackRelease(void)
 	{
 		rock->DeleteRockCollider();
 	}
-	//character_.SetIsAliveEnemyRock(false);
+
+	//ÉLÉÉÉâÉNÉ^Å[ë§Ç…ä‚ÇÃï`âÊìoò^
+	character_.UnRegisterDrawableRocks();
 }
 
 void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
@@ -136,11 +137,14 @@ void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "StompAttack")return;
 
 	animVar_ = _data.animVariable;
-	LoadAttackStatus(_data.jsonData, atk_);
+
+	const auto& data = _data.jsonData;
+	LoadAttackStatus(data, atk_);
+	cameraShakeTime_ = data.value("cameraShakeTime", 0.0f);
+	rockNum_ = data.value("rockNum", 0.0f);
 
 	//ä‚ÇÃê∂ê¨
-	//character_.AddEnemyRock(STOMP_ATK_ROCK_NUM, atk_.pos);
-	for (int i = 0; i < STOMP_ATK_ROCK_NUM; i++)
+	for (int i = 0; i < rockNum_; i++)
 	{
 		std::shared_ptr<EnemyRock> rock = std::make_shared<EnemyRock>(i, atk_.pos);
 		rock_.emplace_back(rock);

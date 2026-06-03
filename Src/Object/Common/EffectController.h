@@ -59,13 +59,13 @@ public:
 
 	/// @brief 再生中エフェクトを止める
 	/// @param _effType 止めたいエフェクトの種類
-	/// @param _arrayNum 止めたいエフェクトの配列番号
-	void Stop(const EFF_TYPE _effType, const int _arrayNum);
+	/// @param _arrayNum 止めたいエフェクトのプレイID
+	void Stop(const EFF_TYPE _effType, const int _playId);
 
 	/// @brief エフェクトの削除
 	/// @param _effType 削除するエフェクトの種類
-	/// @param _arrayNum 削除するエフェクトの配列番号
-	void Delete(const EFF_TYPE _effType, const int _arrayNum);
+	/// @param _arrayNum 削除するエフェクトのプレイID
+	void Delete(const EFF_TYPE _effType, const int _playId);
 
 	/// @brief全停止	/// @param  
 	/// @brief 
@@ -78,58 +78,60 @@ public:
 
 	/// @brief 再生が終わっているか
 	/// @param _effType 確認したいエフェクトの種類
-	/// @param _arrayNum 確認したいエフェクトの配列番号
+	/// @param _playId 確認したいエフェクトのプレイID
 	/// @return 
-	const bool IsEnd(const EFF_TYPE _effType, const int _arrayNum);
+	const bool IsEnd(const EFF_TYPE _effType, const int _playId);
 	
-	/// @brief 指定したエフェクトがいくつ再生されているか
-	/// @param _effType 確認したいエフェクト
-	/// @return プレイされている数(-1:そもそもそのエフェクトが存在しない)
-	const int GetPlayNum(const EFF_TYPE _effType);
+	///// @brief 指定したエフェクトがいくつ再生されているか
+	///// @param _effType 確認したいエフェクト
+	///// @return プレイされている数(-1:そもそもそのエフェクトが存在しない)
+	//const int GetPlayNum(const EFF_TYPE _effType);
 
 	/// @brief 座標の再設定
 	/// @param _effType エフェクトの種類
-	/// @param _arrayNum 変更したいエフェクトの配列番号
+	/// @param _playId 変更したいエフェクトのプレイID
 	/// @param _pos 変更後の座標情報
-	void SetPos(const EFF_TYPE _effType, const int _arrayNum, const VECTOR _pos);
+	void SetPos(const EFF_TYPE _effType, const int _playId, const VECTOR _pos);
 	
 	/// @brief 回転の再設定
 	/// @param _effType エフェクトの種類
 	/// @param _arrayNum 変更したいエフェクトの配列番号
 	/// @param _quaRot 変更後の回転情報
-	void SetQuaRot(const EFF_TYPE _effType, const int _arrayNum, const Quaternion _quaRot);
+	void SetQuaRot(const EFF_TYPE _effType, const int _playId, const Quaternion _quaRot);
 	
 	/// @brief 大きさの再設定
 	/// @param _effType エフェクトの種類
 	/// @param _arrayNum 変更したいエフェクトの配列番号
 	/// @param _scl 変更後の大きさ
-	void SetScale(const EFF_TYPE _effType, const int _arrayNum, const VECTOR _scl);
+	void SetScale(const EFF_TYPE _effType, const int _playId, const VECTOR _scl);
 
 	/// @brief 速度の再設定
 	/// @param _effType エフェクトの種類
 	/// @param _arrayNum 変更したいエフェクトの配列番号
 	/// @param _speedMultiplier 変更後の速度倍率
-	void SetSpeed(const EFF_TYPE _effType, const int _arrayNum, const float _speedMultiplier);
+	void SetSpeed(const EFF_TYPE _effType, const int _playId, const float _speedMultiplier);
 
 private:
 
 	//プレイデータ
 	struct PlayData
 	{
-		int playId;			//再生データ
-		bool isLoop;		//ループの有無
-		VECTOR pos;			//座標
-		Quaternion quaRot;	//回転
-		VECTOR scl;			//大きさ
-		float speedMulti;	//速度倍率
+		int playId = -1;			//再生データ
+		bool isLoop = false;		//ループの有無
+		VECTOR pos = {};			//座標
+		Quaternion quaRot = {};		//回転
+		VECTOR scl = {};			//大きさ
+		float speedMulti;			//速度倍率
+		bool isDelete = false;		//削除フラグ
 	};
 
 	//エフェクトデータ
 	struct EffectData
 	{
 		int resId;							//リソースデータ
-		std::map<int, PlayData> playData;	//プレイ中のデータ
-		int playNum;						//プレイ中のエフェクトの数
+		//std::map<int, PlayData> playData;	//プレイ中のデータ
+		std::list<PlayData> playData;			//プレイ中のデータ
+		//int playNum;						//プレイ中のエフェクトの数
 	};
 
 	//通常倍率
@@ -141,6 +143,18 @@ private:
 	/// @brief もう一度再生
 	/// @param _effType もう一度再生させるエフェクトの種類
 	/// @param _arrayNum もう一度再生させる配列
-	void RePlay(const EFF_TYPE _effType, const int _arrayNum);
+	void RePlay(const EFF_TYPE _effType, const int _playId);
+
+	/// @brief プレイ中のエフェクトのデータを取得
+	/// @param _effType エフェクトの種類
+	/// @param _playId プレイ中のエフェクトのID
+	/// @param _playData 取得したいプレイデータ
+	const std::optional<std::reference_wrapper<PlayData>> FindPlayData(const EFF_TYPE _effType, const int _playId);
+
+	/// @brief プレイ中のエフェクトのデータが存在するか
+	/// @param _effType エフェクトの種類
+	/// @param _playId プレイ中のエフェクトのID
+	/// @return true:存在する、false:存在しない
+	bool IsExistPlayData(const EFF_TYPE _effType, const int _playId);
 };
 

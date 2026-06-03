@@ -7,7 +7,13 @@
 #include "PlayerCardAttackThree.h"
 
 PlayerCardAttackThree::PlayerCardAttackThree(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
-	PlayerCardAttackBase(_actCntl, _charaObj, _cardPresenter)
+	PlayerCardAttackBase(_actCntl, _charaObj, _cardPresenter),
+	atkThreeEndCnt_(),
+	atkAnimLerpCnt_(),
+	chargeAnimSpd_(),
+	attackLerpTime_(),
+	cameraShakeLimit_(),
+	attackEndCnt_()
 {
 }
 
@@ -33,7 +39,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 	//攻撃スタートカウント以下なら、アニメーションスピードを遅くする
 	if (animStep < atk_.colStartStep)
 	{
-		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), ATTACK_ANIM_SPD);
+		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), chargeAnimSpd_);
 	}
 
 	//攻撃判定処理
@@ -45,7 +51,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 
 		//アニメーション速度補完
 		anim_.SetAnimSpeed(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), CharacterBase::DEFAULT_ANIM_SPEED, true
-			, ATTACK_ANIM_SPD, atkAnimLerpCnt_ / ATTACK_LERP_TIME, Easing::EASING_TYPE::QUAD_IN);
+			, chargeAnimSpd_, atkAnimLerpCnt_ / attackLerpTime_, Easing::EASING_TYPE::QUAD_IN);
 
 		//攻撃判定有効
 		isAliveAtkCol_ = true;
@@ -55,8 +61,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 	else if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)))		//アニメーション終了でアイドル状態変更
 	{
 		//攻撃終了時間以上なら、アイドル状態へ
-		const float ATK_END_CNT = 0.5f;
-		if (atkThreeEndCnt_ > ATK_END_CNT)
+		if (atkThreeEndCnt_ > attackEndCnt_)
 		{
 			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 			return;
@@ -66,7 +71,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 		atkThreeEndCnt_ += scnMng_.GetDeltaTime();
 
 		//カメラシェイク
-		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / ATK_END_CNT, 50.0f, Easing::EASING_TYPE::ELASTIC_BACK);
+		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / attackEndCnt_, cameraShakeLimit_, Easing::EASING_TYPE::ELASTIC_BACK);
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::ONE_SHAKE);
 	}
 	else if (animStep > atk_.colEndStep)	//攻撃終了後
@@ -82,4 +87,16 @@ void PlayerCardAttackThree::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 
 	animVar_ = _data.animVariable;
 	LoadAttackStatus(_data.jsonData, atk_);
+
+	//攻撃3段階目のアニメーション速度
+	chargeAnimSpd_ = _data.jsonData.value("chargeAnimSpeed", 0.0f);
+
+	//アニメスピード保管時間
+	attackLerpTime_ = _data.jsonData.value("lerpTime", 0.0f);
+
+	//カメラシェイクの強さ
+	cameraShakeLimit_ = _data.jsonData.value("cameraShakeLimit", 0.0f); 
+
+	//攻撃終了後の後隙
+	attackEndCnt_ = _data.jsonData.value("attackEndCount", 0.0f);
 }

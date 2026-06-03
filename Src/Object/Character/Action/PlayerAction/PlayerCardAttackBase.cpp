@@ -3,6 +3,7 @@
 #include "../../../Common/AnimationController.h"
 #include "../ActionController.h"
 #include "../../Base/LogicBase.h"
+#include "../Object/Common/EffectController.h"
 #include "PlayerCardAttackBase.h"
 
 PlayerCardAttackBase::PlayerCardAttackBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deckPresent):
@@ -40,6 +41,9 @@ void PlayerCardAttackBase::Update(void)
 
 	//攻撃処理
 	AttackUpdate();
+
+	//エフェクト更新
+	effect_->Update();
 
 }
 

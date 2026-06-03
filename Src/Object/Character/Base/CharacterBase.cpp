@@ -213,7 +213,7 @@ void CharacterBase::RegisterDrawableRocks(const std::weak_ptr<EnemyRock> _rock)
 	drawableRocks_.emplace_back(_rock);
 }
 
-void CharacterBase::UnregisterDrawableRocks(void)
+void CharacterBase::UnRegisterDrawableRocks(void)
 {
 	//Šâ‚ğíœ‚·‚é
 	drawableRocks_.clear();

@@ -50,7 +50,7 @@ void PlayerCardReload::Init(void)
 
 	//リロードエフェクトの再生
 	const Transform& trans = character_.GetTransform();
-	effect_->Play(EffectController::EFF_TYPE::RELOAD, trans.pos, trans.quaRot, { RELOD_EFF_SCL,RELOD_EFF_SCL,RELOD_EFF_SCL }, true);
+	effPlayID_=effect_->Play(EffectController::EFF_TYPE::RELOAD, trans.pos, trans.quaRot, { RELOD_EFF_SCL,RELOD_EFF_SCL,RELOD_EFF_SCL }, true);
 }
 
 void PlayerCardReload::Update(void)
@@ -86,7 +86,7 @@ void PlayerCardReload::Update(void)
 
 		//リロード終了エフェクトを再生
 		const Transform& trans = character_.GetTransform();
-		effect_->Play(EffectController::EFF_TYPE::RELOAD_END, trans.pos, trans.quaRot, { EFF_SCL ,EFF_SCL ,EFF_SCL });
+		reloadEndEffPlayID_ = effect_->Play(EffectController::EFF_TYPE::RELOAD_END, trans.pos, trans.quaRot, { EFF_SCL ,EFF_SCL ,EFF_SCL });
 
 		//カードリロード音停止、完了音再生
 		soundMng_.Stop(ResourceManager::SRC::CARD_RELOAD_SE);
@@ -104,8 +104,8 @@ void PlayerCardReload::Release(void)
 	soundMng_.Stop(ResourceManager::SRC::CARD_RELOAD_SE);
 
 	//エフェクトの消去
-	effect_->Stop(EffectController::EFF_TYPE::RELOAD, 0);
-	effect_->Delete(EffectController::EFF_TYPE::RELOAD, 0);
+	effect_->Stop(EffectController::EFF_TYPE::RELOAD, effPlayID_);
+	effect_->Delete(EffectController::EFF_TYPE::RELOAD, effPlayID_);
 
 	//UIの状態をNONEへ
 	if (cardPresent_.GetCardUIState() == CardUIBase::CARD_SELECT::RELOAD_WAIT)

@@ -20,12 +20,12 @@ PlayerCardAttackOneMiddle::~PlayerCardAttackOneMiddle(void)
 void PlayerCardAttackOneMiddle::InitAttack(void)
 {
 	//カウントのセット
-	midAtkCnt_ = ATTACK_ONE_MID_TIME;
+	midAtkCnt_ = attackTime_;
 
 	//近距離攻撃のアニメーションをセット
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE), animVar_);
 
-	midAtkOverCnt_ = ATTACK_ONE_MID_COMBO_TIME;
+	midAtkOverCnt_ = comboTIme_;
 
 	//突き攻撃の方向に向く
 	actionCntl_.GetInput().GetLookAtTargetDir();
@@ -45,17 +45,17 @@ void PlayerCardAttackOneMiddle::AttackUpdate(void)
 	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= atk_.colStartStep && midAtkCnt_ > 0.0f) { midAtkCnt_ -= delta; }
 
 	//中距離突きカウントが０以上なら
-	if (midAtkCnt_ > 0.0f && !atk_.isDamage)
+	if (midAtkCnt_ > 0.0f/* && !atk_.isDamage*/)
 	{
 		//スピード減速
-		speed_ = easing_->EaseFunc(ATTACK_ONE_MID_SPD, 0.0f
-			, (ATTACK_ONE_MID_TIME - midAtkCnt_) / ATTACK_ONE_MID_TIME
+		speed_ = easing_->EaseFunc(initVelocity_, 0.0f
+			, (attackTime_ - midAtkCnt_) / attackTime_
 			, Easing::EASING_TYPE::QUAD_OUT);
 
 		//攻撃判定生成
 		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 	}
-	else if (midAtkCnt_ <= 0.0f || atk_.isDamage)		//アニメーション終了でアイドル状態変更
+	else if (midAtkCnt_ <= 0.0f/* || atk_.isDamage*/)		//アニメーション終了でアイドル状態変更
 	{
 		//カウントダウン
 		midAtkOverCnt_ -= delta;
@@ -89,4 +89,7 @@ void PlayerCardAttackOneMiddle::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 
 	animVar_ = _data.animVariable;
 	LoadAttackStatus(_data.jsonData, atk_);
+	initVelocity_ = _data.jsonData.value("initVelocity", 0.0f);
+	attackTime_ = _data.jsonData.value("attackTime", 0.0f);
+	comboTIme_ = _data.jsonData.value("comboTime", 0.0f);
 }

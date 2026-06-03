@@ -174,9 +174,6 @@
     <ClCompile Include="Src\Object\Character\Action\Idle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAction.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Object\Character\Base\CharacterBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -223,9 +220,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\Manager\Game\CharacterManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Src\pch.cpp">
@@ -611,9 +605,6 @@
     <ClInclude Include="Src\Object\Character\Action\Idle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAction.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Object\Character\Base\CharacterBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -660,9 +651,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\Manager\Game\CharacterManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Src\pch.h">

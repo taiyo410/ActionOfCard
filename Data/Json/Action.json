@@ -51,6 +51,9 @@
       "colEndAnimCnt": 36.0,
       "bufferFrame": 20.0,
       "attackPoint": 10.0,
+      "attackTime": 1.0,
+      "initVelocity": 30.0,
+      "comboTime": 0.2,
       "animation": {
         "useAnim": "P_ATTACK_1_MIDDLE",
         "animSpeed": 80.0,
@@ -91,6 +94,10 @@
       "colEndAnimCnt": 83.0,
       "bufferFrame": 20.0,
       "attackPoint": 25.0,
+      "chargeAnimSpeed": 10.0,
+      "lerpTime": 0.4,
+      "cameraShakeLimit": 0.5,
+      "attackEndCount": 0.5,
       "animation": {
         "useAnim": "P_ATTACK_3",
         "animSpeed": 40.0,
@@ -166,6 +173,8 @@
       "colStartAnimCnt": 22.0,
       "colEndAnimCnt": 46.0,
       "attackPoint": 10.0,
+      "cameraShakeTime": 1.0,
+      "rockNum": 9,
       "animation": {
         "useAnim": "E_STOMP_ATK",
         "animSpeed": 10.0,
@@ -176,6 +185,27 @@
     "JumpAttack": {
       "attackPoint": 40.0,
       "attackRadius": 30.0,
+      "chargeEffectScale": 500.0,
+      "chargeTime": 6.0,
+      "chargeAnimLoopStartStep": 12.0,
+      "chargeAnimLoopEndStep": 13.0,
+      "chargeAnimLoopSpeed": 5.0,
+      "chargeCameraShakeLimit": 10.0,
+      "jumpEndAnimStep": 52.0,
+      "attackLocalPos": {
+        "x": 0.0,
+        "y": 100.0,
+        "z": 0.0
+      },
+      "attackStartRadius": 30.0,
+      "attackEndRadius": 2500.0,
+      "attackColExpandSpeed": 5.0,
+      "attackColExpandTime": 2.5,
+      "attackAnimLoopStartStep": 53.0,
+      "attackAnimLoopEndStep": 69.0,
+      "attackAnimLoopSpeed": 10.0,
+      "attackCameraShakeLimit": 30.0,
+      "attackEffectScale": 1.4,
       "animation": {
         "useAnim": "E_JUMP_ATK",
         "animSpeed": 10.0,

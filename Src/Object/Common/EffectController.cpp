@@ -16,27 +16,34 @@ EffectController::~EffectController(void)
 
 void EffectController::Update(void)
 {
-	for (auto effect : effects_)
+	for (auto& effect : effects_)
 	{
-		for (int i = 0; i < effect.second.playNum; i++)
+		for (auto& playData : effect.second.playData)
 		{
 			//再生が終わったら
-			if (IsEffekseer3DEffectPlaying(effect.second.playData[i].playId) == -1)
+			if (IsEffekseer3DEffectPlaying(playData.playId) == -1)
 			{
 				//ループするなら
-				if (effect.second.playData[i].isLoop)
+				if (playData.isLoop)
 				{
 					//もう一回
- 					RePlay(effect.first, i);
+ 					RePlay(effect.first, playData.playId);
 				}
 				//ループしない
 				else 
 				{
 					//消去
-					Delete(effect.first, i);
+					//Delete(effect.first, playData.playId);
+					playData.isDelete = true;
 				}
 			}
 		}
+	}
+
+	//消去フラグが立っているものを消去
+	for (auto& effect : effects_)
+	{
+		auto it=effect.second.playData.remove_if([](const PlayData& playData) { return playData.isDelete; });
 	}
 }
 
@@ -56,7 +63,7 @@ void EffectController::Add(const int _effHandle, const EFF_TYPE _effType)
 	effect.resId = _effHandle;
 
 	//個数初期化
-	effect.playNum = 0;
+	//effect.playNum = 0;
 
 	//追加
 	effects_.emplace(_effType, effect);
@@ -96,95 +103,111 @@ const int EffectController::Play(const EFF_TYPE _effType, const VECTOR _pos, con
 	playData.isLoop = _isLoop;
 
 	//プレイエフェクトの保存
-	effects_[_effType].playData.emplace(effects_[_effType].playNum, playData);
+	effects_[_effType].playData.push_back(playData);
 
-	//配列保存
-	int ret = effects_[_effType].playNum;
+	////配列保存
+	int ret = playData.playId;
 
-	//カウンタ増加
-	effects_[_effType].playNum++;
+	////カウンタ増加
+	//effects_[_effType].playNum++;
 
-	//配列番号を返す
+	//プレイID返す
 	return ret;
 }
 
 
-void EffectController::SetPos(const EFF_TYPE _effType, const int _arrayNum, const VECTOR _pos)
+void EffectController::SetPos(const EFF_TYPE _effType, const int _playId, const VECTOR _pos)
 {
-	//エフェクトの要素が存在するか または 再生中のエフェクトが存在するか または　その配列のエフェクトが存在するか
-	if (!effects_.count(_effType) || effects_[_effType].playNum <= 0 || effects_[_effType].playNum < _arrayNum)
+	if (!IsExistPlayData(_effType, _playId))
 	{
 		//その要素がなかった
 		return;
 	}
 
 	//座標の再設定
-	SetPosPlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, _pos.x, _pos.y, _pos.z);
-	effects_[_effType].playData[_arrayNum].pos = _pos;
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	SetPosPlayingEffekseer3DEffect(it.playId, _pos.x, _pos.y, _pos.z);
+	it.pos = _pos;
 }
 
-void EffectController::SetQuaRot(const EFF_TYPE _effType, const int _arrayNum, const Quaternion _quaRot)
+void EffectController::SetQuaRot(const EFF_TYPE _effType, const int _playId, const Quaternion _quaRot)
 {
-	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-	if (!effects_.count(_effType) || effects_[_effType].playNum <= 0 || effects_[_effType].playNum < _arrayNum)
+	if (!IsExistPlayData(_effType, _playId))
 	{
 		//その要素がなかった
 		return;
 	}
-	
+
+	//playDataの参照を取得
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
 	//回転の再設定
-	SetRotationPlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, _quaRot.ToEuler().x, _quaRot.ToEuler().y, _quaRot.ToEuler().z);
-	effects_[_effType].playData[_arrayNum].quaRot = _quaRot;
+	SetRotationPlayingEffekseer3DEffect(it.playId, _quaRot.ToEuler().x, _quaRot.ToEuler().y, _quaRot.ToEuler().z);
+	it.quaRot = _quaRot;
 }
 
-void EffectController::SetScale(const EFF_TYPE _effType, const int _arrayNum, const VECTOR _scl)
+void EffectController::SetScale(const EFF_TYPE _effType, const int _playId, const VECTOR _scl)
 {
-	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-	if (!effects_.count(_effType) || effects_[_effType].playNum <= 0 || effects_[_effType].playNum < _arrayNum)
+	if (!IsExistPlayData(_effType, _playId))
 	{
 		//その要素がなかった
 		return;
 	}
-	
+
+	//playDataの参照を取得
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
 	//大きさの再設定
-	SetScalePlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, _scl.x, _scl.y, _scl.z);
-	effects_[_effType].playData[_arrayNum].scl = _scl;
+	SetScalePlayingEffekseer3DEffect(it.playId, _scl.x, _scl.y, _scl.z);
+	it.scl = _scl;
 }
 
-void EffectController::SetSpeed(const EFF_TYPE _effType, const int _arrayNum, const float _speedMultiplier)
+void EffectController::SetSpeed(const EFF_TYPE _effType, const int _playId, const float _speedMultiplier)
 {
-	
-	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-	if (!effects_.count(_effType) || effects_[_effType].playNum <= 0 || effects_[_effType].playNum < _arrayNum)
+	if (!IsExistPlayData(_effType, _playId))
 	{
 		//その要素がなかった
 		return;
 	}
-	
+
+	//playDataの参照を取得
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
 	//速度の再設定
-	SetSpeedPlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, _speedMultiplier);
-	effects_[_effType].playData[_arrayNum].speedMulti = _speedMultiplier;
+	SetSpeedPlayingEffekseer3DEffect(it.playId, _speedMultiplier);
+	it.speedMulti = _speedMultiplier;
 }
 
-void EffectController::Stop(const EFF_TYPE _effType, const int _arrayNum)
+void EffectController::Stop(const EFF_TYPE _effType, const int _playId)
 {
-	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-	if (!effects_.count(_effType) || effects_[_effType].playNum <= 0 || effects_[_effType].playNum < _arrayNum)
+	if (!IsExistPlayData(_effType, _playId))
 	{
 		//その要素がなかった
 		return;
 	}
 	
+	//playDataの参照を取得
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
 	//エフェクトストップ
-	StopEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId);
+	StopEffekseer3DEffect(it.playId);
 }
 
-void EffectController::Delete(const EFF_TYPE _effType, const int _arrayNum)
+void EffectController::Delete(const EFF_TYPE _effType, const int _playId)
 {
+	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか また その配列のエフェクトが存在するか
+	if (!IsExistPlayData(_effType, _playId))
+	{
+		//その要素がなかった
+		return;
+	}
+
 	//指定されたエフェクトを削除
-	Stop(_effType, _arrayNum);
-	effects_[_effType].playData.erase(_arrayNum);
-	effects_[_effType].playNum--;
+	Stop(_effType, _playId);
+
+	auto it=std::find_if(effects_[_effType].playData.begin(), effects_[_effType].playData.end(),
+		[_playId](const PlayData& data)
+		{
+			return data.playId == _playId;
+		});
+
+	effects_[_effType].playData.erase(it);
 }
 
 void EffectController::AllStop(void)
@@ -192,9 +215,9 @@ void EffectController::AllStop(void)
 	//全停止
 	for (const auto& effect : effects_)
 	{
-		for (int i = 0; i < effect.second.playNum; i++)
+		for(const auto& playData : effect.second.playData)
 		{
-			Stop(effect.first, i);
+			Stop(effect.first, playData.playId);
 		}
 	}
 }
@@ -208,17 +231,11 @@ void EffectController::AllDelete(void)
 	effects_.clear();
 }
 
-const bool EffectController::IsEnd(const EFF_TYPE _effType, const int _arrayNum)
+const bool EffectController::IsEnd(const EFF_TYPE _effType, const int _playId)
 {
-	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-	if (!effects_.count(_effType) || effects_[_effType].playNum <= 0 || effects_[_effType].playNum < _arrayNum)
-	{
-		//そもそもその要素がなかった
-		return true;
-	}
-
 	//再生が終わっているか
-	if (IsEffekseer3DEffectPlaying(effects_[_effType].playData[_arrayNum].playId) == -1)
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	if (IsEffekseer3DEffectPlaying(it.playId) == -1)
 	{
 		//終わっていた
 		return true;
@@ -228,42 +245,77 @@ const bool EffectController::IsEnd(const EFF_TYPE _effType, const int _arrayNum)
 	return false;
 }
 
-const int EffectController::GetPlayNum(const EFF_TYPE _effType)
-{
-	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-	if (!effects_.count(_effType))
-	{
-		//そもそもその要素がなかった
-		return -1;
-	}
+//const int EffectController::GetPlayNum(const EFF_TYPE _effType)
+//{
+//	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
+//	if (!effects_.count(_effType))
+//	{
+//		//そもそもその要素がなかった
+//		return -1;
+//	}
+//
+//	return effects_[_effType].playNum;
+//}
 
-	return effects_[_effType].playNum;
-}
-
-void EffectController::RePlay(const EFF_TYPE _effType, const int _arrayNum)
+void EffectController::RePlay(const EFF_TYPE _effType, const int _playId)
 {
+	//再生中のエフェクト参照の取得
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
+
 	//各要素
-	VECTOR scl = effects_[_effType].playData[_arrayNum].scl;
-	VECTOR rot = effects_[_effType].playData[_arrayNum].quaRot.ToEuler();
-	VECTOR pos = effects_[_effType].playData[_arrayNum].pos;
-	float speed = effects_[_effType].playData[_arrayNum].speedMulti;
+	VECTOR scl = it.scl;
+	VECTOR rot = it.quaRot.ToEuler();
+	VECTOR pos = it.pos;
+	float speed = it.speedMulti;
 
 	//削除
-	Delete(_effType, _arrayNum);
+	//Delete(_effType, _playId);
 
 	//プレイハンドルを設定
-	effects_[_effType].playData[_arrayNum].playId = PlayEffekseer3DEffect(effects_[_effType].resId);
+	it.playId = PlayEffekseer3DEffect(effects_[_effType].resId);
 
 	//以降、再生するエフェクトの制御は必ずプレイハンドルIDを使用すること
 	//エフェクトの大きさ設定(XYZ)
-	SetScalePlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, scl.x, scl.y, scl.z);
-
+	SetScalePlayingEffekseer3DEffect(it.playId, scl.x, scl.y, scl.z);
 	//エフェクトの角度を設定
-	SetRotationPlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, rot.x, rot.y, rot.z);
+	SetRotationPlayingEffekseer3DEffect(it.playId, rot.x, rot.y, rot.z);
 
 	//エフェクトの位置を設定
-	SetPosPlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, pos.x, pos.y, pos.z);
+	SetPosPlayingEffekseer3DEffect(it.playId, pos.x, pos.y, pos.z);
 
 	//エフェクトの速度を設定
-	SetSpeedPlayingEffekseer3DEffect(effects_[_effType].playData[_arrayNum].playId, speed);
+	SetSpeedPlayingEffekseer3DEffect(it.playId, speed);
+}
+
+const std::optional<std::reference_wrapper<EffectController::PlayData>>  EffectController::FindPlayData(const EFF_TYPE _effType, const int _playId)
+{
+	//エフェクトの要素が存在するか
+	if(!effects_.count(_effType))
+	{
+		//存在がなければ末尾を返す
+		return std::nullopt;
+	}
+
+	auto& playDataList = effects_[_effType].playData;
+
+	//エフェクト配列からプレイIDが一致するものを探す
+	auto it = std::find_if(playDataList.begin(), playDataList.end(),
+		[_playId](const PlayData& data) 
+		{
+			return data.playId == _playId;
+		});
+	if (it == playDataList.end()) return std::nullopt;
+	return *it;
+}
+
+bool EffectController::IsExistPlayData(const EFF_TYPE _effType, const int _playId)
+{
+	//エフェクトの要素が存在するか または 再生中のエフェクトが存在するか または　その配列のエフェクトが存在するか
+	auto it = FindPlayData(_effType, _playId);
+	if (!effects_.count(_effType) || !it.has_value())
+	{
+		//その要素がなかった
+		return false;
+	}
+	return true;
 }

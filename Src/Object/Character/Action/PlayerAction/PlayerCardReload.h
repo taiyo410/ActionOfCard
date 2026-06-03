@@ -49,6 +49,11 @@ public:
     //リロードカウント
     float pushReloadCnt_;
 
+    //エフェクトプレイID
+	int effPlayID_;
+
+    //リロード終了エフェクトプレイID
+	int reloadEndEffPlayID_;
     //リロードカウントのセット
     void SetUIReloadCnt(void);
 };

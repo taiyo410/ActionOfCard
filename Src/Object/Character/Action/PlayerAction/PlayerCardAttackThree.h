@@ -32,14 +32,16 @@ public:
 
 private:
 
-    //攻撃3段目判定
-    static constexpr float ATTACK_ANIM_SPD = 10.0f;               //攻撃アニメーション3段階目の溜め時のアニメ速度
-    static constexpr float ATTACK_LERP_TIME = 0.4f;          //攻撃3段階目アニメスピード補完時間
-
     //攻撃3段階目判定終了カウント
     float atkThreeEndCnt_;
 
     //攻撃3段階目のアニメーション速度補完
     float atkAnimLerpCnt_;
+
+    //外部読み込み
+	float chargeAnimSpd_;       //攻撃3段階目のアニメーション速度
+	float attackLerpTime_;      //アニメスピード保管時間
+    float cameraShakeLimit_;    //カメラシェイクの強さ
+	float attackEndCnt_;        //攻撃終了後の後隙
 };
 

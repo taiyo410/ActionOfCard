@@ -279,7 +279,7 @@ public:
 
 	/// @brief ƒXƒ^ƒ“ƒvUŒ‚‚ÌŠâ‚Ì•`‰æ”z—ñ‚Ì“o˜^‰ğœ
 	/// @param _rock ‰ğœ‚·‚éŠâ
-	void UnregisterDrawableRocks(void);
+	void UnRegisterDrawableRocks(void);
 
 protected:
 

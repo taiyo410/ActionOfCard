@@ -160,6 +160,11 @@ public:
 	/// @param  
 	void CancelCardActionByDodge(void);
 
+	/// @brief 現在のアクションの取得
+	/// @param  
+	/// @return 現在のアクション
+	const ACTION_TYPE GetActionType(void)const { return act_; }
+
 #ifdef _DEBUG
 	//デバッグb
 	void DrawDebug(void);

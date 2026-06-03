@@ -40,6 +40,9 @@ void EnemyCardAttackBase::Update(void)
 
 	//攻撃処理
 	AttackUpdate();
+
+	//エフェクト更新
+	effect_->Update();
 }
 
 void EnemyCardAttackBase::Release(void)

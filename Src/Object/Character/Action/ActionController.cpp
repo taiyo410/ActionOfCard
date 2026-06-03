@@ -283,10 +283,6 @@ void ActionController::CancelCardActionByDodge(void)
 void ActionController::CardMove(void)
 {
 	CardUIBase::CARD_SELECT uiState = cardPresent_.GetCardUIState();
-	//if (uiState == CardUIBase::CARD_SELECT::DISITION
-	//	|| uiState == CardUIBase::CARD_SELECT::LEFT
-	//	|| uiState == CardUIBase::CARD_SELECT::RIGHT
-	//	|| uiState == CardUIBase::CARD_SELECT::RELOAD)return;
 	if (uiState != CardUIBase::CARD_SELECT::NONE)return;
 	if (IsCardLeftMoveable())
 	{
@@ -378,7 +374,8 @@ void ActionController::DesideEnemyCardAction(void)
 	const float distance = logic_.GetTargetDis();
 
 	//ƒ‰ƒ“ƒ_ƒ€‚Ì”’lŽæ“¾
-	int rand = GetRand(UtilityCommon::PERCENT_MAX);
+	//int rand = GetRand(UtilityCommon::PERCENT_MAX);
+	int rand = 20;
 
 	if (distance > ATK_DISTANCE)
 	{

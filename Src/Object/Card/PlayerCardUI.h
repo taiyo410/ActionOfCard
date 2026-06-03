@@ -230,6 +230,7 @@ private:
 
 	//上下に見せカードを動かす
 	void MoveUpDownVisibleCards(void);
+
 	//矢印とボタン描画
 	void DrawArrowAndBotton(void);
 

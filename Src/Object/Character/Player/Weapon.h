@@ -95,6 +95,9 @@ private:
 	//武器を使う親キャラクター
 	CharacterBase& character_;
 
+	//エフェクトのプレイID
+	int effectPlayId_;
+
 	//追従するフレームの番号
 	int followFrameNo_;
 

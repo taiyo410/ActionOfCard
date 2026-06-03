@@ -54,7 +54,7 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 
 	//武器の取得
 	auto& weapon = dynamic_cast<Weapon&>(parent);
-	if (weapon.GetIsDamage()||charaObj_.GetIsJumpAtk())return;
+	if (weapon.GetIsDamage()||action_.GetActionType()==ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
 
 	//ダメージを与えたことを知らせる
 	weapon.SetIsDamage();

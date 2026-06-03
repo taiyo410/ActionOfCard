@@ -56,6 +56,9 @@ void Weapon::Init(void)
 
 void Weapon::Update(void)
 {
+	//エフェクト更新
+	effect_->Update();
+
 	// 対象フレームの位置にtargetを配置し、
 	// 対象フレームの回転に加え、指定した相対座標・回転を加える
 	ModelFrameUtility::SetFrameWorldMatrix(
@@ -120,6 +123,6 @@ void Weapon::OnHit(const std::weak_ptr<Collider> _hitCol)
 
 	//ヒットエフェクトを再生
 	VECTOR bladeFramePos = MV1GetFramePosition(trans_.modelId, EFFECT_PLAY_FRAME_NO);
-	effect_->Play(EffectController::EFF_TYPE::KEY_BLADE_HIT, bladeFramePos, {}, { EFFECT_PLAY_SCL,EFFECT_PLAY_SCL,EFFECT_PLAY_SCL });
+	effectPlayId_=effect_->Play(EffectController::EFF_TYPE::KEY_BLADE_HIT, bladeFramePos, {}, { EFFECT_PLAY_SCL,EFFECT_PLAY_SCL,EFFECT_PLAY_SCL });
 	SoundManager::GetInstance().Play(ResourceManager::SRC::PLAYER_HIT_SE, SoundManager::PLAYTYPE::BACK);
 }
