@@ -10,7 +10,7 @@
 
 ActionBase::ActionBase(ActionController& _actCntl,CharacterBase& _character):
 	scnMng_(SceneManager::GetInstance()),	
-	actionCntl_(_actCntl),
+	actionCtrl_(_actCntl),
 	anim_(_actCntl.GetAnimation()),
 	soundMng_(SoundManager::GetInstance()),
 	resMng_(ResourceManager::GetInstance()),

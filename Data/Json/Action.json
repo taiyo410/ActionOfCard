@@ -108,16 +108,23 @@
       }
     },
     "FireMagic": {
+      "colStartAnimCnt": 30.0,
       "bufferFrame": 20.0,
       "attackPoint": 20.0,
       "fireRadius": 30.0,
-      "moveSpeed": 0.5,
+      "moveSpeed": 30.0,
+      "actionMaxTime": 4.0,
+      "fireStartLocalPos": {
+        "x": 0.0,
+        "y": 100.0,
+        "z": 20.0
+      },
       "animation": {
         "useAnim": "P_FIRE_MAGIC",
-        "animSpeed": 40.0,
+        "animSpeed": 20.0,
         "detachSpeed": 5.0,
         "isLoop": false,
-        "startStep": 15.0,
+        "startStep": 0.0,
         "endStep": 36.0
       }
     },

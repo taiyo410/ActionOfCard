@@ -101,4 +101,5 @@ protected:
 	void CollNone(void);												//当たっても何もしない(プレイヤー側で何も起きない)
 	void CollStage(const std::weak_ptr<Collider> _hitCol);				//ステージ
 	virtual void CollChara(const std::weak_ptr<Collider> _hitCol) = 0;	//キャラクター同士
+	void CollFire(const std::weak_ptr<Collider>_hitCol);				//炎
 };

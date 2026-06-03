@@ -113,7 +113,7 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 			cardPresent_.FinishCard();
 
 			//ÉAÉCÉhÉãèÛë‘Ç÷
-			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+			actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		}
 	}
 }

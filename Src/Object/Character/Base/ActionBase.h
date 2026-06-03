@@ -136,7 +136,7 @@ protected:
 	ResourceManager& resMng_;
 
 	//アクションコントローラー
-	ActionController& actionCntl_;
+	ActionController& actionCtrl_;
 
 	//アニメーション
 	AnimationController& anim_;

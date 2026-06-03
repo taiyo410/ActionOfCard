@@ -27,21 +27,21 @@ void Idle::Init(void)
 void Idle::Update(void)
 {
 	//移動
-	if (actionCntl_.GetInput().GetIsAct().isRun)
+	if (actionCtrl_.GetInput().GetIsAct().isRun)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::MOVE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::MOVE);
 		return;
 	}
 	//カード使用
-	if (actionCntl_.IsCardDecisionControl()&&actionCntl_.GetInput().GetIsAct().isCardUse)
+	if (actionCtrl_.IsCardDecisionControl()&&actionCtrl_.GetInput().GetIsAct().isCardUse)
 	{
-		actionCntl_.DesideCardAction();
+		actionCtrl_.DesideCardAction();
 		return;
 	}
 	//回避
-	if (actionCntl_.GetInput().GetIsAct().isDodge)
+	if (actionCtrl_.GetInput().GetIsAct().isDodge)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
 		return;
 	}
 }

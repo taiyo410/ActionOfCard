@@ -209,6 +209,8 @@ void ActionController::DesideCardAction(void)
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
 	{
+		//ŽèŽD‚ÉˆÚ“®
+		cardPresent_.PutCard();
 		ChangeAction(ACTION_TYPE::CARD_MAGIC_FIRE);
 	}
 	else if(cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)

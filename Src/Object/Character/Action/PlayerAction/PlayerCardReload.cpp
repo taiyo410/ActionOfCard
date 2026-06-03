@@ -55,7 +55,7 @@ void PlayerCardReload::Init(void)
 
 void PlayerCardReload::Update(void)
 {
-	if (actionCntl_.GetInput().GetIsAct().isCardPushKeep)
+	if (actionCtrl_.GetInput().GetIsAct().isCardPushKeep)
 	{
 		//リロードのため時間をカウント
 		pushReloadCnt_ += scnMng_.GetDeltaTime();
@@ -69,7 +69,7 @@ void PlayerCardReload::Update(void)
 	}
 	else
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 	}
 
 	//リロードの溜め終了時、カードをリロードする
@@ -93,7 +93,7 @@ void PlayerCardReload::Update(void)
 		soundMng_.Play(ResourceManager::SRC::CARD_RELOAD_FINISH_SE, SoundManager::PLAYTYPE::BACK);
 
 		//アイドル状態へ
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 	}
 }
 

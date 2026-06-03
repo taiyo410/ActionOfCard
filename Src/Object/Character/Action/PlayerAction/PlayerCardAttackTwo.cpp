@@ -27,7 +27,7 @@ void PlayerCardAttackTwo::InitAttack(void)
 void PlayerCardAttackTwo::AttackUpdate(void)
 {
 	//コンボ入力受付
-	actionCntl_.ComboInput();
+	actionCtrl_.ComboInput();
 
 	//攻撃の更新
 	AttackMotion(atk_, Collider::TAG::NML_ATK, {});

@@ -1,5 +1,7 @@
 #pragma once
+
 #include "../../ObjectBase.h"
+
 class PlayerMagicFire :
     public ObjectBase
 {
@@ -8,7 +10,7 @@ public:
 
     /// @brief コンストラクタ
     /// @param  
-    PlayerMagicFire(VECTOR& _dir);
+    PlayerMagicFire(VECTOR& _startPos,VECTOR& _dir);
 
     /// @brief デストラクタ
     /// @param  
@@ -36,7 +38,12 @@ public:
 
 	/// @brief jsonからのロード
 	/// @param _jsonData 
-	void LoadJsonData(const auto& _jsonData);
+	void LoadFireData(const nlohmann::json& _jsonData);
+
+	/// @brief 炎の生存状態の取得
+	/// @param  
+	/// @return 炎の生存状態
+	const bool GetIsAlive(void) { return isAlive_; }
 
 private:
 
@@ -51,6 +58,12 @@ private:
 
 	//方向
 	VECTOR& dir_;
+
+	//生存フラグ
+	bool isAlive_;
+
+	//攻撃初期位置
+	VECTOR& startPos_;
 
 };
 

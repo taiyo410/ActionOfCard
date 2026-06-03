@@ -281,6 +281,14 @@ public:
 	/// @param _rock 解除する岩
 	void UnRegisterDrawableRocks(void);
 
+	/// @brief 炎魔法の描画
+	/// @param _fire 
+	void DrawFireBall(const std::weak_ptr<PlayerMagicFire> _fire);
+
+	/// @brief 炎の描画をやめる
+	/// @param  
+	void DeleteFireBall(void);
+
 protected:
 
 	//移動量ラインオフセット
@@ -316,6 +324,9 @@ protected:
 
 	//描画する岩の配列
 	std::vector<std::weak_ptr<EnemyRock>>drawableRocks_;	
+
+	//炎の描画
+	std::weak_ptr<PlayerMagicFire>drawableFire_;
 
 	//アニメーションタイプの文字列対応表
 	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;

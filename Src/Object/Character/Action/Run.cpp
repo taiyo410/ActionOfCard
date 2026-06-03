@@ -35,26 +35,26 @@ void Run::Init(void)
 void Run::Update(void)
 {
 	//カードを場に出す処理
-	if (actionCntl_.GetInput().GetIsAct().isCardUse)
+	if (actionCtrl_.GetInput().GetIsAct().isCardUse)
 	{
-		if (actionCntl_.IsCardDecisionControl())
+		if (actionCtrl_.IsCardDecisionControl())
 		{
-			actionCntl_.DesideCardAction();
+			actionCtrl_.DesideCardAction();
 			return;
 		}
 	}
 
 	//入力方向が0だった場合、アイドル状態移行
-	if (!actionCntl_.GetInput().GetIsAct().isRun)
+	if (!actionCtrl_.GetInput().GetIsAct().isRun)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		return;
 	}
 
 	//回避状態移行
-	if (actionCntl_.GetInput().GetIsAct().isDodge)
+	if (actionCtrl_.GetInput().GetIsAct().isDodge)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
 		return;
 	}
 

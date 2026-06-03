@@ -219,6 +219,16 @@ void CharacterBase::UnRegisterDrawableRocks(void)
 	drawableRocks_.clear();
 }
 
+void CharacterBase::DrawFireBall(const std::weak_ptr<PlayerMagicFire> _fire)
+{
+	drawableFire_ = _fire;
+}
+
+void CharacterBase::DeleteFireBall(void)
+{
+	drawableFire_.reset();
+}
+
 void CharacterBase::ChangeUpdateClearDirection(void)
 {
 	phazeUpdate_ = [this]() {UpdateClearDirection(); };

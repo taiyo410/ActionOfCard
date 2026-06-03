@@ -29,7 +29,7 @@ void PlayerCardAttackOneShort::InitAttack(void)
 void PlayerCardAttackOneShort::AttackUpdate(void)
 {
 	//çUåÇÇÃçXêV
-	actionCntl_.ComboInput();
+	actionCtrl_.ComboInput();
 
 	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
 }

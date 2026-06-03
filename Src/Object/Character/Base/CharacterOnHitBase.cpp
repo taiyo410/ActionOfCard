@@ -52,6 +52,10 @@ void CharacterOnHitBase::CollStage(const std::weak_ptr<Collider> _hitCol)
 	HitModelCommon(_hitCol);
 }
 
+void CharacterOnHitBase::CollFire(const std::weak_ptr<Collider> _hitCol)
+{
+}
+
 void CharacterOnHitBase::HitModelCommon(const std::weak_ptr<Collider> _hitCol)
 {
 

@@ -63,7 +63,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 		//攻撃終了時間以上なら、アイドル状態へ
 		if (atkThreeEndCnt_ > attackEndCnt_)
 		{
-			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+			actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 			return;
 		}
 

@@ -1,11 +1,20 @@
 #include "../pch.h"
+#include "../Utility/Utility3D.h"
+#include "../Manager//Generic/SceneManager.h"
 #include "../ActionController.h"
+#include "../Object/Character/Base/CharacterBase.h"
+#include "../Object/Character/Player/PlayerMagicFIre.h"
+#include "../Object/Character/Base/LogicBase.h"
 #include "PlayerCardMagicFire.h"
 
 PlayerCardMagicFire::PlayerCardMagicFire(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
 	PlayerCardAttackBase(_actCntl, _charaObj, _deck)
 {
-	//fireBall_ = std::make_unique<PlayerMagicFire>(character_, resMng_, scnMng_, soundMng_);
+	fireBall_ = std::make_shared<PlayerMagicFire>(atk_.pos, toTargetDir_);
+	changeState_ = {
+		{STATE::SPELL_CAST,[this]() {ChangeSpellCast(); }},
+		{STATE::ATTACK,[this]() {ChangeAttack(); }}
+	};
 }
 
 PlayerCardMagicFire::~PlayerCardMagicFire(void)
@@ -18,16 +27,22 @@ void PlayerCardMagicFire::Load(void)
 
 void PlayerCardMagicFire::InitAttack(void)
 {
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE),animVar_);
+	const Transform& trans = character_.GetTransform();
+	atk_.pos = Utility3D::AddPosRotate(trans.pos, trans.quaRot, fireLocalPos_);
+	toTargetDir_ = actionCtrl_.GetInput().GetToTargetDir();
+	actCnt_ = 0.0f;
+	changeState_[STATE::SPELL_CAST]();
 }
 
 void PlayerCardMagicFire::AttackUpdate(void)
 {
-	//いったんアイドル状態へ
-	actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+	updateState_();
 }
 
 void PlayerCardMagicFire::AttackRelease(void)
 {
+	character_.DeleteFireBall();
 }
 
 void PlayerCardMagicFire::LoadAnimVar(const ACTION_LOAD_DATA& _data)
@@ -35,5 +50,59 @@ void PlayerCardMagicFire::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "FireMagic")return;
 
 	animVar_ = _data.animVariable;
-	LoadAttackStatus(_data.jsonData, atk_);
+	const auto& data = _data.jsonData;
+	LoadAttackStatus(data, atk_);
+
+	//炎側に外部ファイルを取得させる
+	fireBall_->LoadFireData(data);
+
+	actMaxTime_ = data.value("actionMaxTime", 0.0f);
+
+	//炎出現座標のローカル座標
+	if (data.contains("fireStartLocalPos"))
+	{
+		const auto localPosData = data["fireStartLocalPos"];
+		fireLocalPos_.x = localPosData.value("x", 0.0f);
+		fireLocalPos_.y = localPosData.value("y", 0.0f);
+		fireLocalPos_.z = localPosData.value("z", 0.0f);
+	}
+	
+}
+
+void PlayerCardMagicFire::UpdateSpellCast(void)
+{
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE)) > atk_.colStartStep)
+	{
+		//状態遷移
+		changeState_[STATE::ATTACK]();
+	}
+}
+
+void PlayerCardMagicFire::UpdateAttack(void)
+{
+
+	//アクション時間のカウント
+	actCnt_ += scnMng_.GetDeltaTime();
+
+	//ファイアボールが死ぬ、または、攻撃してから一定時間経過後にアイドルへ
+	//ファイアボールがどこにも当たらずにずっとアクションを続けることを阻止するため
+	if (!fireBall_->GetIsAlive() || actCnt_ > actMaxTime_)
+	{
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+		return;
+	}
+	fireBall_->Update();
+}
+
+void PlayerCardMagicFire::ChangeSpellCast(void)
+{
+	updateState_ = [this]() {UpdateSpellCast(); };
+}
+
+void PlayerCardMagicFire::ChangeAttack(void)
+{
+	//炎を出現させる
+	fireBall_->Init();
+	character_.DrawFireBall(fireBall_);
+	updateState_ = [this]() {UpdateAttack(); };
 }

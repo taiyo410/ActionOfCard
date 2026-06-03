@@ -25,6 +25,7 @@
 #include"../Action/React.h"
 #include"../Action/Dodge.h"
 #include "./PlayerLogic.h"
+#include "./PlayerMagicFIre.h"
 #include "Player.h"
 
 Player::Player(void)
@@ -161,7 +162,15 @@ void Player::Draw(void)
 	//’Êí•`‰æ
 	MV1DrawModel(trans_.modelId);
 
+	//•Ší
 	weapon_->Draw();
+
+	//‰Š‚Ì•`‰æ
+	if (!drawableFire_.expired())
+	{
+		drawableFire_.lock()->Draw();
+	}
+
 }
 
 void Player::Draw2D(void)

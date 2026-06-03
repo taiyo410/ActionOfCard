@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 #include "./PlayerCardAttackBase.h"
 
 class PlayerMagicFire;
@@ -42,9 +43,41 @@ public:
 
 private:
 
+    enum class STATE
+    {
+        SPELL_CAST,
+        ATTACK
+    };
+
+    //Json読み込み
+    //炎のアクション最大時間(一定時間何も起こらなかった場合のアクション時間)
+    float actMaxTime_;
+
+
     //炎
-    //std::unique_ptr<PlayerMagicFire>fireBall_;
+    std::shared_ptr<PlayerMagicFire>fireBall_;
 
+    //炎のローカル座標
+    VECTOR fireLocalPos_;
 
+    //ターゲットへの方向
+    VECTOR toTargetDir_;
+
+    //アクション時間カウント
+    float actCnt_;
+
+    //遷移系
+    std::unordered_map<STATE, std::function<void(void)>>changeState_;
+
+    //更新系
+    std::function<void(void)>updateState_;
+
+    //更新
+    void UpdateSpellCast(void);
+    void UpdateAttack(void);
+
+    //遷移
+    void ChangeSpellCast(void);
+    void ChangeAttack(void);
 };
 

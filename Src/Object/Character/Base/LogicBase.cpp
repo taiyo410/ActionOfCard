@@ -40,6 +40,14 @@ void LogicBase::GetLookAtTargetDir(void)
 	moveDir_ = targetVec;
 }
 
+const VECTOR LogicBase::GetToTargetDir(void)
+{
+	const VECTOR& targetPos = targetChara_.lock()->GetTransform().pos;
+	const VECTOR targetVec = Utility3D::GetMoveVec(myTrans_.pos, targetPos);
+
+	return targetVec;
+}
+
 const bool LogicBase::HitTarget(void) const
 {
 	return false;

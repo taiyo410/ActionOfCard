@@ -110,6 +110,7 @@ CollisionManager::CollisionManager(void)
 	hitRange_[Collider::TAG::CAMERA] = HIT_RANGE_CAMERA;
 	hitRange_[Collider::TAG::STAGE] = HIT_RANGE_STAGE;
 	hitRange_[Collider::TAG::ROCK] = HIT_RANGE_ROCK;
+	hitRange_[Collider::TAG::FIRE] = HIT_RANGE_NORMAL;
 }
 
 CollisionManager::~CollisionManager(void)

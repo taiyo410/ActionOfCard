@@ -50,13 +50,13 @@ void EnemyCardAttackBase::Release(void)
 	//カメラシェイクを元に戻す
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
 
-	actionCntl_.GetInput().SetIsActioning(false);
+	actionCtrl_.GetInput().SetIsActioning(false);
 
 	//現在使っているカードを捨てる
 	cardPresent_.FinishCard();
 
 	//硬直時間セット
-	actionCntl_.GetInput().SetFreezeCntByAttackType();
+	actionCtrl_.GetInput().SetFreezeCntByAttackType();
 
 	AttackRelease();
 }

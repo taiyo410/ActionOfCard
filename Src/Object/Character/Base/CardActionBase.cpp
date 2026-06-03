@@ -45,7 +45,7 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 	}
 	else if (anim_.IsEnd(atkAnim_))		//アニメーション終了でアイドル状態変更
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		return;
 	}
 	else if (anim_.GetAnimStep(atkAnim_) > _status.colEndStep)	//攻撃終了後
@@ -54,7 +54,7 @@ void CardActionBase::AttackMotion(const ATK_STATUS& _status, const Collider::TAG
 		character_.DeleteAttackCol(character_.GetCharaTag(),_attackTag);
 
 		//次の攻撃につなげる
-		actionCntl_.ChangeComboCardAttack();
+		actionCtrl_.ChangeComboCardAttack();
 	}
 }
 
@@ -82,8 +82,8 @@ void CardActionBase::FinishFailureAttack(const Collider::TAG _attackCol)
 	character_.DeleteAttackCol(character_.GetCharaTag(), _attackCol);
 
 	//ダメージリアクション状態に移行
-	actionCntl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
-	actionCntl_.GetInput().SetIsActioning(false);
+	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
+	actionCtrl_.GetInput().SetIsActioning(false);
 }
 
 void CardActionBase::SetAtk(const ATK_STATUS& _atkStatus)
@@ -97,7 +97,7 @@ void CardActionBase::SetAtk(const ATK_STATUS& _atkStatus)
 
 void CardActionBase::ComboInput(void)
 {
-	if (actionCntl_.GetInput().GetIsAct().isCardUse)
+	if (actionCtrl_.GetInput().GetIsAct().isCardUse)
 	{
 		isCombo_ = true;
 	}

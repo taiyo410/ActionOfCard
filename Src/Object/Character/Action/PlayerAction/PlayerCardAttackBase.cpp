@@ -33,10 +33,10 @@ void PlayerCardAttackBase::Update(void)
 	}
 
 	//‰ñ”ğ‚ÅƒAƒNƒVƒ‡ƒ“‚ğ’†’f
-	if (actionCntl_.GetInput().GetIsAct().isDodge
+	if (actionCtrl_.GetInput().GetIsAct().isDodge
 		&& cardPresent_.GetCardUIState() != CardUIBase::CARD_SELECT::DISITION)
 	{
-		actionCntl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
 	}
 
 	//UŒ‚ˆ—

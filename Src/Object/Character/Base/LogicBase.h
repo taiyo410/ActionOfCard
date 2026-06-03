@@ -98,6 +98,11 @@ public:
     /// @param  
     void GetLookAtTargetDir(void);
 
+    /// @brief ターゲットへの方向を取得する
+    /// @param  
+    /// @return 
+    const VECTOR GetToTargetDir(void);
+
     /// @brief ターゲットと当たった
     /// @param  
     /// @return true:当たっている:false:当たっていない

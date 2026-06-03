@@ -28,14 +28,14 @@ void PlayerCardAttackOneMiddle::InitAttack(void)
 	midAtkOverCnt_ = comboTIme_;
 
 	//突き攻撃の方向に向く
-	actionCntl_.GetInput().GetLookAtTargetDir();
+	actionCtrl_.GetInput().GetLookAtTargetDir();
 	isTurnable_ = true;
 }
 
 void PlayerCardAttackOneMiddle::AttackUpdate(void)
 {
 	//コンボ先行受付
-	actionCntl_.ComboInput();
+	actionCtrl_.ComboInput();
 
 	//キャラ同士で当たったか
 	const bool isHitTarget = character_.GetIsHitTarget();
@@ -69,11 +69,11 @@ void PlayerCardAttackOneMiddle::AttackUpdate(void)
 		//中距離突きが終了したら
 		if (midAtkOverCnt_ < 0.0f)
 		{
-			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+			actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		}
 		else
 		{
-			actionCntl_.ChangeComboCardAttack();
+			actionCtrl_.ChangeComboCardAttack();
 		}
 	}
 }

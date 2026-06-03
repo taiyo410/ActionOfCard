@@ -41,7 +41,7 @@ void React::Update(void)
 		//アニメーション終了でアイドル状態へ
 		if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::REACT)))
 		{
-			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+			actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		}
 	}
 	else

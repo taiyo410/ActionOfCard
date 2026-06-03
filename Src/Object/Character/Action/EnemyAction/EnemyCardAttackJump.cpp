@@ -141,7 +141,7 @@ void EnemyCardAttackJump::AttackUpdate(void)
 			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
 			//アイドル状態へ移行
-			actionCntl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+			actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 		}
 	}
 }
