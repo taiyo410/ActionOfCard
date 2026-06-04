@@ -40,16 +40,24 @@ private:
 
 	//スタンプ攻撃
 	static constexpr float STOMP_ATK_SHAKE_CNT = 1.0f;              //カメラシェイク時間
-	static constexpr int STOMP_ATK_ROCK_NUM = 9;                    //岩の生成数
 
+#pragma region 外部ファイル読み込み
+	float cameraShakeTime_;			//カメラシェイク時間
+	float rockNum_;					//岩の数
+	float cameraShakeLimit_;		//カメラシェイク制限値
+#pragma endregion
+
+#pragma region メンバー変数
+	//敵のスタンプ攻撃時に発生する岩
+	std::vector<std::shared_ptr<EnemyRock>>rock_;
 	//岩生成フラグ
 	bool isGenerateRock_;
 
-	//敵のスタンプ攻撃時に発生する岩
-	std::vector<std::shared_ptr<EnemyRock>>rock_;
+#pragma endregion
 
-	//外部読み込み
-	float cameraShakeTime_;			//カメラシェイク時間
-	float rockNum_;					//岩の数
+
+
+
+
 };
 
