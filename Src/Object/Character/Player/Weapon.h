@@ -1,9 +1,11 @@
 #pragma once
-#include "../Object/ObjectBase.h"
+
+#include "../Base/ItemBase.h"
 class EffectController;
 class CharacterBase;
+
 class Weapon :
-    public ObjectBase
+    public ItemBase
 {
 
 public:
@@ -48,15 +50,6 @@ public:
 	/// @param _hitCol 
 	void OnHit(const std::weak_ptr<Collider> _hitCol)override;
 
-	/// @brief // ダメージフラグの取得
-	/// @param  
-	/// @return true:ダメージ判定あり　false:ダメージ判定なし
-	const bool& GetIsDamage(void) const { return isDamage_; }
-
-	/// @brief /// ダメージフラグのリセット
-	/// @param  
-	void SetIsDamage(void) { isDamage_ = true; }
-
 private:
 
 	//ローカル角度(デグリー)
@@ -83,30 +76,24 @@ private:
 	//カプセルコライダーの高さ
 	static constexpr float CAPSULE_COL_HEIGHT = (MAX_VERTEX_POS.y - MIN_VERTEX_POS.y) * WEAPON_SCL;
 
-	//攻撃SEのピッチ
-	static constexpr int ATK_SE_PITCH = -1000;
 
-	//エフェクト
-	std::shared_ptr<EffectController> effect_;
+#pragma region 外部ファイル読み込み
+	float modelScale_;			//武器のモデルの大きさ
+	int hitEffPlayFrameNo_;		//ヒットエフェクト再生するフレーム番号
+	float hitEffScl_;			//ヒットエフェクトの大きさ
+	VECTOR localAngleDeg_;		//武器のローカル角度
+	VECTOR maxVertexPos_;		//武器の最大頂点座標
+	VECTOR minVertexPos_;		//武器の最小頂点座標
+#pragma endregion
 
-	//武器の追従対象
-	Transform* targetTrans_;
+#pragma region メンバー変数
+	Transform* targetTrans_;	//武器の追従対象
+	CharacterBase& character_;	//武器を使う親キャラクター
+	int effectPlayId_;			//エフェクトのプレイID
+	int followFrameNo_;			//追従するフレームの番号
+	VECTOR localPos_;			//武器の相対位置
+	VECTOR localRot_;			//武器の相対回転
+#pragma endregion
 
-	//武器を使う親キャラクター
-	CharacterBase& character_;
 
-	//エフェクトのプレイID
-	int effectPlayId_;
-
-	//追従するフレームの番号
-	int followFrameNo_;
-
-	//武器の相対位置
-	VECTOR localPos_;
-
-	//武器の相対回転
-	VECTOR localRot_;
-
-	//ダメージフラグ
-	bool isDamage_;
 };

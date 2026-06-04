@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../../ObjectBase.h"
+#include "../Base/ItemBase.h"
 
 class PlayerMagicFire :
-    public ObjectBase
+    public ItemBase
 {
 
 public:
@@ -47,23 +47,18 @@ public:
 
 private:
 
-	//移動速度
-	float moveSpd_;
+#pragma region 外部ファイル読み込み
+	float moveSpd_;			//移動速度
+	float atkPow_;			//攻撃力
+	float colRadius_;		//当たり判定の半径
+	VECTOR& dir_;			//方向
+	float fireBallEffScl_;	//エフェクトのスケール
+#pragma endregion
 
-	//攻撃力
-	float atkPow_;
-
-	//当たり判定の半径
-	float colRadius_;
-
-	//方向
-	VECTOR& dir_;
-
-	//生存フラグ
-	bool isAlive_;
-
-	//攻撃初期位置
-	VECTOR& startPos_;
-
+#pragma region メンバー変数
+	bool isAlive_;			//生存フラグ
+	VECTOR& startPos_;		//攻撃初期位置
+	int fireEffPlayId_;		//エフェクトプレイID
+#pragma endregion
 };
 

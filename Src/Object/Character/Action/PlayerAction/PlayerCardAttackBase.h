@@ -34,8 +34,6 @@ public:
 	/// @param  
 	void Release(void) override;
 
-
-
 	/// @brief 攻撃アクションの内容
 	/// @param  
 	virtual void AttackUpdate(void) {}

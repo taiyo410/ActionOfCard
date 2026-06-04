@@ -15,9 +15,6 @@ class PlayerLogic:public LogicBase
 
 public:
 
-    //デルタタイム
-    static constexpr float DELTA_TIME = 1.0f / 60.0f;
-
     enum class CNTL
     {
         NONE,
@@ -50,6 +47,7 @@ private:
     //各アクション操作ボタン
     using JOYPAD_BTN = InputManager::JOYPAD_BTN;
 
+#pragma region メンバー定数
     //移動
     static constexpr int MOVE_FRONT_KEY = KEY_INPUT_W;      //前
     static constexpr int MOVE_LEFT_KEY = KEY_INPUT_A;       //左
@@ -87,6 +85,31 @@ private:
     static constexpr float LEFT_DEG = 270.0f;
     static constexpr float BACK_DEG = 180.0f;
     static constexpr float RIGHT_DEG = 90.0f;
+#pragma endregion
+
+#pragma region メンバー変数
+    //入力更新
+    std::map<InputManager::CONTROLL_TYPE, std::function<void(void)>>inputUpdates_;
+
+    std::weak_ptr<Camera>camera_; //カメラ
+
+    //スティック
+    float leftStickX_;          //スティックの角度X
+    float leftStickY_;          //スティックの角度Y
+    bool& isCanMoveable_;       //移動可能か
+    Vector2 LStickAngleSize_;   //スティックの角度(0～1000を返す)
+    float stickDeg_;            //パッドのスティックの角度
+
+    InputManager::CONTROLL_TYPE cntl_;              //入力デバイス
+    InputManager::JOYPAD_NO padNum_;                //パッド番号
+
+    InputManager& input_;                           //入力情報
+    InputManagerS& inputS_;                         //スティックの入力情報
+
+
+#pragma endregion
+
+#pragma region メンバー関数
 
     //入力デバイス別の更新
     void InputKeyBoard(void);   //キーボード
@@ -101,29 +124,6 @@ private:
 
     //カードリボルバーの左方向の入力フラグを取得
     bool IsCardLeft(void);
-
-    //スティック
-    float leftStickX_;          //スティックの角度X
-    float leftStickY_;          //スティックの角度Y
-    bool& isCanMoveable_;       //移動可能か
-
-    //スティックの角度(0～1000を返す)
-    Vector2 LStickAngleSize_;
-    float stickDeg_;            //パッドのスティックの角度
-
-    //カメラ
-    std::weak_ptr<Camera>camera_;
-
-    InputManager::CONTROLL_TYPE cntl_;              //入力デバイス
-    InputManager::JOYPAD_NO padNum_;                //パッド番号
-
-    //入力情報
-    InputManager& input_;
-
-    //スティックの入力情報
-    InputManagerS& inputS_;
-
-    //入力更新
-    std::map<InputManager::CONTROLL_TYPE, std::function<void(void)>>inputUpdates_;
+#pragma endregion
 };
 

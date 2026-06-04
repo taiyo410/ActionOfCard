@@ -31,8 +31,7 @@
 Player::Player(void)
 	:playerNum_(),
 	cntl_(InputManager::CONTROLL_TYPE::ALL),
-	padNum_(),
-	stateUpdate_()
+	padNum_()
 {
 	padNum_ = static_cast<InputManager::JOYPAD_NO>(playerNum_ + 1);		//‰‚ß‚ÌJOYPAD‚ªkey_pad‚È‚Ì‚Åƒpƒbƒh‚Ì”Ô†‚É‡‚í‚¹‚é
 	characterType_ = CHARACTER_TYPE::PLAYER;

@@ -36,25 +36,22 @@ public:
 
 public:
 
-    //リロードのボタン押す時間
-    static constexpr float RELOAD_TIME = 3.0f;
+#pragma region 外部ファイル読み込み
+    float reloadTime_;              //リロードにかかる時間
+    float reloadEffScl_;            //リロードエフェクトの大きさ
+    float animLoopStartStep_;       //アニメーションループスタートステップ
+    float animLoopEndStep_;         //アニメーションループ終了ステップ
+#pragma endregion
 
-    //エフェクトの大きさ
-    static constexpr float RELOD_EFF_SCL = 100.0f;
+#pragma region メンバー変数
+    float pushReloadCnt_;           //リロードカウント
+    int effPlayID_;                 //エフェクトプレイID
+    int reloadEndEffPlayID_;        //リロード終了エフェクトプレイID
+#pragma endregion
 
-    //アニメーション
-    static constexpr float RELOAD_LOOP_START = 26.0f;                   //アニメーションループスタート
-    static constexpr float RELOAD_LOOP_END = 30.0f;                     //アニメーションループ終了
-
-    //リロードカウント
-    float pushReloadCnt_;
-
-    //エフェクトプレイID
-	int effPlayID_;
-
-    //リロード終了エフェクトプレイID
-	int reloadEndEffPlayID_;
+#pragma region メンバー関数
     //リロードカウントのセット
     void SetUIReloadCnt(void);
+#pragma endregion
 };
 

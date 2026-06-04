@@ -3,6 +3,7 @@
 #include "../Manager/Resource/ResourceManager.h"
 #include "../Object/Common/Collider.h"
 #include "../Object/Common/Geometry/Sphere.h"
+#include "../Object/Common/EffectController.h"
 #include "PlayerMagicFIre.h"
 
 PlayerMagicFire::PlayerMagicFire(VECTOR& _startPos, VECTOR& _dir) :
@@ -34,6 +35,10 @@ void PlayerMagicFire::Init(void)
 	MakeCollider(TAG_PRIORITY::FIRE_SPHERE, { tag_ }, std::move(geo), noneHitTag_);
 	trans_.pos = startPos_;
 	isAlive_ = true;
+	isDamage_ = false;
+
+	//エフェクト再生
+	effect_->Play(EffectController::EFF_TYPE::FIRE_BALL, trans_.pos, trans_.quaRot, { fireBallEffScl_,fireBallEffScl_ ,fireBallEffScl_ });
 }
 
 void PlayerMagicFire::Update(void)
@@ -54,6 +59,9 @@ void PlayerMagicFire::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	//当たったら消す
 	DeleteCollider(TAG_PRIORITY::FIRE_SPHERE);
+
+	//生存状態
+	isAlive_ = false;
 }
 
 void PlayerMagicFire::LoadFireData(const nlohmann::json& _jsonData)

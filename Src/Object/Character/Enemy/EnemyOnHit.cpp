@@ -9,7 +9,7 @@
 #include "../Object/Character/Base/CharacterBase.h"
 #include "../../../Utility/Utility3D.h"
 #include "../Action/ActionController.h"
-#include "../Object/Character/Player/Weapon.h"
+#include "../Object/Character/Base/ItemBase.h"
 #include "../Object/Character/Base/LogicBase.h"
 #include "../Base/CharacterOnHitBase.h"
 #include "EnemyOnHit.h"
@@ -26,7 +26,8 @@ EnemyOnHit::EnemyOnHit(CharacterBase& _chara, VECTOR& _movedPos, VECTOR& _moveDi
 		{ TAG::PLAYER1, [this](const std::weak_ptr<Collider> _hitCol) {CollChara(_hitCol); } },
 		{ TAG::NML_ATK, [this](const std::weak_ptr<Collider> _hitCol) {CollNormalAttack(_hitCol); } },
 		{ TAG::STAGE, [this](const std::weak_ptr<Collider>_hitCol) {CollStage(_hitCol); } },
-		{ TAG::FIRE, [this](const std::weak_ptr<Collider>_hitCol) {CollFire(_hitCol); } }
+		//{ TAG::FIRE, [this](const std::weak_ptr<Collider>_hitCol) {CollFire(_hitCol); } }
+		{ TAG::FIRE, [this](const std::weak_ptr<Collider>_hitCol) {CollNormalAttack(_hitCol); } }
 	};
 }
 
@@ -54,7 +55,7 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	auto& parent = _hitCol.lock()->GetParent();
 
 	//武器の取得
-	auto& weapon = dynamic_cast<Weapon&>(parent);
+	auto& weapon = dynamic_cast<ItemBase&>(parent);
 	if (weapon.GetIsDamage()||action_.GetActionType()==ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
 
 	//ダメージを与えたことを知らせる

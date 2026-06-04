@@ -24,10 +24,6 @@ public:
 	/// @param  
 	void InitAttack(void) override;
 
-	///// @brief 更新(挙動ため時間が終わった後はのけぞらないため継承)
-	///// @param  
-	//void Update(void) override;
-
 	/// @brief 攻撃アクションの内容
 	/// @param  
 	void AttackUpdate(void) override;
@@ -42,17 +38,7 @@ public:
 
 private:
 
-    //イージング
-    std::unique_ptr<Easing>easing_;
-
-	//ジャンプチャージカウント
-	float jumpChargeCnt_;
-
-    //エフェクト再生番号
-	int jumpChargeEffNum_;
-	int blastEffNum_;
-
-	//外部読み込み関連
+#pragma region 外部ファイル読み込み
 	//溜め状態関連
 	float chargeEffScale_;				//溜め状態エフェクト大きさ
 	float chargeTime_;					//溜め時間
@@ -61,7 +47,7 @@ private:
 	float chargeAnimLoopSpd_;			//溜めアニメーションループ速度
 	float chargeCameraShakeLimit_;		//溜め時のカメラシェイク可動範囲
 	float jumpAnimEndStep_;				//ジャンプ終了アニメーションステップ
-	
+
 	//攻撃状態
 	VECTOR atkLocalPos_;				//攻撃ローカル座標
 	float atkStartRadius_;				//攻撃開始時の攻撃範囲
@@ -73,6 +59,17 @@ private:
 	float atkAnimLoopSpd_;				//攻撃アニメーションループ速度
 	float atkCameraShakeLimit_;			//攻撃時のカメラシェイク範囲
 	float atkEffScale_;					//攻撃エフェクトの大きさ
+#pragma endregion
+
+#pragma region メンバー変数
+	std::unique_ptr<Easing>easing_;		//イージング
+	float jumpChargeCnt_;				//ジャンプチャージカウント
+
+	//エフェクト再生番号
+	int jumpChargeEffNum_;		//ジャンプチャージ	
+	int blastEffNum_;			//ドーム攻撃エフェクト
+#pragma endregion
+
 
 
 };

@@ -20,6 +20,7 @@ public:
 		BLAST,		//爆発
 		RELOAD,		//カードリロード
 		RELOAD_END,		//カードリロード
+		FIRE_BALL,
 		E_JUMP_CHARGE,
 		E_DEATH,		//死んだエフェクト
 		E_DEATH_BLAST,	//死んで爆発

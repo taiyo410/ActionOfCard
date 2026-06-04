@@ -50,7 +50,7 @@ void PlayerCardReload::Init(void)
 
 	//リロードエフェクトの再生
 	const Transform& trans = character_.GetTransform();
-	effPlayID_=effect_->Play(EffectController::EFF_TYPE::RELOAD, trans.pos, trans.quaRot, { RELOD_EFF_SCL,RELOD_EFF_SCL,RELOD_EFF_SCL }, true);
+	effPlayID_=effect_->Play(EffectController::EFF_TYPE::RELOAD, trans.pos, trans.quaRot, { reloadEffScl_,reloadEffScl_,reloadEffScl_ }, true);
 }
 
 void PlayerCardReload::Update(void)
@@ -65,7 +65,7 @@ void PlayerCardReload::Update(void)
 
 		//アニメーションループ
 		constexpr float LOOP_SPD = 10.0f;
-		anim_.SetMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), RELOAD_LOOP_START, RELOAD_LOOP_END, LOOP_SPD);
+		anim_.SetMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::CARD_RELOAD), animLoopStartStep_, animLoopEndStep_, LOOP_SPD);
 	}
 	else
 	{
@@ -73,7 +73,7 @@ void PlayerCardReload::Update(void)
 	}
 
 	//リロードの溜め終了時、カードをリロードする
-	if (pushReloadCnt_ >= RELOAD_TIME)
+	if (pushReloadCnt_ >= reloadTime_)
 	{
 		cardPresent_.DeckReload();
 
@@ -120,10 +120,16 @@ void PlayerCardReload::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "Reload")return;
 
 	animVar_ = _data.animVariable;
+
+	const auto& data = _data.jsonData;
+	reloadTime_ = data.value("reloadTime", 0.0f);
+	reloadEffScl_ = data.value("effectScale", 0.0f);
+	animLoopEndStep_ = data.value("animLoopStartStep", 0.0f);
+	animLoopEndStep_ = data.value("animLoopEndStep", 0.0f);
 }
 
 void PlayerCardReload::SetUIReloadCnt(void)
 {
-	float per = pushReloadCnt_ / RELOAD_TIME;
+	float per = pushReloadCnt_ / reloadTime_;
 	cardPresent_.SetUIReloadCount(per);
 }

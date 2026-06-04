@@ -31,8 +31,5 @@ public:
     /// @brief アニメーション情報のロード
     /// @param jsonData アクションロードデータ
     void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
-
-private:
-
 };
 

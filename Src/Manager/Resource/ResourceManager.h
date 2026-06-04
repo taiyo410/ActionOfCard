@@ -136,7 +136,7 @@ public:
 
 	struct RESOURCE_COMMON_PARAM
 	{
-		ResourceData::TYPE type;	//素材の種類
+		ResourceData::TYPE type;
 		SRC src;					//素材名
 		std::wstring path;			//素材のパス
 	};
@@ -223,6 +223,9 @@ private:
 	//リソースのタイプごとの文字列
 	std::unordered_map<std::string, RES_INFO> resTypeStr_;
 
+	//タイプとパスの結びつけ
+	std::unordered_map<ResourceData::TYPE, std::wstring>typePath_;
+
 	//データロード関数
 	std::unordered_map<ResourceData::TYPE, std::function<void(const nlohmann::json _data)>> loadDataFunc_;
 
@@ -239,17 +242,17 @@ private:
 	ResourceData& _Load(SRC src);
 
 	//外部ファイルからのロード	
-	const RESOURCE_COMMON_PARAM GetResourceParameter(const nlohmann::json& _data );		//共通パラメータの取得
+	const RESOURCE_COMMON_PARAM GetResourceParameter(const ResourceData::TYPE _type, const nlohmann::json& _data );		//共通パラメータの取得
 
 	//handleIDしか使用しない種類のロード
-	void LoadResourceCommon(const nlohmann::json& _data);
+	void LoadResourceCommon(const ResourceData::TYPE _type, const nlohmann::json& _data);
 
 	//複数画像のロード
-	void LoadResourceImages(const nlohmann::json& _data);
+	void LoadResourceImages(const ResourceData::TYPE _type, const nlohmann::json& _data);
 
 	//サウンドのロード
-	void LoadResourceSound(const nlohmann::json& _data);
+	void LoadResourceSound(const ResourceData::TYPE _type, const nlohmann::json& _data);
 
 	//シェーダのロード
-	void LoadResourceShader(const nlohmann::json& _data);
+	void LoadResourceShader(const ResourceData::TYPE _type, const nlohmann::json& _data);
 };	

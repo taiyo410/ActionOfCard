@@ -107,26 +107,13 @@ void CardActionBase::ComboInput(void)
 
 void CardActionBase::LoadAttackStatus(const nlohmann::json& _jsonData, ATK_STATUS& _atkStatus)
 {
-	if (_jsonData.contains("colStartAnimCnt"))
-	{
-		_atkStatus.colStartStep = _jsonData.value("colStartAnimCnt", 0.0f);
-	}
-	if (_jsonData.contains("colEndAnimCnt"))
-	{
-		_atkStatus.colEndStep = _jsonData.value("colEndAnimCnt", 0.0f);
-	}
-	if (_jsonData.contains("bufferFrame"))
-	{
-		_atkStatus.bufferFrame = _jsonData.value("bufferFrame", 0.0f);
-	}
-	if (_jsonData.contains("attackRadius"))
-	{
-		_atkStatus.atkRadius = _jsonData.value("attackRadius", 0.0f);
-	}
-	if (_jsonData.contains("attackPoint"))
-	{
-		_atkStatus.atkPoint = _jsonData.value("attackPoint", 0.0f);
-	}
+	//JsonãÛÇÃì«Ç›çûÇ›
+	_atkStatus.colStartStep = _jsonData.value("colStartAnimCnt", 0.0f);
+	_atkStatus.colEndStep = _jsonData.value("colEndAnimCnt", 0.0f);
+	_atkStatus.bufferFrame = _jsonData.value("bufferFrame", 0.0f);
+	_atkStatus.atkRadius = _jsonData.value("attackRadius", 0.0f);
+	_atkStatus.atkPoint = _jsonData.value("attackPoint", 0.0f);
+
 	//çUåÇÉqÉbÉgîªíËÇÕfalseÇ≈äiî[Ç∑ÇÈ
 	_atkStatus.isDamage = false;
 }

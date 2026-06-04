@@ -111,9 +111,10 @@
       "colStartAnimCnt": 30.0,
       "bufferFrame": 20.0,
       "attackPoint": 20.0,
-      "fireRadius": 30.0,
-      "moveSpeed": 30.0,
+      "fireRadius": 100.0,
+      "moveSpeed": 20.0,
       "actionMaxTime": 4.0,
+      "effectScale": 100.0,
       "fireStartLocalPos": {
         "x": 0.0,
         "y": 100.0,
@@ -129,6 +130,10 @@
       }
     },
     "Reload": {
+      "reloadTime": 3.0,
+      "effectScale": 100.0,
+      "animLoopStartStep": 26.0,
+      "animLoopEndStep":30.0,
       "animation": {
         "useAnim": "P_RELOAD",
         "animSpeed": 80.0,
@@ -181,6 +186,7 @@
       "colEndAnimCnt": 46.0,
       "attackPoint": 10.0,
       "cameraShakeTime": 1.0,
+      "cameraShakeLimit": 30.0,
       "rockNum": 9,
       "animation": {
         "useAnim": "E_STOMP_ATK",

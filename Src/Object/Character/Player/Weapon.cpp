@@ -16,12 +16,10 @@
 Weapon::Weapon(CharacterBase& _chara):
 character_(_chara),
 targetTrans_(nullptr),
-followFrameNo_(0),
+followFrameNo_(),
 localPos_(Utility3D::VECTOR_ZERO),
-localRot_(Utility3D::VECTOR_ZERO),
-isDamage_(false)
+localRot_(Utility3D::VECTOR_ZERO)
 {
-	effect_ = std::make_unique<EffectController>();
 }
 
 Weapon::~Weapon(void)
@@ -37,6 +35,14 @@ void Weapon::Load(void)
 	//リソースロード
 	resMng_.Load(ResourceManager::SRC::PLAYER_HIT_SE);
 	resMng_.Load(ResourceManager::SRC::PLAYER_ATTACK_SE);
+
+	//Json読み込み
+	const auto& data = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	const std::string CHARA_STR = "Player";
+	if (data.contains("Weapon"))
+	{
+		int i = 0;
+	}
 }
 
 void Weapon::Init(void)

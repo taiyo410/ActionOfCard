@@ -217,7 +217,7 @@ void ResourceData::LoadSound(void)
 	}
 
 	//読み込んだサウンドの音量を、設定されている音量にする
-	if(volume_!=1.0f)
+	if(volume_!=UtilityCommon::RATIO_MAX)
 	{
 		ChangeVolumeSoundMem(static_cast<int>(VOLUME_MAX * volume_), handleId_);
 	}

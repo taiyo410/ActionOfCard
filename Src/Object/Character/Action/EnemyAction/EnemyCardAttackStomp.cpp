@@ -52,12 +52,9 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 		//攻撃中
 		atk_.pos = Utility3D::AddPosRotate(charaTrans.pos, charaTrans.quaRot, { 0.0f,0.0f,0.0f });
 
-		//カメラシェイク制限値
-		constexpr float CAMERA_SHAKE_LIMIT = 30.0f;
-
 		//溜めのカメラシェイク
 		atkCnt_ += SceneManager::GetInstance().GetDeltaTime();
-		scnMng_.GetCamera().lock()->SetShakeStatus(atkCnt_ / STOMP_ATK_SHAKE_CNT, CAMERA_SHAKE_LIMIT);
+		scnMng_.GetCamera().lock()->SetShakeStatus(atkCnt_ / cameraShakeTime_, cameraShakeLimit_);
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::SHAKE);
 
 		//地響き音再生
@@ -83,7 +80,6 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 		}
 		else
 		{
-			//character_.EnemyRockUpdate();
 			for (auto& rock : rock_)
 			{
 				rock->Update();
@@ -98,11 +94,8 @@ void EnemyCardAttackStomp::AttackUpdate(void)
 
 			//アニメーションループ終了
 			anim_.SetEndMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::STOMP_ATK), CharacterBase::DEFAULT_ANIM_SPEED);
-			//character_.DeleteEnemyRockCol();
-			//character_.SetIsAliveEnemyRock(false);
 
 			//敵の岩の攻撃判定終了
-			//character_.DeleteEnemyRockCol();
 			character_.DeleteAttackCol(Collider::TAG::ENEMY1, Collider::TAG::NML_ATK);
 
 			//エフェクトの終了
@@ -142,6 +135,7 @@ void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	LoadAttackStatus(data, atk_);
 	cameraShakeTime_ = data.value("cameraShakeTime", 0.0f);
 	rockNum_ = data.value("rockNum", 0.0f);
+	cameraShakeLimit_ = data.value("cameraShakeLimit", 0.0f);
 
 	//岩の生成
 	for (int i = 0; i < rockNum_; i++)

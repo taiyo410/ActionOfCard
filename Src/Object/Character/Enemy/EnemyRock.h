@@ -82,10 +82,14 @@ private:
     //水平方面への移動速度
     static constexpr float MOVE_HORIZONTAL_SPD = 20.0f;
 
+#pragma region 外部ファイル読み込み
+    //攻撃力
+    float atkPow_;
+#pragma endregion
 
-
-	//番号
-	int num_;
+#pragma region メンバー変数
+    //番号
+    int num_;
 
     //センター座標
     VECTOR centerPos_;
@@ -105,18 +109,18 @@ private:
     //目標の座標
     VECTOR goalPos_;
 
-	//モデルID
-	int modelId_;
+    //モデルID
+    int modelId_;
 
     //生存(攻撃時にセット)
     bool isAlive_;
 
-	//ダメージ処理済みフラグ
-	bool isDamaged_;
+    //ダメージ処理済みフラグ
+    bool isDamaged_;
+#pragma endregion
 
-    //攻撃力
-    float atkPow_;
-
+#pragma region メンバー関数
     //岩の攻撃力を外部から取得
     void LoadAttackPow(void);
+#pragma endregion
 };

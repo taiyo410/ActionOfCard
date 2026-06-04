@@ -128,14 +128,8 @@ void CharacterBase::LoadStatus(void)
 	const auto& data = j[statusPath]["Status"];
 
 	//データを格納
-	if (data.contains("HP"))
-	{
-		maxStatus_.hp = data["HP"];
-	}
-	if (data.contains("SPD"))
-	{
-		maxStatus_.speed = data["SPD"];
-	}
+	maxStatus_.hp = data.value("hp", 0.0f);
+	maxStatus_.speed = data.value("speed", 0.0f);
 
 	//現在ステータスを最大値にセット
 	status_ = maxStatus_;
@@ -359,35 +353,21 @@ void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 			}
 
 			//アニメーション速度の取得
-			if (animData.contains("animSpeed"))
-			{
-				animVariable.speed = animData.value("animSpeed", 0.0f);
-			}
+			animVariable.speed = animData.value("animSpeed", 0.0f);
 
 			//デタッチスピードの取得
-			if (animData.contains("detachSpeed"))
-			{
-				animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
-			}
+			animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
 
 			//ループフラグの格納
-			if (animData.contains("isLoop"))
-			{
-				animVariable.isLoop = animData.value("isLoop", false);
-			}
+			animVariable.isLoop = animData.value("isLoop", false);
 
 			//スタートステップの取得
-			if (animData.contains("startStep"))
-			{
-				animVariable.step = animData.value("startStep", 0.0f);
-			}
+			animVariable.step = animData.value("startStep", 0.0f);
 
 			//終了ステップの取得
-			if (animData.contains("endStep"))
-			{
-				animVariable.totalTime = animData.value("endStep", 0.0f);
-			}
+			animVariable.totalTime = animData.value("endStep", 0.0f);
 
+			//アクションのロードデータに格納
 			actionLoadData.animVariable = animVariable;
 		}
 
@@ -395,7 +375,6 @@ void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 		{
 			callBack(actionLoadData);
 		}
-
 	}
 }
 

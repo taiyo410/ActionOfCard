@@ -25,13 +25,33 @@
 				"x": 0,
 				"y": 20
 			}
+		},
+		"Weapon": {
+			"modelScale": 0.2,
+			"effectPlayFrameNo": 1,
+			"effectScale": 20.0,
+			"localAngleDegree": {
+				"x": 0.0,
+				"y": 190.0,
+				"z": -45.0
+			},
+			"maxVertexPos": {
+				"x": 91.0,
+				"y": 533.0,
+				"z": 19.7
+			},
+			"minVertexPos": {
+				"x": 91.0,
+				"y": -117.0,
+				"z": 19.7
+			}
 		}
 	},
 	"Enemy": {
 
 		"Status": {
-			"HP": 200,
-			"SPD": 9.0
+			"hp": 200,
+			"speed": 9.0
 		},
 		"HpBar": {
 			"barPos": {

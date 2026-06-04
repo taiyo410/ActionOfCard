@@ -35,23 +35,17 @@ public:
 
 private:
 
-    //中距離攻撃突きカウント
-    float midAtkCnt_;
+#pragma region 外部ファイル読み込み
+    float attackTime_;                      //中距離移動時間
+    float initVelocity_;                    //中距離初期速度
+    float comboTIme_;                       //中距離移動コンボ受付時間
+#pragma endregion
 
-	//中距離攻撃突きオーバーカウント
-    float midAtkOverCnt_;
+#pragma region メンバー変数
+    std::unique_ptr<Easing>easing_;         //イージング
 
-    //中距離移動時間
-	float attackTime_;
-
-	//中距離初期速度
-	float initVelocity_;
-
-	//中距離移動コンボ受付時間
-	float comboTIme_;
-
-    //イージング
-    std::unique_ptr<Easing>easing_;
-
+    float midAtkCnt_;                       //中距離攻撃突きカウント
+    float midAtkOverCnt_;                   //中距離攻撃突きオーバーカウント
+#pragma endregion
 };
 

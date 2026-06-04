@@ -42,15 +42,10 @@ public:
 	//デフォルトのアニメーションスピード
 	static constexpr float DEFAULT_ANIM_SPD = 60.0f;
 
-	//ドッジアニメーション速度
-	static constexpr float DODGE_ANIM_SPD = 80.0f;
-
-	//中距離攻撃アニメ速度
-	static constexpr float ATK_MID_ANIM_SPD = 40.0f;
-
 	//カプセル関連
 	static constexpr VECTOR CAP_LOCAL_TOP = { 0.0f, 200.0f, 0.0f };	//トップ座標
 	static constexpr VECTOR CAP_LOCAL_DOWN = { 0.0f,50.0f,0.0f };	//ダウン座標
+
 
 	/// @brief コンストラクタ
 	/// @param  
@@ -110,88 +105,42 @@ public:
 
 private:
 
-	//足音間隔
-	static constexpr float FOOT_SE_DIS = 0.2f;
+#pragma region メンバー定数
+	static constexpr float MODEL_LOCAL_DEG = 180.0f;		//プレイヤーのローカル角度
+	static constexpr VECTOR MODEL_SCL = { 1.0f,1.0f,1.0f };	//プレイヤーの大きさ
+	static constexpr int PLAYER_NUM = 0;					//プレイヤーナンバー(デッキクラスで判定用)
+	static constexpr int SPINE_FRAME_NO = 0;				//プレイヤーの腰のフレーム番号
+	static constexpr int HAND_FRAME_NO = 36;				//手のフレーム番号
+#pragma endregion
 
-	//重力の割合
-	static constexpr float GRAVITY_PER = 20.0f;
+#pragma region メンバー変数
 
-	//プレイヤー１のX座標
-	static constexpr float PLAYER_ONE_POS_X = -300.0f;
+	std::weak_ptr<Camera>camera_;			//カメラ
+	std::unique_ptr<Weapon>weapon_;			//武器オブジェクト
 
-	//座標の間隔
-	static constexpr float DISTANCE_POS = 50.0f;
+	InputManager::CONTROLL_TYPE cntl_;		//入力デバイス
+	InputManager::JOYPAD_NO padNum_;	//ゲームパッド番号
 
-	//プレイヤーのローカル角度
-	static constexpr float MODEL_LOCAL_DEG = 180.0f;
-
-	//プレイヤーの大きさ
-	static constexpr VECTOR MODEL_SCL = { 1.0f,1.0f,1.0f };
-
-	//プレイヤーの初期のZ座標
-	static constexpr float INIT_POS_Z = -500.0f;
-
-	//プレイヤーナンバー(デッキクラスで判定用)
-	static constexpr int PLAYER_NUM = 0;
-
-	//プレイヤーの腰のフレーム番号
-	static constexpr int SPINE_FRAME_NO = 0;
-
-	//プレイヤーHPバー
-	static constexpr Vector2 START_HPBAR_POS = { 10,10 };
-	static constexpr Vector2 HPBAR_SIZE = { 200,30 };
-
-	//敵ヒットSEボリューム
-	static constexpr float ENEMY_HIT_SE_VOL = 0.8f;
-
-	//カード最大枚数
-	static constexpr int CARD_NUM_MAX = 15;
-
-	//手のフレーム番号
-	static constexpr int HAND_FRAME_NO = 36;
-
-	//当たり判定を行う範囲
-	static constexpr int COL_RANGE = 1;
-
-	//入力デバイス
-	InputManager::CONTROLL_TYPE cntl_;
-
-	//ゲームパッド番号
-	InputManager::JOYPAD_NO padNum_;
-
-	//カメラ
-	std::weak_ptr<Camera>camera_;
-
-	//プレイヤー単体が持っているもの
 	int playerNum_;			//プレイヤー番号
+#pragma endregion
 
-	//状態更新
-	std::function<void(void)>stateUpdate_;
-
-	//武器オブジェクト
-	std::unique_ptr<Weapon>weapon_;
-
+#pragma region メンバー関数
 #ifdef _DEBUG
 	//デバッグ描画
 	void DrawDebug(void);
 #endif // _DEBUG
 
-	//アクションの追加
-	void AddAction(void)override;
+	void MakeColliderGeometry(void)override;	//当たり判定初期化
+	void ChangeUpdateOverDirection(void)override;//ゲームオーバーに遷移
 
-	//当たり判定初期化
-	void MakeColliderGeometry(void)override;
+	void AddAction(void)override;		//アクションの追加
+	void Action(void);					//アクション更新
 
 	//更新
 	void UpdateDirection(void) override;		//演出
 	void UpdateNormal(void)override;			//通常(ゲーム中)
 	void UpdateClearDirection(void)override;	//クリア演出
 	void UpdateOverDirection(void)override;		//ゲームオーバー
-
-	//ゲームオーバーに遷移
-	void ChangeUpdateOverDirection(void)override;
-	
-	//アクション関係
-	void Action(void);
+#pragma endregion
 };
 

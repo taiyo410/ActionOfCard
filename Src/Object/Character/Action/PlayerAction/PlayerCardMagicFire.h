@@ -49,35 +49,29 @@ private:
         ATTACK
     };
 
-    //Json読み込み
-    //炎のアクション最大時間(一定時間何も起こらなかった場合のアクション時間)
-    float actMaxTime_;
+#pragma region 外部ファイル読み込み
+    float actMaxTime_;          //炎のアクション最大時間(一定時間何も起こらなかった場合のアクション時間)
+#pragma endregion
 
+#pragma region メンバー変数
+    std::unordered_map<STATE, std::function<void(void)>>changeState_;   //遷移系
+    std::function<void(void)>updateState_;                              //更新系
 
-    //炎
-    std::shared_ptr<PlayerMagicFire>fireBall_;
+    std::shared_ptr<PlayerMagicFire>fireBall_;    //ファイアボール
 
-    //炎のローカル座標
-    VECTOR fireLocalPos_;
+    VECTOR fireLocalPos_;           //炎のローカル座標
+    VECTOR toTargetDir_;            //ターゲットへの方向
+    float actCnt_;                  //アクション時間カウント
+#pragma endregion
 
-    //ターゲットへの方向
-    VECTOR toTargetDir_;
-
-    //アクション時間カウント
-    float actCnt_;
-
-    //遷移系
-    std::unordered_map<STATE, std::function<void(void)>>changeState_;
-
-    //更新系
-    std::function<void(void)>updateState_;
-
+#pragma region メンバー関数
     //更新
-    void UpdateSpellCast(void);
-    void UpdateAttack(void);
+    void UpdateSpellCast(void);     //詠唱中
+    void UpdateAttack(void);        //攻撃
 
     //遷移
-    void ChangeSpellCast(void);
-    void ChangeAttack(void);
+    void ChangeSpellCast(void);     //詠唱中
+    void ChangeAttack(void);        //攻撃
+#pragma endregion
 };
 
