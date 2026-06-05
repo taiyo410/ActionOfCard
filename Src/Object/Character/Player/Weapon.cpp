@@ -39,10 +39,10 @@ void Weapon::Load(void)
 	//Jsonì«Ç›çûÇ›
 	const auto& data = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
 	const std::string CHARA_STR = "Player";
-	if (data.contains("Weapon"))
-	{
-		int i = 0;
-	}
+	//if (data.contains("Weapon"))
+	//{
+	//	int i = 0;
+	//}
 }
 
 void Weapon::Init(void)

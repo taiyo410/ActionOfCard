@@ -39,20 +39,24 @@ const Vector2 Vector2::operator+(const Vector2 _value)const
 {
 	return { x + _value.x,y + _value.y };
 }
+
 void Vector2::operator+=(const Vector2 _value)
 {
 	x += _value.x;
 	y += _value.y;
 }
+
 const Vector2 Vector2::operator-(const Vector2 _value)const
 {
 	return { x - _value.x,y - _value.y };
 }
+
 void Vector2::operator-=(const Vector2 _value)
 {
 	x -= _value.x;
 	y -= _value.y;
 }
+
 const Vector2 Vector2::operator*(const Vector2 _value)const
 {
 	return { x * _value.x,y * _value.y };
@@ -63,10 +67,12 @@ void Vector2::operator*=(const Vector2 _value)
 	x *= _value.x;
 	y *= _value.y;
 }
+
 const Vector2 Vector2::operator/(const Vector2 _value)const
 {
 	return { x / _value.x,y / _value.y };
 }
+
 void Vector2::operator/=(const Vector2 _value)
 {
 	x /= _value.x;

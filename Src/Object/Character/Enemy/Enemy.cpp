@@ -239,7 +239,6 @@ void Enemy::ChangeUpdateClearDirection(void)
 
 void Enemy::MakeColliderGeometry(void)
 {
-
 	//カプセル
 	std::unique_ptr<Geometry>geo = std::make_unique<Capsule>(trans_.pos, trans_.quaRot, CAP_LOCAL_TOP, CAP_LOCAL_DOWN, CAP_RADIUS);
 	MakeCollider(TAG_PRIORITY::BODY, { tag_ }, std::move(geo));
@@ -259,11 +258,11 @@ void Enemy::MakeColliderGeometry(void)
 }
 void Enemy::UpdateNormal(void)
 {
-	//ロジックの更新
-	logic_->Update();
+	////ロジックの更新
+	//logic_->Update();
 
-	//アクションの更新
-	action_->Update();
+	////アクションの更新
+	//action_->Update();
 
 	//アニメーションの更新
 	animationController_->Update();

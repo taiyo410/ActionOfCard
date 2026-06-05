@@ -23,15 +23,26 @@ PlayerCardMagicFire::~PlayerCardMagicFire(void)
 
 void PlayerCardMagicFire::Load(void)
 {
+	fireBall_->Load();
 }
 
 void PlayerCardMagicFire::InitAttack(void)
 {
+	//アニメーションの再生
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE),animVar_);
+
+	//攻撃座標をセット
 	const Transform& trans = character_.GetTransform();
 	atk_.pos = Utility3D::AddPosRotate(trans.pos, trans.quaRot, fireLocalPos_);
+
+	//敵への方向をセット
 	toTargetDir_ = actionCtrl_.GetInput().GetToTargetDir();
+
 	actCnt_ = 0.0f;
+
+	//炎を出現させる
+	fireBall_->Init();
+	character_.DrawFireBall(fireBall_);
 	changeState_[STATE::SPELL_CAST]();
 }
 
@@ -80,7 +91,6 @@ void PlayerCardMagicFire::UpdateSpellCast(void)
 
 void PlayerCardMagicFire::UpdateAttack(void)
 {
-
 	//アクション時間のカウント
 	actCnt_ += scnMng_.GetDeltaTime();
 
@@ -101,8 +111,7 @@ void PlayerCardMagicFire::ChangeSpellCast(void)
 
 void PlayerCardMagicFire::ChangeAttack(void)
 {
-	//炎を出現させる
-	fireBall_->Init();
-	character_.DrawFireBall(fireBall_);
+	//炎の当たり判定作成
+	fireBall_->MakeFireBallCollider();
 	updateState_ = [this]() {UpdateAttack(); };
 }

@@ -139,7 +139,7 @@ private:
 	static constexpr float NORMAL_MULTI = 1.0f;
 
 	//エフェクト
-	std::map<EFF_TYPE, EffectData> effects_;	
+	std::map<EFF_TYPE, EffectData> effects_;
 
 	/// @brief もう一度再生
 	/// @param _effType もう一度再生させるエフェクトの種類

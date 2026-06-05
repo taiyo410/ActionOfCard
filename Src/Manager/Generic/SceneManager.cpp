@@ -96,6 +96,9 @@ void SceneManager::Update(void)
 
 	//シーンごとの更新
 	scenes_.back()->Update();
+
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
 }
 
 void SceneManager::Draw(void)
@@ -109,9 +112,6 @@ void SceneManager::Draw(void)
 
 	// カメラ設定
 	camera_->SetBeforeDraw();
-
-	// Effekseerにより再生中のエフェクトを更新する。
-	UpdateEffekseer3D();
 
 	// 描画
 	for (auto& scene : scenes_)

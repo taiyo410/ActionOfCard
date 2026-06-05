@@ -24,7 +24,6 @@ bool Vector2F::IsSameVector2F(const Vector2F value1, const Vector2F value2)
 	return false;
 }
 
-
 const Vector2F Vector2F::operator+(const Vector2F _value)const
 {
 	return { x + _value.x,y + _value.y };

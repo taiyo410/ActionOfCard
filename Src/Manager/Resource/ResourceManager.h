@@ -82,6 +82,7 @@ public:
 		E_DEATH_EFF,				//敵の死亡エフェクト
 		RELOAD_EFF,					//リロードエフェクト
 		RELOAD_END_EFF,				//リロード終了エフェクト
+		FIRE_BALL_EFF,				//炎のエフェクト
 
 		//サウンド
 		//BGM
@@ -223,11 +224,8 @@ private:
 	//リソースのタイプごとの文字列
 	std::unordered_map<std::string, RES_INFO> resTypeStr_;
 
-	//タイプとパスの結びつけ
-	std::unordered_map<ResourceData::TYPE, std::wstring>typePath_;
-
 	//データロード関数
-	std::unordered_map<ResourceData::TYPE, std::function<void(const nlohmann::json _data)>> loadDataFunc_;
+	std::unordered_map<ResourceData::TYPE, std::function<void(const RES_INFO _info,const nlohmann::json _data)>> loadDataFunc_;
 
 	// デフォルトコンストラクタをprivateにして、
 	// 外部から生成できない様にする
@@ -242,17 +240,17 @@ private:
 	ResourceData& _Load(SRC src);
 
 	//外部ファイルからのロード	
-	const RESOURCE_COMMON_PARAM GetResourceParameter(const ResourceData::TYPE _type, const nlohmann::json& _data );		//共通パラメータの取得
+	const RESOURCE_COMMON_PARAM GetResourceParameter(const RES_INFO _info, const nlohmann::json& _data );		//共通パラメータの取得
 
 	//handleIDしか使用しない種類のロード
-	void LoadResourceCommon(const ResourceData::TYPE _type, const nlohmann::json& _data);
+	void LoadResourceCommon(const RES_INFO _info, const nlohmann::json& _data);
 
 	//複数画像のロード
-	void LoadResourceImages(const ResourceData::TYPE _type, const nlohmann::json& _data);
+	void LoadResourceImages(const RES_INFO _info, const nlohmann::json& _data );
 
 	//サウンドのロード
-	void LoadResourceSound(const ResourceData::TYPE _type, const nlohmann::json& _data);
+	void LoadResourceSound(const RES_INFO _info, const nlohmann::json& _data );
 
 	//シェーダのロード
-	void LoadResourceShader(const ResourceData::TYPE _type, const nlohmann::json& _data);
+	void LoadResourceShader(const RES_INFO _info, const nlohmann::json& _data );
 };	

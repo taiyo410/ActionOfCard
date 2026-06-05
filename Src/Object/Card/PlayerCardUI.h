@@ -1,14 +1,14 @@
 #pragma once
-#include<functional>
-#include<map>
-#include<memory>
-#include<vector>
-#include<list>
-#include"CardUiBase.h"
-#include"./CardBase.h"
+#include <functional>
+#include <map>
+#include <memory>
+#include <vector>
+#include <list>
+#include "CardUiBase.h"
+#include "./CardBase.h"
 #include "../../Common/Vector2.h"
 #include "../../Common/Vector2F.h"
-#include"../Application.h"
+#include "../Application.h"
 
 class CardUI;
 class CardUIController;
@@ -53,9 +53,6 @@ public:
 #endif // _DEBUG
 
 private:
-
-	//シェーダファイルのパス
-	const std::wstring LINE_HP_BAR_PS_PATH = L"LineHpBarPS.cso";
 
 	//楕円の半径
 	static constexpr float RADIUS_X = 186.0f;	//横半径

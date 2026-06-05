@@ -70,6 +70,7 @@ ResourceManager::ResourceManager(void):
 		{"E_DEATH_EFF" ,SRC::E_DEATH_EFF},
 		{"RELOAD_EFF" ,SRC::RELOAD_EFF},
 		{"RELOAD_END_EFF" ,SRC::RELOAD_END_EFF},
+		{"FIRE_BALL_EFF" ,SRC::FIRE_BALL_EFF},
 		//BGM
 		{"TITLE_BGM",SRC::TITLE_BGM},
 		{"GAME_BGM",SRC::GAME_BGM},
@@ -123,27 +124,16 @@ ResourceManager::ResourceManager(void):
 		{"vertexShader",{TYPE::VERTEX_SHADER,Application::PATH_SHADER }},
 	};
 
-	typePath_ = {
-		{TYPE::MODEL,Application::PATH_MODEL},
-		{TYPE::IMG,Application::PATH_IMAGE},
-		{TYPE::IMGS,Application::PATH_IMAGE},
-		{TYPE::EFFEKSEER,Application::PATH_EFFECT},
-		{TYPE::SOUND,Application::PATH_SOUND},
-		{ TYPE::JSON,Application::PATH_JSON },
-		{TYPE::PIXEL_SHADER,Application::PATH_SHADER },
-		{TYPE::VERTEX_SHADER,Application::PATH_SHADER }
-	};
-
 	loadDataFunc_ = {
-		{TYPE::IMG,[this](const nlohmann::json _data) {LoadResourceCommon(TYPE::IMG,_data); }},
-		{TYPE::IMGS,[this](const nlohmann::json _data) {LoadResourceImages(TYPE::IMGS,_data); }},
-		{TYPE::MODEL,[this](const nlohmann::json _data) {LoadResourceCommon(TYPE::MODEL,_data); }},
-		{TYPE::SOUND,[this](const nlohmann::json _data) {LoadResourceSound(TYPE::SOUND,_data); }},
-		{TYPE::FONT,[this](const nlohmann::json _data) {LoadResourceCommon(TYPE::FONT,_data); }},
-		{TYPE::EFFEKSEER,[this](const nlohmann::json _data) {LoadResourceCommon(TYPE::EFFEKSEER,_data); }},
-		{TYPE::VERTEX_SHADER,[this](const nlohmann::json _data) {LoadResourceShader(TYPE::VERTEX_SHADER,_data); }},
-		{TYPE::PIXEL_SHADER,[this](const nlohmann::json _data) {LoadResourceShader(TYPE::PIXEL_SHADER,_data); }},
-		{TYPE::JSON,[this](const nlohmann::json _data) {LoadResourceCommon(TYPE::JSON,_data); }},
+		{TYPE::IMG,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceCommon(_info,_data); }},
+		{TYPE::IMGS,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceImages(_info,_data); }},
+		{TYPE::MODEL,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceCommon(_info,_data); }},
+		{TYPE::SOUND,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceSound(_info,_data); }},
+		{TYPE::FONT,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceCommon(_info,_data); }},
+		{TYPE::EFFEKSEER,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceCommon(_info,_data); }},
+		{TYPE::VERTEX_SHADER,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceShader(_info,_data); }},
+		{TYPE::PIXEL_SHADER,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceShader(_info,_data); }},
+		{TYPE::JSON,[this](const RES_INFO _info,const nlohmann::json _data) {LoadResourceCommon(_info,_data); }},
 	};
 }
 
@@ -164,7 +154,7 @@ void ResourceManager::Init(void)
 			{
 				//タイプを読み込み、対応したロード関数を呼ぶ
 				TYPE type = str.second.resType;
-				loadDataFunc_[type](resData);
+				loadDataFunc_[type](str.second,resData);
 			}
 		}
 	}
@@ -290,12 +280,12 @@ ResourceData& ResourceManager::_Load(SRC src)
 
 }
 
-const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParameter(const TYPE _type, const nlohmann::json& _data)
+const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParameter(const RES_INFO _info, const nlohmann::json& _data )
 {
 	RESOURCE_COMMON_PARAM resParam;
-	resParam.type = _type;
+	resParam.type = _info.resType;
 	resParam.src = resStr_[_data["name"]];
-	resParam.path = typePath_[_type] + UtilityCommon::GetWStringFromString(_data["handle"]);
+	resParam.path = _info.typePath + UtilityCommon::GetWStringFromString(_data["handle"]);
 
 	//サウンドだった場合のパス
 	if (resParam.type == TYPE::SOUND)
@@ -313,12 +303,12 @@ const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParamet
 	return resParam;
 }
 
-void ResourceManager::LoadResourceCommon(const TYPE _type, const nlohmann::json& _data)
+void ResourceManager::LoadResourceCommon(const RES_INFO _info, const nlohmann::json& _data )
 {
 	std::unique_ptr<ResourceData> res;
 
 	//共通パラメータの取得
-	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_type, _data);
+	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_info, _data);
 
 	//リソースオブジェクト生成
 	res = std::make_unique<ResourceData>(parameter.type, parameter.path);
@@ -327,12 +317,12 @@ void ResourceManager::LoadResourceCommon(const TYPE _type, const nlohmann::json&
 	resourcesMap_.emplace(parameter.src, std::move(res));
 }
 
-void ResourceManager::LoadResourceImages(const TYPE _type, const nlohmann::json& _data)
+void ResourceManager::LoadResourceImages(const RES_INFO _info, const nlohmann::json& _data )
 {
 	std::unique_ptr<ResourceData> res;
 
 	//共通パラメータの取得
-	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_type, _data);
+	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_info, _data);
 
 	//読み込み
 	int numX = _data.value("numX",0);
@@ -348,12 +338,12 @@ void ResourceManager::LoadResourceImages(const TYPE _type, const nlohmann::json&
 	resourcesMap_.emplace(parameter.src, std::move(res));
 }
 
-void ResourceManager::LoadResourceSound(const TYPE _type, const nlohmann::json& _data)
+void ResourceManager::LoadResourceSound(const RES_INFO _info, const nlohmann::json& _data )
 {
 	std::unique_ptr<ResourceData> res;
 
 	//共通パラメータの取得
-	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_type, _data);
+	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_info, _data);
 
 	//サウンドの種類によってパスを変える
 	ResourceData::SOUND_TYPE soundType = ResourceData::SOUND_TYPE::MAX;
@@ -381,12 +371,12 @@ void ResourceManager::LoadResourceSound(const TYPE _type, const nlohmann::json& 
 	resourcesMap_.emplace(parameter.src, std::move(res));
 }
 
-void ResourceManager::LoadResourceShader(const TYPE _type, const nlohmann::json& _data)
+void ResourceManager::LoadResourceShader(const RES_INFO _info, const nlohmann::json& _data )
 {
 	std::unique_ptr<ResourceData> res;
 
 	//共通パラメータの取得
-	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_type,_data);
+	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_info,_data);
 
 	//定数バッファサイズ
 	int constBufNum = 0;

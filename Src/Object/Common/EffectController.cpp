@@ -245,18 +245,6 @@ const bool EffectController::IsEnd(const EFF_TYPE _effType, const int _playId)
 	return false;
 }
 
-//const int EffectController::GetPlayNum(const EFF_TYPE _effType)
-//{
-//	//エフェクトの要素が存在するか また 再生中のエフェクトが存在するか
-//	if (!effects_.count(_effType))
-//	{
-//		//そもそもその要素がなかった
-//		return -1;
-//	}
-//
-//	return effects_[_effType].playNum;
-//}
-
 void EffectController::RePlay(const EFF_TYPE _effType, const int _playId)
 {
 	//再生中のエフェクト参照の取得
@@ -267,9 +255,6 @@ void EffectController::RePlay(const EFF_TYPE _effType, const int _playId)
 	VECTOR rot = it.quaRot.ToEuler();
 	VECTOR pos = it.pos;
 	float speed = it.speedMulti;
-
-	//削除
-	//Delete(_effType, _playId);
 
 	//プレイハンドルを設定
 	it.playId = PlayEffekseer3DEffect(effects_[_effType].resId);

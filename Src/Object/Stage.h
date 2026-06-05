@@ -56,12 +56,6 @@ public:
 
 private:
 
-    //頂点シェーダのパス名
-    const std::wstring VERTEX_SHADER_PATH = L"StageVS.cso";
-
-    //ピクセルシェーダのパス名
-    const std::wstring PIXEL_SHADER_PATH = L"StagePS.cso";
-
     //壁の情報
     Transform wallTrans_;
 

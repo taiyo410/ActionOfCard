@@ -1,8 +1,8 @@
 {
 	"Player": {
 		"Status": {
-			"HP": 200,
-			"SPD": 10
+			"hp": 200,
+			"speed": 10
 		},
 		"HpBar": {
 			"barPos": {

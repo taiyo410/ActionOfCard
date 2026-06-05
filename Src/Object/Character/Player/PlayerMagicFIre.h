@@ -45,6 +45,10 @@ public:
 	/// @return 炎の生存状態
 	const bool GetIsAlive(void) { return isAlive_; }
 
+	/// @brief 炎の当たり判定を作成
+	/// @param  
+	void MakeFireBallCollider(void);
+
 private:
 
 #pragma region 外部ファイル読み込み
