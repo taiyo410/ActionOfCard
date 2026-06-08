@@ -54,7 +54,7 @@ void Enemy::Load(void)
 		Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
 
 	//アニメーションコントローラーの生成
-	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
+	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
 
 	//エフェクト
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
@@ -118,7 +118,7 @@ void Enemy::UpdateDirection(void)
 	UpdateRoarDirection();
 
 	//アニメーションの更新
-	animationController_->Update();
+	animCtrl_->Update();
 
 	//Transformの更新
 	trans_.quaRot = charaRot_.playerRotY_;
@@ -127,11 +127,11 @@ void Enemy::UpdateDirection(void)
 
 void Enemy::UpdateClearDirection(void)
 {
-	animationController_->Update();
+	animCtrl_->Update();
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
 	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, 0, effPos);
 	effect_->Update();
-	if (animationController_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= DEATH_BLAST_ANIM_STEP)
+	if (animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= DEATH_BLAST_ANIM_STEP)
 	{
 
 		if (modelScl_ <= 0.0f)
@@ -148,7 +148,7 @@ void Enemy::UpdateClearDirection(void)
 void Enemy::UpdateOverDirection(void)
 {
 	constexpr float ANIM_SPD_SCL = 0.2f;
-	animationController_->Update(ANIM_SPD_SCL);
+	animCtrl_->Update(ANIM_SPD_SCL);
 }
 
 void Enemy::Draw(void)
@@ -204,8 +204,8 @@ void Enemy::UpdateRoarDirection(void)
 	if (scnMng_.GetCamera().lock()->GetDirectionMode() == Camera::DIRECTION_MODE::ENEMY_ROAR_VIEW)
 	{
 		isRoar_ = false;
-		animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::ROAR_ATK), roarAnim_);
-		float roarAnimStep = animationController_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ROAR_ATK));
+		animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::ROAR_ATK), roarAnim_);
+		float roarAnimStep = animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ROAR_ATK));
 		const float ROAR_TIME = ROAR_ANIM_END_ANIM - ROAR_ANIM_SPEED;
 		if (roarAnimStep >= ROAR_ANIM_START_ANIM)
 		{
@@ -221,7 +221,7 @@ void Enemy::UpdateRoarDirection(void)
 	else
 	{
 		isRoar_ = false;
-		animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::IDLE), idleAnim_);
+		animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::IDLE), idleAnim_);
 	}
 }
 
@@ -233,7 +233,7 @@ void Enemy::ChangeUpdateClearDirection(void)
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
 	effect_->Play(EffectController::EFF_TYPE::E_DEATH, effPos, trans_.quaRot, DEATH_EFF_SCL_VEC);
-	animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
+	animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
 	CharacterBase::ChangeUpdateClearDirection();
 }
 
@@ -265,7 +265,7 @@ void Enemy::UpdateNormal(void)
 	//action_->Update();
 
 	//アニメーションの更新
-	animationController_->Update();
+	animCtrl_->Update();
 
 	//回転の同期
 	UpdatePost();
@@ -276,7 +276,7 @@ void Enemy::UpdateNormal(void)
 }
 void Enemy::AddAction(void)
 {
-	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animationController_, InputManager::JOYPAD_NO::PAD1);
+	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, InputManager::JOYPAD_NO::PAD1);
 	using ACTION_TYPE = ActionController::ACTION_TYPE;
 	//使用するアクションを追加
 	action_->AddAction({ ACTION_TYPE::IDLE,ACTION_TYPE::MOVE

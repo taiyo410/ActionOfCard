@@ -112,18 +112,25 @@ public:
 	/// @param _speedMultiplier 変更後の速度倍率
 	void SetSpeed(const EFF_TYPE _effType, const int _playId, const float _speedMultiplier);
 
+	/// @brief エフェクトのカラー設定
+	/// @param _effType エフェクトの種類
+	/// @param _playId 再生ID
+	/// @param _color 指定したいエフェクトの色
+	void SetColor(const EFF_TYPE _effType, const int _playId, const INT4 _color);
+
 private:
 
 	//プレイデータ
 	struct PlayData
 	{
-		int playId = -1;			//再生データ
-		bool isLoop = false;		//ループの有無
-		VECTOR pos = {};			//座標
-		Quaternion quaRot = {};		//回転
-		VECTOR scl = {};			//大きさ
-		float speedMulti;			//速度倍率
-		bool isDelete = false;		//削除フラグ
+		int playId = -1;						//再生データ
+		bool isLoop = false;					//ループの有無
+		VECTOR pos = {};						//座標
+		Quaternion quaRot = {};					//回転
+		VECTOR scl = {};						//大きさ
+		float speedMulti;						//速度倍率
+		FLOAT4 col = { 1.0f,1.0f,1.0f,1.0f };	//エフェクトの色
+		bool isDelete = false;					//削除フラグ
 	};
 
 	//エフェクトデータ

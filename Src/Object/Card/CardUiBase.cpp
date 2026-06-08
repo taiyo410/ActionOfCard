@@ -33,7 +33,8 @@ reloadPer_()
 {
 	cardTypeMap_ = {
 		{"Attack", CardBase::CARD_TYPE::ATTACK},
-		{"Fire", CardBase::CARD_TYPE::FIRE}
+		{"Fire", CardBase::CARD_TYPE::FIRE},
+		{"Thunder", CardBase::CARD_TYPE::THUNDER},
 	};
 }
 
@@ -54,7 +55,6 @@ void CardUIBase::ChangeUsedActionCard(void)
 	{
 		act->ChangeUsedCard();
 	}
-
 }
 
 void CardUIBase::ChangeReactActionCard(void)
@@ -138,7 +138,7 @@ void CardUIBase::Init(void)
 void CardUIBase::Update(void)
 {
 	//カード状態
-	cardUpdate_();
+	updateCardUI_();
 
 	//見えている部分だけ更新
 	UpdateDrawCardUI();
@@ -306,8 +306,12 @@ const int CardUIBase::GetTypeImg(const CardBase::CARD_STATUS _status)
 	case CardBase::CARD_TYPE::FIRE:
 		typeImg = fireCardImg_;
 		break;
+	case CardBase::CARD_TYPE::THUNDER:
+		typeImg = thunderCardImg_;
+		break;
 	case CardBase::CARD_TYPE::RELOAD:
 		typeImg = reloadCardImg_;
+		break;
 	}
 	return typeImg;
 }

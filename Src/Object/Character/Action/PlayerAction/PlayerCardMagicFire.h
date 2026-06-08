@@ -54,10 +54,10 @@ private:
 #pragma endregion
 
 #pragma region メンバー変数
+    std::shared_ptr<PlayerMagicFire>fireBall_;    //ファイアボール
+
     std::unordered_map<STATE, std::function<void(void)>>changeState_;   //遷移系
     std::function<void(void)>updateState_;                              //更新系
-
-    std::shared_ptr<PlayerMagicFire>fireBall_;    //ファイアボール
 
     VECTOR fireLocalPos_;           //炎のローカル座標
     VECTOR toTargetDir_;            //ターゲットへの方向

@@ -54,7 +54,8 @@ public:
 		GAME_OVER_IMG,				//ゲームオーバーイメージ
 		GAME_CLEAR_IMG,
 		PLAYER_ATK_CARD_IMG,		//番号なしアタックカード
-		PLAYER_FIRE_CARD_IMG,		//番号なしアタックカード
+		PLAYER_FIRE_CARD_IMG,		//番号なしファイアカード
+		PLAYER_THUNDER_CARD_IMG,		//番号なしサンダーカード
 		ENEMY_ATK_CARD_IMG,			//敵番号なしアタックカード
 		RELOAD_CARD_IMG,			//リロードカード
 		RELOAD_GAUGE,				//リロードゲージ
@@ -83,6 +84,7 @@ public:
 		RELOAD_EFF,					//リロードエフェクト
 		RELOAD_END_EFF,				//リロード終了エフェクト
 		FIRE_BALL_EFF,				//炎のエフェクト
+		THUNDER_EFF,				//炎のエフェクト
 
 		//サウンド
 		//BGM

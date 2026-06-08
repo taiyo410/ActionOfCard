@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Character\Player\PlayerMagicThunder.cpp" />
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicThunder.cpp" />
     <ClCompile Include="Src\Object\Character\Base\ItemBase.cpp" />
     <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackStomp.cpp" />
     <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackJump.cpp" />
@@ -122,6 +124,8 @@
     <ClCompile Include="Src\Manager\Generic\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Character\Player\PlayerMagicThunder.h" />
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicThunder.h" />
     <ClInclude Include="Src\Object\Character\Base\ItemBase.h" />
     <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackStomp.h" />
     <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardAttackJump.h" />

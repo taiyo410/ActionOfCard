@@ -4,6 +4,19 @@
 			"hp": 200,
 			"speed": 10
 		},
+		"UseAction": [
+			"idle",
+			"run",
+			"react",
+			"dodge",
+			"cardAttack1_Middle",
+			"cardAttack1_Short",
+			"cardAttack2",
+			"cardAttack3",
+			"cardMagicFire",
+			"cardMagicThunder",
+			"cardReload"
+		],
 		"HpBar": {
 			"barPos": {
 				"x": 26,

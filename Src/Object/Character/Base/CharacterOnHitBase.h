@@ -86,7 +86,7 @@ protected:
 	Collider::TAG tag_;
 
 	//キャラクターの情報
-	CharacterBase& charaObj_;
+	CharacterBase& character_;
 
 	//当たった箇所
 	HIT_POINT hitPoint_;

@@ -29,6 +29,7 @@ class PlayerCardAttackOneShort;
 class PlayerCardAttackTwo;
 class PlayerCardAttackThree;
 class PlayerCardMagicFire;
+class PlayerCardMagicThunder;
 class EnemyCardAttackJump;
 class EnemyCardAttackStomp;
 
@@ -54,6 +55,7 @@ public:
 		CARD_ATTACK_THREE,	//カードアクション
 		CARD_RELOAD,	//カードリロード
 		CARD_MAGIC_FIRE,//カードによる炎魔法
+		CARD_MAGIC_THUNDER,//カードによる炎魔法
 		CARD_ATTACK_ENEMY_JUMP,
 		CARD_ATTACK_ENEMY_STOMP,
 		DODGE,
@@ -175,6 +177,7 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//プレイヤーナンバー(カードデッキで判定する用)
 	static constexpr int PLAYER_NUM = 0;
 
@@ -187,6 +190,8 @@ private:
 
 	//プレイヤーに攻撃を仕掛けるプレイヤーとの距離
 	static constexpr float ATK_DISTANCE = 250.0f;
+
+#pragma endregion
 
 	// シーンマネージャ参照
 	SceneManager& scnMng_;
@@ -210,7 +215,7 @@ private:
 	CardPresenter& cardPresent_;
 
 	//オブジェクト(当たり判定用)
-	CharacterBase& charaObj_;
+	CharacterBase& character_;
 
 	//モデル情報
 	Transform& trans_;
@@ -243,6 +248,9 @@ private:
 
 	//サブアクション(カードセレクトなど同時並行となるもの)
 	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>subAction_;
+
+	//アクションの文字列の対応表
+	std::unordered_map<std::string, ACTION_TYPE>actionStrTable_;
 
 	//カード選択
 	void CardMove(void);

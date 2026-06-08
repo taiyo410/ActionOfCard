@@ -114,12 +114,26 @@
       "fireRadius": 100.0,
       "moveSpeed": 20.0,
       "actionMaxTime": 4.0,
-      "effectScale": 20.0,
+      "effectScale": 100.0,
+      "effectDeleteTime": 0.3,
       "fireStartLocalPos": {
         "x": 0.0,
         "y": 100.0,
         "z": 20.0
       },
+      "animation": {
+        "useAnim": "P_FIRE_MAGIC",
+        "animSpeed": 20.0,
+        "detachSpeed": 5.0,
+        "isLoop": false,
+        "startStep": 0.0,
+        "endStep": 36.0
+      }
+    },
+    "ThunderMagic": {
+      "colStartAnimCnt": 30.0,
+      "bufferFrame": 20.0,
+      "attackPoint": 20.0,
       "animation": {
         "useAnim": "P_FIRE_MAGIC",
         "animSpeed": 20.0,

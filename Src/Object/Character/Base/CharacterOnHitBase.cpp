@@ -12,7 +12,7 @@
 
 CharacterOnHitBase::CharacterOnHitBase(CharacterBase& _chara, VECTOR& _movedPos,VECTOR& _moveDiff,
 	ActionController& _action, std::map<ObjectBase::TAG_PRIORITY, std::shared_ptr<Collider>>& _colParam, Transform& _trans):
-	charaObj_(_chara),
+	character_(_chara),
 	movedPos_(_movedPos),
 	moveDiff_(_moveDiff),
 	colParam_(_colParam),

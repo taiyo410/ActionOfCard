@@ -62,9 +62,6 @@ void EffectController::Add(const int _effHandle, const EFF_TYPE _effType)
 	//リソースID
 	effect.resId = _effHandle;
 
-	//個数初期化
-	//effect.playNum = 0;
-
 	//追加
 	effects_.emplace(_effType, effect);
 }
@@ -173,6 +170,22 @@ void EffectController::SetSpeed(const EFF_TYPE _effType, const int _playId, cons
 	//速度の再設定
 	SetSpeedPlayingEffekseer3DEffect(it.playId, _speedMultiplier);
 	it.speedMulti = _speedMultiplier;
+}
+
+void EffectController::SetColor(const EFF_TYPE _effType, const int _playId, const INT4 _color)
+{
+	if (!IsExistPlayData(_effType, _playId))
+	{
+		//その要素がなかった
+		return;
+	}
+
+	//playDataの参照を取得
+	PlayData& it = FindPlayData(_effType, _playId).value().get();
+
+	//指定エフェクトのカラー変更
+	SetColorPlayingEffekseer3DEffect(it.playId, _color.x, _color.y, _color.z, _color.w);
+	
 }
 
 void EffectController::Stop(const EFF_TYPE _effType, const int _playId)

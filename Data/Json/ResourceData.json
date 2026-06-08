@@ -130,6 +130,10 @@
         "handle": "PlayerFireCard.png"
       },
       {
+        "name": "PLAYER_THUNDER_CARD_IMG",
+        "handle": "PlayerThunderCard.png"
+      },
+      {
         "name": "ENEMY_ATK_CARD_IMG",
         "handle": "EnemyAttackCard.png"
       },
@@ -232,6 +236,10 @@
       {
         "name": "FIRE_BALL_EFF",
         "handle": "FireBall/FireBall.efkefc"
+      },
+      {
+        "name": "THUNDER_EFF",
+        "handle": "Thunder/Thunder.efkproj"
       }
     ],
 

@@ -22,12 +22,12 @@ CharacterBase::CharacterBase(void) :
 	moveDiff_(Utility3D::VECTOR_ZERO),
 	soundMng_(SoundManager::GetInstance()),
 	isMoveable_(true),
-	updatePhase_(UPDATE_PHASE::NONE),
+	phase_(UPDATE_PHASE::NONE),
 	uiMng_(UIManager::GetInstance()),
 	hitStopFrame_(HIT_STOP_FRAME),
 	isEndClearDirect_(false)
 {
-	changeUpdate_ = {
+	changePhase_ = {
 		{UPDATE_PHASE::NONE,[this]() {ChangeUpdateNone(); }},
 		{UPDATE_PHASE::NORMAL,[this]() {ChangeUpdateNormal(); }},
 		{UPDATE_PHASE::DIRECTION, [this]() {ChangeUpdateDirection(); }},
@@ -62,7 +62,7 @@ CharacterBase::~CharacterBase(void)
 
 void CharacterBase::Update(void)
 {
-	phazeUpdate_();
+	updatePhase_();
 }
 
 void CharacterBase::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)
@@ -187,15 +187,15 @@ void CharacterBase::SetUsedCard(void)
 
 void CharacterBase::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 {
-	if (updatePhase_ == _phase)return;
-	updatePhase_ = _phase;
-	changeUpdate_[updatePhase_]();
+	if (phase_ == _phase)return;
+	phase_ = _phase;
+	changePhase_[phase_]();
 }
 
 void CharacterBase::ChangeDirectToNormal(void)
 {
-	animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::IDLE),idleAnim_);
-	phazeUpdate_ = [this]() {UpdateNormal(); };
+	animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::IDLE),idleAnim_);
+	updatePhase_ = [this]() {UpdateNormal(); };
 }
 
 void CharacterBase::RegisterDrawableRocks(const std::weak_ptr<EnemyRock> _rock)
@@ -225,12 +225,12 @@ void CharacterBase::DeleteFireBall(void)
 
 void CharacterBase::ChangeUpdateClearDirection(void)
 {
-	phazeUpdate_ = [this]() {UpdateClearDirection(); };
+	updatePhase_ = [this]() {UpdateClearDirection(); };
 }
 
 void CharacterBase::ChangeUpdateOverDirection(void)
 {
-	phazeUpdate_ = [this]() {UpdateOverDirection(); };
+	updatePhase_ = [this]() {UpdateOverDirection(); };
 }
 
 void CharacterBase::MoveDirFromInput(void)
@@ -349,7 +349,7 @@ void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 			if (useSrc != ResourceManager::SRC::NONE)
 			{
 				//アニメーションに追加
-				animationController_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
+				animCtrl_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
 			}
 
 			//アニメーション速度の取得
@@ -392,20 +392,20 @@ void CharacterBase::UpdateHitStop(void)
 
 void CharacterBase::ChangeUpdateNone(void)
 {
-	phazeUpdate_ = [this]() {UpdateNone(); };
+	updatePhase_ = [this]() {UpdateNone(); };
 }
 
 void CharacterBase::ChangeUpdateNormal(void)
 {
-	phazeUpdate_ = [this]() {UpdateNormal(); };
+	updatePhase_ = [this]() {UpdateNormal(); };
 }
 
 void CharacterBase::ChangeUpdateDirection(void)
 {
-	phazeUpdate_ = [this]() { UpdateDirection(); };
+	updatePhase_ = [this]() { UpdateDirection(); };
 }
 
 void CharacterBase::ChangeUpdateHitStop(void)
 {
-	phazeUpdate_ = [this]() { UpdateHitStop(); };
+	updatePhase_ = [this]() { UpdateHitStop(); };
 }

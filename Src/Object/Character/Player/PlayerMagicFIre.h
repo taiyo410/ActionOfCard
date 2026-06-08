@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include "../Base/ItemBase.h"
 
 class PlayerMagicFire :
@@ -7,6 +8,12 @@ class PlayerMagicFire :
 {
 
 public:
+
+	enum class STATE
+	{
+		NORMAL,
+		FADE_OUT
+	};
 
     /// @brief コンストラクタ
     /// @param  
@@ -49,6 +56,10 @@ public:
 	/// @param  
 	void MakeFireBallCollider(void);
 
+	/// @brief 状態遷移
+	/// @param _state 遷移したい状態
+	void ChangeDelete(void);
+
 private:
 
 #pragma region 外部ファイル読み込み
@@ -57,12 +68,26 @@ private:
 	float colRadius_;		//当たり判定の半径
 	VECTOR& dir_;			//方向
 	float fireBallEffScl_;	//エフェクトのスケール
+	float effDeleteTime_;	//エフェクトの消去時間
 #pragma endregion
 
 #pragma region メンバー変数
-	bool isAlive_;			//生存フラグ
-	VECTOR& startPos_;		//攻撃初期位置
-	int fireEffPlayId_;		//エフェクトプレイID
+	//状態遷移
+	std::function<void(void)>updateState_;			//状態更新
+
+	bool isAlive_;				//生存フラグ
+	VECTOR& startPos_;			//攻撃初期位置
+	int fireEffPlayId_;			//エフェクトプレイID
+	float effAlpha_;			//エフェクトのブレンド描画
+	float effDeleteScl_;		//エフェクト削除時のスケールダウン用
+	float effDeleteAlpha_;		//エフェクト削除時のアルファ値
+	float effDeleteCnt_;		//エフェクトの消去カウント
 #pragma endregion
+
+#pragma region 状態更新
+	void UpdateNormal(void);
+	void UpdateFadeOut(void);
+#pragma endregion
+
 };
 

@@ -50,6 +50,7 @@ void PlayerCardUI::Load(void)
 	//リソースのロード
 	atkCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_ATK_CARD_IMG).handleId_;
 	fireCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_FIRE_CARD_IMG).handleId_;
+	thunderCardImg_=resMng_.Load(ResourceManager::SRC::PLAYER_THUNDER_CARD_IMG).handleId_;
 
 	reloadCardImg_ = resMng_.Load(ResourceManager::SRC::RELOAD_CARD_IMG).handleId_;
 	reloadGauge_ = resMng_.Load(ResourceManager::SRC::RELOAD_GAUGE).handleId_;
@@ -253,7 +254,7 @@ void PlayerCardUI::ChangeNone(void)
 		card->SetStartAndGoalAngle(0.0f);
 	}
 
-	cardUpdate_ = [this]() {UpdateNone(); };
+	updateCardUI_ = [this]() {UpdateNone(); };
 }
 
 void PlayerCardUI::ChangeLeft(void)
@@ -302,7 +303,7 @@ void PlayerCardUI::ChangeLeft(void)
 	//サウンドを再生
 	soundMng_.Play(ResourceManager::SRC::CARD_MOVE_SE, SoundManager::PLAYTYPE::BACK);
 
-	cardUpdate_ = [this]() {UpdateLeft(); };
+	updateCardUI_ = [this]() {UpdateLeft(); };
 }
 
 void PlayerCardUI::ChangeRight(void)
@@ -350,7 +351,7 @@ void PlayerCardUI::ChangeRight(void)
 	//サウンドを再生
 	soundMng_.Play(ResourceManager::SRC::CARD_MOVE_SE, SoundManager::PLAYTYPE::BACK);
 	
-	cardUpdate_ = [this]() {UpdateRight(); };
+	updateCardUI_ = [this]() {UpdateRight(); };
 }
 
 void PlayerCardUI::ChangeDecision(void)
@@ -385,13 +386,13 @@ void PlayerCardUI::ChangeDecision(void)
 	//カードの範囲変数を更新する
 	DecideGoalAngle();
 
-	cardUpdate_ = [this]() {UpdateDecision(); };
+	updateCardUI_ = [this]() {UpdateDecision(); };
 }
 
 void PlayerCardUI::ChangeReloadWait(void)
 {
 	cardMoveCnt_ = 0.0f;
-	cardUpdate_ = [this]() {UpdateReloadWait(); };
+	updateCardUI_ = [this]() {UpdateReloadWait(); };
 }
 void PlayerCardUI::ChangeReload(void)
 {
@@ -407,7 +408,7 @@ void PlayerCardUI::ChangeReload(void)
 
 	//リロードアニメーション中はカレントを終端にする
 	handCurrent_ = handCards_.end();
-	cardUpdate_ = [this]() {UpdateReload(); };
+	updateCardUI_ = [this]() {UpdateReload(); };
 }
 void PlayerCardUI::UpdateNone(void)
 {

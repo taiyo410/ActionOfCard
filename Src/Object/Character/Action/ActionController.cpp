@@ -20,6 +20,7 @@
 #include"../Action/PlayerAction/PlayerCardAttackTwo.h"
 #include"../Action/PlayerAction/PlayerCardAttackThree.h"
 #include"../Action/PlayerAction/PlayerCardMagicFire.h"
+#include"../Action/PlayerAction/PlayerCardMagicThunder.h"
 #include"../Action/PlayerAction/PlayerCardReload.h"
 #include"../Action/EnemyAction/EnemyCardAttackJump.h"
 #include"../Action/EnemyAction/EnemyCardAttackStomp.h"
@@ -27,7 +28,7 @@
 #include "ActionController.h"
 
 ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, Transform& _trans, CardPresenter& _deck, AnimationController& _anim, InputManager::JOYPAD_NO _padNum) :
-	charaObj_(_charaObj),
+	character_(_charaObj),
 	logic_(_input),
 	trans_(_trans),
 	cardPresent_(_deck),
@@ -44,58 +45,54 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	dir_(Utility3D::VECTOR_ZERO)
 {
 	actionTable_ = {
-		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,charaObj_)); }},
-		{ACTION_TYPE::MOVE, [this]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,charaObj_)); }},
-		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,charaObj_)); }},
-		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,charaObj_)); }},
+		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,character_)); }},
+		{ACTION_TYPE::MOVE, [this]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,character_)); }},
+		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,character_)); }},
+		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,character_)); }},
 		{ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackOneMiddle>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,std::make_unique<PlayerCardAttackOneMiddle>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_ATTACK_ONE_SHORT,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_SHORT,std::make_unique<PlayerCardAttackOneShort>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ONE_SHORT,std::make_unique<PlayerCardAttackOneShort>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_ATTACK_TWO,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_TWO,std::make_unique<PlayerCardAttackTwo>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_TWO,std::make_unique<PlayerCardAttackTwo>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_ATTACK_THREE,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_THREE,std::make_unique<PlayerCardAttackThree>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_THREE,std::make_unique<PlayerCardAttackThree>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_MAGIC_FIRE,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_FIRE,std::make_unique<PlayerCardMagicFire>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_FIRE,std::make_unique<PlayerCardMagicFire>(*this,character_,cardPresent_));
+		}},
+		{ACTION_TYPE::CARD_MAGIC_THUNDER,[this]() {
+				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_THUNDER,std::make_unique<PlayerCardMagicFire>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_RELOAD,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::PLAYER)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD,std::make_unique<PlayerCardReload>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD,std::make_unique<PlayerCardReload>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,std::make_unique<EnemyCardAttackJump>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,std::make_unique<EnemyCardAttackJump>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,[this]() {
-			if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
-			{
-				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,std::make_unique<EnemyCardAttackStomp>(*this,charaObj_,cardPresent_));
-			}
+				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,std::make_unique<EnemyCardAttackStomp>(*this,character_,cardPresent_));
 		}}
+	};
+
+	actionStrTable_= {
+		{"Idle", ACTION_TYPE::IDLE},
+		{"Run", ACTION_TYPE::MOVE},
+		{"React", ACTION_TYPE::REACT},
+		{"Dodge", ACTION_TYPE::DODGE},
+		{"React", ACTION_TYPE::REACT},
+		{"Attack_1_Middle", ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE},
+		{"Attack_1_Short", ACTION_TYPE::CARD_ATTACK_ONE_SHORT},
+		{"Attack_2", ACTION_TYPE::CARD_ATTACK_TWO},
+		{"Attack_3", ACTION_TYPE::CARD_ATTACK_THREE},
+		{"FireMagic", ACTION_TYPE::CARD_MAGIC_FIRE},
+		{"Thunder", ACTION_TYPE::CARD_MAGIC_THUNDER},
+		{"Reload", ACTION_TYPE::CARD_RELOAD},
+		{"StompAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP},
+		{"JumpAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP },
 	};
 
 };
@@ -134,7 +131,7 @@ void ActionController::Update(void)
 	MoveDirFromInput();
 
 	//キャラクターの回転
-	charaObj_.Rotate();
+	character_.Rotate();
 
 	//移動量の更新
 	DirAndMovePowUpdate();
@@ -149,6 +146,20 @@ void ActionController::AddAction(std::vector<ACTION_TYPE> _types)
 	for (auto& type : _types)
 	{
 		actionTable_[type]();
+	}
+
+	const auto datas = ResourceManager::GetInstance().Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+
+	//読み込むキャラクター種類
+	std::string charaStr = character_.GetCharacterType() == CHARACTER_TYPE::PLAYER 
+		? "Player" : "Enemy";
+
+	if (datas[charaStr].contains("UseAction"))
+	{
+		for (const auto& useAct : datas[charaStr]["UseAction"])
+		{
+			//auto addAct=
+		}
 	}
 }
 
@@ -189,7 +200,7 @@ void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
 void ActionController::DesideCardAction(void)
 {
 	//敵はカード攻撃処理へ
-	if (charaObj_.GetCharaType() == CHARACTER_TYPE::ENEMY)
+	if (character_.GetCharaType() == CHARACTER_TYPE::ENEMY)
 	{
 		//手札に移動
 		cardPresent_.PutCard();
@@ -318,19 +329,19 @@ void ActionController::SetFlinchCnt(const float _flinchTime)
 
 void ActionController::MoveDirFromInput(void)
 {
-	charaObj_.MoveDirFromInput();
+	character_.MoveDirFromInput();
 
 	if (mainAction_[act_]->GetIsTurnable())
 	{
 		//補完角度の設定(入力角度まで方向転換する)
-		charaObj_.SetGoalRotate();
+		character_.SetGoalRotate();
 	}
 }
 
 void ActionController::DirAndMovePowUpdate(void)
 {
 	//方向の更新
-	moveDir_ = charaObj_.GetRotation().dir_;
+	moveDir_ = character_.GetRotation().dir_;
 	float speed = mainAction_[act_]->GetSpeed();
 	//移動量の更新
 	movePow_ = VScale(moveDir_, speed);

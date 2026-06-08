@@ -58,7 +58,7 @@ void Player::Load(void)
 	trans_.localPos = { 0.0f,Player::CAP_RADIUS,0.0f };
 
 	//アニメーションコントローラーの生成
-	animationController_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
+	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
 
 	//ステータスのロード
 	LoadStatus();
@@ -110,7 +110,7 @@ void Player::Init(void)
 void Player::UpdateDirection(void)
 {
 	//アニメーションの更新
-	animationController_->Update();
+	animCtrl_->Update();
 
 	//武器の更新
 	weapon_->Update();
@@ -126,7 +126,7 @@ void Player::UpdateNormal(void)
 	Action();
 
 	//アニメーション
-	animationController_->Update();
+	animCtrl_->Update();
 
 	//武器
 	weapon_->Update();
@@ -144,7 +144,7 @@ void Player::UpdateClearDirection(void)
 void Player::UpdateOverDirection(void)
 {
 	UpdateDirection();
-	if (animationController_->IsEnd(static_cast<int>(ANIM_TYPE::DEATH)))
+	if (animCtrl_->IsEnd(static_cast<int>(ANIM_TYPE::DEATH)))
 	{
 		isEndClearDirect_ = true;
 	}
@@ -152,7 +152,7 @@ void Player::UpdateOverDirection(void)
 
 void Player::ChangeUpdateOverDirection(void)
 {
-	animationController_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
+	animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
 	CharacterBase::ChangeUpdateOverDirection();
 }
 
@@ -236,7 +236,7 @@ void Player::DrawDebug(void)
 	//	col.second->GetGeometry().Draw();
 	//}
 
-	animationController_->DrawDebug();
+	animCtrl_->DrawDebug();
 
 	cardPresent_->DrawCardDeckError();
 }
@@ -246,7 +246,7 @@ void Player::DrawDebug(void)
 void Player::AddAction(void)
 {
 	//アクション
-	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animationController_, padNum_);
+	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, padNum_);
 	using ACTION_TYPE = ActionController::ACTION_TYPE;
 	action_->AddAction({ ACTION_TYPE::IDLE, ACTION_TYPE::MOVE,ACTION_TYPE::REACT, ACTION_TYPE::DODGE
 		,ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE, ACTION_TYPE::CARD_ATTACK_ONE_SHORT

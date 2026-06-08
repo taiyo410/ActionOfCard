@@ -12,6 +12,7 @@ public:
 	{
 		ATTACK
 		,FIRE
+		,THUNDER
 		,RELOAD
 	};
 

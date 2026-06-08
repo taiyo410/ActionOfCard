@@ -76,17 +76,6 @@ public:
 
 	};
 
-	//アクションの種類
-	enum class ACTION_TYPE
-	{
-		IDLE,		//何もしてない
-		MOVE,		//移動
-		DASHMOVE,	//ダッシュ
-		REACT,	//パンチされた状態
-		JUMP,		//ジャンプ
-		CARD_ACTION	//カードアクション
-	};
-
 	//更新フェーズ
 	enum class UPDATE_PHASE
 	{
@@ -291,11 +280,12 @@ public:
 
 protected:
 
+#pragma region メンバー定数
 	//移動量ラインオフセット
-	static constexpr float MOVE_LINE_Y_OFFSET = - 1.0f;
+	static constexpr float MOVE_LINE_Y_OFFSET = -1.0f;
 
 	//移動量更新条件の移動ラインの長さ
-	static constexpr float MOVE_LINE_Y_CHECK_VALUE =  1.5f;
+	static constexpr float MOVE_LINE_Y_CHECK_VALUE = 1.5f;
 
 	//リロードカードステータス
 	static constexpr CardBase::CARD_STATUS RELOAD_CARD_STATUS = { -1,CardBase::CARD_TYPE::RELOAD };
@@ -306,108 +296,59 @@ protected:
 	//キャラステータスのデータパス
 	const std::string PLAYER_STATUS_DATA = "Player";	//プレイヤー
 	const std::string ENEMY_STATUS_DATA = "Enemy";		//敵
+#pragma endregion
 
-	//入力
-	std::unique_ptr<LogicBase>logic_;
+#pragma region メンバー変数
+	std::unique_ptr<EffectController>effect_;			//エフェクト
+	std::unique_ptr<LogicBase>logic_;					//入力
+	std::unique_ptr<ActionController>action_;			//行動系
+	std::unique_ptr<AnimationController>animCtrl_;		// アニメーション
+	std::shared_ptr<CardDeck>deck_;						//デッキ
+	std::unique_ptr<CharacterOnHitBase>onHit_;			//当たった時の処理
+	std::unique_ptr<CardPresenter>cardPresent_;			//カードUIと内部のデッキクラスの結びつけクラス
+	std::vector<std::weak_ptr<EnemyRock>>drawableRocks_;//描画する岩の配列
+	std::weak_ptr<PlayerMagicFire>drawableFire_;		//炎の描画
 
-	//行動系
-	std::unique_ptr<ActionController>action_;
+	std::unordered_map <UPDATE_PHASE, std::function<void(void)>>changePhase_;	//更新フェーズ変更
+	std::function<void(void)>updatePhase_;										//更新フェーズの更新
 
-	// アニメーション
-	std::unique_ptr<AnimationController>animationController_;
-
-	//デッキ
-	std::shared_ptr<CardDeck>deck_;
-
-	//当たった時の処理
-	std::unique_ptr<CharacterOnHitBase>onHit_;
-
-	//描画する岩の配列
-	std::vector<std::weak_ptr<EnemyRock>>drawableRocks_;	
-
-	//炎の描画
-	std::weak_ptr<PlayerMagicFire>drawableFire_;
-
-	//アニメーションタイプの文字列対応表
-	std::unordered_map<std::string,ANIM_TYPE>animStrTable_;
-
-	//当たり判定の要素
-	VECTOR movedPos_;		//移動後座標
-	VECTOR moveDiff_;		//移動前座標
-	VECTOR movePow_;		// 移動量
-
-	//角度関連
-	ROTATION charaRot_;
-
-	//ステータス
-	STATUS status_;
-
-	//更新フェーズ
-	UPDATE_PHASE updatePhase_;
-
-	//更新フェーズ変更
-	std::map <UPDATE_PHASE, std::function<void(void)>>changeUpdate_;
-
-	//更新フェーズの更新
-	std::function<void(void)>phazeUpdate_;
-
-	//UIマネージャ
-	UIManager& uiMng_;
-
-	//カードUIと内部のデッキクラスの結びつけクラス
-	std::unique_ptr<CardPresenter>cardPresent_;
-
-	//サウンドマネージャ
-	SoundManager& soundMng_;
-
-	//移動操作可能か
-	bool isMoveable_;
-
-	//ステータス
-	STATUS maxStatus_;
-
-	//エフェクト
-	std::unique_ptr<EffectController>effect_;
-
-	//攻撃によってダメージを与えたか(与えたら判定を抜ける)
-	bool isDamage_;
-
-	//ダメージ
-	float damagePoint_;
-
-	//カプセル半径
-	float capRadius_;
-
-	//クリア演出が終わったか
-	bool isEndClearDirect_;
-
-	//腰のボーン番号
-	int hipBoneNo_;
-
-	//Hpのデータ
-	HP_DATA hpData_;
-
-	//キャラ種別
-	CHARACTER_TYPE characterType_;
-
-	//ヒットストップ用カウンタ(フレーム)
-	int hitStopFrame_;
-
-	//アニメーションパラメータ
-	std::unordered_map<ANIM_TYPE, float> animParam_;
-
-	//アクションの文字列
-	std::vector<std::string> actionStr_;
+	std::unordered_map<std::string, ANIM_TYPE>animStrTable_;	//アニメーションタイプの文字列対応表
 
 	//アクションごとのアニメーション再生データテーブル
-	std::unordered_map<ANIM_TYPE,AnimationController::ANIMATION_VARIABLE> actionAnimTable_;
+	std::unordered_map<ANIM_TYPE, AnimationController::ANIMATION_VARIABLE> actionAnimTable_;
+
+	UIManager& uiMng_;				//UIマネージャ
+	SoundManager& soundMng_;		//サウンドマネージャ
+
+	//当たり判定の要素
+	VECTOR movedPos_;				//移動後座標
+	VECTOR moveDiff_;				//移動前座標
+	VECTOR movePow_;				// 移動量
+
+	ROTATION charaRot_;				//角度関連
+	STATUS status_;					//ステータス
+	UPDATE_PHASE phase_;		//更新フェーズ
+	bool isMoveable_;				//移動操作可能か
+	STATUS maxStatus_;				//ステータス
+	bool isDamage_;					//攻撃によってダメージを与えたか(与えたら判定を抜ける)
+	float damagePoint_;				//ダメージ
+	float capRadius_;				//カプセル半径
+	bool isEndClearDirect_;			//クリア演出が終わったか
+	int hipBoneNo_;					//腰のボーン番号
+	HP_DATA hpData_;				//Hpのデータ
+	CHARACTER_TYPE characterType_;	//キャラ種別
+	int hitStopFrame_;				//ヒットストップ用カウンタ(フレーム)
+	std::vector<std::string> actionStr_;	//アクションの文字列
+	std::unordered_map<ANIM_TYPE, float> animParam_;	//アニメーションパラメータ
 
 	//演出用アニメーションのパラメータ
 	AnimationController::ANIMATION_VARIABLE deathAnim_;		//死亡アニメーション
 	AnimationController::ANIMATION_VARIABLE clearAnim_;		//クリア演出アニメーション
 	AnimationController::ANIMATION_VARIABLE overAnim_;		//ゲームオーバー演出アニメーション
 	AnimationController::ANIMATION_VARIABLE idleAnim_;		//アイドルアニメーション
+#pragma endregion
 
+#pragma region メンバー関数
 	//移動後座標などの更新
 	void UpdatePost(void);
 
@@ -443,4 +384,9 @@ protected:
 	virtual void ChangeUpdateClearDirection(void);	//クリア演出
 	virtual void ChangeUpdateOverDirection(void);	//ゲームオーバー演出
 	void ChangeUpdateHitStop(void);				//ヒットストップ
+#pragma endregion
+
+
+
+
 };

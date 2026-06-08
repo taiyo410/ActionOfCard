@@ -67,7 +67,7 @@ void PlayerOnHit::CollChara(const std::weak_ptr<Collider> _hitCol)
 	Geometry& hitCap = _hitCol.lock()->GetGeometry();
 
 	//自分の座標
-	VECTOR myPos = charaObj_.GetTransform().pos;
+	VECTOR myPos = character_.GetTransform().pos;
 	const VECTOR hitCharaPos = parentChara.GetTransform().pos;
 
 	//お互いの距離をとる
@@ -81,7 +81,7 @@ void PlayerOnHit::CollChara(const std::weak_ptr<Collider> _hitCol)
 	float pushPow = abs(minDist - dis);
 
 	//押し出す方向ベクトルの計算
-	VECTOR vec = Utility3D::GetMoveVec(parentChara.GetTransform().pos,charaObj_.GetTransform().pos );
+	VECTOR vec = Utility3D::GetMoveVec(parentChara.GetTransform().pos,character_.GetTransform().pos );
 
 	//Y成分はいらない
 	vec.y = 0.0f;
@@ -109,10 +109,10 @@ void PlayerOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	float damage = parentChara.GetMainAction().GetAtkPoint();
 
 	//ダメージ処理
-	charaObj_.Damage(static_cast<int>(damage));
+	character_.Damage(static_cast<int>(damage));
 	
 	//攻撃中に敵の攻撃を食らった場合、カードを消費する
-	charaObj_.SetUsedCard();
+	character_.SetUsedCard();
 
 	//ヒットSE再生
 	SoundManager::GetInstance().Play(ResourceManager::SRC::ENEMY_HIT_SE, SoundManager::PLAYTYPE::BACK);
@@ -134,7 +134,7 @@ void PlayerOnHit::CollRock(const std::weak_ptr<Collider> _hitCol)
 	int damage = static_cast<int>(rock.GetAttackPow());
 
 	//ダメージを与える
-	charaObj_.Damage(damage);
+	character_.Damage(damage);
 
 	//のけぞり時間セット
 	rock.SetIsDamaged();

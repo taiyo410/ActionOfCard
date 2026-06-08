@@ -80,7 +80,7 @@ void EnemyCardUI::DrawDebug(void)
 
 void EnemyCardUI::ChangeNone(void)
 {
-	cardUpdate_ = [this]() {UpdateNone(); };
+	updateCardUI_ = [this]() {UpdateNone(); };
 }
 
 void EnemyCardUI::ChangeDecision(void)
@@ -98,12 +98,12 @@ void EnemyCardUI::ChangeDecision(void)
 		act->ChangeUsing();
 	}
 
-	cardUpdate_ = [this]() {UpdateDecision(); };
+	updateCardUI_ = [this]() {UpdateDecision(); };
 }
 
 void EnemyCardUI::ChangeReloadWait(void)
 {
-	cardUpdate_ = [this]() {UpdateReloadWait(); };
+	updateCardUI_ = [this]() {UpdateReloadWait(); };
 }
 
 void EnemyCardUI::UpdateNone(void)

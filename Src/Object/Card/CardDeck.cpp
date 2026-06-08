@@ -18,6 +18,7 @@ CardDeck::CardDeck(CHARACTER_TYPE& _charaType, int _playerNum):
 	cardTypeMap_= {
 		{"Attack", CardBase::CARD_TYPE::ATTACK},
 		{"Fire", CardBase::CARD_TYPE::FIRE},
+		{"Thunder", CardBase::CARD_TYPE::THUNDER},
 	};
 }
 

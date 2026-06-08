@@ -127,6 +127,7 @@ public:
 
 protected:
 
+#pragma region メンバー定数
 	//Jsonで読み込むキャラクターカードの文字列
 	const std::string JSON_PLAYER_STR = "Player";
 	const std::string JSON_ENEMY_STR = "Enemy";
@@ -139,10 +140,10 @@ protected:
 	static constexpr Vector2F DISITON_CARD_POS = { Application::SCREEN_HALF_X, Application::SCREEN_HALF_Y + 200 };
 
 	//弾かれる前のゴール座標
-	static constexpr Vector2F REACT_START_CARD_POS = { Application::SCREEN_HALF_X-100.0f, Application::SCREEN_HALF_Y + 200.0f };
+	static constexpr Vector2F REACT_START_CARD_POS = { Application::SCREEN_HALF_X - 100.0f, Application::SCREEN_HALF_Y + 200.0f };
 
 	//デルタ(処理が重くなった時にカードuiが壊れるので定数でカウントする)
-	static constexpr float DELTA = 1.0f/60.0f;
+	static constexpr float DELTA = 1.0f / 60.0f;
 
 	//カード強さ最大値
 	static constexpr int MAX_CARD_POWER = 9;
@@ -160,83 +161,48 @@ protected:
 	//カードのナンバーローカル座標
 	static constexpr Vector2F NUM_LOCAL_POS = { 89.0f,130.0f };
 
+#pragma endregion
 
-
-	//カード更新関数
-	std::function<void(void)>cardUpdate_;
-
-	//状態遷移
-	std::unordered_map<CARD_SELECT, std::function<void(void)>>changeMoveState_;
-
-	//タイプ画像
-	std::unordered_map<CardBase::CARD_TYPE, int> cardTypeImgs_;
-
-	//初期カード
-	std::list<std::shared_ptr<CardUIController>>initialCards_;
-
-	//手札
-	std::list<std::shared_ptr<CardUIController>>handCards_;
-
-	//手札の現在選択中カード
-	std::list<std::shared_ptr<CardUIController>>::iterator handCurrent_;
-
-	//アクション中カード
-	std::list<std::shared_ptr<CardUIController>>actions_;
-
+#pragma region メンバー変数
 	//シェーダー関連
-	std::unique_ptr<PixelMaterial>material_;
-	std::unique_ptr<PixelRenderer>renderer_;
+	std::unique_ptr<PixelMaterial>material_;		//マテリアル
+	std::unique_ptr<PixelRenderer>renderer_;		//レンダラー
+	std::unique_ptr<Easing>easing_;					//イージング
+	
+	//状態遷移
+	CARD_SELECT selectState_;		//状態
+	std::unordered_map<CARD_SELECT, std::function<void(void)>>changeMoveState_;
+	std::function<void(void)>updateCardUI_;			//カード更新関数
 
-	//イージング
-	std::unique_ptr<Easing>easing_;
+	std::unordered_map<CardBase::CARD_TYPE, int> cardTypeImgs_;				//タイプ画像
+	std::unordered_map<std::string, CardBase::CARD_TYPE> cardTypeMap_;		//カードタイプと文字列の対応マップ
 
-	//キャラクター種別(jsonで読み込むため)
-	std::string charaType_;
-
-	//カードタイプと文字列の対応マップ
-	std::unordered_map<std::string, CardBase::CARD_TYPE> cardTypeMap_;
-
-	//円形UIの中心座標
-	Vector2 centerPos_;
-
-	//カード番号イメージ
-	int* cardNoImg_;
-
-	//攻撃カード画像
-	int atkCardImg_;
-
-	//火炎カード画像
-	int fireCardImg_;
-
-	//リロードカード画像
-	int reloadCardImg_;
-
-	//リロードゲージ
-	int reloadGauge_;		
-
-	//カードナンバー座標
-	Vector2F numPos_;
-
-	//カードセレクトの動き時間
-	float cardMoveCnt_;
-
-	//決定後のカウント
-	float disitionCnt_;
-
-	//リロード割合(カードのゲージ計算用)
-	float reloadPer_;
-
-	//状態
-	CARD_SELECT selectState_;
+	std::list<std::shared_ptr<CardUIController>>initialCards_;				//初期カード
+	std::list<std::shared_ptr<CardUIController>>handCards_;					//手札
+	std::list<std::shared_ptr<CardUIController>>::iterator handCurrent_;	//手札の現在選択中カード
+	std::list<std::shared_ptr<CardUIController>>actions_;					//アクション中カード
 
 	//マネージャ関連
-	SoundManager& soundMng_;		//サウンド
-	ResourceManager& resMng_;		//リソース
-	SceneManager& scnMng_;			//シーン
+	SoundManager& soundMng_;			//サウンド
+	ResourceManager& resMng_;			//リソース
+	SceneManager& scnMng_;				//シーン
 
-	//カード勝ったとき流すサウンド
-	ResourceManager::SRC cardWinRes_;
+	std::string charaType_;				//キャラクター種別(jsonで読み込むため)
+	Vector2 centerPos_;					//円形UIの中心座標
+	int* cardNoImg_;					//カード番号イメージ
+	int atkCardImg_;					//攻撃カード画像
+	int fireCardImg_;					//火炎カード画像
+	int thunderCardImg_;				//火炎カード画像
+	int reloadCardImg_;					//リロードカード画像
+	int reloadGauge_;					//リロードゲージ
+	Vector2F numPos_;					//カードナンバー座標
+	float cardMoveCnt_;					//カードセレクトの動き時間
+	float disitionCnt_;					//決定後のカウント
+	float reloadPer_;					//リロード割合(カードのゲージ計算用)
+	ResourceManager::SRC cardWinRes_;	//カード勝ったとき流すサウンド
+#pragma endregion
 
+#pragma region メンバー関数
 	//手札選択カードの計算
 	void AddHandCurrent(void);	//足し算
 	void SubHandCurrent(void);	//引き算
@@ -256,7 +222,7 @@ protected:
 	virtual void UpdateReloadWait(void) {};	//リロード待機(チャージ状態)
 
 	//UI描画更新
-	virtual void UpdateDrawCardUI(void) = 0;;
+	virtual void UpdateDrawCardUI(void) = 0;
 
 	//アクション配列のカードをすべて決定移動させる
 	void DecisionMoveCardAll(void);
@@ -275,6 +241,10 @@ protected:
 
 	//属性画像取得
 	const int GetTypeImg(const CardBase::CARD_STATUS _status);
+#pragma endregion
+
+
+
 
 private:
 

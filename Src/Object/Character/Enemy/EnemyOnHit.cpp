@@ -73,7 +73,7 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 
 	//ダメージ計算
 	int damage = static_cast<int>(atkPoint) + addDam;
-	charaObj_.Damage(damage);
+	character_.Damage(damage);
 
 	action_.ChangeAction(ActionController::ACTION_TYPE::REACT);
 }
