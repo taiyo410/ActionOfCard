@@ -4,17 +4,38 @@
 			"hp": 200,
 			"speed": 10
 		},
+		"ModelData": {
+			"model": "PLAYER",
+			"localDegree": {
+				"x": 0.0,
+				"y": 180.0,
+				"z": 0.0
+			},
+			"localPos": {
+				"x": 0.0,
+				"y": 25.0,
+				"z": 0.0
+			},
+			"scale": 1.0,
+			"spineFrameNum": 0,
+			"handFrameNum": 36
+		},
+		"BattleStartPos": {
+			"x": 0.0,
+			"y": 0.0,
+			"z": 600.0
+		},
 		"UseAction": [
 			"idle",
 			"run",
 			"react",
 			"dodge",
-			"cardAttack1_Middle",
-			"cardAttack1_Short",
-			"cardAttack2",
-			"cardAttack3",
-			"cardMagicFire",
-			"cardMagicThunder",
+			"attack_1_Middle",
+			"attack_1_Short",
+			"attack_2",
+			"attack_3",
+			"fireMagic",
+			"thunderMagic",
 			"cardReload"
 		],
 		"HpBar": {
@@ -61,11 +82,39 @@
 		}
 	},
 	"Enemy": {
-
 		"Status": {
 			"hp": 200,
 			"speed": 9.0
 		},
+		"ModelData": {
+			"model": "ENEMY_1",
+			"localDegree": {
+				"x": 0.0,
+				"y": 180.0,
+				"z": 0.0
+			},
+			"localPos": {
+				"x": 0.0,
+				"y": 0.0,
+				"z": 0.0
+			},
+			"scale": 5.0,
+			"spineFrameNum": 0,
+			"handFrameNum": 36
+		},
+		"BattleStartPos": {
+			"x": 0.0,
+			"y": 0.0,
+			"z": -600.0
+		},
+		"UseAction": [
+			"idle",
+			"run",
+			"react",
+			"jumpAttack",
+			"stompAttack",
+			"cardReload"
+		],
 		"HpBar": {
 			"barPos": {
 				"x": 550,

@@ -1,4 +1,6 @@
 #include "../pch.h"
+#include "../../../Utility/Utility3D.h"
+#include "../../../Utility/UtilityJson.h"
 #include "../Manager/Generic/SceneManager.h"
 #include "../Manager/Generic/UIManager.h"
 #include "../Object/Common/AnimationController.h"
@@ -9,7 +11,6 @@
 #include"../Object/Card/CardDeck.h"
 #include"../Object/Card/CardUIBase.h"
 #include "../Object/Stage.h"
-#include "../../../Utility/Utility3D.h"
 #include "../../Common/Geometry/Capsule.h"
 #include "../../Common/Geometry/Sphere.h"
 #include "../../Common/Geometry/Line.h"
@@ -54,10 +55,79 @@ CharacterBase::CharacterBase(void) :
 		{"Rush_Atk", ANIM_TYPE::RUSH_ATK},
 		{"Roar", ANIM_TYPE::ROAR_ATK},
 	};
+
+	loadDataFuncTable_ = {
+		{"Status",[this](const nlohmann::json& _data) {LoadStatus(_data); }},
+		{"ModelData",[this](const nlohmann::json& _data) {LoadModelData(_data); }},
+		{"BattleStartPos",[this](const nlohmann::json& _data) {LoadBattleStartPos(_data); }},
+	};
 }
 
 CharacterBase::~CharacterBase(void)
 {
+}
+
+void CharacterBase::Load(void)
+{
+	LoadCommon();
+
+	LoadCharacter();
+}
+
+void CharacterBase::LoadCommon(void)
+{
+	//共通のパラメータのロード
+	LoadCommonData();
+
+	//当たり判定の生成
+	MakeColliderGeometry();
+
+	//使用するアクションを追加
+	actionCtrl_->AddAction();
+	//アクションのロード
+	actionCtrl_->Load();
+}
+
+void CharacterBase::LoadCommonData(void)
+{
+	const auto& jsonData = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	for (const auto& [key,data] : jsonData[objectName_].items())
+	{
+		loadDataFuncTable_[key](data);
+	}
+}
+
+void CharacterBase::InitCommon(void)
+{
+	trans_.SetModel(resMng_.LoadModelDuplicate(useModelSrc_));
+	trans_.scl = { modelScl_,modelScl_,modelScl_ };
+	trans_.quaRotLocal =
+		Quaternion::Euler({ UtilityCommon::Deg2RadF(localDeg_.x)
+			, UtilityCommon::Deg2RadF(localDeg_.y)
+			, UtilityCommon::Deg2RadF(localDeg_.z) });
+	trans_.pos = battleStartPos_;
+	trans_.localPos = localPos_;
+	//プレイヤー入力
+	logic_->Init();
+	actionCtrl_->Init();
+	deck_->Init();
+	//更新
+	trans_.Update();
+}
+
+void CharacterBase::UpdateCommon(void)
+{
+}
+
+void CharacterBase::DrawCommon(void)
+{
+}
+
+void CharacterBase::Init(void)
+{
+	InitCommon();
+
+	InitCharacter();
 }
 
 void CharacterBase::Update(void)
@@ -87,10 +157,14 @@ void CharacterBase::DeleteAttackCol(const Collider::TAG& _charaTag, const Collid
 	DeleteCollider(TAG_PRIORITY::ATK_SPHERE);
 }
 
+void CharacterBase::LoadCharacter(void)
+{
+}
+
 void CharacterBase::UpdatePost(void)
 {
 	//移動後座標の更新
-	movedPos_ = VAdd(trans_.pos, action_->GetMovePow());
+	movedPos_ = VAdd(trans_.pos, actionCtrl_->GetMovePow());
 
 	//移動量ラインの更新
 	VECTOR moveVec = VSub(movedPos_, trans_.pos);
@@ -115,30 +189,47 @@ void CharacterBase::UpdatePost(void)
 	trans_.pos = movedPos_;
 }
 
-void CharacterBase::LoadStatus(void)
+void CharacterBase::LoadStatus(const nlohmann::json& _data)
 {
-	//jsonロード
-	nlohmann::json j = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
-
-	std::string statusPath = "";
-
-	characterType_ == CHARACTER_TYPE::PLAYER ? statusPath = PLAYER_STATUS_DATA
-		: statusPath = ENEMY_STATUS_DATA;
-
-	const auto& data = j[statusPath]["Status"];
-
 	//データを格納
-	maxStatus_.hp = data.value("hp", 0.0f);
-	maxStatus_.speed = data.value("speed", 0.0f);
+	maxStatus_.hp = _data.value("hp", 0.0f);
+	maxStatus_.speed = _data.value("speed", 0.0f);
 
 	//現在ステータスを最大値にセット
 	status_ = maxStatus_;
 }
 
+void CharacterBase::LoadModelData(const nlohmann::json& _data)
+{
+	//データを格納
+	//使用モデル
+	std::string modelStr = _data.value("model", "");
+	useModelSrc_ = resMng_.GetSrcFromString(modelStr);
+
+	//ローカル角度
+	localDeg_ = UtilityJson::GetLoadVector3("localDegree", _data);
+
+	//ローカル座標
+	localPos_ = UtilityJson::GetLoadVector3("localPos", _data);
+
+	//モデルの大きさ
+	modelScl_ = _data.value("scale", 0.0f);
+
+	//腰のフレーム番号
+	spineBoneNo_ = _data.value("spineFrameNum", 0);
+
+}
+
+void CharacterBase::LoadBattleStartPos(const nlohmann::json& _data)
+{
+	battleStartPos_ = UtilityJson::GetLoadVector3("BattleStartPos", _data);
+}
+
 void CharacterBase::MoveLimit(const VECTOR& _stagePos,const VECTOR& _stageSize)
 {
+	const float radius = collider_[TAG_PRIORITY::BODY]->GetGeometry().GetRadius();
 	//カプセルを考慮したステージの制限サイズ
-	VECTOR subRadiusSize={_stageSize.x- capRadius_,0.0f,_stageSize.z- capRadius_};
+	VECTOR subRadiusSize={_stageSize.x- radius,0.0f,_stageSize.z- radius};
 
 	//センターサイズ
 	VECTOR sizeHalf = VScale(subRadiusSize, 0.5f);
@@ -150,7 +241,7 @@ void CharacterBase::MoveLimit(const VECTOR& _stagePos,const VECTOR& _stageSize)
 	VECTOR moveVec = Utility3D::GetMoveVec(trans_.pos, movedPos_);
 
 	//カプセル関係を考慮した移動座標
-	VECTOR addPos = VScale(moveVec, capRadius_);
+	VECTOR addPos = VScale(moveVec, radius);
 
 	//制限座標
 	VECTOR limitPos = VAdd(trans_.pos, addPos);
@@ -158,7 +249,7 @@ void CharacterBase::MoveLimit(const VECTOR& _stagePos,const VECTOR& _stageSize)
 	//押し出しベクトル
 	VECTOR pushVec = Utility3D::GetMoveVec(movedPos_, moveDiff_);
 	pushVec.y = 0.0f;
-	VECTOR pushPow = VScale(pushVec, action_->GetSpd());
+	VECTOR pushPow = VScale(pushVec, actionCtrl_->GetSpd());
 
 	//移動制限
 	if (limitPos.x >= limit.x)
@@ -184,7 +275,10 @@ void CharacterBase::SetUsedCard(void)
 	uiMng_.GetCardUI(characterType_).ChangeReactActionCard();
 	deck_->EraseHandCard();
 }
+void CharacterBase::MakeColliderGeometry(void)
+{
 
+}
 void CharacterBase::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 {
 	if (phase_ == _phase)return;
@@ -267,7 +361,7 @@ void CharacterBase::Damage(const int _dam)
 
 const bool CharacterBase::GetIsDamage(void) const
 {
-	return action_->GetMainAction().GetIsDamage();
+	return actionCtrl_->GetMainAction().GetIsDamage();
 }
 
 VECTOR CharacterBase::GetCharaCenterPos(void) const
@@ -277,27 +371,37 @@ VECTOR CharacterBase::GetCharaCenterPos(void) const
 
 void CharacterBase::SetIsDamage(void)
 {
-	action_->GetMainAction().SetIsDamage();
+	actionCtrl_->GetMainAction().SetIsDamage();
 }
 
 void CharacterBase::SetFlinchCnt(const float _flichCnt)
 {
-	action_->SetFlinchCnt(_flichCnt);
+	actionCtrl_->SetFlinchCnt(_flichCnt);
 }
 
 const bool CharacterBase::GetIsJumpAtk(void) const
 {
-	return action_->GetMainAction().IsJumpAtk();
+	return actionCtrl_->GetMainAction().IsJumpAtk();
 }
 
 const ActionBase& CharacterBase::GetMainAction(void) const
 {
-	return action_->GetMainAction();
+	return actionCtrl_->GetMainAction();
 }
 
 const CharacterOnHitBase::HIT_POINT& CharacterBase::GetHitPoint(void) const
 {
 	return onHit_->GetHitPoint();
+}
+
+const VECTOR& CharacterBase::GetCapsuleTop(void)
+{
+	return collider_[TAG_PRIORITY::BODY]->GetGeometry().GetLocalPosPoint1();
+}
+
+const VECTOR& CharacterBase::GetCapsuleDown(void)
+{
+	return collider_[TAG_PRIORITY::BODY]->GetGeometry().GetLocalPosPoint2();
 }
 
 void CharacterBase::SetLogicTargetCharacter(std::shared_ptr<CharacterBase> _targetChara)

@@ -376,8 +376,8 @@
         "handle": "Action.json"
       },
       {
-        "name": "ANIMATION_PARAMETER_DATA",
-        "handle": "AnimationParameter.json"
+        "name": "COLLISION_DATA",
+        "handle": "CollisionData.json"
       }
     ],
 

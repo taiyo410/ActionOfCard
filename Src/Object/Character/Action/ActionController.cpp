@@ -24,6 +24,7 @@
 #include"../Action/PlayerAction/PlayerCardReload.h"
 #include"../Action/EnemyAction/EnemyCardAttackJump.h"
 #include"../Action/EnemyAction/EnemyCardAttackStomp.h"
+#include"../Action/EnemyAction/EnemyCardReload.h"
 
 #include "ActionController.h"
 
@@ -68,7 +69,14 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_THUNDER,std::make_unique<PlayerCardMagicFire>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_RELOAD,[this]() {
-				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD,std::make_unique<PlayerCardReload>(*this,character_,cardPresent_));
+			if (character_.GetCharacterType() == CHARACTER_TYPE::PLAYER)
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD, std::make_unique<PlayerCardReload>(*this, character_, cardPresent_));
+			}
+			else
+			{
+				mainAction_.emplace(ACTION_TYPE::CARD_RELOAD, std::make_unique<EnemyCardReload>(*this, character_, cardPresent_));
+			}
 		}},
 		{ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,[this]() {
 				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,std::make_unique<EnemyCardAttackJump>(*this,character_,cardPresent_));
@@ -79,20 +87,20 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	};
 
 	actionStrTable_= {
-		{"Idle", ACTION_TYPE::IDLE},
-		{"Run", ACTION_TYPE::MOVE},
-		{"React", ACTION_TYPE::REACT},
-		{"Dodge", ACTION_TYPE::DODGE},
-		{"React", ACTION_TYPE::REACT},
-		{"Attack_1_Middle", ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE},
-		{"Attack_1_Short", ACTION_TYPE::CARD_ATTACK_ONE_SHORT},
-		{"Attack_2", ACTION_TYPE::CARD_ATTACK_TWO},
-		{"Attack_3", ACTION_TYPE::CARD_ATTACK_THREE},
-		{"FireMagic", ACTION_TYPE::CARD_MAGIC_FIRE},
-		{"Thunder", ACTION_TYPE::CARD_MAGIC_THUNDER},
-		{"Reload", ACTION_TYPE::CARD_RELOAD},
-		{"StompAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP},
-		{"JumpAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP },
+		{"idle", ACTION_TYPE::IDLE},
+		{"run", ACTION_TYPE::MOVE},
+		{"react", ACTION_TYPE::REACT},
+		{"dodge", ACTION_TYPE::DODGE},
+		{"react", ACTION_TYPE::REACT},
+		{"attack_1_Middle", ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE},
+		{"attack_1_Short", ACTION_TYPE::CARD_ATTACK_ONE_SHORT},
+		{"attack_2", ACTION_TYPE::CARD_ATTACK_TWO},
+		{"attack_3", ACTION_TYPE::CARD_ATTACK_THREE},
+		{"fireMagic", ACTION_TYPE::CARD_MAGIC_FIRE},
+		{"thunderMagic", ACTION_TYPE::CARD_MAGIC_THUNDER},
+		{"cardReload", ACTION_TYPE::CARD_RELOAD},
+		{"stompAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP},
+		{"jumpAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP },
 	};
 
 };
@@ -141,24 +149,25 @@ void ActionController::Update(void)
 }
 
 
-void ActionController::AddAction(std::vector<ACTION_TYPE> _types)
+void ActionController::AddAction(void)
 {
-	for (auto& type : _types)
-	{
-		actionTable_[type]();
-	}
-
 	const auto datas = ResourceManager::GetInstance().Load(ResourceManager::SRC::CHARA_DATA).jsonData;
 
 	//読み込むキャラクター種類
 	std::string charaStr = character_.GetCharacterType() == CHARACTER_TYPE::PLAYER 
 		? "Player" : "Enemy";
 
+	//UseActionを読み込んで追加する
 	if (datas[charaStr].contains("UseAction"))
 	{
-		for (const auto& useAct : datas[charaStr]["UseAction"])
+		for (const auto& actData : datas[charaStr]["UseAction"])
 		{
-			//auto addAct=
+			std::string actionName = actData.get<std::string>();
+			auto it = actionStrTable_.find(actionName);
+			if (it != actionStrTable_.end())
+			{
+				actionTable_[it->second]();
+			}
 		}
 	}
 }
@@ -247,7 +256,6 @@ void ActionController::ChangeComboCardAttack(void)
 
 	//攻撃に使用したカードを手札に戻す
 	cardPresent_.PutCard();
-
 
 	//コンボ情報をポップ
 	atkCombos_.pop();
@@ -428,4 +436,3 @@ const bool ActionController::IsAttacable(void)
 		&&cardPresent_.GetCardUIState() != CardUIBase::CARD_SELECT::DISITION
 		&& IsCardDecisionControl();
 }
-

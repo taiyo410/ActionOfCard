@@ -44,7 +44,6 @@ void PlayerOnHit::Load(void)
 void PlayerOnHit::Init(void)
 {
 	hitPoint_ = {};
-	bodyRadius_ = Player::CAP_RADIUS;
 	movedPos_ = Utility3D::VECTOR_ZERO;
 }
 
@@ -118,7 +117,7 @@ void PlayerOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	SoundManager::GetInstance().Play(ResourceManager::SRC::ENEMY_HIT_SE, SoundManager::PLAYTYPE::BACK);
 
 	//ÇÃÇØÇºÇËèÛë‘Ç÷
-	action_.ChangeAction(ActionController::ACTION_TYPE::REACT);
+	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
 	
 }
 
@@ -143,7 +142,7 @@ void PlayerOnHit::CollRock(const std::weak_ptr<Collider> _hitCol)
 	SoundManager::GetInstance().Play(ResourceManager::SRC::ENEMY_HIT_SE, SoundManager::PLAYTYPE::BACK);
 
 	//ÇÃÇØÇºÇËèÛë‘Ç÷
-	action_.ChangeAction(ActionController::ACTION_TYPE::REACT);
+	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
 }
 
 #ifdef _DEBUG

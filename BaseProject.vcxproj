@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardReload.cpp" />
     <ClCompile Include="Src\Object\Character\Player\PlayerMagicThunder.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicThunder.cpp" />
     <ClCompile Include="Src\Object\Character\Base\ItemBase.cpp" />
@@ -122,8 +123,10 @@
     <ClCompile Include="Src\Object\Character\Player\Weapon.cpp" />
     <ClCompile Include="Src\Object\Character\Base\UIBase2D.cpp" />
     <ClCompile Include="Src\Manager\Generic\UIManager.cpp" />
+    <ClCompile Include="Src\Utility\UtilityJson.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardReload.h" />
     <ClInclude Include="Src\Object\Character\Player\PlayerMagicThunder.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicThunder.h" />
     <ClInclude Include="Src\Object\Character\Base\ItemBase.h" />
@@ -270,6 +273,7 @@
     <ClInclude Include="Src\Object\Character\Player\Weapon.h" />
     <ClInclude Include="Src\Object\Character\Base\UIBase2D.h" />
     <ClInclude Include="Src\Manager\Generic\UIManager.h" />
+    <ClInclude Include="Src\Utility\UtilityJson.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Src\Shader\Common\Pixel\PixelShader2DHeader.hlsli" />

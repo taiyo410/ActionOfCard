@@ -64,7 +64,7 @@ protected:
 	static constexpr float POSITION_OFFSET = 0.1f;
 
 	//プレイヤー
-	ActionController& action_;
+	ActionController& actionCtrl_;
 
 	//移動量
 	VECTOR& movedPos_;
@@ -90,9 +90,6 @@ protected:
 
 	//当たった箇所
 	HIT_POINT hitPoint_;
-
-	//当たり判定の球の半径
-	float bodyRadius_;
 
 	//モデルの当たった時の共通処理
 	void HitModelCommon(const std::weak_ptr<Collider> _hitCol);

@@ -16,11 +16,10 @@ CharacterOnHitBase::CharacterOnHitBase(CharacterBase& _chara, VECTOR& _movedPos,
 	movedPos_(_movedPos),
 	moveDiff_(_moveDiff),
 	colParam_(_colParam),
-	action_(_action),
+	actionCtrl_(_action),
 	trans_(_trans),
 	hitPoint_(),
-	isHitTarget_(false),
-	bodyRadius_()
+	isHitTarget_(false)
 {
 }
 
@@ -126,7 +125,7 @@ void CharacterOnHitBase::HitModelCommon(const std::weak_ptr<Collider> _hitCol)
 			//ˆê’è‰ñ”‚Ì‰Ÿ‚µo‚µˆ—‚ğ‚·‚é
 			for (int tryCnt = 0; tryCnt < COL_TRY_CNT_MAX; tryCnt++)
 			{
-				int pHit = HitCheck_Sphere_Triangle(trans.pos, bodyRadius_
+				int pHit = HitCheck_Sphere_Triangle(trans.pos, bodyShere->GetGeometry().GetRadius()
 					, hit.Position[0], hit.Position[1], hit.Position[2]);
 
 				if (pHit)

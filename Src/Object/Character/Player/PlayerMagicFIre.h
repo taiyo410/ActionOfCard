@@ -61,6 +61,10 @@ public:
 	void ChangeDelete(void);
 
 private:
+#pragma region メンバー定数
+	const std::string FIRE_STR = "FireBall";
+#pragma endregion
+
 
 #pragma region 外部ファイル読み込み
 	float moveSpd_;			//移動速度

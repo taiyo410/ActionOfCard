@@ -32,6 +32,7 @@ class PlayerCardMagicFire;
 class PlayerCardMagicThunder;
 class EnemyCardAttackJump;
 class EnemyCardAttackStomp;
+class EnemyCardReload;
 
 
 class ActionController
@@ -131,7 +132,7 @@ public:
 
 	/// @brief アクションの追加
 	/// @param _types 追加したいアクションタイプ
-	void AddAction(std::vector<ACTION_TYPE> _types);
+	void AddAction(void);
 
 	/// @brief メインアクションの取得
 	/// @param  

@@ -1,7 +1,8 @@
 #pragma once
-#include<memory>
-#include<map>
-#include<vector>
+#include <memory>
+#include <map>
+#include <vector>
+#include <nlohmann/json.hpp>
 #include "Common/Transform.h"
 #include "../Common/IntVector3.h"
 #include "./Common/Collider.h"
@@ -18,22 +19,13 @@ public:
 	//タグ優先順位
 	enum class  TAG_PRIORITY
 	{
+		STAGE,
 		BODY,
-		LEFT_ONE,
-		LEFT_TWO,
-		LEFT_THREE,
-		RIGHT_ONE,
-		RIGHT_TWO,
-		RIGHT_THREE,
 		MOVE_LINE,
 		UPDOWN_LINE,
 		ATK_SPHERE,
 		ROCK_SPHERE,
 		FIRE_SPHERE,
-		DOUBLE_SPHERE_1,
-		DOUBLE_SPHERE_2,
-		CAMERA_SPHERE,
-		CAMERA_LINE,
 	};
 
 	/// @brief コンストラクタ
@@ -75,6 +67,11 @@ public:
 	/// @return true:特定のオブジェクトが存在する	false存在しない
 	const bool IsAliveCollider(const Collider::TAG _chataTag, const Collider::TAG _tag);
 
+	/// @brief オブジェクト名の取得
+	/// @param  
+	/// @return オブジェクト名
+	const std::string& GetObjectName(void) { return objectName_; }
+
 protected:
 
 	// シングルトン参照
@@ -90,11 +87,17 @@ protected:
 	//タグ
 	Collider::TAG tag_;
 
+	//オブジェクトの名前
+	std::string objectName_;
+
 	//当たり判定をしないタグ設定
 	std::set<Collider::TAG> noneHitTag_;
 
 	//初めのタグ順格納
 	std::vector<TAG_PRIORITY>tagPrioritys_;
+
+	//タグと文字列の対応表
+	std::unordered_map<std::string, TAG_PRIORITY>tagStrTable_;
 	
 	/// @brief 当たり判定作成(形状情報作成後)
 	/// @param _tag 自身の当たり判定タグ
@@ -102,10 +105,38 @@ protected:
 	/// @param _notHitTags 衝突させないタグ
 	void MakeCollider(const TAG_PRIORITY _tagPriority,const std::set<Collider::TAG> _tag, std::unique_ptr<Geometry> _geometry, const std::set<Collider::TAG> _notHitTags = {});
 
+	//Json読み込みで当たり判定を生成
+	void MakeColliderFromJsonData(void);
+
 	/// @brief 特定の配列番号の当たり判定の削除
 	/// @param _priority タグの種類
 	void DeleteCollider(const TAG_PRIORITY _priority);
 
 	//全当たり判定の削除
 	void DeleteAllCollider(void);
+
+	//オブジェクト毎に外部データをロード
+	virtual void LoadObjectData(void);
+
+
+private:
+	//当たり判定形状の文字列と生成する関数の対応表
+	std::unordered_map<std::string, std::function<void(const std::string& _priStr,const nlohmann::json& _data)>>makeCollisionTable_;
+
+	//タグと文字列の対応表
+	std::unordered_map<std::string, Collider::TAG>colTagStrTable_;
+
+	//タグ優先度用のタグと文字列対応表
+	std::unordered_map<std::string, TAG_PRIORITY>colTagPriorityStrTable_;
+
+	//当たり判定の生成
+	void MakeLineCollision(const std::string& _priStr, const nlohmann::json& _data);		//線分
+	void MakeCapsuleCollision(const std::string& _priStr, const nlohmann::json& _data);		//カプセル
+	void MakeCubeCollision(const std::string& _priStr, const nlohmann::json& _data);		//キューブ
+	void MakeSphereCollision(const std::string& _priStr, const nlohmann::json& _data);		//球体
+	void MakeModelCollision(const std::string& _priStr, const nlohmann::json& _data);		//モデル
+
+	//当たらないタグの取得
+	const std::set<Collider::TAG> GetNoneHitTag(const nlohmann::json& _data);
+
 };

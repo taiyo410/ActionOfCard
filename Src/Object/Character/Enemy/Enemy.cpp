@@ -31,14 +31,20 @@ Enemy::Enemy(void):
 	cardCenterPos_({}),
 	modelScl_(MODEL_SIZE_MULTIPLITER)
 {
-	capRadius_ = CAP_RADIUS;
+	objectName_ = ENEMY_STR;
 	characterType_ = CHARACTER_TYPE::ENEMY;
 	isRoar_ = false;
 	logic_ = std::make_unique<EnemyLogic>(trans_);
 	deck_ = std::make_shared<CardDeck>(characterType_, ENEMY_NUM);
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
 	effect_ = std::make_unique<EffectController>();
-	hipBoneNo_ = SPINE_FRAME_NO;
+	spineBoneNo_ = SPINE_FRAME_NO;
+	tag_ = Collider::TAG::ENEMY1;
+
+	//アニメーションコントローラーの生成
+	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, spineBoneNo_);
+	//アクション
+	actionCtrl_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, InputManager::JOYPAD_NO::PAD1);
 }
 
 Enemy::~Enemy(void)
@@ -46,73 +52,38 @@ Enemy::~Enemy(void)
 	collider_.clear();
 	effect_->AllStop();
 }
-void Enemy::Load(void)
-{
-	trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::ENEMY));
-	trans_.quaRot = Quaternion();
-	trans_.quaRotLocal =
-		Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
+//void Enemy::Load(void)
+//{
+//	//trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::ENEMY));
+//	//trans_.quaRot = Quaternion();
+//	//trans_.quaRotLocal =
+//	//	Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
+//}
 
-	//アニメーションコントローラーの生成
-	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
-
-	//エフェクト
-	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
-
-	//ステータスロード
-	LoadStatus();
-
-	//アクションの追加
-	AddAction();
-
-	//Jsonからアクションごとのデータのロード
-	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
-		{
-			//アクションコントローラーの全行動クラスに通知
-			action_->AnimLoadNotify(animVar);
-			if (animVar.name == "Death")
-			{
-				deathAnim_ = animVar.animVariable;
-			}
-			else if (animVar.name == "Idle")
-			{
-				idleAnim_ = animVar.animVariable;
-			}
-			else if (animVar.name == "Roar")
-			{
-				roarAnim_ = animVar.animVariable;
-			}
-		});
-
-	action_->Load();
-}
-
-void Enemy::Init(void)
-{
-	deck_->Init();
-	action_->Init();
-	logic_->Init();
-	tag_ = Collider::TAG::ENEMY1;
-	capRadius_ = CAP_RADIUS;
-
-	//Transformの設定
-	trans_.quaRot = Quaternion();
-	trans_.scl = { modelScl_,modelScl_,modelScl_ };
-	trans_.quaRotLocal =
-		Quaternion::Euler({ 0.0f, UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
-
-	trans_.pos = { 0.0f,0.0f,CENTER_POS_Z_OFFSET };
-	trans_.localPos = { 0.0f,0.0f,0.0f };
-	trans_.Update();
-
-	//当たり判定の作成
-	MakeColliderGeometry();
-}
+//void Enemy::Init(void)
+//{
+//	//deck_->Init();
+//	//actionCtrl_->Init();
+//	//logic_->Init();
+//
+//	////Transformの設定
+//	//trans_.quaRot = Quaternion();
+//	//trans_.scl = { modelScl_,modelScl_,modelScl_ };
+//	//trans_.quaRotLocal =
+//	//	Quaternion::Euler({ 0.0f, UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
+//
+//	//trans_.pos = { 0.0f,0.0f,CENTER_POS_Z_OFFSET };
+//	//trans_.localPos = { 0.0f,0.0f,0.0f };
+//	//trans_.Update();
+//
+//	//当たり判定の作成
+//	//MakeColliderGeometry();
+//}
 
 void Enemy::UpdateDirection(void)
 {
 	//方向の更新
-	action_->Update();
+	actionCtrl_->Update();
 
 	//咆哮演出の更新
 	UpdateRoarDirection();
@@ -133,7 +104,6 @@ void Enemy::UpdateClearDirection(void)
 	effect_->Update();
 	if (animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= DEATH_BLAST_ANIM_STEP)
 	{
-
 		if (modelScl_ <= 0.0f)
 		{
 			isEndClearDirect_ = true;
@@ -237,24 +207,35 @@ void Enemy::ChangeUpdateClearDirection(void)
 	CharacterBase::ChangeUpdateClearDirection();
 }
 
+void Enemy::LoadCharacter(void)
+{
+	//エフェクト
+	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
+
+	//Jsonからアクションごとのデータのロード
+	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
+		{
+			//アクションコントローラーの全行動クラスに通知
+			actionCtrl_->AnimLoadNotify(animVar);
+			if (animVar.name == "Death")
+			{
+				deathAnim_ = animVar.animVariable;
+			}
+			else if (animVar.name == "Idle")
+			{
+				idleAnim_ = animVar.animVariable;
+			}
+			else if (animVar.name == "Roar")
+			{
+				roarAnim_ = animVar.animVariable;
+			}
+		});
+}
+
 void Enemy::MakeColliderGeometry(void)
 {
-	//カプセル
-	std::unique_ptr<Geometry>geo = std::make_unique<Capsule>(trans_.pos, trans_.quaRot, CAP_LOCAL_TOP, CAP_LOCAL_DOWN, CAP_RADIUS);
-	MakeCollider(TAG_PRIORITY::BODY, { tag_ }, std::move(geo));
-	tagPrioritys_.emplace_back(TAG_PRIORITY::BODY);
-
-	//現在の座標と移動後座標を結んだ線のコライダ(落下時の当たり判定)
-	geo = std::make_unique<Line>(trans_.pos, trans_.quaRot, Utility3D::VECTOR_ZERO, Utility3D::VECTOR_ZERO);
-	MakeCollider(TAG_PRIORITY::MOVE_LINE, { tag_ }, std::move(geo));
-	tagPrioritys_.emplace_back(TAG_PRIORITY::MOVE_LINE);
-
-	//上下ライン
-	geo = std::make_unique<Line>(trans_.pos, trans_.quaRot, CAP_LOCAL_TOP, CAP_LOCAL_DOWN);
-	MakeCollider(TAG_PRIORITY::UPDOWN_LINE, { tag_ }, std::move(geo));
-	tagPrioritys_.emplace_back(TAG_PRIORITY::UPDOWN_LINE);
-
-	onHit_ = std::make_unique<EnemyOnHit>(*this, movedPos_, moveDiff_, *action_, collider_, trans_);
+	MakeColliderFromJsonData();
+	onHit_ = std::make_unique<EnemyOnHit>(*this, movedPos_, moveDiff_, *actionCtrl_, collider_, trans_);
 }
 void Enemy::UpdateNormal(void)
 {
@@ -262,7 +243,7 @@ void Enemy::UpdateNormal(void)
 	//logic_->Update();
 
 	////アクションの更新
-	//action_->Update();
+	//actionCtrl_->Update();
 
 	//アニメーションの更新
 	animCtrl_->Update();
@@ -273,14 +254,6 @@ void Enemy::UpdateNormal(void)
 	//Transformの更新
 	trans_.quaRot = charaRot_.playerRotY_;
 	trans_.Update();
-}
-void Enemy::AddAction(void)
-{
-	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, InputManager::JOYPAD_NO::PAD1);
-	using ACTION_TYPE = ActionController::ACTION_TYPE;
-	//使用するアクションを追加
-	action_->AddAction({ ACTION_TYPE::IDLE,ACTION_TYPE::MOVE
-		,ACTION_TYPE::REACT,ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP,ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP });
 }
 
 #ifdef _DEBUG

@@ -1,6 +1,13 @@
+#include "../Utility/UtilityJson.h"
+#include "../Utility/Utility3D.h"
 #include "../Manager/Resource/ResourceManager.h"
 #include "../Manager/Generic/SceneManager.h"
 #include "../Manager/Game/CollisionManager.h"
+#include "./Common/Geometry/Capsule.h"
+#include "./Common/Geometry/Cube.h"
+#include "./Common/Geometry/Model.h"
+#include "./Common/Geometry/Sphere.h"
+#include "./Common/Geometry/Line.h"
 #include "ObjectBase.h"
 
 ObjectBase::ObjectBase(void)
@@ -9,6 +16,35 @@ ObjectBase::ObjectBase(void)
 	tag_(Collider::TAG::NONE),
 	trans_()
 {
+	makeCollisionTable_ = {
+		{"capsule",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeCapsuleCollision(_priStr,_data); }},
+		{"line",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeLineCollision(_priStr,_data); }},
+		{"cube",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeCubeCollision(_priStr,_data); }},
+		{"sphere",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeSphereCollision(_priStr,_data); }},
+		{"model",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeModelCollision(_priStr,_data); }}
+	};
+	
+	//コライダーのタグ
+	colTagStrTable_ = {
+		{"player",Collider::TAG::PLAYER1},
+		{"enemy",Collider::TAG::ENEMY1},
+		{"normalAttack",Collider::TAG::NML_ATK},
+		{"jumpAttack",Collider::TAG::JUMP_ATK},
+		{"stage",Collider::TAG::STAGE},
+		{"stompRock",Collider::TAG::ROCK},
+		{"fire",Collider::TAG::FIRE},
+		{"camera",Collider::TAG::CAMERA}
+	};
+	//優先順位用のタグ
+	colTagPriorityStrTable_ = {
+		{"STAGE",TAG_PRIORITY::STAGE},
+		{"Body",TAG_PRIORITY::BODY},
+		{"MoveLine",TAG_PRIORITY::MOVE_LINE},
+		{"UpdownLine",TAG_PRIORITY::UPDOWN_LINE},
+		{"AttackSphere",TAG_PRIORITY::ATK_SPHERE},
+		{"RockSphere",TAG_PRIORITY::ROCK_SPHERE},
+		{"FireSphere",TAG_PRIORITY::FIRE_SPHERE}
+	};
 }
 
 ObjectBase::~ObjectBase(void)
@@ -31,7 +67,7 @@ void ObjectBase::MakeCollider(const TAG_PRIORITY _tagPriority, const std::set<Co
 
 const bool ObjectBase::IsAliveCollider(const Collider::TAG _chataTag, const Collider::TAG _tag)
 {
-	for (auto& col:collider_)
+	for (auto& col : collider_)
 	{
 		auto tags = col.second->GetTags();
 		//特定のタグを見つけるまでイテレータを回す
@@ -79,5 +115,140 @@ void ObjectBase::DeleteAllCollider(void)
 
 	//当たり判定情報の削除
 	collider_.clear();
+}
+
+void ObjectBase::LoadObjectData(void)
+{
+
+}
+
+void ObjectBase::MakeColliderFromJsonData(void)
+{
+	const auto& colData = resMng_.Load(ResourceManager::SRC::COLLISION_DATA).jsonData;
+
+	//取得したいオブジェクト名がなければ処理を飛ばす
+	if (!colData.contains(objectName_))return;
+	for (const auto& [key, data] : colData[objectName_].items())
+	{
+		const std::string& geoStr = data.value("geometry", "");
+		makeCollisionTable_[geoStr](key,data);
+	}
+}
+
+void ObjectBase::MakeLineCollision(const std::string& _priStr, const nlohmann::json& _data)
+{
+	//当たらないタグの取得
+	std::set<Collider::TAG> noneHitTag = GetNoneHitTag(_data);
+
+	//優先順位用タグの取得
+	auto it = colTagPriorityStrTable_.find(_priStr);
+
+	//ラインパラメーター取得
+	const VECTOR& localPos1 = UtilityJson::GetLoadVector3("localPos1",_data);
+	const VECTOR& localPos2 = UtilityJson::GetLoadVector3("localPos2",_data);
+
+	//コライダーの生成
+	std::unique_ptr<Geometry>geo = std::make_unique<Line>(trans_.pos, trans_.quaRot, localPos1, localPos2);
+	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
+	tagPrioritys_.emplace_back(it->second);
+}
+
+
+void ObjectBase::MakeCapsuleCollision(const std::string& _priStr, const nlohmann::json& _data)
+{
+	//当たらないタグの取得
+	std::set<Collider::TAG> noneHitTag = GetNoneHitTag(_data);
+
+	//優先順位用タグの取得
+	auto it = colTagPriorityStrTable_.find(_priStr);
+
+	//カプセルのパラメーター取得
+	const VECTOR localTop = UtilityJson::GetLoadVector3("localPos1",_data);
+	const VECTOR localDown = UtilityJson::GetLoadVector3("localPos2",_data);
+	const float radius = _data.value("radius", 0.0f);
+
+	std::unique_ptr<Geometry>geo = std::make_unique<Capsule>(trans_.pos, trans_.quaRot, localTop, localDown, radius);
+	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
+	tagPrioritys_.emplace_back(it->second);
+}
+
+void ObjectBase::MakeCubeCollision(const std::string& _priStr, const nlohmann::json& _data)
+{
+	//当たらないタグの取得
+	std::set<Collider::TAG> noneHitTag = GetNoneHitTag(_data);
+
+	//優先順位用タグの取得
+	auto it = colTagPriorityStrTable_.find(_priStr);
+
+	//球のパラメーター取得
+	const VECTOR min = UtilityJson::GetLoadVector3("min", _data);
+	const VECTOR max = UtilityJson::GetLoadVector3("max", _data);
+	
+	//ハーフサイズ指定用のパラメータ
+	const VECTOR halfSize = UtilityJson::GetLoadVector3("halfSize", _data);
+
+	//コライダーの生成
+	std::unique_ptr<Geometry>geo = std::make_unique<Cube>(trans_.pos, trans_.quaRot,halfSize);
+
+	//最大頂点と最小頂点が指定されていた場合の生成
+	if (Utility3D::EqualsVZero(min) || Utility3D::EqualsVZero(max))
+	{
+		geo= std::make_unique<Cube>(trans_.pos, trans_.quaRot, min,max);
+	}
+	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
+	tagPrioritys_.emplace_back(it->second);
+}
+
+void ObjectBase::MakeSphereCollision(const std::string& _priStr, const nlohmann::json& _data)
+{
+	//当たらないタグの取得
+	std::set<Collider::TAG> noneHitTag = GetNoneHitTag(_data);
+
+	//優先順位用タグの取得
+	auto it = colTagPriorityStrTable_.find(_priStr);
+
+	//球のパラメーター取得
+	const float radius = _data.value("radius", 0.0f);
+
+	//コライダーの生成
+	std::unique_ptr<Geometry>geo = std::make_unique<Sphere>(trans_.pos, radius);
+	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
+	tagPrioritys_.emplace_back(it->second);
+}
+
+void ObjectBase::MakeModelCollision(const std::string& _priStr, const nlohmann::json& _data)
+{
+	//当たらないタグの取得
+	std::set<Collider::TAG> noneHitTag = GetNoneHitTag(_data);
+
+	//優先順位用タグの取得
+	auto it = colTagPriorityStrTable_.find(_priStr);
+
+	//球のパラメーター取得
+	const std::string model = _data.value("model", "");
+	const ResourceManager::SRC useSrc = resMng_.GetSrcFromString(model);
+	const int modelId = useSrc == ResourceManager::SRC::NONE ? trans_.modelId : resMng_.LoadModelDuplicate(useSrc);
+
+	//コライダーの生成
+	std::unique_ptr<Geometry>geo = std::make_unique<Model>(trans_.pos,trans_.quaRot,modelId);
+	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
+	tagPrioritys_.emplace_back(it->second);
+}
+
+const std::set<Collider::TAG> ObjectBase::GetNoneHitTag(const nlohmann::json& _data)
+{
+	std::set<Collider::TAG> ret = {};
+	if (_data.contains("noneHitTag"))
+	{
+		for (const auto& noneHit : _data["noneHitTag"])
+		{
+			const std::string& tagStr = noneHit.get<std::string>();
+			auto it = colTagStrTable_.find(tagStr);
+
+			//登録されていれば配列に追加
+			if (it != colTagStrTable_.end())ret.emplace(it->second);
+		}
+	}
+	return ret;
 }
 

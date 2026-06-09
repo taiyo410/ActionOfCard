@@ -118,7 +118,7 @@ public:
 		CHARA_DATA,						//キャラクターデータ
 		DECK_DATA,						//デッキデータ
 		ACTION_DATA,					//アクションデータ
-		ANIMATION_PARAMETER_DATA,		//アニメーションデータ
+		COLLISION_DATA,		//アニメーションデータ
 		//ピクセルシェーダ
 		STAGE_PS,					//ステージ
 		SKYDOME_PS,					//スカイドーム

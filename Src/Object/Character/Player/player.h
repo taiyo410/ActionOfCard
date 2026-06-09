@@ -36,17 +36,6 @@ class Player :public CharacterBase
 
 public:
 
-	//半径
-	static constexpr float CAP_RADIUS = 25.0f;
-
-	//デフォルトのアニメーションスピード
-	static constexpr float DEFAULT_ANIM_SPD = 60.0f;
-
-	//カプセル関連
-	static constexpr VECTOR CAP_LOCAL_TOP = { 0.0f, 200.0f, 0.0f };	//トップ座標
-	static constexpr VECTOR CAP_LOCAL_DOWN = { 0.0f,50.0f,0.0f };	//ダウン座標
-
-
 	/// @brief コンストラクタ
 	/// @param  
 	Player(void);
@@ -111,7 +100,17 @@ private:
 	static constexpr int PLAYER_NUM = 0;					//プレイヤーナンバー(デッキクラスで判定用)
 	static constexpr int SPINE_FRAME_NO = 0;				//プレイヤーの腰のフレーム番号
 	static constexpr int HAND_FRAME_NO = 36;				//手のフレーム番号
+
+	const std::string PLAYER_STR = "Player";
+
+	//半径
+	static constexpr float CAP_RADIUS = 25.0f;
 #pragma endregion
+
+#pragma region 外部ファイル読み込み
+	int handFrameNo_;		//手のボーン番号
+#pragma endregion
+
 
 #pragma region メンバー変数
 
@@ -130,11 +129,15 @@ private:
 	void DrawDebug(void);
 #endif // _DEBUG
 
+	void LoadCharacter(void)override;	//キャラクター別のロード
+	void InitCharacter(void)override;	//キャラクター別の初期化
+
 	void MakeColliderGeometry(void)override;	//当たり判定初期化
 	void ChangeUpdateOverDirection(void)override;//ゲームオーバーに遷移
 
-	void AddAction(void)override;		//アクションの追加
 	void Action(void);					//アクション更新
+
+
 
 	//更新
 	void UpdateDirection(void) override;		//演出

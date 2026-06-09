@@ -59,6 +59,9 @@ public:
 
 private:
 
+    //オブジェクト名に使用する文字列
+    const std::string ROCK_STR = "StompRock";
+
     //ジャンプ力
     static constexpr float POW_JUMP = 100.0f;
 

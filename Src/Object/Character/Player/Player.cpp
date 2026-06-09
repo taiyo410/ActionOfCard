@@ -19,13 +19,13 @@
 #include"../Base/CharacterOnHitBase.h"
 #include"./PlayerOnHit.h"
 #include "./Weapon.h"
-#include"../Base/ActionBase.h"
-#include"../Action/Idle.h"
-#include"../Action/Run.h"
-#include"../Action/React.h"
-#include"../Action/Dodge.h"
-#include "./PlayerLogic.h"
+//#include"../Base/ActionBase.h"
+//#include"../Action/Idle.h"
+//#include"../Action/Run.h"
+//#include"../Action/React.h"
+//#include"../Action/Dodge.h"
 #include "./PlayerMagicFIre.h"
+#include "./PlayerLogic.h"
 #include "Player.h"
 
 Player::Player(void)
@@ -33,14 +33,17 @@ Player::Player(void)
 	cntl_(InputManager::CONTROLL_TYPE::ALL),
 	padNum_()
 {
+	tag_ = Collider::TAG::PLAYER1;
+	objectName_ = PLAYER_STR;
 	padNum_ = static_cast<InputManager::JOYPAD_NO>(playerNum_ + 1);		//初めのJOYPADがkey_padなのでパッドの番号に合わせる
 	characterType_ = CHARACTER_TYPE::PLAYER;
-	capRadius_ = CAP_RADIUS;
 	deck_ = std::make_shared<CardDeck>(characterType_, PLAYER_NUM);
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
 	weapon_ = std::make_unique<Weapon>(*this);
 	logic_ = std::make_unique<PlayerLogic>(trans_, isMoveable_, padNum_, InputManager::CONTROLL_TYPE::ALL);
-	hipBoneNo_ = SPINE_FRAME_NO;
+	spineBoneNo_ = SPINE_FRAME_NO;
+	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, spineBoneNo_);
+	actionCtrl_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, padNum_);
 }
 
 Player::~Player(void)
@@ -50,61 +53,19 @@ Player::~Player(void)
 
 void Player::Load(void)
 {
-	trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::PLAYER));
-	trans_.scl = MODEL_SCL;
-	trans_.quaRotLocal =
-		Quaternion::Euler({ 0.0f, UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
-	trans_.pos = { 0.0f,0.0f,-CENTER_POS_Z_OFFSET };
-	trans_.localPos = { 0.0f,Player::CAP_RADIUS,0.0f };
-
-	//アニメーションコントローラーの生成
-	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, hipBoneNo_);
-
-	//ステータスのロード
-	LoadStatus();
-
-	//アクションの追加
-	AddAction();
-
-	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
-		{
-			//アクションコントローラーの全行動クラスに通知
-			action_->AnimLoadNotify(animVar);
-			if(animVar.name=="Death")
-			{
-				deathAnim_ = animVar.animVariable;
-			}
-			else if(animVar.name=="Idle")
-			{
-				idleAnim_ = animVar.animVariable;
-			}
-		});
+	//trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::PLAYER));
+	//trans_.scl = MODEL_SCL;
+	//trans_.quaRotLocal =
+	//	Quaternion::Euler({ 0.0f, UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
+	//trans_.pos = { 0.0f,0.0f,-CENTER_POS_Z_OFFSET };
+	//trans_.localPos = { 0.0f,Player::CAP_RADIUS,0.0f };
 	
-	action_->Load();
-	weapon_->Load();
-	resMng_.Load(SoundManager::SRC::ENEMY_HIT_SE);
+	//actionCtrl_->Load();
 }
 
 void Player::Init(void)
 {
 
-	//武器の追従対象をセット
-	weapon_->SetTargetAndFrameNo(&trans_, HAND_FRAME_NO);
-
-	tag_ = Collider::TAG::PLAYER1;
-	
-	//プレイヤー入力
-	logic_->Init();
-
-	MakeColliderGeometry();
-
-	action_->Init();
-	weapon_->Init();
-
-	deck_->Init();
-
-	//更新
-	trans_.Update();
 }
 
 void Player::UpdateDirection(void)
@@ -169,14 +130,13 @@ void Player::Draw(void)
 	{
 		drawableFire_.lock()->Draw();
 	}
-
 }
 
 void Player::Draw2D(void)
 {
 
 #ifdef _DEBUG
-	//action_->DrawDebug();
+	//actionCtrl_->DrawDebug();
 	DrawDebug();
 #endif // _DEBUG
 }
@@ -231,11 +191,6 @@ void Player::Damage(const int _dam)
 #ifdef _DEBUG
 void Player::DrawDebug(void)
 {
-	//for (auto& col : collider_)
-	//{
-	//	col.second->GetGeometry().Draw();
-	//}
-
 	animCtrl_->DrawDebug();
 
 	cardPresent_->DrawCardDeckError();
@@ -243,34 +198,46 @@ void Player::DrawDebug(void)
 
 #endif // _DEBUG
 
-void Player::AddAction(void)
+void Player::LoadCharacter(void)
 {
-	//アクション
-	action_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, padNum_);
-	using ACTION_TYPE = ActionController::ACTION_TYPE;
-	action_->AddAction({ ACTION_TYPE::IDLE, ACTION_TYPE::MOVE,ACTION_TYPE::REACT, ACTION_TYPE::DODGE
-		,ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE, ACTION_TYPE::CARD_ATTACK_ONE_SHORT
-		,ACTION_TYPE::CARD_ATTACK_TWO,ACTION_TYPE::CARD_ATTACK_THREE,ACTION_TYPE::CARD_MAGIC_FIRE,ACTION_TYPE::CARD_RELOAD });
+	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
+		{
+			//アクションコントローラーの全行動クラスに通知
+			actionCtrl_->AnimLoadNotify(animVar);
+			if (animVar.name == "Death")
+			{
+				deathAnim_ = animVar.animVariable;
+			}
+			else if (animVar.name == "Idle")
+			{
+				idleAnim_ = animVar.animVariable;
+			}
+		});
+	weapon_->Load();
+	resMng_.Load(SoundManager::SRC::ENEMY_HIT_SE);
+
+	//手のボーン番号を外部ファイルから取得
+	const auto& data = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
+	if (data.contains("ModelData"))
+	{
+		const auto& handBornNoData = data["ModelData"]["handFrameNum"];
+		handFrameNo_ = handBornNoData.value("handFrameNum", 0);
+	}
+
+}
+
+void Player::InitCharacter(void)
+{
+	//武器の追従対象をセット
+	weapon_->SetTargetAndFrameNo(&trans_, handFrameNo_);
+	weapon_->Init();
 }
 
 void Player::MakeColliderGeometry(void)
 {
-	//カプセル
-	std::unique_ptr<Geometry>geo = std::make_unique<Capsule>(trans_.pos, trans_.quaRot, CAP_LOCAL_TOP, CAP_LOCAL_DOWN, CAP_RADIUS);
-	MakeCollider(TAG_PRIORITY::BODY, { tag_ }, std::move(geo));
-	tagPrioritys_.emplace_back(TAG_PRIORITY::BODY);
+	MakeColliderFromJsonData();
 
-	//現在の座標と移動後座標を結んだ線のコライダ(落下時の当たり判定)
-	geo = std::make_unique<Line>(trans_.pos, trans_.quaRot, Utility3D::VECTOR_ZERO, Utility3D::VECTOR_ZERO);
-	MakeCollider(TAG_PRIORITY::MOVE_LINE, { tag_ }, std::move(geo));
-	tagPrioritys_.emplace_back(TAG_PRIORITY::MOVE_LINE);
-
-	//上下ライン
-	geo = std::make_unique<Line>(trans_.pos, trans_.quaRot, CAP_LOCAL_TOP, CAP_LOCAL_DOWN);
-	MakeCollider(TAG_PRIORITY::UPDOWN_LINE, { tag_ }, std::move(geo));
-	tagPrioritys_.emplace_back(TAG_PRIORITY::UPDOWN_LINE);
-
-	onHit_ = std::make_unique<PlayerOnHit>(*this, movedPos_, moveDiff_, *action_, collider_, trans_);
+	onHit_ = std::make_unique<PlayerOnHit>(*this, movedPos_, moveDiff_, *actionCtrl_, collider_, trans_);
 	onHit_->Init();
 	onHit_->Load();
 }
@@ -281,7 +248,7 @@ void Player::Action(void)
 	logic_->Update();
 
 	//アクション関係の更新
-	action_->Update();
+	actionCtrl_->Update();
 
 	//当たり判定の更新
 	UpdatePost();

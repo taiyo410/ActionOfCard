@@ -56,13 +56,13 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 
 	//武器の取得
 	auto& weapon = dynamic_cast<ItemBase&>(parent);
-	if (weapon.GetIsDamage()||action_.GetActionType()==ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
+	if (weapon.GetIsDamage()||actionCtrl_.GetActionType()==ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
 
 	//ダメージを与えたことを知らせる
 	weapon.SetIsDamage();
 
 	//相手キャラの技攻撃力取得
-	const float& atkPoint = action_.GetInput().GetTargetCharacter().lock()->GetMainAction().GetAtkPoint();
+	const float& atkPoint = actionCtrl_.GetInput().GetTargetCharacter().lock()->GetMainAction().GetAtkPoint();
 
 	//相手の数字との差が近いほどダメージを追加する
 	const int cardDif= CardSystem::GetInstance().GetCardDif();
@@ -75,7 +75,7 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	int damage = static_cast<int>(atkPoint) + addDam;
 	character_.Damage(damage);
 
-	action_.ChangeAction(ActionController::ACTION_TYPE::REACT);
+	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
 }
 
 void EnemyOnHit::CollChara(const std::weak_ptr<Collider> _hitCol)

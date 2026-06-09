@@ -21,6 +21,7 @@ PlayerMagicFire::PlayerMagicFire(VECTOR& _startPos, VECTOR& _dir) :
 	noneHitTag_.emplace(Collider::TAG::CAMERA);
 	noneHitTag_.emplace(Collider::TAG::PLAYER1);
 	noneHitTag_.emplace(Collider::TAG::NML_ATK);
+	objectName_=FIRE_STR;
 
 	tag_ = Collider::TAG::FIRE;
 }

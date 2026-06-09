@@ -40,7 +40,8 @@ void Stage::Init(void)
 
 	//“–‚½‚è”»’èì¬
 	std::unique_ptr<Geometry>geo = std::make_unique<Model>(trans_.pos, trans_.quaRot, trans_.modelId);
-	MakeCollider(TAG_PRIORITY::BODY,{ tag_ }, std::move(geo), { Collider::TAG::NML_ATK });
+	MakeCollider(TAG_PRIORITY::STAGE,{ tag_ }, std::move(geo), { Collider::TAG::NML_ATK });
+	tagPrioritys_.emplace_back(TAG_PRIORITY::STAGE);
 
 	//ƒ}ƒeƒŠƒAƒ‹
 	material_=std::make_unique<ModelMaterial>(

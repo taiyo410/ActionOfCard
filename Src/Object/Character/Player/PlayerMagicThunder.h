@@ -46,6 +46,11 @@ public:
 
 private:
 
+#pragma region メンバー定数
+    const std::string THUNDER_STR = "Thunder";
+#pragma endregion
+
+
 #pragma region 外部ファイル読み込み
 
 #pragma endregion

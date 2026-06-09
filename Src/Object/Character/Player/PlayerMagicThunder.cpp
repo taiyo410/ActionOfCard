@@ -11,6 +11,8 @@
 PlayerMagicThunder::PlayerMagicThunder(VECTOR& _targetPos):
 	targetPos_(_targetPos)
 {
+	objectName_ = THUNDER_STR;
+
 	noneHitTag_.emplace(Collider::TAG::STAGE);
 	noneHitTag_.emplace(Collider::TAG::CAMERA);
 	noneHitTag_.emplace(Collider::TAG::PLAYER1);

@@ -123,11 +123,11 @@ public:
 
 	/// @brief 読み込み
 	/// @param  
-	virtual void Load(void)override = 0;
+	virtual void Load(void)override;
 
 	/// @brief 初期化
 	/// @param  
-	virtual void Init(void)override = 0;
+	virtual void Init(void)override;
 
 	/// @brief 更新
 	/// @param  
@@ -227,6 +227,16 @@ public:
 	/// @return ヒットポイント
 	const CharacterOnHitBase::HIT_POINT& GetHitPoint(void)const;
 
+	/// @brief カプセルのTop座標を取得
+	/// @param  
+	/// @return カプセルのTop座標
+	const VECTOR& GetCapsuleTop(void);
+
+	/// @brief カプセルのDown座標を取得
+	/// @param  
+	/// @return カプセルのTop座標
+	const VECTOR& GetCapsuleDown(void);
+
 	/// @brief ロジッククラスにターゲットをセット
 	/// @param _targetChara ターゲット
 	void SetLogicTargetCharacter(std::shared_ptr<CharacterBase>_targetChara);
@@ -287,9 +297,6 @@ protected:
 	//移動量更新条件の移動ラインの長さ
 	static constexpr float MOVE_LINE_Y_CHECK_VALUE = 1.5f;
 
-	//リロードカードステータス
-	static constexpr CardBase::CARD_STATUS RELOAD_CARD_STATUS = { -1,CardBase::CARD_TYPE::RELOAD };
-
 	//中心からのZオフセット
 	static constexpr float CENTER_POS_Z_OFFSET = 600.0f;
 
@@ -298,10 +305,22 @@ protected:
 	const std::string ENEMY_STATUS_DATA = "Enemy";		//敵
 #pragma endregion
 
+#pragma region 外部ファイル読み込み
+	STATUS maxStatus_;						//ステータス最大値
+	ResourceManager::SRC useModelSrc_;		//使用するモデル
+	VECTOR localDeg_;						//ローカル回転
+	VECTOR localPos_;						//ローカル座標
+	float modelScl_;						//モデルの大きさ
+	int spineBoneNo_;						//腰のボーン番号
+	VECTOR battleStartPos_;					//戦闘開始時のスタート座標		
+
+#pragma endregion
+
+
 #pragma region メンバー変数
 	std::unique_ptr<EffectController>effect_;			//エフェクト
 	std::unique_ptr<LogicBase>logic_;					//入力
-	std::unique_ptr<ActionController>action_;			//行動系
+	std::unique_ptr<ActionController>actionCtrl_;			//行動系
 	std::unique_ptr<AnimationController>animCtrl_;		// アニメーション
 	std::shared_ptr<CardDeck>deck_;						//デッキ
 	std::unique_ptr<CharacterOnHitBase>onHit_;			//当たった時の処理
@@ -324,17 +343,11 @@ protected:
 	VECTOR movedPos_;				//移動後座標
 	VECTOR moveDiff_;				//移動前座標
 	VECTOR movePow_;				// 移動量
-
 	ROTATION charaRot_;				//角度関連
 	STATUS status_;					//ステータス
 	UPDATE_PHASE phase_;		//更新フェーズ
 	bool isMoveable_;				//移動操作可能か
-	STATUS maxStatus_;				//ステータス
-	bool isDamage_;					//攻撃によってダメージを与えたか(与えたら判定を抜ける)
-	float damagePoint_;				//ダメージ
-	float capRadius_;				//カプセル半径
 	bool isEndClearDirect_;			//クリア演出が終わったか
-	int hipBoneNo_;					//腰のボーン番号
 	HP_DATA hpData_;				//Hpのデータ
 	CHARACTER_TYPE characterType_;	//キャラ種別
 	int hitStopFrame_;				//ヒットストップ用カウンタ(フレーム)
@@ -349,20 +362,21 @@ protected:
 #pragma endregion
 
 #pragma region メンバー関数
+
+	//各キャラクターの基本処理
+	virtual void LoadCharacter(void) = 0;	//ロード
+	virtual void InitCharacter(void) = 0;	//初期化
+	virtual void UpdateCharacter(void) = 0;	//更新
+	virtual void DrawCharacter(void) = 0;	//描画
+
 	//移動後座標などの更新
 	void UpdatePost(void);
-
-	//Jsonからステータスをロード
-	void LoadStatus(void);
 
 	//移動制限
 	void MoveLimit(const VECTOR& _stagePos, const VECTOR& _stageSize);
 
-	//アクションの追加
-	virtual void AddAction(void) = 0;
-
 	//コライダ作成
-	virtual void MakeColliderGeometry(void) = 0;
+	virtual void MakeColliderGeometry(void);
 
 	//アニメーションを外部からロード
 	using OnActionDataLoaded = std::function<void(ACTION_LOAD_DATA&)>;
@@ -373,9 +387,8 @@ protected:
 	virtual void UpdateNormal(void) = 0;			//通常更新
 	virtual void UpdateDirection(void) = 0;			//演出時更新
 	virtual void UpdateClearDirection(void) = 0;	//クリア演出
-	virtual void UpdateOverDirection(void) = 0;	//オーバー演出
+	virtual void UpdateOverDirection(void) = 0;		//オーバー演出
 	void UpdateHitStop(void);						//ヒットストップ更新
-
 
 	//遷移先の更新フェーズ
 	void ChangeUpdateNone(void);				//何もしない
@@ -386,7 +399,25 @@ protected:
 	void ChangeUpdateHitStop(void);				//ヒットストップ
 #pragma endregion
 
+private:
 
+#pragma region メンバー変数
+	//データロード関数テーブル
+	std::unordered_map<std::string, std::function<void(const nlohmann::json& _data)>>loadDataFuncTable_;
+#pragma endregion
 
+#pragma region メンバー関数
 
+	//キャラクター共通で処理する
+	void LoadCommon(void);			//ロード
+	void LoadCommonData(void);		//キャラクター共通のデータを外部ファイルから読み込み
+	void InitCommon(void);			//初期化
+	void UpdateCommon(void);		//更新
+	void DrawCommon(void);			//描画
+
+	//外部からのロード関数
+	void LoadStatus(const nlohmann::json& _data);			//ステータス
+	void LoadModelData(const nlohmann::json& _data);		//モデル情報
+	void LoadBattleStartPos(const nlohmann::json& _data);	//バトル開始時の座標の読み込み
+#pragma endregion
 };

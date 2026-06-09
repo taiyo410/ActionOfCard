@@ -1,0 +1,98 @@
+{
+  "Player": {
+    "Body": {
+      "geometry": "capsule",
+      "radius": 25.0,
+      "localPos1": {
+        "x": 0.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 50.0,
+        "z": 0.0
+      }
+    },
+    "MoveLine": {
+      "geometry": "line",
+      "localPos1": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    "UpdownLine": {
+      "geometry": "line",
+      "localPos1": {
+        "x": 0.0,
+        "y": 200.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 50.0,
+        "z": 0.0
+      }
+    }
+  },
+  "Enemy": {
+    "Body": {
+      "geometry": "capsule",
+      "radius": 150.0,
+      "localPos1": {
+        "x": 0.0,
+        "y": 750.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    "MoveLine": {
+      "geometry": "line",
+      "localPos1": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    },
+    "UpdownLine": {
+      "geometry": "line",
+      "localPos1": {
+        "x": 0.0,
+        "y": 750.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      }
+    }
+  },
+  "FireBall": {
+    "FireSphere": {
+      "geometry": "sphere",
+      "radius": 100,
+      "noneHitTag": [
+        "stage",
+        "camera",
+        "player",
+        "normalAttack"
+      ]
+    }
+  }
+}

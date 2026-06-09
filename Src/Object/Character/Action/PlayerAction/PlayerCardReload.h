@@ -28,6 +28,8 @@ public:
     /// @param  
     void Update(void) override;
 
+	/// @brief 解放
+	/// @param  
 	void Release(void) override;
 
     /// @brief アニメーション情報のロード

@@ -104,6 +104,9 @@ public:
 private:
 
 	//定数
+	//Enemyの文字列
+	const std::string ENEMY_STR = "Enemy";
+
 	//敵の腰のフレーム番号
 	static constexpr int SPINE_FRAME_NO = 1;
 
@@ -112,14 +115,6 @@ private:
 
 	//敵番号(デッキで判定する用)
 	static constexpr int ENEMY_NUM = 1;
-
-	//足音間隔
-	static constexpr float FOOT_SE_DIS = 0.6f;
-
-	//カプセル関連
-	static constexpr VECTOR CAP_LOCAL_TOP = { 0.0f, 150.0f*MODEL_SIZE_MULTIPLITER, 0.0f };	//トップ座標
-	static constexpr VECTOR CAP_LOCAL_DOWN = { 0.0f,0.0f,0.0f };	//ダウン座標
-	static constexpr float CAP_RADIUS = 30.0f* MODEL_SIZE_MULTIPLITER;				//カプセル球の半径
 
 	//倒れるエフェクトのスケール
 	static constexpr float DEATH_EFF_SCL = 100.0f;
@@ -140,6 +135,9 @@ private:
 	//咆哮アニメーション
 	AnimationController::ANIMATION_VARIABLE roarAnim_;
 
+	//キャラクター単体でのロード
+	void LoadCharacter(void)override;
+
 	//コライダ作成
 	void MakeColliderGeometry(void)override;
 
@@ -152,9 +150,6 @@ private:
 	/// @brief クリア演出に変更
 	/// @param  
 	void ChangeUpdateClearDirection(void)override;
-
-	//アクションの追加
-	void AddAction(void)override;
 
 #ifdef _DEBUG
 	void DrawDebug(void);
