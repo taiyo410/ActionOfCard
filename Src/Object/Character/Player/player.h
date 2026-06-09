@@ -111,7 +111,6 @@ private:
 	int handFrameNo_;		//手のボーン番号
 #pragma endregion
 
-
 #pragma region メンバー変数
 
 	std::weak_ptr<Camera>camera_;			//カメラ
@@ -129,20 +128,23 @@ private:
 	void DrawDebug(void);
 #endif // _DEBUG
 
+	//ロジックによる操作を受け付ける
+	void AcceptLogicControl(void) override;
+
 	void LoadCharacter(void)override;	//キャラクター別のロード
 	void InitCharacter(void)override;	//キャラクター別の初期化
 
 	void MakeColliderGeometry(void)override;	//当たり判定初期化
 	void ChangeUpdateOverDirection(void)override;//ゲームオーバーに遷移
 
-	void Action(void);					//アクション更新
-
-
-
 	//更新
-	void UpdateDirection(void) override;		//演出
-	void UpdateNormal(void)override;			//通常(ゲーム中)
-	void UpdateClearDirection(void)override;	//クリア演出
+	//void UpdateDirection(void) override;		//演出
+	void UpdateDirectionCharacter(void) override;	//キャラクター別の更新
+	//void UpdateNormal(void)override;			//通常(ゲーム中)
+	void UpdateNormalCharacter(void) override;
+	//void UpdateClearDirection(void) override;	//クリア演出
+	void UpdateClearDirectionCharacter(void) override;
+	void UpdateOverDirectionCharacter(void) override;
 	void UpdateOverDirection(void)override;		//ゲームオーバー
 #pragma endregion
 };

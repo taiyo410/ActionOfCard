@@ -19,11 +19,6 @@
 #include"../Base/CharacterOnHitBase.h"
 #include"./PlayerOnHit.h"
 #include "./Weapon.h"
-//#include"../Base/ActionBase.h"
-//#include"../Action/Idle.h"
-//#include"../Action/Run.h"
-//#include"../Action/React.h"
-//#include"../Action/Dodge.h"
 #include "./PlayerMagicFIre.h"
 #include "./PlayerLogic.h"
 #include "Player.h"
@@ -50,60 +45,88 @@ Player::~Player(void)
 {
 	collider_.clear();
 }
+//void Player::UpdateDirection(void)
+//{
+//	//アニメーションの更新
+//	animCtrl_->Update();
+//
+//	//武器の更新
+//	weapon_->Update();
+//
+//	//Transformの更新
+//	trans_.quaRot = charaRot_.playerRotY_;
+//	trans_.Update();
+//}
 
-void Player::Load(void)
+void Player::UpdateDirectionCharacter(void)
 {
-	//trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::PLAYER));
-	//trans_.scl = MODEL_SCL;
-	//trans_.quaRotLocal =
-	//	Quaternion::Euler({ 0.0f, UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
-	//trans_.pos = { 0.0f,0.0f,-CENTER_POS_Z_OFFSET };
-	//trans_.localPos = { 0.0f,Player::CAP_RADIUS,0.0f };
-	
-	//actionCtrl_->Load();
-}
-
-void Player::Init(void)
-{
-
-}
-
-void Player::UpdateDirection(void)
-{
-	//アニメーションの更新
-	animCtrl_->Update();
-
 	//武器の更新
 	weapon_->Update();
-
-	//Transformの更新
-	trans_.quaRot = charaRot_.playerRotY_;
-	trans_.Update();
 }
 
-void Player::UpdateNormal(void)
+//void Player::UpdateNormal(void)
+//{
+//	//プレイヤー状態更新
+//	//Action();
+//
+//		//ロジック
+//	logic_->Update();
+//
+//	//アクション関係の更新
+//	actionCtrl_->Update();
+//
+//
+//	//アニメーション
+//	animCtrl_->Update();
+//
+//	//武器
+//	weapon_->Update();
+//
+//	//当たり判定の更新
+//	UpdatePost();
+//
+//	trans_.quaRot = charaRot_.playerRotY_;
+//	trans_.Update();
+//}
+
+void Player::UpdateNormalCharacter(void)
 {
-	//プレイヤー状態更新
-	Action();
-
-	//アニメーション
-	animCtrl_->Update();
-
-	//武器
 	weapon_->Update();
 }
 
-void Player::UpdateClearDirection(void)
-{
-	//演出と同じ更新
-	UpdateDirection();
+//void Player::UpdateClearDirection(void)
+//{
+//	//演出と同じ更新
+//	UpdateDirection();
+//
+//	//プレイヤー状態更新
+//	//ロジック
+//	logic_->Update();
+//
+//	//アクション関係の更新
+//	actionCtrl_->Update();
+//
+//	//当たり判定の更新
+//	UpdatePost();
+//}
 
-	//プレイヤー状態更新
-	Action();
+void Player::UpdateClearDirectionCharacter(void)
+{
+	//敵倒した後は操作を受け付ける
+	AcceptLogicControl();
+}
+
+void Player::UpdateOverDirectionCharacter(void)
+{
+	if (animCtrl_->IsEnd(static_cast<int>(ANIM_TYPE::DEATH)))
+	{
+		isEndClearDirect_ = true;
+	}
 }
 
 void Player::UpdateOverDirection(void)
 {
+	//演出時と同じ、操作のみを受け付けない処理
 	UpdateDirection();
 	if (animCtrl_->IsEnd(static_cast<int>(ANIM_TYPE::DEATH)))
 	{
@@ -198,6 +221,14 @@ void Player::DrawDebug(void)
 
 #endif // _DEBUG
 
+void Player::AcceptLogicControl(void)
+{
+	CharacterBase::AcceptLogicControl();
+
+	//武器の更新
+	weapon_->Update();
+}
+
 void Player::LoadCharacter(void)
 {
 	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
@@ -240,20 +271,5 @@ void Player::MakeColliderGeometry(void)
 	onHit_ = std::make_unique<PlayerOnHit>(*this, movedPos_, moveDiff_, *actionCtrl_, collider_, trans_);
 	onHit_->Init();
 	onHit_->Load();
-}
-
-void Player::Action(void)
-{
-	//ロジック
-	logic_->Update();
-
-	//アクション関係の更新
-	actionCtrl_->Update();
-
-	//当たり判定の更新
-	UpdatePost();
-
-	trans_.quaRot = charaRot_.playerRotY_;
-	trans_.Update();
 }
 

@@ -366,7 +366,7 @@ protected:
 	//各キャラクターの基本処理
 	virtual void LoadCharacter(void) = 0;	//ロード
 	virtual void InitCharacter(void) = 0;	//初期化
-	virtual void UpdateCharacter(void) = 0;	//更新
+	virtual void UpdateNormalCharacter(void) = 0;	//更新
 	virtual void DrawCharacter(void) = 0;	//描画
 
 	//移動後座標などの更新
@@ -382,12 +382,18 @@ protected:
 	using OnActionDataLoaded = std::function<void(ACTION_LOAD_DATA&)>;
 	void LoadAddAnimation(OnActionDataLoaded callBack=nullptr);
 
+	//ロジックによる操作を受け付ける
+	virtual void AcceptLogicControl(void);
+
 	//更新フェーズ	
 	void UpdateNone(void);							//何もしない
-	virtual void UpdateNormal(void) = 0;			//通常更新
-	virtual void UpdateDirection(void) = 0;			//演出時更新
-	virtual void UpdateClearDirection(void) = 0;	//クリア演出
-	virtual void UpdateOverDirection(void) = 0;		//オーバー演出
+	virtual void UpdateNormal(void);			//通常更新
+	virtual void UpdateDirection(void);			//演出時更新
+	virtual void UpdateDirectionCharacter(void) = 0;			//演出時更新
+	virtual void UpdateClearDirection(void);	//クリア演出
+	virtual void UpdateClearDirectionCharacter(void) = 0;	//クリア演出
+	virtual void UpdateOverDirection(void);		//オーバー演出
+	virtual void UpdateOverDirectionCharacter(void) = 0;		//オーバー演出
 	void UpdateHitStop(void);						//ヒットストップ更新
 
 	//遷移先の更新フェーズ
@@ -412,7 +418,9 @@ private:
 	void LoadCommon(void);			//ロード
 	void LoadCommonData(void);		//キャラクター共通のデータを外部ファイルから読み込み
 	void InitCommon(void);			//初期化
-	void UpdateCommon(void);		//更新
+	void UpdateNormalCommon(void);		//更新
+	void UpdateDirectionCommon(void);	//演出時の共通の更新
+	void UpdateClearDirectionCommon(void);
 	void DrawCommon(void);			//描画
 
 	//外部からのロード関数

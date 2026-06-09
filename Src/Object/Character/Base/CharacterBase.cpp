@@ -107,7 +107,8 @@ void CharacterBase::InitCommon(void)
 			, UtilityCommon::Deg2RadF(localDeg_.z) });
 	trans_.pos = battleStartPos_;
 	trans_.localPos = localPos_;
-	//プレイヤー入力
+
+	//入力
 	logic_->Init();
 	actionCtrl_->Init();
 	deck_->Init();
@@ -115,7 +116,25 @@ void CharacterBase::InitCommon(void)
 	trans_.Update();
 }
 
-void CharacterBase::UpdateCommon(void)
+void CharacterBase::UpdateNormalCommon(void)
+{
+	//ロジックによる操作の受付
+	AcceptLogicControl();
+
+	//回転の同期
+	UpdatePost();
+}
+
+void CharacterBase::UpdateDirectionCommon(void)
+{
+	//方向の更新
+	actionCtrl_->Update();
+
+	//アニメーションの更新
+	animCtrl_->Update();
+}
+
+void CharacterBase::UpdateClearDirectionCommon(void)
 {
 }
 
@@ -133,6 +152,13 @@ void CharacterBase::Init(void)
 void CharacterBase::Update(void)
 {
 	updatePhase_();
+
+	//アニメーションの更新
+	animCtrl_->Update();
+
+	//Transformの更新
+	trans_.quaRot = charaRot_.playerRotY_;
+	trans_.Update();
 }
 
 void CharacterBase::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)
@@ -482,9 +508,44 @@ void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 	}
 }
 
+void CharacterBase::AcceptLogicControl(void)
+{
+	//ロジックの更新
+	logic_->Update();
+
+	//アクションの更新
+	actionCtrl_->Update();
+
+	//アニメーションの更新
+	animCtrl_->Update();
+}
+
 void CharacterBase::UpdateNone(void)
 {
 	//何もしない
+}
+
+void CharacterBase::UpdateNormal(void)
+{
+	UpdateNormalCommon();
+	UpdateNormalCharacter();
+}
+
+void CharacterBase::UpdateDirection(void)
+{
+	UpdateDirectionCommon();
+
+	UpdateDirectionCharacter();
+}
+
+void CharacterBase::UpdateClearDirection(void)
+{
+
+}
+
+void CharacterBase::UpdateOverDirection(void)
+{
+
 }
 
 void CharacterBase::UpdateHitStop(void)

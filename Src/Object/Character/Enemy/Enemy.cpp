@@ -80,25 +80,34 @@ Enemy::~Enemy(void)
 //	//MakeColliderGeometry();
 //}
 
-void Enemy::UpdateDirection(void)
-{
-	//方向の更新
-	actionCtrl_->Update();
+//void Enemy::UpdateDirection(void)
+//{
+//	//方向の更新
+//	actionCtrl_->Update();
+//
+//	//アニメーションの更新
+//	animCtrl_->Update();
+//
+//	//Transformの更新
+//	trans_.quaRot = charaRot_.playerRotY_;
+//	trans_.Update();
+//}
 
+void Enemy::UpdateDirectionCharacter(void)
+{
 	//咆哮演出の更新
 	UpdateRoarDirection();
-
-	//アニメーションの更新
-	animCtrl_->Update();
-
-	//Transformの更新
-	trans_.quaRot = charaRot_.playerRotY_;
-	trans_.Update();
 }
 
-void Enemy::UpdateClearDirection(void)
+//void Enemy::UpdateClearDirection(void)
+//{
+//	animCtrl_->Update();
+//
+//	trans_.Update();
+//}
+
+void Enemy::UpdateClearDirectionCharacter(void)
 {
-	animCtrl_->Update();
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
 	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, 0, effPos);
 	effect_->Update();
@@ -112,10 +121,15 @@ void Enemy::UpdateClearDirection(void)
 		modelScl_ -= 0.1f;
 		trans_.scl = { modelScl_,modelScl_,modelScl_ };
 	}
-	trans_.Update();
 }
 
 void Enemy::UpdateOverDirection(void)
+{
+	constexpr float ANIM_SPD_SCL = 0.2f;
+	animCtrl_->Update(ANIM_SPD_SCL);
+}
+
+void Enemy::UpdateOverDirectionCharacter(void)
 {
 	constexpr float ANIM_SPD_SCL = 0.2f;
 	animCtrl_->Update(ANIM_SPD_SCL);

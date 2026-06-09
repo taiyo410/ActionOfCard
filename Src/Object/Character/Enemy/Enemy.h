@@ -143,9 +143,12 @@ private:
 
 	//更新系
 	void UpdateNormal(void)override;			//通常更新
-	void UpdateDirection(void)override;			//演出時の更新
-	void UpdateClearDirection(void)override;	//クリア時(敵が倒れる)
+	//void UpdateDirection(void)override;			//演出時の更新
+	void UpdateDirectionCharacter(void)override;	
+	//void UpdateClearDirection(void)override;	//クリア時(敵が倒れる)
+	void UpdateClearDirectionCharacter(void) override;	
 	void UpdateOverDirection(void)override;		//ゲームオーバー
+	void UpdateOverDirectionCharacter(void) override;
 
 	/// @brief クリア演出に変更
 	/// @param  
