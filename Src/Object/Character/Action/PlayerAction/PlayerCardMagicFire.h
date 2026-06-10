@@ -1,12 +1,12 @@
 #pragma once
 
 #include <unordered_map>
-#include "./PlayerCardAttackBase.h"
+#include "./PlayerCardMagicBase.h"
 
 class PlayerMagicFire;
 
 class PlayerCardMagicFire :
-    public PlayerCardAttackBase
+    public PlayerCardMagicBase
 {
 
 public:
@@ -31,7 +31,7 @@ public:
 
     /// @brief XV
     /// @param  
-    void AttackUpdate(void) override;
+    //void AttackUpdate(void) override;
 
     /// @brief ‰ğ•ú
     /// @param
@@ -66,12 +66,12 @@ private:
 
 #pragma region ƒƒ“ƒo[ŠÖ”
     //XV
-    void UpdateSpellCast(void);     //‰r¥’†
-    void UpdateAttack(void);        //UŒ‚
+    void UpdateSpellCast(void) override;     //‰r¥’†
+    void UpdateAttack(void) override;        //UŒ‚
 
     //‘JˆÚ
-    void ChangeSpellCast(void);     //‰r¥’†
-    void ChangeAttack(void);        //UŒ‚
+    void ChangeSpellCast(void) override;     //‰r¥’†
+    void ChangeAttack(void) override;        //UŒ‚
 #pragma endregion
 };
 

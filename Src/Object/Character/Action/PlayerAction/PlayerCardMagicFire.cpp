@@ -8,13 +8,9 @@
 #include "PlayerCardMagicFire.h"
 
 PlayerCardMagicFire::PlayerCardMagicFire(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
-	PlayerCardAttackBase(_actCntl, _charaObj, _deck)
+	PlayerCardMagicBase(_actCntl, _charaObj, _deck)
 {
 	fireBall_ = std::make_shared<PlayerMagicFire>(atk_.pos, toTargetDir_);
-	changeState_ = {
-		{STATE::SPELL_CAST,[this]() {ChangeSpellCast(); }},
-		{STATE::ATTACK,[this]() {ChangeAttack(); }}
-	};
 }
 
 PlayerCardMagicFire::~PlayerCardMagicFire(void)
@@ -46,14 +42,9 @@ void PlayerCardMagicFire::InitAttack(void)
 	changeState_[STATE::SPELL_CAST]();
 }
 
-void PlayerCardMagicFire::AttackUpdate(void)
-{
-	updateState_();
-}
-
 void PlayerCardMagicFire::AttackRelease(void)
 {
-	character_.DeleteFireBall();
+	character_.DeleteItem();
 }
 
 void PlayerCardMagicFire::LoadAnimVar(const ACTION_LOAD_DATA& _data)

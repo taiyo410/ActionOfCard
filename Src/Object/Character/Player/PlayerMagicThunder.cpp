@@ -27,6 +27,7 @@ void PlayerMagicThunder::Load(void)
 
 void PlayerMagicThunder::Init(void)
 {
+	isAlive_ = true;
 	trans_.pos = targetPos_;
 	VECTOR sclVec = { thunderEffScl_ ,thunderEffScl_ ,thunderEffScl_ };
 	thunderEffPlayId_ = effect_->Play(EffectController::EFF_TYPE::THUNDER, trans_.pos, trans_.quaRot, sclVec);
@@ -36,7 +37,7 @@ void PlayerMagicThunder::Update(void)
 {
 	if (effect_->IsEnd(EffectController::EFF_TYPE::THUNDER, thunderEffPlayId_))
 	{
-		isAlive_ = true;
+		isAlive_ = false;
 	}
 }
 

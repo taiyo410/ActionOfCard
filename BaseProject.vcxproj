@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicBase.cpp" />
     <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardReload.cpp" />
     <ClCompile Include="Src\Object\Character\Player\PlayerMagicThunder.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicThunder.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="Src\Utility\UtilityJson.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicBase.h" />
     <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardReload.h" />
     <ClInclude Include="Src\Object\Character\Player\PlayerMagicThunder.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicThunder.h" />

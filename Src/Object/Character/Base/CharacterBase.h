@@ -286,7 +286,7 @@ public:
 
 	/// @brief ‰Š‚Ì•`‰æ‚ð‚â‚ß‚é
 	/// @param  
-	void DeleteFireBall(void);
+	void DeleteItem(void);
 
 protected:
 

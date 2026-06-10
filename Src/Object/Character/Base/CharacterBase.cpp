@@ -361,7 +361,7 @@ void CharacterBase::DrawItem(const std::weak_ptr<ItemBase> _item)
 	drawableItem_ = _item;
 }
 
-void CharacterBase::DeleteFireBall(void)
+void CharacterBase::DeleteItem(void)
 {
 	drawableItem_.reset();
 }

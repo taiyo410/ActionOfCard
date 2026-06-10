@@ -8,7 +8,7 @@
 #include "PlayerCardMagicThunder.h"
 
 PlayerCardMagicThunder::PlayerCardMagicThunder(ActionController& _actCtrl, CharacterBase& _charaObj, CardPresenter& _deck):
-	PlayerCardAttackBase(_actCtrl,_charaObj,_deck)
+	PlayerCardMagicBase(_actCtrl,_charaObj,_deck)
 {
 	thunder_ = std::make_shared<PlayerMagicThunder>(targetPos_);
 }
@@ -26,28 +26,13 @@ void PlayerCardMagicThunder::InitAttack(void)
 {
 	targetPos_ = actionCtrl_.GetInput().GetTargetTransform().pos;
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE), animVar_);
-	thunder_->Init();
-	character_.DrawItem(thunder_);
-}
 
-void PlayerCardMagicThunder::AttackUpdate(void)
-{
-	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE)) > atk_.colStartStep)
-	{
-		if (!thunder_->GetIsAlive())
-		{
-			//ó‘Ô‘JˆÚ
-			thunder_->Init();
-			character_.DrawItem(thunder_);
-			thunder_->MakeThunderCollider();
-		}
-
-		return;
-	}
+	changeState_[STATE::SPELL_CAST]();
 }
 
 void PlayerCardMagicThunder::AttackRelease(void)
 {
+	character_.DeleteItem();
 }
 
 void PlayerCardMagicThunder::LoadAnimVar(const ACTION_LOAD_DATA& _data)
@@ -58,4 +43,35 @@ void PlayerCardMagicThunder::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	const auto& data = _data.jsonData;
 	LoadAttackStatus(data, atk_);
 	thunder_->LoadThunderData(data);
+}
+
+void PlayerCardMagicThunder::UpdateSpellCast(void)
+{
+	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE)) > atk_.colStartStep)
+	{
+		changeState_[STATE::SPELL_CAST]();
+	}
+}
+
+void PlayerCardMagicThunder::UpdateAttack(void)
+{
+	if (!thunder_->GetIsAlive())
+	{
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
+	}
+}
+
+void PlayerCardMagicThunder::ChangeSpellCast(void)
+{
+	updateState_ = [this]() {UpdateSpellCast(); };
+}
+
+void PlayerCardMagicThunder::ChangeAttack(void)
+{
+	//ó‘Ô‘JˆÚ
+	thunder_->Init();
+	character_.DrawItem(thunder_);
+	thunder_->MakeThunderCollider();
+
+	updateState_ = [this]() {UpdateAttack(); };
 }

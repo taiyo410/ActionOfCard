@@ -1,11 +1,11 @@
 #pragma once
 
-#include "PlayerCardAttackBase.h"
+#include "PlayerCardMagicBase.h"
 
 class PlayerMagicThunder;
 
 class PlayerCardMagicThunder :
-    public PlayerCardAttackBase
+    public PlayerCardMagicBase
 {
 public:
 
@@ -27,10 +27,6 @@ public:
     /// @param  
     void InitAttack(void) override;
 
-    /// @brief XV
-    /// @param  
-    void AttackUpdate(void) override;
-
     /// @brief ‰ğ•ú
     /// @param
     void AttackRelease(void) override;
@@ -51,7 +47,13 @@ private:
 #pragma endregion
 
 #pragma region ƒƒ“ƒo[ŠÖ”
+    //XV
+    void UpdateSpellCast(void) override;     //‰r¥’†
+    void UpdateAttack(void) override;        //UŒ‚
 
+    //‘JˆÚ
+    void ChangeSpellCast(void) override;     //‰r¥’†
+    void ChangeAttack(void) override;        //UŒ‚
 #pragma endregion
 
 
