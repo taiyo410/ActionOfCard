@@ -26,7 +26,8 @@ CharacterBase::CharacterBase(void) :
 	phase_(UPDATE_PHASE::NONE),
 	uiMng_(UIManager::GetInstance()),
 	hitStopFrame_(HIT_STOP_FRAME),
-	isEndClearDirect_(false)
+	isEndClearDirect_(false),
+	animSpdScl_(UtilityCommon::RATIO_MAX)
 {
 	changePhase_ = {
 		{UPDATE_PHASE::NONE,[this]() {ChangeUpdateNone(); }},
@@ -58,9 +59,14 @@ CharacterBase::CharacterBase(void) :
 
 	loadDataFuncTable_ = {
 		{"Status",[this](const nlohmann::json& _data) {LoadStatus(_data); }},
-		{"ModelData",[this](const nlohmann::json& _data) {LoadModelData(_data); }},
+		{"ModelData",[this](const nlohmann::json& _data) {
+			LoadModelDataCommon(_data); 
+			LoadModelDataCharacter(_data);
+		}},
 		{"BattleStartPos",[this](const nlohmann::json& _data) {LoadBattleStartPos(_data); }},
 	};
+
+	animCtrl_ = std::make_unique<AnimationController>();
 }
 
 CharacterBase::~CharacterBase(void)
@@ -84,8 +90,17 @@ void CharacterBase::LoadCommon(void)
 
 	//使用するアクションを追加
 	actionCtrl_->AddAction();
+
 	//アクションのロード
 	actionCtrl_->Load();
+
+	//Jsonからアクションごとのデータのロード
+	LoadActionData([this](const ACTION_LOAD_DATA& _animVar)
+		{
+			//アクションコントローラーの全行動クラスに通知
+			actionCtrl_->AnimLoadNotify(_animVar);
+			LoadCharacterActionDataCallBack(_animVar);
+		});
 }
 
 void CharacterBase::LoadCommonData(void)
@@ -93,13 +108,16 @@ void CharacterBase::LoadCommonData(void)
 	const auto& jsonData = resMng_.Load(ResourceManager::SRC::CHARA_DATA).jsonData;
 	for (const auto& [key,data] : jsonData[objectName_].items())
 	{
+		//配列内になければ飛ばす
+		auto it = loadDataFuncTable_.find(key);
+		if (it == loadDataFuncTable_.end())continue;
+
 		loadDataFuncTable_[key](data);
 	}
 }
 
 void CharacterBase::InitCommon(void)
 {
-	trans_.SetModel(resMng_.LoadModelDuplicate(useModelSrc_));
 	trans_.scl = { modelScl_,modelScl_,modelScl_ };
 	trans_.quaRotLocal =
 		Quaternion::Euler({ UtilityCommon::Deg2RadF(localDeg_.x)
@@ -119,7 +137,7 @@ void CharacterBase::InitCommon(void)
 void CharacterBase::UpdateNormalCommon(void)
 {
 	//ロジックによる操作の受付
-	AcceptLogicControl();
+	//AcceptLogicControl();
 
 	//回転の同期
 	UpdatePost();
@@ -129,23 +147,19 @@ void CharacterBase::UpdateDirectionCommon(void)
 {
 	//方向の更新
 	actionCtrl_->Update();
-
-	//アニメーションの更新
-	animCtrl_->Update();
 }
 
 void CharacterBase::UpdateClearDirectionCommon(void)
 {
 }
 
-void CharacterBase::DrawCommon(void)
+void CharacterBase::UpdateOverDirectionCommon(void)
 {
 }
 
 void CharacterBase::Init(void)
 {
 	InitCommon();
-
 	InitCharacter();
 }
 
@@ -154,11 +168,23 @@ void CharacterBase::Update(void)
 	updatePhase_();
 
 	//アニメーションの更新
-	animCtrl_->Update();
+	animCtrl_->Update(animSpdScl_);
 
 	//Transformの更新
 	trans_.quaRot = charaRot_.playerRotY_;
 	trans_.Update();
+}
+
+void CharacterBase::Draw(void)
+{
+	DrawCommon();
+	DrawCharacter();
+}
+
+void CharacterBase::DrawCommon(void)
+{
+	//通常描画
+	MV1DrawModel(trans_.modelId);
 }
 
 void CharacterBase::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)
@@ -181,10 +207,6 @@ void CharacterBase::DeleteAttackCol(const Collider::TAG& _charaTag, const Collid
 {
 	if (!IsAliveCollider(_charaTag, _attackCol))return;
 	DeleteCollider(TAG_PRIORITY::ATK_SPHERE);
-}
-
-void CharacterBase::LoadCharacter(void)
-{
 }
 
 void CharacterBase::UpdatePost(void)
@@ -225,12 +247,13 @@ void CharacterBase::LoadStatus(const nlohmann::json& _data)
 	status_ = maxStatus_;
 }
 
-void CharacterBase::LoadModelData(const nlohmann::json& _data)
+void CharacterBase::LoadModelDataCommon(const nlohmann::json& _data)
 {
 	//データを格納
 	//使用モデル
 	std::string modelStr = _data.value("model", "");
 	useModelSrc_ = resMng_.GetSrcFromString(modelStr);
+	trans_.SetModel(resMng_.LoadModelDuplicate(useModelSrc_));
 
 	//ローカル角度
 	localDeg_ = UtilityJson::GetLoadVector3("localDegree", _data);
@@ -242,13 +265,16 @@ void CharacterBase::LoadModelData(const nlohmann::json& _data)
 	modelScl_ = _data.value("scale", 0.0f);
 
 	//腰のフレーム番号
-	spineBoneNo_ = _data.value("spineFrameNum", 0);
+	spineFrameNo_ = _data.value("spineFrameNum", 0);
+
+	//アニメーションに必要なモデル情報を渡す
+	animCtrl_->SetModelInfo(trans_.modelId, spineFrameNo_);
 
 }
 
 void CharacterBase::LoadBattleStartPos(const nlohmann::json& _data)
 {
-	battleStartPos_ = UtilityJson::GetLoadVector3("BattleStartPos", _data);
+	battleStartPos_ = UtilityJson::GetLoadVector3(_data);
 }
 
 void CharacterBase::MoveLimit(const VECTOR& _stagePos,const VECTOR& _stageSize)
@@ -301,10 +327,7 @@ void CharacterBase::SetUsedCard(void)
 	uiMng_.GetCardUI(characterType_).ChangeReactActionCard();
 	deck_->EraseHandCard();
 }
-void CharacterBase::MakeColliderGeometry(void)
-{
 
-}
 void CharacterBase::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 {
 	if (phase_ == _phase)return;
@@ -333,14 +356,14 @@ void CharacterBase::UnRegisterDrawableRocks(void)
 	drawableRocks_.clear();
 }
 
-void CharacterBase::DrawFireBall(const std::weak_ptr<PlayerMagicFire> _fire)
+void CharacterBase::DrawItem(const std::weak_ptr<ItemBase> _item)
 {
-	drawableFire_ = _fire;
+	drawableItem_ = _item;
 }
 
 void CharacterBase::DeleteFireBall(void)
 {
-	drawableFire_.reset();
+	drawableItem_.reset();
 }
 
 void CharacterBase::ChangeUpdateClearDirection(void)
@@ -440,7 +463,7 @@ const bool CharacterBase::GetIsHitTarget(void) const
 	return onHit_->GetIsHitTarget();
 }
 
-void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
+void CharacterBase::LoadActionData(OnActionDataLoaded _callBack)
 {
 	//データ読み込み
 	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
@@ -501,9 +524,9 @@ void CharacterBase::LoadAddAnimation(OnActionDataLoaded callBack)
 			actionLoadData.animVariable = animVariable;
 		}
 
-		if(callBack)
+		if(_callBack)
 		{
-			callBack(actionLoadData);
+			_callBack(actionLoadData);
 		}
 	}
 }
@@ -515,9 +538,6 @@ void CharacterBase::AcceptLogicControl(void)
 
 	//アクションの更新
 	actionCtrl_->Update();
-
-	//アニメーションの更新
-	animCtrl_->Update();
 }
 
 void CharacterBase::UpdateNone(void)
@@ -534,18 +554,19 @@ void CharacterBase::UpdateNormal(void)
 void CharacterBase::UpdateDirection(void)
 {
 	UpdateDirectionCommon();
-
 	UpdateDirectionCharacter();
 }
 
 void CharacterBase::UpdateClearDirection(void)
 {
-
+	UpdateClearDirectionCommon();
+	UpdateClearDirectionCharacter();
 }
 
 void CharacterBase::UpdateOverDirection(void)
 {
-
+	UpdateOverDirectionCommon();
+	UpdateOverDirectionCharacter();
 }
 
 void CharacterBase::UpdateHitStop(void)

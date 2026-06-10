@@ -47,9 +47,7 @@ private:
 
 #pragma region メンバー変数
     std::shared_ptr<PlayerMagicThunder>thunder_;    //サンダー
-
     VECTOR targetPos_;         //敵の座標
-
 #pragma endregion
 
 #pragma region メンバー関数

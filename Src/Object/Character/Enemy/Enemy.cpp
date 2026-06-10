@@ -1,34 +1,16 @@
-#include"../Utility/Utility2D.h"
 #include"../Utility/Utility3D.h"
-#include"../Utility/UtilityCommon.h"
-#include "../../../Application.h"
-#include "../Player/Player.h"
-#include "../Base/CharacterOnHitBase.h"
 #include "./EnemyOnHit.h"
 #include "./EnemyRock.h"
-#include "../Object/Common/AnimationController.h"
 #include "../Enemy/EnemyLogic.h"
-#include "../../Common/Geometry/Capsule.h"
-#include "../../Common/Geometry/Sphere.h"
-#include "../../Common/Geometry/Line.h"
-#include "../Manager/Resource/ResourceManager.h"
 #include "../Manager/Generic/Camera.h"
 #include "../Manager/Generic/SceneManager.h"
 #include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/DataBank.h" 
 #include "../../Card/CardDeck.h"
-#include "../Object/Card/EnemyCardUI.h"
-#include "../Object/Card/CardPresenter.h"
 #include "../Object/Common/EffectController.h"
 #include "../Action/ActionController.h"
-#include "../Base/ActionBase.h"
-#include "../Action/Idle.h"
-#include "../Action/Run.h"
-#include "../Action/React.h"
 #include "Enemy.h"
 
 Enemy::Enemy(void):
-	cardCenterPos_({}),
 	modelScl_(MODEL_SIZE_MULTIPLITER)
 {
 	objectName_ = ENEMY_STR;
@@ -38,11 +20,7 @@ Enemy::Enemy(void):
 	deck_ = std::make_shared<CardDeck>(characterType_, ENEMY_NUM);
 	cardPresent_ = std::make_unique<CardPresenter>(characterType_, *deck_);
 	effect_ = std::make_unique<EffectController>();
-	spineBoneNo_ = SPINE_FRAME_NO;
 	tag_ = Collider::TAG::ENEMY1;
-
-	//アニメーションコントローラーの生成
-	animCtrl_ = std::make_unique<AnimationController>(trans_.modelId, spineBoneNo_);
 	//アクション
 	actionCtrl_ = std::make_unique<ActionController>(*this, *logic_, trans_, *cardPresent_, *animCtrl_, InputManager::JOYPAD_NO::PAD1);
 }
@@ -52,63 +30,20 @@ Enemy::~Enemy(void)
 	collider_.clear();
 	effect_->AllStop();
 }
-//void Enemy::Load(void)
-//{
-//	//trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::ENEMY));
-//	//trans_.quaRot = Quaternion();
-//	//trans_.quaRotLocal =
-//	//	Quaternion::Euler({ 0.0f,UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
-//}
 
-//void Enemy::Init(void)
-//{
-//	//deck_->Init();
-//	//actionCtrl_->Init();
-//	//logic_->Init();
-//
-//	////Transformの設定
-//	//trans_.quaRot = Quaternion();
-//	//trans_.scl = { modelScl_,modelScl_,modelScl_ };
-//	//trans_.quaRotLocal =
-//	//	Quaternion::Euler({ 0.0f, UtilityCommon::Deg2RadF(MODEL_LOCAL_DEG), 0.0f });
-//
-//	//trans_.pos = { 0.0f,0.0f,CENTER_POS_Z_OFFSET };
-//	//trans_.localPos = { 0.0f,0.0f,0.0f };
-//	//trans_.Update();
-//
-//	//当たり判定の作成
-//	//MakeColliderGeometry();
-//}
+void Enemy::UpdateNormalCharacter(void)
+{
 
-//void Enemy::UpdateDirection(void)
-//{
-//	//方向の更新
-//	actionCtrl_->Update();
-//
-//	//アニメーションの更新
-//	animCtrl_->Update();
-//
-//	//Transformの更新
-//	trans_.quaRot = charaRot_.playerRotY_;
-//	trans_.Update();
-//}
+}
 
 void Enemy::UpdateDirectionCharacter(void)
 {
 	//咆哮演出の更新
 	UpdateRoarDirection();
 }
-
-//void Enemy::UpdateClearDirection(void)
-//{
-//	animCtrl_->Update();
-//
-//	trans_.Update();
-//}
-
 void Enemy::UpdateClearDirectionCharacter(void)
 {
-	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
+	VECTOR effPos = MV1GetFramePosition(trans_.modelId, chestFrameNum_);
 	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, 0, effPos);
 	effect_->Update();
 	if (animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= DEATH_BLAST_ANIM_STEP)
@@ -123,23 +58,14 @@ void Enemy::UpdateClearDirectionCharacter(void)
 	}
 }
 
-void Enemy::UpdateOverDirection(void)
-{
-	constexpr float ANIM_SPD_SCL = 0.2f;
-	animCtrl_->Update(ANIM_SPD_SCL);
-}
-
 void Enemy::UpdateOverDirectionCharacter(void)
 {
 	constexpr float ANIM_SPD_SCL = 0.2f;
-	animCtrl_->Update(ANIM_SPD_SCL);
+	animSpdScl_ = ANIM_SPD_SCL;
 }
 
-void Enemy::Draw(void)
+void Enemy::DrawCharacter(void)
 {
-	//通常描画
-	MV1DrawModel(trans_.modelId);
-
 	//岩の描画
 	if (!drawableRocks_.empty())
 	{
@@ -149,6 +75,7 @@ void Enemy::Draw(void)
 		}
 	}
 }
+
 void Enemy::Draw2D(void)
 {
 
@@ -212,7 +139,7 @@ void Enemy::UpdateRoarDirection(void)
 void Enemy::ChangeUpdateClearDirection(void)
 {
 	isRoar_ = false;
-	VECTOR effPos = MV1GetFramePosition(trans_.modelId, CHEST_FRAME_NO);
+	VECTOR effPos = MV1GetFramePosition(trans_.modelId, chestFrameNum_);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_FOOT_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
@@ -225,25 +152,10 @@ void Enemy::LoadCharacter(void)
 {
 	//エフェクト
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
+}
 
-	//Jsonからアクションごとのデータのロード
-	LoadAddAnimation([this](const ACTION_LOAD_DATA& animVar)
-		{
-			//アクションコントローラーの全行動クラスに通知
-			actionCtrl_->AnimLoadNotify(animVar);
-			if (animVar.name == "Death")
-			{
-				deathAnim_ = animVar.animVariable;
-			}
-			else if (animVar.name == "Idle")
-			{
-				idleAnim_ = animVar.animVariable;
-			}
-			else if (animVar.name == "Roar")
-			{
-				roarAnim_ = animVar.animVariable;
-			}
-		});
+void Enemy::InitCharacter(void)
+{
 }
 
 void Enemy::MakeColliderGeometry(void)
@@ -251,23 +163,25 @@ void Enemy::MakeColliderGeometry(void)
 	MakeColliderFromJsonData();
 	onHit_ = std::make_unique<EnemyOnHit>(*this, movedPos_, moveDiff_, *actionCtrl_, collider_, trans_);
 }
-void Enemy::UpdateNormal(void)
+void Enemy::LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _animVar)
 {
-	////ロジックの更新
-	//logic_->Update();
+	if (_animVar.name == "Death")
+	{
+		deathAnim_ = _animVar.animVariable;
+	}
+	else if (_animVar.name == "Idle")
+	{
+		idleAnim_ = _animVar.animVariable;
+	}
+	else if (_animVar.name == "Roar")
+	{
+		roarAnim_ = _animVar.animVariable;
+	}
+}
 
-	////アクションの更新
-	//actionCtrl_->Update();
-
-	//アニメーションの更新
-	animCtrl_->Update();
-
-	//回転の同期
-	UpdatePost();
-
-	//Transformの更新
-	trans_.quaRot = charaRot_.playerRotY_;
-	trans_.Update();
+void Enemy::LoadModelDataCharacter(const nlohmann::json& _data)
+{
+	chestFrameNum_ = _data.value("chestFrameNum", 0);
 }
 
 #ifdef _DEBUG

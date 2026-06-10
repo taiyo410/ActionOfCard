@@ -134,6 +134,7 @@
       "colStartAnimCnt": 30.0,
       "bufferFrame": 20.0,
       "attackPoint": 20.0,
+      "effectScale": 100.0,
       "animation": {
         "useAnim": "P_FIRE_MAGIC",
         "animSpeed": 20.0,
@@ -147,7 +148,7 @@
       "reloadTime": 3.0,
       "effectScale": 100.0,
       "animLoopStartStep": 26.0,
-      "animLoopEndStep":30.0,
+      "animLoopEndStep": 30.0,
       "animation": {
         "useAnim": "P_RELOAD",
         "animSpeed": 80.0,

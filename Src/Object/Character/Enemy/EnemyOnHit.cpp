@@ -26,8 +26,8 @@ EnemyOnHit::EnemyOnHit(CharacterBase& _chara, VECTOR& _movedPos, VECTOR& _moveDi
 		{ TAG::PLAYER1, [this](const std::weak_ptr<Collider> _hitCol) {CollChara(_hitCol); } },
 		{ TAG::NML_ATK, [this](const std::weak_ptr<Collider> _hitCol) {CollNormalAttack(_hitCol); } },
 		{ TAG::STAGE, [this](const std::weak_ptr<Collider>_hitCol) {CollStage(_hitCol); } },
-		//{ TAG::FIRE, [this](const std::weak_ptr<Collider>_hitCol) {CollFire(_hitCol); } }
-		{ TAG::FIRE, [this](const std::weak_ptr<Collider>_hitCol) {CollNormalAttack(_hitCol); } }
+		{ TAG::FIRE, [this](const std::weak_ptr<Collider>_hitCol) {CollNormalAttack(_hitCol); } },
+		{ TAG::THUNDER, [this](const std::weak_ptr<Collider>_hitCol) {CollNormalAttack(_hitCol); } }
 	};
 }
 

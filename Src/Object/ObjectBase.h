@@ -26,6 +26,7 @@ public:
 		ATK_SPHERE,
 		ROCK_SPHERE,
 		FIRE_SPHERE,
+		THUNDER_LINE,
 	};
 
 	/// @brief コンストラクタ

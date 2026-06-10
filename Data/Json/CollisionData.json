@@ -94,5 +94,26 @@
         "normalAttack"
       ]
     }
+  },
+  "Thunder": {
+    "ThunderLine": {
+      "geometry": "line",
+      "localPos1": {
+        "x": 0.0,
+        "y": 1000.0,
+        "z": 0.0
+      },
+      "localPos2": {
+        "x": 0.0,
+        "y": 50.0,
+        "z": 0.0
+      },
+      "noneHitTag": [
+        "stage",
+        "camera",
+        "player",
+        "normalAttack"
+      ]
+    }
   }
 }

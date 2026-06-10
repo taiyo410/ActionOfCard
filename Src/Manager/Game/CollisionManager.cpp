@@ -111,6 +111,7 @@ CollisionManager::CollisionManager(void)
 	hitRange_[Collider::TAG::STAGE] = HIT_RANGE_STAGE;
 	hitRange_[Collider::TAG::ROCK] = HIT_RANGE_ROCK;
 	hitRange_[Collider::TAG::FIRE] = HIT_RANGE_NORMAL;
+	hitRange_[Collider::TAG::THUNDER] = HIT_RANGE_NORMAL;
 }
 
 CollisionManager::~CollisionManager(void)

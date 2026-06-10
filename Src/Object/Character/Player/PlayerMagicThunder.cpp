@@ -9,28 +9,35 @@
 #include "PlayerMagicThunder.h"
 
 PlayerMagicThunder::PlayerMagicThunder(VECTOR& _targetPos):
-	targetPos_(_targetPos)
+	targetPos_(_targetPos),
+	isAlive_(false)
 {
 	objectName_ = THUNDER_STR;
+	tag_ = Collider::TAG::THUNDER;
+}
 
-	noneHitTag_.emplace(Collider::TAG::STAGE);
-	noneHitTag_.emplace(Collider::TAG::CAMERA);
-	noneHitTag_.emplace(Collider::TAG::PLAYER1);
-	noneHitTag_.emplace(Collider::TAG::NML_ATK);
+PlayerMagicThunder::~PlayerMagicThunder(void)
+{
 }
 
 void PlayerMagicThunder::Load(void)
 {
+	effect_->Add(resMng_.Load(ResourceManager::SRC::THUNDER_EFF).handleId_,EffectController::EFF_TYPE::THUNDER);
 }
 
 void PlayerMagicThunder::Init(void)
 {
 	trans_.pos = targetPos_;
+	VECTOR sclVec = { thunderEffScl_ ,thunderEffScl_ ,thunderEffScl_ };
+	thunderEffPlayId_ = effect_->Play(EffectController::EFF_TYPE::THUNDER, trans_.pos, trans_.quaRot, sclVec);
 }
 
 void PlayerMagicThunder::Update(void)
 {
-
+	if (effect_->IsEnd(EffectController::EFF_TYPE::THUNDER, thunderEffPlayId_))
+	{
+		isAlive_ = true;
+	}
 }
 
 void PlayerMagicThunder::Draw(void)
@@ -47,14 +54,12 @@ void PlayerMagicThunder::OnHit(const std::weak_ptr<Collider> _hitCol)
 	DeleteCollider(TAG_PRIORITY::FIRE_SPHERE);
 }
 
-void PlayerMagicThunder::LoadThunderData(const nlohmann::json _jsonData)
+void PlayerMagicThunder::LoadThunderData(const nlohmann::json _data)
 {
+	thunderEffScl_ = _data.value("effectScale", 0.0f);
 }
 
 void PlayerMagicThunder::MakeThunderCollider(void)
 {
-	VECTOR localPos1 = { trans_.pos.x,trans_.pos.y - 500.0f,trans_.pos.z };
-	VECTOR localPos2 = { trans_.pos.x,trans_.pos.y + 500.0f,trans_.pos.z };
-	std::unique_ptr<Geometry> geo = std::make_unique<Line>(trans_.pos, trans_.quaRot, localPos1, localPos2);
-	MakeCollider(TAG_PRIORITY::FIRE_SPHERE, { tag_ }, std::move(geo), noneHitTag_);
+	MakeColliderFromJsonData();
 }

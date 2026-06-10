@@ -14,15 +14,16 @@ public :
 	//衝突用タグ
 	enum class TAG
 	{
-		NONE,			//タグなし
-		PLAYER1,		//プレイヤー1
-		ENEMY1,			//敵1
-		NML_ATK,		//剣
-		JUMP_ATK,		//ジャンプ
-		STAGE,			//ステージ
-		ROCK,			//敵の攻撃用岩
-		FIRE,			//プレイヤーの炎魔法
-		CAMERA,			//カメラ
+		NONE,				//タグなし
+		PLAYER1,			//プレイヤー1
+		ENEMY1,				//敵1
+		NML_ATK,			//剣
+		JUMP_ATK,			//ジャンプ
+		STAGE,				//ステージ
+		ROCK,				//敵の攻撃用岩
+		FIRE,				//プレイヤーの炎魔法
+		THUNDER,			//プレイヤーの炎魔法
+		CAMERA,				//カメラ
 	};
 
 	/// @brief コンストラクタ

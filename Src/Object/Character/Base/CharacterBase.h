@@ -23,7 +23,7 @@ class LogicBase;
 class PlayerOnHit;
 class EnemyOnHit;
 class EnemyRock;
-class PlayerMagicFire;
+class ItemBase;
 
 class CharacterBase 
 	: public ObjectBase
@@ -135,7 +135,7 @@ public:
 
 	/// @brief 描画
 	/// @param  
-	virtual void Draw(void)override = 0;
+	void Draw(void)override;
 
 	//2D関連の描画
 	virtual void Draw2D(void) = 0;
@@ -282,7 +282,7 @@ public:
 
 	/// @brief 炎魔法の描画
 	/// @param _fire 
-	void DrawFireBall(const std::weak_ptr<PlayerMagicFire> _fire);
+	void DrawItem(const std::weak_ptr<ItemBase> _item);
 
 	/// @brief 炎の描画をやめる
 	/// @param  
@@ -311,48 +311,50 @@ protected:
 	VECTOR localDeg_;						//ローカル回転
 	VECTOR localPos_;						//ローカル座標
 	float modelScl_;						//モデルの大きさ
-	int spineBoneNo_;						//腰のボーン番号
+	int spineFrameNo_;						//腰のボーン番号
 	VECTOR battleStartPos_;					//戦闘開始時のスタート座標		
 
 #pragma endregion
 
 
 #pragma region メンバー変数
-	std::unique_ptr<EffectController>effect_;			//エフェクト
-	std::unique_ptr<LogicBase>logic_;					//入力
+	std::unique_ptr<EffectController>effect_;				//エフェクト
+	std::unique_ptr<LogicBase>logic_;						//入力
 	std::unique_ptr<ActionController>actionCtrl_;			//行動系
-	std::unique_ptr<AnimationController>animCtrl_;		// アニメーション
-	std::shared_ptr<CardDeck>deck_;						//デッキ
-	std::unique_ptr<CharacterOnHitBase>onHit_;			//当たった時の処理
-	std::unique_ptr<CardPresenter>cardPresent_;			//カードUIと内部のデッキクラスの結びつけクラス
-	std::vector<std::weak_ptr<EnemyRock>>drawableRocks_;//描画する岩の配列
-	std::weak_ptr<PlayerMagicFire>drawableFire_;		//炎の描画
+	std::unique_ptr<AnimationController>animCtrl_;			// アニメーション
+	std::shared_ptr<CardDeck>deck_;							//デッキ
+	std::unique_ptr<CharacterOnHitBase>onHit_;				//当たった時の処理
+	std::unique_ptr<CardPresenter>cardPresent_;				//カードUIと内部のデッキクラスの結びつけクラス
+	std::vector<std::weak_ptr<EnemyRock>>drawableRocks_;	//描画する岩の配列
+	std::weak_ptr<ItemBase>drawableItem_;					//炎の描画
 
 	std::unordered_map <UPDATE_PHASE, std::function<void(void)>>changePhase_;	//更新フェーズ変更
 	std::function<void(void)>updatePhase_;										//更新フェーズの更新
 
-	std::unordered_map<std::string, ANIM_TYPE>animStrTable_;	//アニメーションタイプの文字列対応表
+	std::unordered_map<std::string, ANIM_TYPE>animStrTable_;					//アニメーションタイプの文字列対応表
 
 	//アクションごとのアニメーション再生データテーブル
 	std::unordered_map<ANIM_TYPE, AnimationController::ANIMATION_VARIABLE> actionAnimTable_;
+	std::unordered_map<ANIM_TYPE, float> animParam_;	//アニメーションパラメータ
+	std::vector<std::string> actionStr_;				//アクションの文字列
 
 	UIManager& uiMng_;				//UIマネージャ
 	SoundManager& soundMng_;		//サウンドマネージャ
 
 	//当たり判定の要素
-	VECTOR movedPos_;				//移動後座標
-	VECTOR moveDiff_;				//移動前座標
-	VECTOR movePow_;				// 移動量
-	ROTATION charaRot_;				//角度関連
-	STATUS status_;					//ステータス
-	UPDATE_PHASE phase_;		//更新フェーズ
-	bool isMoveable_;				//移動操作可能か
-	bool isEndClearDirect_;			//クリア演出が終わったか
-	HP_DATA hpData_;				//Hpのデータ
-	CHARACTER_TYPE characterType_;	//キャラ種別
-	int hitStopFrame_;				//ヒットストップ用カウンタ(フレーム)
-	std::vector<std::string> actionStr_;	//アクションの文字列
-	std::unordered_map<ANIM_TYPE, float> animParam_;	//アニメーションパラメータ
+	VECTOR movedPos_;						//移動後座標
+	VECTOR moveDiff_;						//移動前座標
+	VECTOR movePow_;						// 移動量
+
+	ROTATION charaRot_;						//角度関連
+	STATUS status_;							//ステータス
+	UPDATE_PHASE phase_;					//更新フェーズ
+	bool isMoveable_;						//移動操作可能か
+	bool isEndClearDirect_;					//クリア演出が終わったか
+	HP_DATA hpData_;						//Hpのデータ
+	CHARACTER_TYPE characterType_;			//キャラ種別
+	int hitStopFrame_;						//ヒットストップ用カウンタ(フレーム)
+	float animSpdScl_;						//アニメーション速度の倍率
 
 	//演出用アニメーションのパラメータ
 	AnimationController::ANIMATION_VARIABLE deathAnim_;		//死亡アニメーション
@@ -364,10 +366,13 @@ protected:
 #pragma region メンバー関数
 
 	//各キャラクターの基本処理
-	virtual void LoadCharacter(void) = 0;	//ロード
-	virtual void InitCharacter(void) = 0;	//初期化
-	virtual void UpdateNormalCharacter(void) = 0;	//更新
-	virtual void DrawCharacter(void) = 0;	//描画
+	virtual void LoadCharacter(void) = 0;						//ロード
+	virtual void InitCharacter(void) = 0;						//初期化
+	virtual void UpdateDirectionCharacter(void) = 0;			//演出時更新
+	virtual void UpdateNormalCharacter(void) = 0;				//更新
+	virtual void UpdateClearDirectionCharacter(void) = 0;		//クリア演出
+	virtual void UpdateOverDirectionCharacter(void) = 0;		//オーバー演出
+	virtual void DrawCharacter(void) = 0;						//描画
 
 	//移動後座標などの更新
 	void UpdatePost(void);
@@ -376,24 +381,25 @@ protected:
 	void MoveLimit(const VECTOR& _stagePos, const VECTOR& _stageSize);
 
 	//コライダ作成
-	virtual void MakeColliderGeometry(void);
+	virtual void MakeColliderGeometry(void)=0;
 
-	//アニメーションを外部からロード
-	using OnActionDataLoaded = std::function<void(ACTION_LOAD_DATA&)>;
-	void LoadAddAnimation(OnActionDataLoaded callBack=nullptr);
+	//アクション関連のデータを外部からロード
+	using OnActionDataLoaded = std::function<void(const ACTION_LOAD_DATA&)>;
+	void LoadActionData(OnActionDataLoaded callBack=nullptr);
+	virtual void LoadModelDataCharacter(const nlohmann::json& _data) {};
+
+	//アクションデータの呼び出し時のコールバック
+	virtual void LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _data) = 0;
 
 	//ロジックによる操作を受け付ける
 	virtual void AcceptLogicControl(void);
 
 	//更新フェーズ	
-	void UpdateNone(void);							//何もしない
-	virtual void UpdateNormal(void);			//通常更新
-	virtual void UpdateDirection(void);			//演出時更新
-	virtual void UpdateDirectionCharacter(void) = 0;			//演出時更新
-	virtual void UpdateClearDirection(void);	//クリア演出
-	virtual void UpdateClearDirectionCharacter(void) = 0;	//クリア演出
-	virtual void UpdateOverDirection(void);		//オーバー演出
-	virtual void UpdateOverDirectionCharacter(void) = 0;		//オーバー演出
+	void UpdateNone(void);				//何もしない
+	void UpdateNormal(void);			//通常更新
+	void UpdateDirection(void);			//演出時更新
+	void UpdateClearDirection(void);	//クリア演出
+	void UpdateOverDirection(void);		//オーバー演出
 	void UpdateHitStop(void);						//ヒットストップ更新
 
 	//遷移先の更新フェーズ
@@ -414,18 +420,19 @@ private:
 
 #pragma region メンバー関数
 
-	//キャラクター共通で処理する
-	void LoadCommon(void);			//ロード
-	void LoadCommonData(void);		//キャラクター共通のデータを外部ファイルから読み込み
-	void InitCommon(void);			//初期化
-	void UpdateNormalCommon(void);		//更新
-	void UpdateDirectionCommon(void);	//演出時の共通の更新
-	void UpdateClearDirectionCommon(void);
-	void DrawCommon(void);			//描画
+	//キャラクター共通の処理
+	void LoadCommon(void);						//ロード
+	void LoadCommonData(void);					//キャラクター共通のデータを外部ファイルから読み込み
+	void InitCommon(void);						//初期化
+	void UpdateNormalCommon(void);				//更新
+	void UpdateDirectionCommon(void);			//演出時の共通の更新
+	void UpdateClearDirectionCommon(void);		//ゲームクリア時
+	void UpdateOverDirectionCommon(void);		//ゲームオーバー時
+	void DrawCommon(void);						//描画
 
 	//外部からのロード関数
-	void LoadStatus(const nlohmann::json& _data);			//ステータス
-	void LoadModelData(const nlohmann::json& _data);		//モデル情報
-	void LoadBattleStartPos(const nlohmann::json& _data);	//バトル開始時の座標の読み込み
+	void LoadStatus(const nlohmann::json& _data);					//ステータス
+	virtual void LoadModelDataCommon(const nlohmann::json& _data);		//モデル情報
+	void LoadBattleStartPos(const nlohmann::json& _data);			//バトル開始時の座標の読み込み
 #pragma endregion
 };

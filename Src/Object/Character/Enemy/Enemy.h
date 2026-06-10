@@ -64,18 +64,6 @@ public:
 	/// @param  
 	~Enemy(void)override;
 
-	/// @brief ロード
-	/// @param  
-	void Load(void) override;
-
-	/// @brief 初期化
-	/// @param  
-	void Init(void) override;
-
-	/// @brief 描画
-	/// @param  
-	void Draw(void) override;
-
 	/// @brief 2D描画
 	/// @param  
 	void Draw2D(void) override;
@@ -103,18 +91,17 @@ public:
 
 private:
 
-	//定数
-	//Enemyの文字列
-	const std::string ENEMY_STR = "Enemy";
+#ifdef _DEBUG
+	void DrawDebug(void);
+#endif // _DEBUG
 
-	//敵の腰のフレーム番号
-	static constexpr int SPINE_FRAME_NO = 1;
 
-	//胸のフレーム
-	static constexpr int CHEST_FRAME_NO = 4;
-
+#pragma region 定数
 	//敵番号(デッキで判定する用)
 	static constexpr int ENEMY_NUM = 1;
+
+	//Enemyの文字列
+	const std::string ENEMY_STR = "Enemy";
 
 	//倒れるエフェクトのスケール
 	static constexpr float DEATH_EFF_SCL = 100.0f;
@@ -122,39 +109,43 @@ private:
 
 	//爆発発生アニメステップ
 	static constexpr float DEATH_BLAST_ANIM_STEP = 93.0f;
+#pragma endregion
 
-	//カードの中心座標
-	Vector2 cardCenterPos_; 
+#pragma region 外部ファイル読み込み
+	int chestFrameNum_;				//胸のフレーム番号
+	float deathEffScl_;				//死亡エフェクト
+	float deathStartAnimStep_;		//死亡エフェクトの発生アニメステップ
+#pragma endregion
 
-	//敵のスケール
-	float modelScl_;
-
-	//咆哮状態かどうか
-	bool isRoar_;
-
+#pragma region メンバー変数
 	//咆哮アニメーション
 	AnimationController::ANIMATION_VARIABLE roarAnim_;
+	float modelScl_;	//敵のスケール(死亡時のエフェクトスケールダウン用)
+	bool isRoar_;		//咆哮状態かどうか
 
-	//キャラクター単体でのロード
-	void LoadCharacter(void)override;
+#pragma endregion
 
+#pragma region メンバー関数
 	//コライダ作成
-	void MakeColliderGeometry(void)override;
+	void MakeColliderGeometry(void) override;
 
-	//更新系
-	void UpdateNormal(void)override;			//通常更新
-	//void UpdateDirection(void)override;			//演出時の更新
-	void UpdateDirectionCharacter(void)override;	
-	//void UpdateClearDirection(void)override;	//クリア時(敵が倒れる)
-	void UpdateClearDirectionCharacter(void) override;	
-	void UpdateOverDirection(void)override;		//ゲームオーバー
-	void UpdateOverDirectionCharacter(void) override;
+	//キャラクター別のアクションデータの呼び出し時のコールバック
+	void LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _animVar) override;
 
-	/// @brief クリア演出に変更
-	/// @param  
+	//キャラクター別のモデル情報
+	void LoadModelDataCharacter(const nlohmann::json& _data) override;
+
+	//キャラクター別の処理
+	void LoadCharacter(void) override;					//キャラクター単体でのロード
+	void InitCharacter(void) override;					//キャラクター別の初期化
+	void UpdateNormalCharacter(void) override;			//戦闘(ゲーム時)の更新
+	void UpdateDirectionCharacter(void) override;		//ゲーム前のスタート時の演出	
+	void UpdateClearDirectionCharacter(void) override;	//クリア演出		
+	void UpdateOverDirectionCharacter(void) override;	//ゲームオーバー演出
+	void DrawCharacter(void) override;					//描画
+
+	//クリア演出に変更
 	void ChangeUpdateClearDirection(void)override;
+#pragma endregion
 
-#ifdef _DEBUG
-	void DrawDebug(void);
-#endif // _DEBUG
 };

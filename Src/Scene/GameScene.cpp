@@ -163,17 +163,18 @@ void GameScene::NormalUpdate(void)
 		return;
 	}
 	//敵が倒れたらクリアシ－ンへ
-	if (CharacterManager::GetInstance().IsSceneChageClearCondition())
+//	if (CharacterManager::GetInstance().IsSceneChageClearCondition())
+	if (inputMng_.IsTrgDown(KEY_INPUT_SPACE))
 	{
 		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
 		return;
 	}
-	//自分が倒れたらゲームオーバーシーンへ
-	else if (CharacterManager::GetInstance().IsSceneChangeGameOverCondition())
-	{
-		ChangeUpdatePhase(UPDATE_PHASE::OVER_DIRECTION);
-		return;
-	}
+	////自分が倒れたらゲームオーバーシーンへ
+	//else if (CharacterManager::GetInstance().IsSceneChangeGameOverCondition())
+	//{
+	//	ChangeUpdatePhase(UPDATE_PHASE::OVER_DIRECTION);
+	//	return;
+	//}
 
 	//ステージ
 	stage_->Update();

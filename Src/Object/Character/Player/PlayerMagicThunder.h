@@ -14,19 +14,19 @@ public:
 
     /// @brief デストラクタ
     /// @param  
-    PlayerMagicThunder(void);
+    ~PlayerMagicThunder(void) override;
 
     /// @brief ロード
     /// @param  
-    void Load(void)override;
+    void Load(void) override;
 
     /// @brief 初期化
     /// @param  
-    void Init(void)override;
+    void Init(void) override;
 
     /// @brief 更新
     /// @param  
-    void Update(void)override;
+    void Update(void) override;
 
     /// @brief 描画
     /// @param  
@@ -38,11 +38,16 @@ public:
 
     /// @brief Json読み込み
     /// @param _jsonData 
-    void LoadThunderData(const nlohmann::json _jsonData);
+    void LoadThunderData(const nlohmann::json _data);
 
     /// @brief 炎の当たり判定を作成
     /// @param  
     void MakeThunderCollider(void);
+
+    /// @brief 生存状態の取得
+    /// @param  
+    /// @return 
+    const bool GetIsAlive(void) { return isAlive_; }
 
 private:
 
@@ -52,12 +57,12 @@ private:
 
 
 #pragma region 外部ファイル読み込み
-
+    float thunderEffScl_;       //サンダーエフェクトの大きさ
 #pragma endregion
 
 #pragma region メンバー変数
-    float thunderEffScl_;       //サンダーエフェクトの大きさ
     int thunderEffPlayId_;      //サンダーエフェクトのプレイID
+    bool isAlive_;              //サンダー生存状態
 #pragma endregion
 
 #pragma region メンバー関数

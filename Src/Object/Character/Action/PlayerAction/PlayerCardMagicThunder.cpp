@@ -19,19 +19,29 @@ PlayerCardMagicThunder::~PlayerCardMagicThunder(void)
 
 void PlayerCardMagicThunder::Load(void)
 {
+	thunder_->Load();
 }
 
 void PlayerCardMagicThunder::InitAttack(void)
 {
 	targetPos_ = actionCtrl_.GetInput().GetTargetTransform().pos;
+	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE), animVar_);
+	thunder_->Init();
+	character_.DrawItem(thunder_);
 }
 
 void PlayerCardMagicThunder::AttackUpdate(void)
 {
 	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE)) > atk_.colStartStep)
 	{
-		//ó‘Ô‘JˆÚ
-		thunder_->MakeThunderCollider();
+		if (!thunder_->GetIsAlive())
+		{
+			//ó‘Ô‘JˆÚ
+			thunder_->Init();
+			character_.DrawItem(thunder_);
+			thunder_->MakeThunderCollider();
+		}
+
 		return;
 	}
 }
@@ -47,4 +57,5 @@ void PlayerCardMagicThunder::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	animVar_ = _data.animVariable;
 	const auto& data = _data.jsonData;
 	LoadAttackStatus(data, atk_);
+	thunder_->LoadThunderData(data);
 }

@@ -17,10 +17,6 @@ PlayerMagicFire::PlayerMagicFire(VECTOR& _startPos, VECTOR& _dir) :
 	effAlpha_(),
 	effDeleteCnt_()
 {
-	noneHitTag_.emplace(Collider::TAG::STAGE);
-	noneHitTag_.emplace(Collider::TAG::CAMERA);
-	noneHitTag_.emplace(Collider::TAG::PLAYER1);
-	noneHitTag_.emplace(Collider::TAG::NML_ATK);
 	objectName_=FIRE_STR;
 
 	tag_ = Collider::TAG::FIRE;
@@ -80,8 +76,7 @@ void PlayerMagicFire::LoadFireData(const nlohmann::json& _jsonData)
 
 void PlayerMagicFire::MakeFireBallCollider(void)
 {
-	std::unique_ptr<Geometry> geo = std::make_unique<Sphere>(trans_.pos, colRadius_);
-	MakeCollider(TAG_PRIORITY::FIRE_SPHERE, { tag_ }, std::move(geo), noneHitTag_);
+	MakeColliderFromJsonData();
 }
 
 void PlayerMagicFire::ChangeDelete(void)

@@ -43,18 +43,6 @@ public:
 	/// @brief  デストラクタ
 	/// @param  
 	~Player(void)override;
-	
-	/// @brief 読み込み
-	/// @param  
-	void Load(void)override;
-	
-	/// @brief 初期化
-	/// @param  
-	void Init(void)override;
-	
-	/// @brief 描画
-	/// @param  
-	void Draw(void)override;
 
 	/// @brief 2D関連の描画
 	/// @param  
@@ -95,16 +83,8 @@ public:
 private:
 
 #pragma region メンバー定数
-	static constexpr float MODEL_LOCAL_DEG = 180.0f;		//プレイヤーのローカル角度
-	static constexpr VECTOR MODEL_SCL = { 1.0f,1.0f,1.0f };	//プレイヤーの大きさ
-	static constexpr int PLAYER_NUM = 0;					//プレイヤーナンバー(デッキクラスで判定用)
-	static constexpr int SPINE_FRAME_NO = 0;				//プレイヤーの腰のフレーム番号
-	static constexpr int HAND_FRAME_NO = 36;				//手のフレーム番号
-
-	const std::string PLAYER_STR = "Player";
-
-	//半径
-	static constexpr float CAP_RADIUS = 25.0f;
+	static constexpr int PLAYER_NUM = 0;			//プレイヤーナンバー(デッキクラスで判定用)
+	const std::string PLAYER_STR = "Player";		//プレイヤー文字列
 #pragma endregion
 
 #pragma region 外部ファイル読み込み
@@ -112,7 +92,6 @@ private:
 #pragma endregion
 
 #pragma region メンバー変数
-
 	std::weak_ptr<Camera>camera_;			//カメラ
 	std::unique_ptr<Weapon>weapon_;			//武器オブジェクト
 
@@ -128,24 +107,27 @@ private:
 	void DrawDebug(void);
 #endif // _DEBUG
 
+	//キャラクターごとの基本処理
+	void LoadCharacter(void) override;					//キャラクター別のロード
+	void InitCharacter(void) override;					//キャラクター別の初期化
+	void UpdateDirectionCharacter(void) override;		//キャラクター別の更新
+	void UpdateNormalCharacter(void) override;			//通常(ゲーム中)
+	void UpdateClearDirectionCharacter(void) override;	//クリア演出;
+	void UpdateOverDirectionCharacter(void) override;	//ゲームオーバー
+	void DrawCharacter(void) override;					//描画
+
+	//キャラクター別のアクションデータの呼び出し時のコールバック
+	void LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _animVar) override;
+
+	//キャラクター別のモデル情報
+	void LoadModelDataCharacter(const nlohmann::json& _data) override;
+
 	//ロジックによる操作を受け付ける
 	void AcceptLogicControl(void) override;
 
-	void LoadCharacter(void)override;	//キャラクター別のロード
-	void InitCharacter(void)override;	//キャラクター別の初期化
-
-	void MakeColliderGeometry(void)override;	//当たり判定初期化
-	void ChangeUpdateOverDirection(void)override;//ゲームオーバーに遷移
-
-	//更新
-	//void UpdateDirection(void) override;		//演出
-	void UpdateDirectionCharacter(void) override;	//キャラクター別の更新
-	//void UpdateNormal(void)override;			//通常(ゲーム中)
-	void UpdateNormalCharacter(void) override;
-	//void UpdateClearDirection(void) override;	//クリア演出
-	void UpdateClearDirectionCharacter(void) override;
-	void UpdateOverDirectionCharacter(void) override;
-	void UpdateOverDirection(void)override;		//ゲームオーバー
+	//当たり判定初期化
+	void MakeColliderGeometry(void) override;
+	void ChangeUpdateOverDirection(void) override;//ゲームオーバーに遷移
 #pragma endregion
 };
 

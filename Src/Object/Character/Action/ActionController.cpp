@@ -66,7 +66,7 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_FIRE,std::make_unique<PlayerCardMagicFire>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_MAGIC_THUNDER,[this]() {
-				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_THUNDER,std::make_unique<PlayerCardMagicFire>(*this,character_,cardPresent_));
+				mainAction_.emplace(ACTION_TYPE::CARD_MAGIC_THUNDER,std::make_unique<PlayerCardMagicThunder>(*this,character_,cardPresent_));
 		}},
 		{ACTION_TYPE::CARD_RELOAD,[this]() {
 			if (character_.GetCharacterType() == CHARACTER_TYPE::PLAYER)
@@ -154,8 +154,7 @@ void ActionController::AddAction(void)
 	const auto datas = ResourceManager::GetInstance().Load(ResourceManager::SRC::CHARA_DATA).jsonData;
 
 	//読み込むキャラクター種類
-	std::string charaStr = character_.GetCharacterType() == CHARACTER_TYPE::PLAYER 
-		? "Player" : "Enemy";
+	std::string charaStr = character_.GetObjectName();
 
 	//UseActionを読み込んで追加する
 	if (datas[charaStr].contains("UseAction"))
@@ -232,6 +231,12 @@ void ActionController::DesideCardAction(void)
 		//手札に移動
 		cardPresent_.PutCard();
 		ChangeAction(ACTION_TYPE::CARD_MAGIC_FIRE);
+	}
+	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::THUNDER)
+	{
+		//手札に移動
+		cardPresent_.PutCard();
+		ChangeAction(ACTION_TYPE::CARD_MAGIC_THUNDER);
 	}
 	else if(cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
 	{

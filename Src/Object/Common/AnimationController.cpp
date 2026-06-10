@@ -4,10 +4,10 @@
 #include "../Common/Easing.h"
 #include "AnimationController.h"
 
-AnimationController::AnimationController(const int _modelId, const int _hipNum) :
+AnimationController::AnimationController(void) :
 	scnMng_(SceneManager::GetInstance()),
-	hipNum_(_hipNum),
-	modelId_(_modelId),
+	spineFrameNum_(),
+	modelId_(),
 	playType_(-1),
 	isBlend_(false)
 {
@@ -275,6 +275,12 @@ void AnimationController::SetFrameAnimAttachLocalMatrixPos(int modelId, int atta
 	MV1SetFrameUserLocalMatrix(modelId, frameIdx, ret);
 }
 
+void AnimationController::SetModelInfo(const int _modelId, const int _spineFrameNum)
+{
+	modelId_ = _modelId;
+	spineFrameNum_ = _spineFrameNum;
+}
+
 void AnimationController::GetFrameLocalMatrix(const int _modelId, int _frameIdx, VECTOR& _scl, MATRIX& _matRot, VECTOR& _pos)
 {
 	// 対象フレームのローカル行列を取得する
@@ -321,16 +327,6 @@ bool AnimationController::IsBlendAnim(const int type) const
 
 void AnimationController::DrawDebug(void)
 {
-	constexpr float posX = 100.0f;
-	float posY = 100.0f;
-
-	for(const auto& anim : animations_)
-	{
-		//DrawFormatString(posY, 10.0f, GetColor(255, 255, 255), L"AnimType:%d", anim.first);
-		DrawFormatString(posX, posY, GetColor(255, 255, 255), L"AnimStep:%f", anim.second.variable.step);
-		//DrawFormatString(posX, posY, UtilityCommon::WHITE, L"BlendRate:%f", anim.second.blendRate);
-		posY += 16;
-	}
 }
 
 void AnimationController::UpdateNone(void)
@@ -415,10 +411,10 @@ void AnimationController::FreezeMovementForAnimation(void)
 {
 
 	// 対象フレーム(今回は0版)のローカル行列を初期値にリセットする
-	MV1ResetFrameUserLocalMatrix(modelId_, hipNum_);
+	MV1ResetFrameUserLocalMatrix(modelId_, spineFrameNum_);
 
 	// 対象フレームのローカル行列(大きさ、回転、位置)を取得する
-	auto mat = MV1GetFrameLocalMatrix(modelId_, hipNum_);
+	auto mat = MV1GetFrameLocalMatrix(modelId_, spineFrameNum_);
 	auto scl = MGetSize(mat);			// 行列から大きさを取り出す
 	auto rot = MGetRotElem(mat);		// 行列から回転を取り出す
 	auto pos = MGetTranslateElem(mat);	// 行列から移動値を取り出す
@@ -440,7 +436,7 @@ void AnimationController::FreezeMovementForAnimation(void)
 
 	// 合成した行列を対象フレームにセットし直して、
 	// アニメーションの移動値を無効化
-	MV1SetFrameUserLocalMatrix(modelId_, hipNum_, mix);
+	MV1SetFrameUserLocalMatrix(modelId_, spineFrameNum_, mix);
 }
 
 void AnimationController::AnimationDettach(const int _type)

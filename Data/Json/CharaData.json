@@ -23,7 +23,7 @@
 		"BattleStartPos": {
 			"x": 0.0,
 			"y": 0.0,
-			"z": 600.0
+			"z": -600.0
 		},
 		"UseAction": [
 			"idle",
@@ -100,12 +100,13 @@
 			},
 			"scale": 5.0,
 			"spineFrameNum": 0,
-			"handFrameNum": 36
+			"handFrameNum": 36,
+			"chestFrameNum": 4
 		},
 		"BattleStartPos": {
 			"x": 0.0,
 			"y": 0.0,
-			"z": -600.0
+			"z": 600.0
 		},
 		"UseAction": [
 			"idle",

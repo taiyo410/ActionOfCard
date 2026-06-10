@@ -13,15 +13,16 @@ public:
 	enum class EFF_TYPE
 	{
 		NONE,
-		KEY_BLADE_HIT, //キーブレードヒット
-		DASH,		//ダッシュ
-		JUMP,		//ジャンプ
-		PUNCH_HIT,	//パンチヒット
-		BLAST,		//爆発
-		RELOAD,		//カードリロード
+		KEY_BLADE_HIT,	//キーブレードヒット
+		DASH,			//ダッシュ
+		JUMP,			//ジャンプ
+		PUNCH_HIT,		//パンチヒット
+		BLAST,			//爆発
+		RELOAD,			//カードリロード
 		RELOAD_END,		//カードリロード
-		FIRE_BALL,
-		E_JUMP_CHARGE,
+		FIRE_BALL,		//ファイアボール
+		THUNDER,		//雷
+		E_JUMP_CHARGE,	//ジャンプ溜め
 		E_DEATH,		//死んだエフェクト
 		E_DEATH_BLAST,	//死んで爆発
 	};

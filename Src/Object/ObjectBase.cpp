@@ -43,7 +43,8 @@ ObjectBase::ObjectBase(void)
 		{"UpdownLine",TAG_PRIORITY::UPDOWN_LINE},
 		{"AttackSphere",TAG_PRIORITY::ATK_SPHERE},
 		{"RockSphere",TAG_PRIORITY::ROCK_SPHERE},
-		{"FireSphere",TAG_PRIORITY::FIRE_SPHERE}
+		{"FireSphere",TAG_PRIORITY::FIRE_SPHERE},
+		{"ThunderLine",TAG_PRIORITY::THUNDER_LINE}
 	};
 }
 

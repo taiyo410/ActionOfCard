@@ -42,7 +42,7 @@ void PlayerCardMagicFire::InitAttack(void)
 
 	//‰Š‚ðoŒ»‚³‚¹‚é
 	fireBall_->Init();
-	character_.DrawFireBall(fireBall_);
+	character_.DrawItem(fireBall_);
 	changeState_[STATE::SPELL_CAST]();
 }
 

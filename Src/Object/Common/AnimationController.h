@@ -49,7 +49,7 @@ public :
 	/// @brief コンストラクタ
 	/// @param _modelId モデルID
 	/// @param _hipNum 尻のボーン番号
-	AnimationController(const int _modelId,const int _hipNum);
+	AnimationController(void);
 
 	/// @brief デストラクタ
 	/// @param  
@@ -132,6 +132,11 @@ public :
 	/// @param pos 座標
 	void SetFrameAnimAttachLocalMatrixPos(int modelId, int attachNo, int frameIdx, VECTOR& pos);
 
+	/// @brief モデル情報をセット
+	/// @param _modelId モデルId
+	/// @param _spineNum 腰のボーン番号
+	void SetModelInfo(const int _modelId, const int _spineFrameNum);
+
 	/// @brief フレーム行列情報の取得
 	/// @param _modelId モデルID
 	/// @param _frameIdx フレーム番号
@@ -191,8 +196,8 @@ private :
 	// アニメーションの座標移動を無効カウするためのオフセット
 	VECTOR invalidBlendPos_;
 
-	//モデルのヒップ番号
-	int hipNum_;
+	//モデルの腰番号
+	int spineFrameNum_;
 
 	//状態別更新
 	void UpdateNone(void);		//アニメーションブレンド
