@@ -43,7 +43,7 @@ private:
 
 #pragma region 外部ファイル読み込み
 	float cameraShakeTime_;			//カメラシェイク時間
-	float rockNum_;					//岩の数
+	int rockNum_;					//岩の数
 	float cameraShakeLimit_;		//カメラシェイク制限値
 #pragma endregion
 
