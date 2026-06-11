@@ -18,7 +18,6 @@ float lookup(float2 uv, float2 texelSize, float d, float dx, float dy)
 
 float4 main(PS_INPUT PSInput) : SV_TARGET0
 {
-    
     float2 uv = PSInput.uv;
     float4 srcCol = tex.Sample(texSampler, uv);
     

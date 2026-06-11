@@ -1,7 +1,6 @@
 #include"../Object/Character/Player/Player.h"
 #include"../Utility/Utility3D.h"
 #include "../Object/Character/Base/CharacterBase.h"
-
 #include "../../../Manager/Generic/Camera.h"
 #include "PlayerLogic.h"
 
