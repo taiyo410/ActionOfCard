@@ -67,11 +67,11 @@ private:
 #pragma region ƒƒ“ƒo[ŠÖ”
     //XV
     void UpdateSpellCast(void) override;     //‰r¥’†
-    void UpdateAttack(void) override;        //UŒ‚
+    void UpdateMagicAttack(void) override;        //UŒ‚
 
     //‘JˆÚ
     void ChangeSpellCast(void) override;     //‰r¥’†
-    void ChangeAttack(void) override;        //UŒ‚
+    void ChangeMagicAttack(void) override;        //UŒ‚
 #pragma endregion
 };
 

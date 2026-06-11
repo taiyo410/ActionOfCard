@@ -43,10 +43,9 @@ public:
 	virtual void AttackRelease(void) {}
 
 protected:
-
-	//攻撃カウント
-	float atkCnt_;
-
+#pragma region メンバー変数
+	float atkCnt_;				//攻撃カウント
+#pragma endregion
 private:
 
 

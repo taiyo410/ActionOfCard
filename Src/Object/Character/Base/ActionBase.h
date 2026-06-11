@@ -113,55 +113,22 @@ public:
 	virtual void LoadAnimVar(const ACTION_LOAD_DATA& animVar) {}
 
 protected:
-
-	//移動スピード
-	static constexpr float MOVE_SPEED = 6.0f;
-
-	//ブレンド時間
-	static constexpr float BLEND_TIME = 0.5f;
-
-	//速度
-	float speed_;			
-
-	//怯み時間
-	float flinchCnt_;
-
-	//シーンマネージャ
-	SceneManager& scnMng_;
-
-	//サウンドマネージャ
-	SoundManager& soundMng_;
-
-	//リソースマネージャ
-	ResourceManager& resMng_;
-
-	//アクションコントローラー
-	ActionController& actionCtrl_;
-
-	//アニメーション
-	AnimationController& anim_;
-
-	//キャラクター
-	CharacterBase& character_;
-
-	//方向転換可能かどうか
-	bool isTurnable_;
-
-	//敵への方向転換
-	bool isTargetTurn_;
-
-	//攻撃の当たり判定中か
-	bool isAliveAtkCol_;
-
-	//現在の攻撃
-	ATK_STATUS atk_;
-
-	////使用アニメーション
-	AnimationController::ANIMATION_VARIABLE animVar_;
-
-private:
-
-	// 回転完了までの時間
-	static constexpr float TIME_ROT = 0.1f;
+#pragma region メンバー変数
+	SceneManager& scnMng_;			//シーンマネージャ
+	SoundManager& soundMng_;		//サウンドマネージャ
+	ResourceManager& resMng_;		//リソースマネージャ
+	ActionController& actionCtrl_;	//アクションコントローラー
+	AnimationController& anim_;		//アニメーション
+	CharacterBase& character_;		//キャラクター
+		
+	AnimationController::ANIMATION_VARIABLE animVar_;//使用アニメーション
+	float speed_;			//速度
+	float flinchCnt_;		//怯み時間
+	bool isTurnable_;		//方向転換可能かどうか
+	bool isTargetTurn_;		//敵への方向転換
+	bool isAliveAtkCol_;	//攻撃の当たり判定中か
+	ATK_STATUS atk_;		//現在の攻撃
+	int useAnimNum_;        //使用アニメーション番号
+#pragma endregion
 };
 

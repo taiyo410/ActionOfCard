@@ -6,7 +6,7 @@ PlayerCardMagicBase::PlayerCardMagicBase(ActionController& _actCntl, CharacterBa
 {
 	changeState_ = {
 	{STATE::SPELL_CAST,[this]() {ChangeSpellCast(); }},
-	{STATE::ATTACK,[this]() {ChangeAttack(); }}
+	{STATE::ATTACK,[this]() {ChangeMagicAttack(); }}
 	};
 }
 

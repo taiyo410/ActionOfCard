@@ -44,7 +44,6 @@ void PlayerCardAttackBase::Update(void)
 
 	//エフェクト更新
 	effect_->Update();
-
 }
 
 void PlayerCardAttackBase::Release(void)

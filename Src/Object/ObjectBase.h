@@ -139,5 +139,4 @@ private:
 
 	//“–‚½‚ç‚È‚¢ƒ^ƒO‚ÌŽæ“¾
 	const std::set<Collider::TAG> GetNoneHitTag(const nlohmann::json& _data);
-
 };

@@ -11,6 +11,7 @@ PlayerCardMagicFire::PlayerCardMagicFire(ActionController& _actCntl, CharacterBa
 	PlayerCardMagicBase(_actCntl, _charaObj, _deck)
 {
 	fireBall_ = std::make_shared<PlayerMagicFire>(atk_.pos, toTargetDir_);
+	useAnimNum_ = static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE);
 }
 
 PlayerCardMagicFire::~PlayerCardMagicFire(void)
@@ -80,7 +81,7 @@ void PlayerCardMagicFire::UpdateSpellCast(void)
 	}
 }
 
-void PlayerCardMagicFire::UpdateAttack(void)
+void PlayerCardMagicFire::UpdateMagicAttack(void)
 {
 	//アクション時間のカウント
 	actCnt_ += scnMng_.GetDeltaTime();
@@ -100,9 +101,9 @@ void PlayerCardMagicFire::ChangeSpellCast(void)
 	updateState_ = [this]() {UpdateSpellCast(); };
 }
 
-void PlayerCardMagicFire::ChangeAttack(void)
+void PlayerCardMagicFire::ChangeMagicAttack(void)
 {
 	//炎の当たり判定作成
 	fireBall_->MakeFireBallCollider();
-	updateState_ = [this]() {UpdateAttack(); };
+	updateState_ = [this]() {UpdateMagicAttack(); };
 }

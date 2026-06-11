@@ -477,54 +477,54 @@ void CharacterBase::LoadActionData(OnActionDataLoaded _callBack)
 
 	// アクションごとの使用アニメーションを読み取って
 	// アニメーションコントローラーに追加する
-	for (const auto& [name,data] : actionData.items())
+	for (const auto& [name, data] : actionData.items())
 	{
-		ACTION_LOAD_DATA actionLoadData = {name, {}, data};
+		ACTION_LOAD_DATA actionLoadData = { name, {}, data };
 
 		//animationのデータがあれば格納する
-		if (data.contains("animation"))
+		if (!data.contains("animation"))continue;
+
+		//アニメーションデータの取得
+		const auto& animData = data["animation"];
+
+		////Jsonのリスト名と登録情報が一致しているかを調べる
+		////使用アニメーションの取得
+		std::string useAnim = animData.value("useAnim", "");
+		auto nameIt = animStrTable_.find(name);
+		if (nameIt == animStrTable_.end())continue;
+
+		//使用するリソースを取得
+		ResourceManager::SRC useSrc = resMng_.GetSrcFromString(useAnim);
+
+		//再生するときのパラメータを格納
+		AnimationController::ANIMATION_VARIABLE animVariable = {};
+		
+		if (useSrc != ResourceManager::SRC::NONE)
 		{
-			//アニメーションデータの取得
-			const auto& animData = data["animation"];
-
-			////Jsonのリスト名と登録情報が一致しているかを調べる
-			////使用アニメーションの取得
-			std::string useAnim = animData.value("useAnim", "");
-			auto nameIt = animStrTable_.find(name);
-			if (nameIt == animStrTable_.end())continue;
-
-			//使用するリソースを取得
-			ResourceManager::SRC useSrc = resMng_.GetSrcFromString(useAnim);
-
-			//再生するときのパラメータを格納
-			AnimationController::ANIMATION_VARIABLE animVariable = {};
-
-			if (useSrc != ResourceManager::SRC::NONE)
-			{
-				//アニメーションに追加
-				animCtrl_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
-			}
-
-			//アニメーション速度の取得
-			animVariable.speed = animData.value("animSpeed", 0.0f);
-
-			//デタッチスピードの取得
-			animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
-
-			//ループフラグの格納
-			animVariable.isLoop = animData.value("isLoop", false);
-
-			//スタートステップの取得
-			animVariable.step = animData.value("startStep", 0.0f);
-
-			//終了ステップの取得
-			animVariable.totalTime = animData.value("endStep", 0.0f);
-
-			//アクションのロードデータに格納
-			actionLoadData.animVariable = animVariable;
+			//アニメーションに追加
+			animCtrl_->Add(static_cast<int>(nameIt->second), resMng_.LoadModelDuplicate(useSrc));
 		}
 
-		if(_callBack)
+		//アニメーション速度の取得
+		animVariable.speed = animData.value("animSpeed", 0.0f);
+
+		//デタッチスピードの取得
+		animVariable.detachSpeed = animData.value("detachSpeed", 0.0f);
+
+		//ループフラグの格納
+		animVariable.isLoop = animData.value("isLoop", false);
+
+		//スタートステップの取得
+		animVariable.step = animData.value("startStep", 0.0f);
+
+		//終了ステップの取得
+		animVariable.totalTime = animData.value("endStep", 0.0f);
+
+		//アクションのロードデータに格納
+		actionLoadData.animVariable = animVariable;
+
+		//callbackがあれば処理する
+		if (_callBack)
 		{
 			_callBack(actionLoadData);
 		}

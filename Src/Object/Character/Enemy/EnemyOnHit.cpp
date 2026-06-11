@@ -55,17 +55,38 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	auto& parent = _hitCol.lock()->GetParent();
 
 	//武器の取得
-	auto& weapon = dynamic_cast<ItemBase&>(parent);
-	if (weapon.GetIsDamage()||actionCtrl_.GetActionType()==ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
+	auto& item = dynamic_cast<ItemBase&>(parent);
+	if (item.GetIsDamage()||actionCtrl_.GetActionType()==ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
 
 	//ダメージを与えたことを知らせる
-	weapon.SetIsDamage();
+	item.SetIsDamage();
 
+	DamageFunc();
+}
+
+void EnemyOnHit::CollFire(const std::weak_ptr<Collider> _hitCol)
+{
+	if(actionCtrl_.GetActionType() == ActionController::ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP)return;
+	DamageFunc();
+}
+
+void EnemyOnHit::CollThunder(const std::weak_ptr<Collider> _hitCol)
+{
+}
+
+void EnemyOnHit::CollChara(const std::weak_ptr<Collider> _hitCol)
+{
+	//相手と当たった
+	isHitTarget_ = true;
+}
+
+void EnemyOnHit::DamageFunc(void)
+{
 	//相手キャラの技攻撃力取得
 	const float& atkPoint = actionCtrl_.GetInput().GetTargetCharacter().lock()->GetMainAction().GetAtkPoint();
 
 	//相手の数字との差が近いほどダメージを追加する
-	const int cardDif= CardSystem::GetInstance().GetCardDif();
+	const int cardDif = CardSystem::GetInstance().GetCardDif();
 
 	int addDam = 0;
 	//カードシステムからカードの強さの差を取得。
@@ -75,11 +96,6 @@ void EnemyOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	int damage = static_cast<int>(atkPoint) + addDam;
 	character_.Damage(damage);
 
+	//のけぞりさせる
 	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
-}
-
-void EnemyOnHit::CollChara(const std::weak_ptr<Collider> _hitCol)
-{
-	//相手と当たった
-	isHitTarget_ = true;
 }

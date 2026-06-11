@@ -43,6 +43,11 @@ private:
 
 	//衝突後処理
 	void CollNormalAttack(const std::weak_ptr<Collider> _hitCol);		//通常攻撃
-	void CollChara(const std::weak_ptr<Collider> _hitCol)override;		//キャラ同士の当たり判定
+	void CollFire(const std::weak_ptr<Collider> _hitCol);				//ファイア魔法
+	void CollThunder(const std::weak_ptr<Collider> _hitCol);				//ファイア魔法
+	void CollChara(const std::weak_ptr<Collider> _hitCol)override;		//キャラクター同士
+
+	//ダメージ計算
+	void DamageFunc(void);
 };
 

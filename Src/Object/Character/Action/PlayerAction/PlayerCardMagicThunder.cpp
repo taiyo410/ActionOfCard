@@ -11,6 +11,7 @@ PlayerCardMagicThunder::PlayerCardMagicThunder(ActionController& _actCtrl, Chara
 	PlayerCardMagicBase(_actCtrl,_charaObj,_deck)
 {
 	thunder_ = std::make_shared<PlayerMagicThunder>(targetPos_);
+	useAnimNum_ = static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE);
 }
 
 PlayerCardMagicThunder::~PlayerCardMagicThunder(void)
@@ -49,12 +50,13 @@ void PlayerCardMagicThunder::UpdateSpellCast(void)
 {
 	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE)) > atk_.colStartStep)
 	{
-		changeState_[STATE::SPELL_CAST]();
+		changeState_[STATE::ATTACK]();
 	}
 }
 
-void PlayerCardMagicThunder::UpdateAttack(void)
+void PlayerCardMagicThunder::UpdateMagicAttack(void)
 {
+	thunder_->Update();
 	if (!thunder_->GetIsAlive())
 	{
 		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
@@ -66,12 +68,12 @@ void PlayerCardMagicThunder::ChangeSpellCast(void)
 	updateState_ = [this]() {UpdateSpellCast(); };
 }
 
-void PlayerCardMagicThunder::ChangeAttack(void)
+void PlayerCardMagicThunder::ChangeMagicAttack(void)
 {
 	//ó‘Ô‘JˆÚ
 	thunder_->Init();
 	character_.DrawItem(thunder_);
 	thunder_->MakeThunderCollider();
 
-	updateState_ = [this]() {UpdateAttack(); };
+	updateState_ = [this]() {UpdateMagicAttack(); };
 }

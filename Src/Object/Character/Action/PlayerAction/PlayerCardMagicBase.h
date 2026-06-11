@@ -60,11 +60,11 @@ protected:
 #pragma region ƒƒ“ƒo[ŠÖ”
     //XV
     virtual void UpdateSpellCast(void) = 0;     //‰r¥’†
-    virtual void UpdateAttack(void) = 0;        //UŒ‚
+    virtual void UpdateMagicAttack(void) = 0;        //UŒ‚
 
     //‘JˆÚ
     virtual void ChangeSpellCast(void) = 0;     //‰r¥’†
-    virtual void ChangeAttack(void) = 0;        //UŒ‚
+    virtual void ChangeMagicAttack(void) = 0;        //UŒ‚
 #pragma endregion
 };
 

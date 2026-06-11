@@ -28,6 +28,7 @@ void PlayerMagicThunder::Load(void)
 void PlayerMagicThunder::Init(void)
 {
 	isAlive_ = true;
+	isDamage_ = false;
 	trans_.pos = targetPos_;
 	VECTOR sclVec = { thunderEffScl_ ,thunderEffScl_ ,thunderEffScl_ };
 	thunderEffPlayId_ = effect_->Play(EffectController::EFF_TYPE::THUNDER, trans_.pos, trans_.quaRot, sclVec);
@@ -52,7 +53,7 @@ void PlayerMagicThunder::Draw(void)
 void PlayerMagicThunder::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	//ìñÇΩÇ¡ÇΩÇÁè¡Ç∑
-	DeleteCollider(TAG_PRIORITY::FIRE_SPHERE);
+	DeleteCollider(TAG_PRIORITY::THUNDER_LINE);
 }
 
 void PlayerMagicThunder::LoadThunderData(const nlohmann::json _data)
