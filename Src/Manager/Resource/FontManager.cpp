@@ -31,7 +31,7 @@ void FontManager::Init(void)
 			(Application::PATH_FONT + fontPath_[i]).c_str(),
 			FR_PRIVATE,
 			NULL)
-			== -1)
+			== 0)
 		{
 			return;
 		}

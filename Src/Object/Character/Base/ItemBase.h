@@ -34,6 +34,10 @@ public:
 	/// @param  
 	virtual void Draw(void) override = 0;
 
+	/// @brief 解放
+	/// @param  
+	virtual void Release(void);
+
 	/// @brief // ダメージフラグの取得
 	/// @param  
 	/// @return true:ダメージ判定あり　false:ダメージ判定なし
@@ -50,6 +54,8 @@ protected:
 
 	//ダメージフラグ
 	bool isDamage_;
+
+
 
 };
 

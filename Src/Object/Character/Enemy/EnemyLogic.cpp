@@ -57,7 +57,8 @@ void EnemyLogic::Update(void)
 	}
 
 	//硬直がなかったらカード使用可能
-	if (freezeCnt_ <= 0.0f && !isActioning_)
+	//if (freezeCnt_ <= 0.0f && !isActioning_)
+	if (InputManager::GetInstance().IsTrgDown(KEY_INPUT_Z))
 	{
 		isAct_.isCardUse = true;
 		cardCoolCnt_ = CARD_COOL_TIME;

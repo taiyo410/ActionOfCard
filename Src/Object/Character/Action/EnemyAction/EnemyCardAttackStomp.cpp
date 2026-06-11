@@ -134,7 +134,7 @@ void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	const auto& data = _data.jsonData;
 	LoadAttackStatus(data, atk_);
 	cameraShakeTime_ = data.value("cameraShakeTime", 0.0f);
-	rockNum_ = data.value("rockNum", 0.0f);
+	rockNum_ = data.value("rockNum", 0);
 	cameraShakeLimit_ = data.value("cameraShakeLimit", 0.0f);
 
 	//ä‚ÇÃê∂ê¨

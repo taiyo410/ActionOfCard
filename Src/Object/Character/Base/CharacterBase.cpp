@@ -91,9 +91,6 @@ void CharacterBase::LoadCommon(void)
 	//使用するアクションを追加
 	actionCtrl_->AddAction();
 
-	//アクションのロード
-	actionCtrl_->Load();
-
 	//Jsonからアクションごとのデータのロード
 	LoadActionData([this](const ACTION_LOAD_DATA& _animVar)
 		{
@@ -101,6 +98,9 @@ void CharacterBase::LoadCommon(void)
 			actionCtrl_->AnimLoadNotify(_animVar);
 			LoadCharacterActionDataCallBack(_animVar);
 		});
+
+	//アクションのロード
+	actionCtrl_->Load();
 }
 
 void CharacterBase::LoadCommonData(void)
@@ -137,7 +137,7 @@ void CharacterBase::InitCommon(void)
 void CharacterBase::UpdateNormalCommon(void)
 {
 	//ロジックによる操作の受付
-	//AcceptLogicControl();
+	AcceptLogicControl();
 
 	//回転の同期
 	UpdatePost();

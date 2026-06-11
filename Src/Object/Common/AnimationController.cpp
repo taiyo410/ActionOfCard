@@ -409,7 +409,6 @@ void AnimationController::UpdateNormal(const float _spdScl)
 
 void AnimationController::FreezeMovementForAnimation(void)
 {
-
 	// 対象フレーム(今回は0版)のローカル行列を初期値にリセットする
 	MV1ResetFrameUserLocalMatrix(modelId_, spineFrameNum_);
 

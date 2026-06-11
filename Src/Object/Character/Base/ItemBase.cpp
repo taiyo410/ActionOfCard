@@ -11,3 +11,8 @@ ItemBase::ItemBase(void):
 ItemBase::~ItemBase(void)
 {
 }
+
+void ItemBase::Release(void)
+{
+
+}

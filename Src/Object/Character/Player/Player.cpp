@@ -66,8 +66,6 @@ void Player::InitCharacter(void)
 
 void Player::UpdateNormalCharacter(void)
 {
-	//ロジックによる操作の受付
-	AcceptLogicControl();
 	weapon_->Update();
 }
 void Player::UpdateClearDirectionCharacter(void)

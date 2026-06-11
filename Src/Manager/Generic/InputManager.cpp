@@ -54,6 +54,7 @@ void InputManager::Init(void)
 
 	//ポーズシーンを開く
 	Add(KEY_INPUT_ESCAPE);
+	Add(KEY_INPUT_Z);
 
 	InputManager::MouseInfo info;
 

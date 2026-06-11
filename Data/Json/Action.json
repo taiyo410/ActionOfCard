@@ -123,7 +123,7 @@
       },
       "animation": {
         "useAnim": "P_FIRE_MAGIC",
-        "animSpeed": 20.0,
+        "animSpeed": 40.0,
         "detachSpeed": 5.0,
         "isLoop": false,
         "startStep": 0.0,
@@ -137,7 +137,7 @@
       "effectScale": 100.0,
       "animation": {
         "useAnim": "P_FIRE_MAGIC",
-        "animSpeed": 20.0,
+        "animSpeed": 40.0,
         "detachSpeed": 5.0,
         "isLoop": false,
         "startStep": 0.0,
@@ -151,7 +151,7 @@
       "animLoopEndStep": 30.0,
       "animation": {
         "useAnim": "P_RELOAD",
-        "animSpeed": 80.0,
+        "animSpeed": 40.0,
         "detachSpeed": 5.0,
         "startStep": 17.0,
         "endStep": 33.0

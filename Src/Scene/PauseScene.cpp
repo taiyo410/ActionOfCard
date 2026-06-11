@@ -13,10 +13,10 @@ PauseScene::PauseScene(void):
 	selectIndex_()
 {
 	//更新関数のセット
-	updateFunc_ = [this]() {LoadingUpdate(); };
+	updateFunc_ = [this]() {NormalUpdate(); };
 
 	//描画関数のセット
-	drawFunc_ = [this]() {LoadingDraw(); };
+	drawFunc_ = [this]() {NormalDraw(); };
 	
 	//リストごとに処理を分ける
 	listFuncTable_ =

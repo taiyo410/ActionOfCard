@@ -50,6 +50,13 @@ void PlayerMagicThunder::Draw(void)
 	}
 }
 
+void PlayerMagicThunder::Release(void)
+{
+	//ìñÇΩÇ¡ÇΩÇÁè¡Ç∑
+	DeleteCollider(TAG_PRIORITY::THUNDER_LINE);
+	effect_->Stop(EffectController::EFF_TYPE::THUNDER, thunderEffPlayId_);
+}
+
 void PlayerMagicThunder::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	//ìñÇΩÇ¡ÇΩÇÁè¡Ç∑

@@ -34,6 +34,7 @@ void PlayerCardMagicThunder::InitAttack(void)
 void PlayerCardMagicThunder::AttackRelease(void)
 {
 	character_.DeleteItem();
+	thunder_->Release();
 }
 
 void PlayerCardMagicThunder::LoadAnimVar(const ACTION_LOAD_DATA& _data)

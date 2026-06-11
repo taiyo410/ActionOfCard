@@ -43,21 +43,12 @@ public:
 
 private:
 
-    enum class STATE
-    {
-        SPELL_CAST,
-        ATTACK
-    };
-
 #pragma region 外部ファイル読み込み
     float actMaxTime_;          //炎のアクション最大時間(一定時間何も起こらなかった場合のアクション時間)
 #pragma endregion
 
 #pragma region メンバー変数
     std::shared_ptr<PlayerMagicFire>fireBall_;    //ファイアボール
-
-    std::unordered_map<STATE, std::function<void(void)>>changeState_;   //遷移系
-    std::function<void(void)>updateState_;                              //更新系
 
     VECTOR fireLocalPos_;           //炎のローカル座標
     VECTOR toTargetDir_;            //ターゲットへの方向

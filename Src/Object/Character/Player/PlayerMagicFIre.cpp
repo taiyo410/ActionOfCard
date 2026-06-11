@@ -56,6 +56,15 @@ void PlayerMagicFire::Draw(void)
 {
 }
 
+void PlayerMagicFire::Release(void)
+{
+	effect_->Stop(EffectController::EFF_TYPE::FIRE_BALL, fireEffPlayId_);
+	isAlive_ = false;
+
+	//ìñÇΩÇ¡ÇΩÇÁè¡Ç∑
+	DeleteCollider(TAG_PRIORITY::FIRE_SPHERE);
+}
+
 void PlayerMagicFire::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	//ìñÇΩÇ¡ÇΩÇÁè¡Ç∑

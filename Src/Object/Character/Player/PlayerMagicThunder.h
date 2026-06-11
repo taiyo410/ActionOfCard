@@ -32,6 +32,10 @@ public:
     /// @param  
     void Draw(void) override;
 
+    /// @brief 解放
+    /// @param  
+    void Release(void)override;
+
     /// @brief 当たり判定
     /// @param _hitCol 当たったコライダー
     void OnHit(const std::weak_ptr<Collider> _hitCol) override;

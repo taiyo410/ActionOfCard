@@ -46,6 +46,7 @@ void PlayerCardMagicFire::InitAttack(void)
 void PlayerCardMagicFire::AttackRelease(void)
 {
 	character_.DeleteItem();
+	fireBall_->Release();
 }
 
 void PlayerCardMagicFire::LoadAnimVar(const ACTION_LOAD_DATA& _data)
