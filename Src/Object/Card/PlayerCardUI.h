@@ -54,10 +54,7 @@ public:
 
 private:
 
-	//楕円の半径
-	static constexpr float RADIUS_X = 186.0f;	//横半径
-	static constexpr float RADIUS_Y = 214.0f;	//縦半径
-
+#pragma region メンバー定数
 	//見せるカード枚数
 	static constexpr int VISIBLE_CARD_MAX = 6;
 
@@ -83,6 +80,10 @@ private:
 	static constexpr float ARROUND_PER_QUAD_DEG = ARROUND_PER_DEG * ARROUND_NUM_PER_QUAD;//90度当たりの枚数
 	static constexpr float ARROUND_PER_QUAD_RAD = ARROUND_PER_QUAD_DEG * DX_PI_F / 180.0f;//90度当たりの枚数
 
+	//楕円の半径
+	static constexpr float RADIUS_X = 186.0f;	//横半径
+	static constexpr float RADIUS_Y = 214.0f;	//縦半径
+
 	//バーの色(明るい緑)
 	static constexpr FLOAT4 BAR_LIGHT_GREEN = { 0.2f, 0.6f, 1.0f,0.0f };
 
@@ -105,27 +106,7 @@ private:
 	static constexpr Vector2F BAR_BG_SIZE = { BAR_SIZE.x + 40.0f,BAR_SIZE.y + 70.0f };
 
 	//弾かれる前のゴール座標
-	static constexpr Vector2F REACT_GOAL_CARD_POS = {-200.0f, Application::SCREEN_HALF_Y + 500.0f };
-
-	//カード残り枚数ゲージシェーダ定数バッファサイズ
-	static constexpr int CARD_NUM_GAUGE_CONST_BUF_SIZE = 3;
-
-	//カード残り枚数ゲージシェーダ定数バッファインデックス
-	static constexpr int CARD_NUM_GAUGE_CONST_BUF_IDX = 2;
-
-	//選択カード番号
-	static constexpr int SELECT_CARD_NO = 1;
-
-	//フォントサイズ
-	static constexpr int FONT_SIZE = 32;
-	static constexpr int RELOAD_FONT_SIZE = 20;
-
-	//リロード文字列のセンターからのオフセット
-	static constexpr float RELOAD_STR_OFF_Y = 30.0f;
-
-	//リロード文字列
-	std::wstring RELOAD_STR = L"RELOAD";
-
+	static constexpr Vector2F REACT_GOAL_CARD_POS = { -200.0f, Application::SCREEN_HALF_Y + 500.0f };
 	//フォントの輪郭幅
 	static constexpr int FONT_EDGE_SIZE = 2;
 	static constexpr Vector2F FONT_POS = { BAR_POS.x,550.0f };
@@ -135,7 +116,7 @@ private:
 	static constexpr float REVOLVER_ARROW_SCL = 0.8f;
 
 	//スケールを含めた矢印サイズ
-	static constexpr Vector2F REVOLVER_ARROW_SCL_SIZE = 
+	static constexpr Vector2F REVOLVER_ARROW_SCL_SIZE =
 	{ REVOLVER_ARROW_SIZE.x * REVOLVER_ARROW_SCL, REVOLVER_ARROW_SIZE.y * REVOLVER_ARROW_SCL, };
 
 	//矢印回転角度
@@ -153,38 +134,51 @@ private:
 
 	//ボタン座標と矢印の間隔
 	static constexpr float REVOLVER_BTN_ARROW_OFFSET = 10.0f;
+	//フォントサイズ
+	static constexpr int FONT_SIZE = 32;
+	static constexpr int RELOAD_FONT_SIZE = 20;
 
-	//半径
-	Vector2F radius_;
+	//リロード文字列のセンターからのオフセット
+	static constexpr float RELOAD_STR_OFF_Y = 30.0f;
+
+
+
+
+	//カード残り枚数ゲージシェーダ定数バッファサイズ
+	static constexpr int CARD_NUM_GAUGE_CONST_BUF_SIZE = 3;
+
+	//カード残り枚数ゲージシェーダ定数バッファインデックス
+	static constexpr int CARD_NUM_GAUGE_CONST_BUF_IDX = 2;
+
+	//選択カード番号
+	static constexpr int SELECT_CARD_NO = 1;
+
+	//リロード文字列
+	std::wstring RELOAD_STR = L"RELOAD";
+#pragma endregion
+
+#pragma region メンバー変数
+	//カード残り枚数のゲージ
+	std::unique_ptr<PixelMaterial> cardGaugePSMaterial_;
+	std::unique_ptr<PixelRenderer> cardGaugePSRenderer_;
 
 	//見せるカード
-	std::list<std::shared_ptr<CardUIController>>visibleCards_;				
-
+	std::list<std::shared_ptr<CardUIController>>visibleCards_;
 	//リロード用の現在のカードイテレータ
-	std::list<std::shared_ptr<CardUIController>>::iterator reloadAnimCurr_;	
+	std::list<std::shared_ptr<CardUIController>>::iterator reloadAnimCurr_;
 
-	//リロード終了
-	bool isReloadEnd_;
+	Vector2F radius_;		//半径
+	bool isReloadEnd_;		//リロード終了
+	float cardNumPer_;		//残りカード枚数ゲージ
+	int cardNumFrameImg_;	//残りカード枚数ゲージ
+	int cardNumMaskImg_;	//残りカード枚数マスク画像
+	int cardNumBgImg_;		//残りカード枚数ゲージ背景
+	int fontHandle_;		//フォントハンドル
+	int reloadFontHandle_;	//リロードのフォントハンドル
+	int imgRevolverArrow_;	//矢印
+#pragma endregion
 
-	//残りカード枚数ゲージ
-	float cardNumPer_;
-
-	//残りカード枚数ゲージ
-	int cardNumFrameImg_;
-
-	//残りカード枚数マスク画像
-	int cardNumMaskImg_;
-
-	//残りカード枚数ゲージ背景
-	int cardNumBgImg_;
-
-	//フォント
-	int fontHandle_;
-	int reloadFontHandle_;
-
-	//矢印
-	int imgRevolverArrow_;
-
+#pragma region メンバー関数
 	//カード状態遷移
 	void ChangeNone(void)override;			//通常
 	void ChangeLeft(void)override;			//左に移動
@@ -209,7 +203,7 @@ private:
 
 	//角度を現在角度に設定
 	void SetBasePosVisibleCards(void);
-	
+
 	//見せるカードの更新
 	void UpdateVisibleCard(void);
 
@@ -234,8 +228,5 @@ private:
 	//現在選択中のカードの配列を取得
 	std::list<std::shared_ptr<CardUIController>>::iterator GetVisibleCurrentIt(void);
 	std::list<std::shared_ptr<CardUIController>>::iterator GetSearchHandIt(std::shared_ptr<CardUIController> target);
-
-	//カード残り枚数のゲージ
-	std::unique_ptr<PixelMaterial> cardGaugePSMaterial_;
-	std::unique_ptr<PixelRenderer> cardGaugePSRenderer_;
+#pragma endregion
 };

@@ -12,7 +12,8 @@ CardUIDraw::CardUIDraw(int& _typeImg,Vector2F& _centerPos, float& _scl):
 	typeImg_(_typeImg),
 	centerPos_(_centerPos),
 	scl_(_scl),
-	selectEaseCnt_()
+	selectEaseCnt_(),
+	shaderSetRevolutionCard_()
 {
 	//通常カードシェーダ
 	normalCardPSMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::CARD_NORMAL_PS);
@@ -41,17 +42,11 @@ void CardUIDraw::Init(void)
 
 	easing_ = std::make_unique<Easing>();
 
-	trans_.pos = CARD_INIT_POS;
-	trans_.quaRot = Quaternion();
-	trans_.scl = { CARD_SCL,CARD_SCL,CARD_SCL };
-	trans_.quaRotLocal =
-		Quaternion::Euler({ 0.0f,0.0f,0.0f });
-
 	//通常カードシェーダ
 	normalCardPSMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::CARD_NORMAL_PS);
 	normalCardPSMaterial_->AddTextureBuf(typeImg_);
 	normalCardPSMaterial_->AddConstBuf({ 0.0f,0.0f, 0.0f,1.0f });		//カードの色
-	normalCardPSMaterial_->AddConstBuf({ 1.0f,0.0f, size_.x,size_.y });		//サイズ
+	normalCardPSMaterial_->AddConstBuf({ 1.0f,0.0f, 0.0f,0.0f });		//サイズ
 	normalCardPSRenderer_ = std::make_unique<PixelRenderer>(*normalCardPSMaterial_);
 	normalCardPSRenderer_->MakeSquareVertex(rightTopPos_, size_);
 
@@ -80,7 +75,7 @@ void CardUIDraw::Update(void)
 
 void CardUIDraw::Draw(void)
 {
-	normalCardPSMaterial_->SetConstBuf(NORMAL_CARD_CONST_BUN_NUM, { 0.0f,0.0f, 0.0f,1.0f });		//カードの色
+	normalCardPSMaterial_->SetConstBuf(NORMAL_CARD_CONST_BUN_NUM, { 0.0f,0.0f, shaderSetRevolutionCard_,1.0f });		//カードの色
 	DrawCard();
 }
 
@@ -98,6 +93,10 @@ void CardUIDraw::DrawSelectCard(void)
 
 	//カード描画
 	DrawCard();
+}
+
+void CardUIDraw::DrawReverseColorCard(void)
+{
 }
 
 void CardUIDraw::DrawCard(void)
@@ -144,4 +143,9 @@ void CardUIDraw::DrawReloadGauge(const float& _reloadPer)
 	reloadCardPSMaterial_->SetConstBuf(RELOAD_PER_CONST_BUF_SIZE, { 0.0f,0.0f,_reloadPer,0.0f });
 	reloadCardPSRenderer_->SetSize(size_ * scl_);
 	reloadCardPSRenderer_->Draw(rightTopPos.x, rightTopPos.y);
+}
+
+void CardUIDraw::SetIsReverseCard(const bool _isReverseColorCardDraw)
+{
+	shaderSetRevolutionCard_ = _isReverseColorCardDraw ? 1.0f : 0.0f;
 }

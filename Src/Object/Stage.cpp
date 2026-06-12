@@ -67,7 +67,6 @@ void Stage::Draw(void)
 {
 	MV1DrawModel(wallTrans_.modelId);
 	renderer_->Draw();
-
 }
 
 void Stage::OnHit(const std::weak_ptr<Collider> _hitCol)

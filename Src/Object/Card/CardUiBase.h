@@ -180,7 +180,7 @@ protected:
 	std::list<std::shared_ptr<CardUIController>>initialCards_;				//初期カード
 	std::list<std::shared_ptr<CardUIController>>handCards_;					//手札
 	std::list<std::shared_ptr<CardUIController>>::iterator handCurrent_;	//手札の現在選択中カード
-	std::list<std::shared_ptr<CardUIController>>actions_;					//アクション中カード
+	std::list<std::shared_ptr<CardUIController>>actionCards_;					//アクション中カード
 
 	//マネージャ関連
 	SoundManager& soundMng_;			//サウンド

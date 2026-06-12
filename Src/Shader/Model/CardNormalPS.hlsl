@@ -6,7 +6,8 @@ cbuffer cbParam : register(b4)
     float4 g_color;
     float g_fog_Pow;
     float g_time;
-    float2 dummy;
+    float g_isRevolution;
+    float dummy;
 }
 
 float lookup(float2 uv, float2 texelSize, float d, float dx, float dy)
@@ -31,6 +32,12 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     area = area * g_fog_Pow;
     area = abs(area);
     srcCol.rgb += area;
+    
+    //革命時、カードを反転させる
+    if (g_isRevolution==1.0)
+    {
+        srcCol = 1.0f - srcCol;
+    }
     
     return srcCol + g_color;
   

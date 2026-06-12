@@ -44,9 +44,6 @@ private:
     //弾かれた後のゴール座標(敵)
     static constexpr Vector2F REACT_GOAL_CARD_POS = { Application::SCREEN_SIZE_X + 200.0f, Application::SCREEN_HALF_Y + 500 };
 
-	//カードブレイクサウンド音量
-	static constexpr float CARD_BREAK_SOUND_VOLUME = 0.6f;
-
     //遷移系
     void ChangeNone(void) override;		        //通常
     void ChangeDecision(void) override;	        //決定

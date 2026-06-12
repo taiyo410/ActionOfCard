@@ -38,7 +38,7 @@ PlayerCardUI::~PlayerCardUI(void)
 {
 	handCards_.clear();
 	visibleCards_.clear();
-	actions_.clear();
+	actionCards_.clear();
 	changeMoveState_.clear();
 	initialCards_.clear();
 }
@@ -198,7 +198,7 @@ void PlayerCardUI::InitCardUI(void)
 	//初めに配列を初期化
 	handCards_.clear();
 	visibleCards_.clear();
-	actions_.clear();
+	actionCards_.clear();
 
 	//手札にすべての初期札を入れる
 	for (auto& it : initialCards_)
@@ -362,10 +362,10 @@ void PlayerCardUI::ChangeDecision(void)
 		ChangeSelectState(CARD_SELECT::RELOAD_WAIT);
 		return;
 	}
-	actions_.emplace_back(*handCurrent_);
+	actionCards_.emplace_back(*handCurrent_);
 
 	//決定カウントをセット
-	for (auto& act : actions_)
+	for (auto& act : actionCards_)
 	{
 		//弾かれ状態の場合は飛ばす
 		if (act->GetState() == CardUIController::CARD_STATE::REACT)continue;
@@ -463,10 +463,10 @@ void PlayerCardUI::UpdateDecision(void)
 	cardMoveCnt_ -= DELTA;
 
 	//決定移動が終わったカードを探す
-	auto it = std::find_if(actions_.begin(), actions_.end(), [this](auto& act) {return act->GetDecisionCnt() > 0.0f; });
+	auto it = std::find_if(actionCards_.begin(), actionCards_.end(), [this](auto& act) {return act->GetDecisionCnt() > 0.0f; });
 
 	//終わっていたら、NONE状態へ
-	if(it==actions_.end())
+	if(it==actionCards_.end())
 	{
 		SetBasePosVisibleCards();
 		SetBasePosActionCards();

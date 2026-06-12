@@ -50,11 +50,10 @@ public:
 	/// @brief 解放
 	/// @param  
 	void Release(void)override;
+
 private:
 
-	//BGM
-	static constexpr float BGM_GAME_VOL = 0.5f;
-
+#pragma region メンバー定数
 	//集中線シェーダー関連
 	//定数バッファの個数
 	static constexpr int INTENSIVE_CBUFFER_NUM = 1;
@@ -73,9 +72,12 @@ private:
 
 	//ボタン長押し文字のY座標オフセット
 	static constexpr float SKIP_BTN_STR_OFFSET_Y = 16.0f;
+#pragma endregion
 
-	//ポストエフェクト用スクリーン
-	int postEffectScreen_;
+#pragma region メンバー変数
+	std::unique_ptr<SkyDome> skyDome_;			//スカイドーム
+	std::unique_ptr<Stage>stage_;				//ステージ
+	std::shared_ptr<PauseScene> pauseScene_;	//ポーズ画面
 
 	//スローカウンタ(フレーム)
 	int slowFrame_;
@@ -84,25 +86,12 @@ private:
 	UPDATE_PHASE updatePhase_;											//更新
 	std::map<UPDATE_PHASE, std::function<void(void)>>changeUpdate_;		//遷移
 
-	//スカイドーム
-	std::unique_ptr<SkyDome> skyDome_;
-
-	//ステージ
-	std::unique_ptr<Stage>stage_;
-
-	//ポーズ画面
-	std::shared_ptr<PauseScene> pauseScene_;
-
-	//プレイヤー
-	std::unique_ptr<Player>player_;
-
-	//敵
-	std::unique_ptr<Enemy>enemy_;
-
 	//スキップ中
 	bool isSkippingDirection_;
 	//長押しカウンタ
 	float skipKeepCnt_;
+
+#pragma endregion
 
 	//演出更新のスキップ
 	void CheckSkip(void);

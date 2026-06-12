@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Scene\GameEventRevolutionScene.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicBase.cpp" />
     <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyCardReload.cpp" />
     <ClCompile Include="Src\Object\Character\Player\PlayerMagicThunder.cpp" />
@@ -127,6 +128,7 @@
     <ClCompile Include="Src\Utility\UtilityJson.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Src\Scene\GameEventRevolutionScene.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicBase.h" />
     <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyCardReload.h" />
     <ClInclude Include="Src\Object\Character\Player\PlayerMagicThunder.h" />
@@ -318,6 +320,12 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Src\Shader\Model\ArcHpBarPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Src\Shader\Model\RevolutionPostEffectPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>

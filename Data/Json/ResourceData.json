@@ -417,6 +417,11 @@
         "name": "CARD_SELECT_PS",
         "handle": "SelectCardPS.cso",
         "constBufNum": 1
+      },
+      {
+        "name": "REVOLUTION_POSTEFFECT_PS",
+        "handle": "SelectCardPS.cso",
+        "constBufNum": 1
       }
     ],
 

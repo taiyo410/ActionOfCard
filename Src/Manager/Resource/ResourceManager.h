@@ -84,7 +84,7 @@ public:
 		RELOAD_EFF,					//リロードエフェクト
 		RELOAD_END_EFF,				//リロード終了エフェクト
 		FIRE_BALL_EFF,				//炎のエフェクト
-		THUNDER_EFF,				//炎のエフェクト
+		THUNDER_EFF,				//雷のエフェクト
 
 		//サウンド
 		//BGM
@@ -127,6 +127,7 @@ public:
 		CARD_NORMAL_PS,				//通常カード
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
+		REVOLUTION_POST_PS,			//革命を起こした時のポストエフェクト
 		//頂点シェーダ
 		STAGE_VS					//ステージ
 	};
