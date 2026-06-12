@@ -1,13 +1,13 @@
-#include"../Utility/Utility3D.h"
+#include "../../Card/CardDeck.h"
+#include "../Utility/Utility3D.h"
 #include "../Manager/Generic/Camera.h"
 #include "../Manager/Generic/SceneManager.h"
 #include "../Manager/Generic/InputManager.h"
-#include "../../Card/CardDeck.h"
 #include "../Object/Common/EffectController.h"
-#include "./EnemyOnHit.h"
-#include "./EnemyRock.h"
-#include "../Enemy/EnemyLogic.h"
 #include "../Action/ActionController.h"
+#include "EnemyOnHit.h"
+#include "EnemyRock.h"
+#include "EnemyLogic.h"
 #include "Enemy.h"
 
 Enemy::Enemy(void):
@@ -78,21 +78,23 @@ void Enemy::DrawCharacter(void)
 
 void Enemy::Draw2D(void)
 {
-
 #ifdef _DEBUG
 	DrawDebug();
 #endif // _DEBUG
 }
+
 void Enemy::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	onHit_->OnHitUpdate(_hitCol);
 }
+
 void Enemy::MoveDirFromInput(void)
 {
 	//“ü—ÍƒNƒ‰ƒX‚©‚çŠp“x‚ðŽæ“¾
 	VECTOR getDir = logic_->GetDir();
 	charaRot_.dir_ = getDir;
 }
+
 void Enemy::SetGoalRotate(void)
 {
 	Quaternion axis= Quaternion::Euler

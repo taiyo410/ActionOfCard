@@ -72,7 +72,7 @@ public:
 		INTENSIVE_LINE_1,			//集中線画像1(複数画像でアニメーション)
 		INTENSIVE_LINE_2,			//集中線画像2(複数画像でアニメーション)
 
-		//複数画像
+		//スプライト画像
 		NUMBERS_IMGS,				//カード番号
 		CONTROLLER_UI_IMGS,			//コントローラーのボタンUI
 
@@ -119,6 +119,7 @@ public:
 		DECK_DATA,						//デッキデータ
 		ACTION_DATA,					//アクションデータ
 		COLLISION_DATA,		//アニメーションデータ
+		
 		//ピクセルシェーダ
 		STAGE_PS,					//ステージ
 		SKYDOME_PS,					//スカイドーム
@@ -128,6 +129,7 @@ public:
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
 		REVOLUTION_POST_PS,			//革命を起こした時のポストエフェクト
+		
 		//頂点シェーダ
 		STAGE_VS					//ステージ
 	};

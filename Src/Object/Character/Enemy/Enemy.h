@@ -95,7 +95,6 @@ private:
 	void DrawDebug(void);
 #endif // _DEBUG
 
-
 #pragma region 定数
 	//敵番号(デッキで判定する用)
 	static constexpr int ENEMY_NUM = 1;
@@ -122,7 +121,6 @@ private:
 	AnimationController::ANIMATION_VARIABLE roarAnim_;
 	float modelScl_;	//敵のスケール(死亡時のエフェクトスケールダウン用)
 	bool isRoar_;		//咆哮状態かどうか
-
 #pragma endregion
 
 #pragma region メンバー関数

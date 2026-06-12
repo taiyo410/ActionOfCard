@@ -313,9 +313,7 @@ protected:
 	float modelScl_;						//モデルの大きさ
 	int spineFrameNo_;						//腰のボーン番号
 	VECTOR battleStartPos_;					//戦闘開始時のスタート座標		
-
 #pragma endregion
-
 
 #pragma region メンバー変数
 	std::unique_ptr<EffectController>effect_;				//エフェクト
@@ -364,7 +362,6 @@ protected:
 #pragma endregion
 
 #pragma region メンバー関数
-
 	//各キャラクターの基本処理
 	virtual void LoadCharacter(void) = 0;						//ロード
 	virtual void InitCharacter(void) = 0;						//初期化
@@ -419,7 +416,6 @@ private:
 #pragma endregion
 
 #pragma region メンバー関数
-
 	//キャラクター共通の処理
 	void LoadCommon(void);						//ロード
 	void LoadCommonData(void);					//キャラクター共通のデータを外部ファイルから読み込み

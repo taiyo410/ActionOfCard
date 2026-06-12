@@ -34,7 +34,6 @@ class EnemyCardAttackJump;
 class EnemyCardAttackStomp;
 class EnemyCardReload;
 
-
 class ActionController
 {
 
@@ -274,8 +273,6 @@ private:
 	//敵のアクションをランダムで決める
 	void DesideEnemyCardAction(void);
 
-	/// @brief 攻撃可能かどうかの判定
-	/// @param  
-	/// @return 
+	//攻撃可能かどうかの判定
 	const bool IsAttacable(void);
 };

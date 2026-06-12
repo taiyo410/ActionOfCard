@@ -2,7 +2,6 @@
 #include <map>
 #include <functional>
 #include <memory>
-//#include"../../Character/Player/InputController.h"
 #include"../../Card/CardBase.h"
 #include "../Base/CharacterBase.h"
 #include "../Action/ActionController.h"
@@ -13,22 +12,12 @@ class ActionController;
 class CardDeck;
 class InputController;
 class Camera;
-class Geometry;
-class Cupsule;
-class Line;
 class PlayerOnHit;
 class PlayerCardUI;
 class Weapon;
 class ModelMaterial;
 class ModelRenderer;
 class PlayerHpUI;
-class Idle;
-class Run;
-class Jump;
-class React;
-class Dodge;
-
-
 class EffectController;
 
 class Player :public CharacterBase
@@ -130,4 +119,3 @@ private:
 	void ChangeUpdateOverDirection(void) override;//ゲームオーバーに遷移
 #pragma endregion
 };
-
