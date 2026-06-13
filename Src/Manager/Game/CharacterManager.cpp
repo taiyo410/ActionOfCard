@@ -60,7 +60,7 @@ void CharacterManager::Draw2D(void)
 	}
 }
 
-const bool CharacterManager::IsSceneChageClearCondition(void) const
+const bool CharacterManager::IsSceneChangeClearCondition(void) const
 {
 	return characters_[ENEMY_NO]->GetStatus().hp <= 0;
 }

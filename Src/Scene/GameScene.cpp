@@ -163,8 +163,7 @@ void GameScene::NormalUpdate(void)
 		return;
 	}
 	//“G‚ª“|‚ê‚½‚çƒNƒŠƒAƒV|ƒ“‚Ö
-	//if (CharacterManager::GetInstance().IsSceneChageClearCondition())
-	if (InputManager::GetInstance().IsTrgDown(KEY_INPUT_SPACE))
+	if (CharacterManager::GetInstance().IsSceneChangeClearCondition())
 	{
 		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
 		return;

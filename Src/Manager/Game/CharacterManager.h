@@ -40,7 +40,7 @@ public:
 	/// @brief ゲームクリアシーン遷移条件(敵のHPによるもの)
 	/// @param  
 	/// @return 
-	const bool IsSceneChageClearCondition(void)const;
+	const bool IsSceneChangeClearCondition(void)const;
 
 	/// @brief ゲームオーバーシーン遷移
 	/// @param  
