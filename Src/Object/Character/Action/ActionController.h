@@ -47,7 +47,7 @@ public:
 	enum class ACTION_TYPE
 	{
 		IDLE,			//何もしてない
-		MOVE,			//移動
+		RUN,			//移動
 		REACT,			//パンチされた状態
 		JUMP,			//ジャンプ
 		CARD_ATTACK_ONE_MIDDLE,	//カードアクション

@@ -29,7 +29,7 @@ void Idle::Update(void)
 	//移動
 	if (actionCtrl_.GetInput().GetIsAct().isRun)
 	{
-		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::MOVE);
+		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::RUN);
 		return;
 	}
 	//カード使用

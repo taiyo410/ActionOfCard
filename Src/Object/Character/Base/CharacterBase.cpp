@@ -538,6 +538,9 @@ void CharacterBase::AcceptLogicControl(void)
 
 	//アクションの更新
 	actionCtrl_->Update();
+
+	//座標更新
+	UpdatePost();
 }
 
 void CharacterBase::UpdateNone(void)

@@ -47,7 +47,7 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 {
 	actionTable_ = {
 		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,character_)); }},
-		{ACTION_TYPE::MOVE, [this]() {mainAction_.emplace(ACTION_TYPE::MOVE,std::make_unique<Run>(*this,character_)); }},
+		{ACTION_TYPE::RUN, [this]() {mainAction_.emplace(ACTION_TYPE::RUN,std::make_unique<Run>(*this,character_)); }},
 		{ACTION_TYPE::DODGE,[this]() {mainAction_.emplace(ACTION_TYPE::DODGE,std::make_unique<Dodge>(*this,character_)); }},
 		{ACTION_TYPE::REACT,[this]() {mainAction_.emplace(ACTION_TYPE::REACT,std::make_unique<React>(*this,character_)); }},
 		{ACTION_TYPE::CARD_ATTACK_ONE_MIDDLE,[this]() {
@@ -88,7 +88,7 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 
 	actionStrTable_= {
 		{"idle", ACTION_TYPE::IDLE},
-		{"run", ACTION_TYPE::MOVE},
+		{"run", ACTION_TYPE::RUN},
 		{"react", ACTION_TYPE::REACT},
 		{"dodge", ACTION_TYPE::DODGE},
 		{"react", ACTION_TYPE::REACT},

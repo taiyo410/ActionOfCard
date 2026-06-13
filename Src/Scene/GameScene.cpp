@@ -163,7 +163,8 @@ void GameScene::NormalUpdate(void)
 		return;
 	}
 	//敵が倒れたらクリアシ－ンへ
-	if (CharacterManager::GetInstance().IsSceneChageClearCondition())
+	//if (CharacterManager::GetInstance().IsSceneChageClearCondition())
+	if (InputManager::GetInstance().IsTrgDown(KEY_INPUT_SPACE))
 	{
 		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
 		return;
@@ -305,7 +306,6 @@ void GameScene::ChangeNormal(void)
 	//カメラのリセット
 	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::FOLLOW);
 
-
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
 
 	updateFunc_ = [this]() {NormalUpdate(); };
@@ -381,7 +381,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//演出状態へ移行
-	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
+	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
 }
 void GameScene::Skip(void)
 {
