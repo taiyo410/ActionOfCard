@@ -33,6 +33,7 @@ private:
 
 #pragma region メンバー定数
 	static constexpr float FADE_TIME = 0.3f;
+	static constexpr float WAIT_TIME = 1.0f;
 #pragma endregion
 
 #pragma region 外部ファイルから読み込み
@@ -46,6 +47,7 @@ private:
 
 	float fadeCnt_;			//色反転フェードのカウント
 	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
+	float waitCnt_;			//シーン待機時間
 
 #pragma endregion
 

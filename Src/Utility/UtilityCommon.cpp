@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <random>
 #include "UtilityCommon.h"
 #include "Manager/Generic/SceneManager.h"
 
@@ -165,7 +166,6 @@ int UtilityCommon::WrapIndex(int index, int max)
     return (index % max + max) % max;
 }
 
-
 std::vector<std::vector<int>> UtilityCommon::LoadCSVData(const std::wstring& filePath)
 {
     std::vector<std::vector<int>> csvData;
@@ -245,6 +245,20 @@ std::string UtilityCommon::GetStringFromWString(const std::wstring& wstr)
     std::string result(size, 0);
     WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &result[0], size, nullptr, nullptr);
     return result;
+}
+
+float UtilityCommon::GetMersenneRandomNumber(const float _min, const float _max)
+{
+    // —”¶¬Ší‚ğì¬
+    std::random_device rd;
+    std::mt19937 mt(rd());
+
+    // ®”—”
+    std::uniform_int_distribution<int> dist(_min, _max);
+
+    float value = static_cast<float>(dist(mt));
+
+    return value;
 }
 
 nlohmann::json UtilityCommon::LoadJsonData(const std::string& filePath)

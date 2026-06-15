@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Manager/Generic/InputManager.h"
-#include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/SceneManager.h"
+#include "Manager/Resource/ResourceManager.h"
 #include "Renderer/PixelMaterial.h"
 #include "Renderer/PixelRenderer.h"
 #include "GameEventRevolutionScene.h"
@@ -44,10 +44,9 @@ void GameEventRevolutionScene::Init(void)
 {
 	//ポストエフェクトをSceneManager側へ
 	scnMng_.SetPostEffect(renderer_);
-
 	revolutionFadeFunc_ = [this]() {RevolutionFadeIn(); };
-
 	fadeCnt_ = 0.0f;
+	waitCnt_ = 0.0f;
 }
 
 void GameEventRevolutionScene::Release(void)
@@ -78,7 +77,14 @@ void GameEventRevolutionScene::RevolutionFadeIn(void)
 	if (fadeCnt_ <= FADE_TIME)
 	{
 		fadeCnt_ += scnMng_.GetDeltaTime();
+		return;
 	}
+
+	if (waitCnt_ > WAIT_TIME)
+	{
+		revolutionFadeFunc_ = [this]() {RevolutionFadeOut(); };
+	}
+	waitCnt_ += scnMng_.GetDeltaTime();
 }
 
 void GameEventRevolutionScene::RevolutionFadeOut(void)

@@ -74,6 +74,10 @@ private:
 
 	//ボタン長押し文字のY座標オフセット
 	static constexpr float SKIP_BTN_STR_OFFSET_Y = 16.0f;
+
+	//革命時間の最大、最小時間
+	static constexpr float REVOLUTION_TIME_MIN = 8.0f;
+	static constexpr float REVOLUTION_TIME_MAX = 15.0f;
 #pragma endregion
 
 #pragma region メンバー変数
@@ -93,6 +97,9 @@ private:
 	bool isSkippingDirection_;
 	//長押しカウンタ
 	float skipKeepCnt_;
+
+	float revolutionCnt_;               //革命変化時間カウント
+	float revolutionRondomTime_;        //ランダムで革命時間を決める
 
 #pragma endregion
 

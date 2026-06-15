@@ -1,4 +1,5 @@
 #include "Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/Camera.h"

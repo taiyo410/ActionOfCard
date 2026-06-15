@@ -43,6 +43,7 @@ public:
 		RELOAD			//リロード
 	};
 
+	//
 	enum class ORDER_RULE
 	{
 		NORMAL,			//通常
@@ -76,6 +77,9 @@ public:
 	/// @return  カード２枚のカード強さの差
 	const int GetCardDif(void)const { return cardDif_; }
 
+	//カードの勝敗判定を変更する
+	void ChangeJudgeRule(void);
+
 #ifdef _DEBUG
 	void DrawDebug(void);
 #endif // _DEBUG
@@ -95,6 +99,7 @@ private:
 	bool canPut_;							//カードを場に出せるか
 	BATTLE_RESULT playerResult_[ARRAY_NUM];	//結果返す時のプレイヤーの識別
 	BATTLE_RESULT preResult_[ARRAY_NUM];	//攻撃前のカード勝利結果
+	ORDER_RULE rule_;						//勝敗ルール
 	int cardDif_;							//2枚のカードの強さの差
 	bool isFirstAtk_[ARRAY_NUM];			//先出しかどうか true:先出し
 #pragma endregion

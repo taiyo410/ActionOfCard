@@ -9,7 +9,8 @@ CardSystem::CardSystem(void):
 	isFirstAtk_{ false,false },
 	playerResult_{BATTLE_RESULT::NONE,BATTLE_RESULT::NONE },
 	preResult_{ BATTLE_RESULT::NONE,BATTLE_RESULT::NONE },
-	cardDif_()
+	cardDif_(),
+	rule_(ORDER_RULE::NORMAL)
 
 {
 	changeBattleRule_ = {
@@ -138,6 +139,11 @@ const std::array<CardSystem::BATTLE_RESULT, CardSystem::ARRAY_NUM> CardSystem::G
 }
 
 #ifdef _DEBUG
+void CardSystem::ChangeJudgeRule(void)
+{
+	rule_ = rule_ == ORDER_RULE::NORMAL ? ORDER_RULE::REVOLUTION : ORDER_RULE::NORMAL;
+	changeBattleRule_[rule_]();
+}
 void CardSystem::DrawDebug(void)
 {
 }

@@ -1,4 +1,5 @@
 #include <DxLib.h>
+#include "Utility/UtilityCommon.h"
 #include "Application.h"
 #include "Common/Fader.h"
 #include "Manager/Resource/FontManager.h"
@@ -21,7 +22,8 @@
 #include "./GameEventRevolutionScene.h"
 #include "./GameScene.h"
 
-GameScene::GameScene(void)
+GameScene::GameScene(void):
+	revolutionCnt_()
 {
 	//更新関数のセット
 	updateFunc_ = [this]() {LoadingUpdate(); };
@@ -97,6 +99,10 @@ void GameScene::Init(void)
 	//キャラクターの初期化
 	CharacterManager::GetInstance().Init();
 	UIManager::GetInstance().Init();
+
+	//革命になるランダム時間を決める
+	float rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
+	revolutionRondomTime_ = rand;
 
 	//シェイク状態を初期化
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
@@ -185,6 +191,17 @@ void GameScene::NormalUpdate(void)
 		ChangeUpdatePhase(UPDATE_PHASE::OVER_DIRECTION);
 		return;
 	}
+
+	//ランダム時間ごとに革命と中将ルールを切り替える
+	if (revolutionCnt_ > revolutionRondomTime_)
+	{
+		int rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
+		revolutionRondomTime_ = rand;
+		revolutionCnt_ = 0.0f;
+		CardSystem::GetInstance().ChangeJudgeRule();
+		scnMng_.PushScene(revolutionScene_);
+	}
+	revolutionCnt_ += scnMng_.GetDeltaTime();
 
 	//ステージ
 	stage_->Update();

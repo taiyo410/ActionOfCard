@@ -57,6 +57,11 @@ public:
 
 private:
 
+#pragma region ƒƒ“ƒo[’è”
+
+#pragma endregion
+
+
     //•Ç‚Ìî•ñ
     Transform wallTrans_;
 

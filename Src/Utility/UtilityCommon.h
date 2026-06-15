@@ -122,6 +122,12 @@ public:
 	/// @return wstringオブジェクト
 	static std::string GetStringFromWString(const std::wstring& wstr);
 
+	/// @brief メルセンヌでのランダム数を取得
+	/// @param _min 最小値
+	/// @param _max 最大値
+	/// @return ランダムな値
+	static float GetMersenneRandomNumber(const float _min, const float _max);
+
 	/// @brief JSONファイルの読み込み
 	/// @param filePath ファイルパス
 	/// @return 読み込んだJSONデータ
