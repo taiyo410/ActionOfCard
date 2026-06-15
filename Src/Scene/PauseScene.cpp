@@ -1,12 +1,12 @@
-#include "PauseScene.h"
 #include <DxLib.h>
-#include "../Application.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/FontManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/InputManagerS.h"
-#include "../Utility/UtilityCommon.h"
+#include "Utility/UtilityCommon.h"
+#include "Application.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/FontManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/InputManagerS.h"
+#include "./PauseScene.h"
 
 PauseScene::PauseScene(void):
 	pauseFont_(UtilityCommon::INITIAL_HANDLE),

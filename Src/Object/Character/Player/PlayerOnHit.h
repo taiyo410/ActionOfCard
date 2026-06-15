@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Object/ObjectBase.h"
-#include "../Base/CharacterOnHitBase.h"
+#include "Object/ObjectBase.h"
+#include "Object/Character/Base/CharacterOnHitBase.h"
 class ActionController;
 class CharacterBase;
 

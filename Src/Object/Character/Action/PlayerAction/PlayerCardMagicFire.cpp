@@ -1,10 +1,10 @@
-#include "../pch.h"
-#include "../Utility/Utility3D.h"
-#include "../Manager//Generic/SceneManager.h"
-#include "../ActionController.h"
-#include "../Object/Character/Base/CharacterBase.h"
-#include "../Object/Character/Player/PlayerMagicFIre.h"
-#include "../Object/Character/Base/LogicBase.h"
+#include "pch.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Base/LogicBase.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Player/PlayerMagicFIre.h"
 #include "PlayerCardMagicFire.h"
 
 PlayerCardMagicFire::PlayerCardMagicFire(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):

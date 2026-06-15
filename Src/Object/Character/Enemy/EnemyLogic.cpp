@@ -1,9 +1,9 @@
-#include "../Utility/UtilityCommon.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Utility/Utility3D.h"
-#include "../Object/Character/Base/CharacterBase.h"
-#include "EnemyLogic.h"
+#include "Utility/UtilityCommon.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "./EnemyLogic.h"
 
 EnemyLogic::EnemyLogic(Transform& _myTrans):
 	LogicBase(_myTrans),

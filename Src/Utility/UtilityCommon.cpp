@@ -1,7 +1,7 @@
-#include<iostream>
-#include<fstream>
+#include <iostream>
+#include <fstream>
 #include "UtilityCommon.h"
-#include "../Manager/Generic/SceneManager.h"
+#include "Manager/Generic/SceneManager.h"
 
 int UtilityCommon::Round(float v)
 {

@@ -1,6 +1,6 @@
 #pragma once
 #include <memory>
-#include "../Common/Vector2F.h"
+#include "Common/Vector2F.h"
 
 class ResourceManager;
 class PixelMaterial;

@@ -1,12 +1,12 @@
-﻿#include<algorithm>
-#include<cassert>
-#include"../../../Common/Quaternion.h"
-#include"../../../Utility/Utility3D.h"
-#include"Model.h"
-#include"Sphere.h"
-#include"Capsule.h"
-#include"Line.h"
-#include"Cube.h"
+﻿#include <algorithm>
+#include <cassert>
+#include "Common/Quaternion.h"
+#include "Utility/Utility3D.h"
+#include "./Model.h"
+#include "./Sphere.h"
+#include "./Capsule.h"
+#include "./Line.h"
+#include "./Cube.h"
 
 //***************************************************
 //箱

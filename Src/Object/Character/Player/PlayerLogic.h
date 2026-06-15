@@ -1,11 +1,11 @@
 #pragma once
 #include <DxLib.h>
 #include <memory>
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/InputManagerS.h"
-#include "../Utility/Utility3D.h"
-#include "../Base/LogicBase.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/InputManagerS.h"
+#include "Object/Character/Base/LogicBase.h"
 //#define DEBUG_ON
 class PlayerBase;
 class Command;

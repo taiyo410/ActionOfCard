@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneBase.h"
+#include "./SceneBase.h"
 
 class PixelMaterial;
 class PixelRenderer;
@@ -42,7 +42,7 @@ private:
 #pragma region メンバー変数
 	//ポストエフェクト
 	std::unique_ptr<PixelMaterial>material_;		//マテリアル
-	std::unique_ptr<PixelRenderer>renderer_;		//レンダラー
+	std::shared_ptr<PixelRenderer>renderer_;		//レンダラー
 
 #pragma endregion
 

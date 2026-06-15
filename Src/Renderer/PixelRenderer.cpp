@@ -1,5 +1,5 @@
-#include "../Application.h"
-#include "PixelRenderer.h"
+#include "Application.h"
+#include "./PixelRenderer.h"
 
 PixelRenderer::PixelRenderer(PixelMaterial& pixelMaterial) :
 	material_(pixelMaterial),

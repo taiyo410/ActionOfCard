@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerCardAttackBase.h"
+#include "./PlayerCardAttackBase.h"
 
 class ItemBase;
 

@@ -1,9 +1,9 @@
 #pragma once
 #include <map>
 #include <Dxlib.h>
-#include "../../Template/Singleton.h"
-#include "../../Common/Vector2.h"
-#include "../../Common/Vector2F.h"
+#include "Template/Singleton.h"
+#include "Common/Vector2.h"
+#include "Common/Vector2F.h"
 
 class InputManager 
 	: public Singleton<InputManager>

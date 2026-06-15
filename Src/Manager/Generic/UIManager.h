@@ -1,8 +1,8 @@
 #pragma once
 #include <unordered_map>
-#include "../Object/Character/UIData/CharacterUIData.h"
-#include "../Common/Vector2F.h"
-#include "../Template/Singleton.h"
+#include "Object/Character/UIData/CharacterUIData.h"
+#include "Common/Vector2F.h"
+#include "Template/Singleton.h"
 
 class HpUI;
 class CardUIBase;

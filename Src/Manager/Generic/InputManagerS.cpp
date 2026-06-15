@@ -207,6 +207,8 @@ Vector2 InputManagerS::GetKnockRStickSize(InputManager::JOYPAD_NO no) const
 	return Vector2(padInfo.AKeyRX, padInfo.AKeyRY);
 }
 
-InputManagerS::InputManagerS()
+InputManagerS::InputManagerS():
+	currentState_(),
+	lastState_()
 {
 }

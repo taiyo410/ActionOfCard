@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <nlohmann/json.hpp>
-#include "../../Template/Singleton.h"
+#include "Template/Singleton.h"
 #include "Resource.h"
 
 class ResourceManager : 

@@ -1,7 +1,7 @@
 #include <DxLib.h>
 #include <cassert>
-#include "../Resource/ResourceManager.h"
-#include "../../Application.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Application.h"
 #include "SoundManager.h"
 SoundManager::SoundManager(void):
 	resMng_(ResourceManager::GetInstance()),

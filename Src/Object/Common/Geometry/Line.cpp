@@ -1,9 +1,9 @@
-#include "../../../Common/Quaternion.h"
-#include"Model.h"
-#include"Cube.h"
-#include"Sphere.h"
-#include"Capsule.h"
-#include"Line.h"
+#include "Common/Quaternion.h"
+#include"./Model.h"
+#include"./Cube.h"
+#include"./Sphere.h"
+#include"./Capsule.h"
+#include"./Line.h"
 
 //***************************************************
 //ê¸

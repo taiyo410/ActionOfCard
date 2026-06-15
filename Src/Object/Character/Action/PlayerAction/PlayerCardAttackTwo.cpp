@@ -1,12 +1,10 @@
-#include "../pch.h"
-#include "../pch.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/Camera.h"
-#include "../../Base/CharacterBase.h"
-#include "../../../Common/AnimationController.h"
-#include "../ActionController.h"
-#include "PlayerCardAttackOneShort.h"
-#include "PlayerCardAttackTwo.h"
+#include "pch.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Action/ActionController.h"
+#include "./PlayerCardAttackTwo.h"
 
 PlayerCardAttackTwo::PlayerCardAttackTwo(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
 	PlayerCardAttackBase(_actCntl,_charaObj,_cardPresenter)

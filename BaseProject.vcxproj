@@ -40,7 +40,6 @@
     <ClCompile Include="Src\Object\Card\CardPresenter.cpp" />
     <ClCompile Include="Src\Manager\Generic\ButtonUIManager.cpp" />
     <ClCompile Include="Src\Object\DirectionUI.cpp" />
-    <ClCompile Include="Src\Object\Character\UIData\CharacterUIData.cpp" />
     <ClCompile Include="Src\Object\Character\UI\HpUI.cpp" />
     <ClCompile Include="Src\Object\Character\Enemy\EnemyRock.cpp" />
     <ClCompile Include="Src\Object\Character\Enemy\EnemyOnHit.cpp" />
@@ -53,7 +52,6 @@
     <ClCompile Include="Src\Object\Card\EnemyCardUI.cpp" />
     <ClCompile Include="Src\Object\Card\CardUIBase.cpp" />
     <ClCompile Include="Src\Object\Character\Action\Dodge.cpp" />
-    <ClCompile Include="Src\Object\Common\Geometry\Cylinder.cpp" />
     <ClCompile Include="Src\Object\Character\Base\CardActionBase.cpp" />
     <ClCompile Include="Src\Object\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Src\pch.cpp">
@@ -162,7 +160,6 @@
     <ClInclude Include="Src\Object\Card\EnemyCardUI.h" />
     <ClInclude Include="Src\Object\Card\CardUIBase.h" />
     <ClInclude Include="Src\Object\Character\Action\Dodge.h" />
-    <ClInclude Include="Src\Object\Common\Geometry\Cylinder.h" />
     <ClInclude Include="Src\Object\Character\Base\CardActionBase.h" />
     <ClInclude Include="Src\Object\SkyDome\SkyDome.h" />
     <ClInclude Include="Src\pch.h" />
@@ -256,7 +253,6 @@
     <ClInclude Include="Src\Common\Fader.h" />
     <ClInclude Include="Src\Common\Quaternion.h" />
     <ClInclude Include="Src\Common\Vector2.h" />
-    <ClInclude Include="Src\main.h" />
     <ClInclude Include="Src\Manager\Generic\Camera.h" />
     <ClInclude Include="Src\Manager\Generic\InputManager.h" />
     <ClInclude Include="Src\Manager\Resource\Resource.h" />
@@ -446,7 +442,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;NOMINMAX;UNICODE;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/;$(ProjectDir)Src/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -457,7 +453,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./Src/Lib/DxLib;./Src/Lib/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ObjectFileOutput>$(ProjectDir)/Data/Shader/%(Filename).cso</ObjectFileOutput>

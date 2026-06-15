@@ -1,8 +1,9 @@
 #pragma once
+
 #include <string>
 #include <vector>
 #include <DxLib.h>
-#include "../Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/ResourceManager.h"
 
 class ResourceManager;
 

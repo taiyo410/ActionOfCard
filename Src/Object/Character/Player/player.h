@@ -2,9 +2,9 @@
 #include <map>
 #include <functional>
 #include <memory>
-#include"../../Card/CardBase.h"
-#include "../Base/CharacterBase.h"
-#include "../Action/ActionController.h"
+#include "Object/Card/CardBase.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Action/ActionController.h"
 
 #define DEBUG_ON
 class AnimationController;

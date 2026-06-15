@@ -2,10 +2,11 @@
 #include <memory>
 #include <chrono>
 #include <list>
-#include "../../Template/Singleton.h"
-#include "../../Common/Fader.h"
+#include "Template/Singleton.h"
+#include "Common/Fader.h"
 
 class SceneBase;
+class PixelRenderer;
 class Fader;
 class Camera;
 
@@ -23,6 +24,7 @@ public:
 		NONE,
 		TITLE,
 		GAME,
+		REVOLUTION_START,
 		GAME_CLEAR,
 		GAME_OVER,
 	};
@@ -49,7 +51,7 @@ public:
 	
 	/// @brief 先頭の（Updateが呼ばれる）シーンを切り替える
 	/// @param scene 切り替え先のシーン
-	void CreateScene(std::shared_ptr<SceneBase> scene);
+	void CreateScene(const SCENE_ID _sceneId);
 	
 	/// @brief シーンをプッシュする。スタックの数が増える
 	/// 一番上のシーンのUpdateしか呼ばれません。
@@ -75,6 +77,10 @@ public:
 	/// @brief シーンチェンジのセット
 	/// @param _isSceneChange 
 	inline void SetIsSceneChange(const bool _isSceneChange) {isSceneChanging_ = _isSceneChange;}
+
+	/// @brief //ポストエフェクトのセット
+	/// @param _postEffectRenderer ポストエフェクト
+	void SetPostEffect(const std::weak_ptr<PixelRenderer> _postEffectRenderer) { postEffectRenderer_ = _postEffectRenderer; }
 
 	/// @brief 現在のシーンIDを返す
 	/// @param  
@@ -117,6 +123,7 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//ライトの方向
 	static constexpr VECTOR LIGHT_DIR = { 0.0f, -1.0f, 1.0f };
 
@@ -133,35 +140,33 @@ private:
 
 	//デルタタイム
 	static constexpr float DELTA_TIME = 1.0f / 60.0f;
+#pragma endregion
 
-	SCENE_ID sceneId_;
-	SCENE_ID waitSceneId_;
+#pragma region メンバー変数
 
+	std::unique_ptr<Fader> fader_;		//フェード
+	std::shared_ptr<Camera> camera_;	//カメラ
 	//各種シーン
 	std::list<std::shared_ptr<SceneBase>> scenes_;
-
-	//フェード
-	std::unique_ptr<Fader> fader_;
-
-	//カメラ
-	std::shared_ptr<Camera> camera_;
-
-	//シーン遷移中判定
-	bool isSceneChanging_;
+	//ポストエフェクト
+	std::weak_ptr<PixelRenderer>postEffectRenderer_;
 
 	//デルタタイム
 	std::chrono::system_clock::time_point preTime_;
-	float deltaTime_;
 
-	//経過時間
-	float totalTime_;
+	//シーン生成関数格納
+	std::unordered_map<SCENE_ID, std::function<std::shared_ptr<SceneBase>(void)>>createScenePtr_;
 
-	//メインスクリーン
-	int mainScreen_;
+	SCENE_ID sceneId_;			//シーンID
+	SCENE_ID waitSceneId_;		//待機中のシーンID
+	bool isSceneChanging_;		//シーン遷移中判定
+	float deltaTime_;			//デルタタイム
+	float totalTime_;			//経過時間
+	int mainScreen_;			//メインスクリーン
+	bool isEndFade_;			//フェードが終了したか
+#pragma endregion
 
-	//フェードが終了したか
-	bool isEndFade_;
-
+#pragma region メンバー関数
 	// コンストラクタ(シングルトンのためprivate)
 	SceneManager(void);
 
@@ -176,4 +181,5 @@ private:
 
 	//シーン遷移用フェード
 	void SceneChangeFade(void);
+#pragma endregion
 };

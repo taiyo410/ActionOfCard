@@ -1,8 +1,8 @@
 #include <DxLib.h>
-#include "../Utility/UtilityCommon.h"
-#include "../../Manager/Generic/SceneManager.h"
-#include "../Common/Easing.h"
-#include "AnimationController.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Common/Easing.h"
+#include "./AnimationController.h"
 
 AnimationController::AnimationController(void) :
 	scnMng_(SceneManager::GetInstance()),

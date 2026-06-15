@@ -1,5 +1,5 @@
-#include "../../../Common/Quaternion.h"
-#include "Geometry.h"
+#include "Common/Quaternion.h"
+#include "./Geometry.h"
 
 Geometry::~Geometry(void)
 {

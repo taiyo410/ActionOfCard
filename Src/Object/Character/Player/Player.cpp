@@ -1,19 +1,19 @@
-#include "../../../Utility/Utility3D.h"
-#include "../../../Utility/UtilityCommon.h"
-#include "../../../Utility/Utility2D.h"
-#include "../../../Manager/Resource/ResourceManager.h"
-#include "../../../Manager/Generic/SceneManager.h"
-#include "../../../Manager/Generic/Camera.h"
-#include "../../../Manager/Generic/DataBank.h"
-#include"../Object/Card/CardDeck.h"
-#include"../Object/Card/PlayerCardUI.h"
-#include"../Action/ActionController.h"
-#include"../Base/CharacterOnHitBase.h"
-#include"./PlayerOnHit.h"
+#include "Utility/Utility3D.h"
+#include "Utility/Utility2D.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Generic/DataBank.h"
+#include "Object/Card/CardDeck.h"
+#include "Object/Card/PlayerCardUI.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Base/CharacterOnHitBase.h"
+#include "./PlayerOnHit.h"
 #include "./Weapon.h"
 #include "./PlayerMagicFIre.h"
 #include "./PlayerLogic.h"
-#include "Player.h"
+#include "./Player.h"
 
 Player::Player(void)
 	:playerNum_(),
@@ -93,7 +93,7 @@ void Player::DrawCharacter(void)
 	//•Ší
 	weapon_->Draw();
 
-	//‰Š‚Ì•`‰æ
+	//‰Š‚ª‚ ‚ê‚Î•`‰æ‚·‚é
 	if (!drawableItem_.expired())
 	{
 		drawableItem_.lock()->Draw();

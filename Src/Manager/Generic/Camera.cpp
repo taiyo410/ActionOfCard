@@ -1,17 +1,18 @@
-#include "../pch.h"
+#include "pch.h"
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
-#include"../Application.h"
-#include "../../Utility/Utility3D.h"
-#include "../../Utility//UtilityCommon.h"
-#include "../Common/Easing.h"
-#include "../../Object/Common/Transform.h"
-#include "../../Object/Common/Geometry/Sphere.h"
-#include "../../Object/Common/Geometry/Line.h"
-#include "../../Object/Stage.h"
-#include"../../Manager/Generic/InputManager.h"
-#include"../../Manager/Generic/InputManagerS.h"
-#include"../../Manager/Generic/SceneManager.h"
+#include "Application.h"
+#include "Utility/Utility3D.h"
+#include "Utility//UtilityCommon.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/InputManagerS.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Common/Easing.h"
+#include "Object/Common/Transform.h"
+#include "Object/Common/Geometry/Sphere.h"
+#include "Object/Common/Geometry/Line.h"
+#include "Object/Stage.h"
+
 #include "Camera.h"
 
 Camera::Camera(void):
@@ -40,7 +41,21 @@ Camera::Camera(void):
 	oneShakeTime_(),
 	nextDirectionMode_(DIRECTION_MODE::NONE),
 	directionEasingTime_(),
-	shekePerCnt_()
+	shekePerCnt_(),
+	easeType_(Easing::EASING_TYPE::LERP),
+	easingGoalF2CPos_(),
+	easingGoalF2TPos_(),
+	easingStartF2CPos_(),
+	easingStartF2TPos_(),
+	followLocalCenterPos_(),
+	followFramePos_(),
+	goalAngles_(),
+	goalFollowLocalCenterPos_(),
+	followCenterPos_(),
+	goalPos_(),
+	startAngles_(),
+	startFollowLocalCenterPos_(),
+	targetPoses_()
 {
 
 }
@@ -234,7 +249,6 @@ void Camera::SyncTargetFollow(void)
 
 	// 注視点(通常重力でいうところのY値を追従対象と同じにする)
 	localPos = rotOutX_.PosAxis(LOCAL_F2T_POS);
-	//targetPos_ = VAdd(followPos, localPos);
 	targetPos_ = VAdd(targetPos, localPos);
 
 	// カメラ位置

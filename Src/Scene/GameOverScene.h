@@ -1,5 +1,5 @@
 #pragma once
-#include "../Common/Vector2.h"
+#include "Common/Vector2.h"
 #include "SceneBase.h"
 class GameOverScene :
     public SceneBase

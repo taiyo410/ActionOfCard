@@ -1,7 +1,7 @@
 #include <math.h>
 #include <DxLib.h>
-#include "../Utility/UtilityCommon.h"
-#include "../Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
+#include "Utility/Utility3D.h"
 #include "Quaternion.h"
 Quaternion::Quaternion(void)
 {

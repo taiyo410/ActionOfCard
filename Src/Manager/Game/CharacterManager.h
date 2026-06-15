@@ -1,7 +1,7 @@
 #pragma once
 #include<vector>
-#include "../Object/Character/UIData/CharacterUIData.h"
-#include "../../Template/Singleton.h"
+#include "Object/Character/UIData/CharacterUIData.h"
+#include "Template/Singleton.h"
 
 class CharacterBase;
 class Player;

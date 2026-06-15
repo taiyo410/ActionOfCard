@@ -1,5 +1,5 @@
-#include "../Application.h"
-#include "../Manager/Resource/ResourceManager.h"
+#include "Application.h"
+#include "Manager/Resource/ResourceManager.h"
 #include "ModelMaterial.h"
 
 ModelMaterial::ModelMaterial(const ResourceManager::SRC _vsSrc, const ResourceManager::SRC _psSrc):

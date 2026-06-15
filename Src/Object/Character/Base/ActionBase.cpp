@@ -1,12 +1,12 @@
-#include"../Utility/Utility3D.h"
-#include"../Utility/UtilityCommon.h"
-#include"../Manager/Generic/SceneManager.h"
-#include"../../../Manager/Generic/Camera.h"
-#include"../Action/ActionController.h"
-#include "../../../Object/Common/AnimationController.h"
-#include "../Base/CharacterBase.h"
-#include"../Base/LogicBase.h"
-#include "ActionBase.h"
+#include "Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Base/LogicBase.h"
+#include "./ActionBase.h"
 
 ActionBase::ActionBase(ActionController& _actCntl,CharacterBase& _character):
 	scnMng_(SceneManager::GetInstance()),	

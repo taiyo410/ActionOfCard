@@ -1,9 +1,9 @@
 #pragma once
 #include <unordered_map>
 #include <string>
-#include "../Resource/ResourceManager.h"
-#include "../Resource/Resource.h"
-#include "../Template/Singleton.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/Resource.h"
+#include "Template/Singleton.h"
 
 class ResourceManager;
 

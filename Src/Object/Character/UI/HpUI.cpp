@@ -1,13 +1,13 @@
-#include "../pch.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Application.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Common/Easing.h"
-#include "../Renderer/PixelRenderer.h"
-#include "../Renderer/PixelMaterial.h"
-#include "HpUI.h"
+#include "pch.h"
+#include "Utility/UtilityCommon.h"
+#include "Application.h"
+#include "Common/Easing.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Renderer/PixelRenderer.h"
+#include "Renderer/PixelMaterial.h"
+#include "./HpUI.h"
 
 HpUI::HpUI(CHARACTER_TYPE _charaType):
 	charaType_(_charaType),

@@ -1,11 +1,11 @@
-#include "../pch.h"
-#include "../Utility/Utility3D.h"
-#include "../Manager//Generic/SceneManager.h"
-#include "../ActionController.h"
-#include "../Object/Character/Base/CharacterBase.h"
-#include "../Object/Character/Player/PlayerMagicThunder.h"
-#include "../Object/Character/Base/LogicBase.h"
-#include "PlayerCardMagicThunder.h"
+#include "pch.h"
+#include "Utility/Utility3D.h"
+#include "Manager//Generic/SceneManager.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Base/LogicBase.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Player/PlayerMagicThunder.h"
+#include "./PlayerCardMagicThunder.h"
 
 PlayerCardMagicThunder::PlayerCardMagicThunder(ActionController& _actCtrl, CharacterBase& _charaObj, CardPresenter& _deck):
 	PlayerCardMagicBase(_actCtrl,_charaObj,_deck)

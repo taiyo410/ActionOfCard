@@ -5,8 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include <nlohmann/json.hpp>
-#include "../Common/Vector2.h"
-#include "../Common/Vector2F.h"
+#include "Common/Vector2.h"
+#include "Common/Vector2F.h"
 
 class UtilityCommon
 {

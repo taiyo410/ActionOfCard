@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Object/ObjectBase.h"
+#include "Object/ObjectBase.h"
 
 class EffectController;
 

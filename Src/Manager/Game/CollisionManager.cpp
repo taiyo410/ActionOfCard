@@ -1,8 +1,8 @@
-#include"../Object/Common/Transform.h"
-#include"../Object/Common/Geometry/Geometry.h"
-#include"../Object/Common/Collider.h"
-#include"../Object/ObjectBase.h"
-#include"../Utility/Utility3D.h"
+#include "Object/Common/Transform.h"
+#include "Object/Common/Geometry/Geometry.h"
+#include "Object/Common/Collider.h"
+#include "Object/ObjectBase.h"
+#include "Utility/Utility3D.h"
 #include "CollisionManager.h"
 
 void CollisionManager::AddCollider(const std::shared_ptr<Collider> _collider)

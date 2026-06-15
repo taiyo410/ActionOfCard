@@ -1,7 +1,8 @@
 #pragma once
+
 #include <DxLib.h>
-#include"../Common/Quaternion.h"
-#include"../UIData/CharacterUIData.h"	
+#include"Common/Quaternion.h"
+#include"Object/Character/UIData/CharacterUIData.h"	
 
 class ResourceManager;
 class SceneManager;

@@ -1,7 +1,7 @@
 #pragma once
 #include <DxLib.h>
-#include "../Common/Vector2.h"
-#include "../Common/Quaternion.h"
+#include "Common/Vector2.h"
+#include "Common/Quaternion.h"
 
 class Utility3D
 {

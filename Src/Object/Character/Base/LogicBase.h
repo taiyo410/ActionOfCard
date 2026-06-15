@@ -1,6 +1,6 @@
 #pragma once
-#include<DxLib.h>
-#include "../Object/Common/Transform.h"
+#include <DxLib.h>
+#include "Object/Common/Transform.h"
 
 class CharacterBase;
 

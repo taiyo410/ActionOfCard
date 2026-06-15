@@ -1,10 +1,10 @@
-#include "../pch.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/Camera.h"
-#include "../../Base/CharacterBase.h"
-#include "../../../Common/AnimationController.h"
-#include "../ActionController.h"
-#include "../../Base/LogicBase.h"
+#include "pch.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Character/Base/LogicBase.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Action/ActionController.h"
 #include "PlayerCardAttackOneMiddle.h"
 
 PlayerCardAttackOneMiddle::PlayerCardAttackOneMiddle(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):

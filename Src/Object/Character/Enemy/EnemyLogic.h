@@ -1,6 +1,8 @@
 #pragma once
-#include "../Base/LogicBase.h"
-#include"../Object/Common/Transform.h"
+
+#include "Object/Common/Transform.h"
+#include "Object/Character/Base/LogicBase.h"
+
 class CharacterBase;
 
 class EnemyLogic :

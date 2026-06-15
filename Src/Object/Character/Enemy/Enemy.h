@@ -1,8 +1,9 @@
 #pragma once
+
 #include<memory>
-#include "../Base/CharacterBase.h"
-#include"../../Card/CardBase.h"
-#include"../../../Common/Vector2.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Card/CardBase.h"
+#include "Common/Vector2.h"
 
 class CardDeck;
 class EnemyInput;

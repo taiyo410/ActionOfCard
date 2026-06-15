@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerCardMagicBase.h"
+#include "./PlayerCardMagicBase.h"
 
 class PlayerMagicThunder;
 

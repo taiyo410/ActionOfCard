@@ -1,5 +1,6 @@
 #pragma once
-#include "../Base/CharacterOnHitBase.h"
+
+#include "Object/Character/Base/CharacterOnHitBase.h"
 
 class EnemyOnHit :
     public CharacterOnHitBase

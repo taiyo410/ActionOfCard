@@ -29,10 +29,6 @@ public:
     /// @param  
     void InitAttack(void) override;
 
-    /// @brief XV
-    /// @param  
-    //void AttackUpdate(void) override;
-
     /// @brief ‰ğ•ú
     /// @param
     void AttackRelease(void) override;

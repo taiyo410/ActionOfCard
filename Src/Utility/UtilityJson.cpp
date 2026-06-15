@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "UtilityJson.h"
 
 const VECTOR UtilityJson::GetLoadVector3(const nlohmann::json& _data)

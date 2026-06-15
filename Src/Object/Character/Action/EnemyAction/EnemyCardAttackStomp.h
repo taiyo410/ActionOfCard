@@ -1,5 +1,7 @@
 #pragma once
+
 #include "EnemyCardAttackBase.h"
+
 class EnemyCardAttackStomp :
     public EnemyCardAttackBase
 {

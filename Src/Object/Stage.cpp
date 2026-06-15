@@ -1,11 +1,11 @@
-#include "../Utility/Utility3D.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Renderer/ModelMaterial.h"
-#include "../Renderer/ModelRenderer.h"
-#include"../Object/Common/Geometry/Model.h"
-#include "Stage.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Renderer/ModelMaterial.h"
+#include "Renderer/ModelRenderer.h"
+#include "Object/Common/Geometry/Model.h"
+#include "./Stage.h"
 
 Stage::Stage(void)
 {

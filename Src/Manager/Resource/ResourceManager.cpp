@@ -1,6 +1,6 @@
 #include <DxLib.h>
-#include "../../Application.h"
-#include "../Utility/UtilityCommon.h"
+#include "Application.h"
+#include "Utility/UtilityCommon.h"
 #include "Resource.h"
 #include "ResourceManager.h"
 

@@ -1,5 +1,5 @@
-#include "../pch.h"
-#include "../Resource/ResourceManager.h"
+#include "pch.h"
+#include "Manager/Resource/ResourceManager.h"
 #include "ButtonUIManager.h"
 
 void ButtonUIManager::Load(void)

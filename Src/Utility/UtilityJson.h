@@ -2,8 +2,8 @@
 
 #include <nlohmann/json.hpp>
 #include <DxLib.h>
-#include "../Common/Vector2.h"
-#include "../Common/Vector2F.h"
+#include "Common/Vector2.h"
+#include "Common/Vector2F.h"
 
 class UtilityJson
 {

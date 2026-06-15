@@ -1,6 +1,6 @@
 #pragma once
-#include<memory>
-#include "../Common/Easing.h"
+#include <memory>
+#include "Common/Easing.h"
 #include "SceneBase.h"
 
 class SoundManager;

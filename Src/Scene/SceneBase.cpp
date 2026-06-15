@@ -1,12 +1,12 @@
 #include <DxLib.h>
 #include <string>
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/InputManagerS.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Utility/UtilityCommon.h"
-#include "SceneBase.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/InputManagerS.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "./SceneBase.h"
 
 SceneBase::SceneBase(void) :
 	resMng_(ResourceManager::GetInstance()),

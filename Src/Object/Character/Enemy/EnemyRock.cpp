@@ -1,10 +1,9 @@
-#include "EnemyRock.h"
-#include "../pch.h"
-#include "../Utility/Utility3D.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Object/Common/Collider.h"
-#include "../Object/Common/Geometry/Sphere.h"
-#include "../Manager/Resource/ResourceManager.h"
+#include "pch.h"
+#include "Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Object/Common/Collider.h"
+#include "Object/Common/Geometry/Sphere.h"
 #include "EnemyRock.h"
 
 EnemyRock::EnemyRock(int& _num, VECTOR& _startPos):

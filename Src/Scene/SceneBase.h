@@ -1,7 +1,7 @@
 #pragma once
-#include<functional>
-#include "../Common/Vector2.h"
-#include "../Application.h"
+#include <functional>
+#include "Common/Vector2.h"
+#include "Application.h"
 
 class SceneManager;
 class ResourceManager;

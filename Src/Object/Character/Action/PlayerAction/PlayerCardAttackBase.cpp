@@ -1,9 +1,9 @@
 #include "../pch.h"
-#include "../../Base/CharacterBase.h"
-#include "../../../Common/AnimationController.h"
-#include "../ActionController.h"
-#include "../../Base/LogicBase.h"
-#include "../Object/Common/EffectController.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Common/EffectController.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Base/LogicBase.h"
 #include "PlayerCardAttackBase.h"
 
 PlayerCardAttackBase::PlayerCardAttackBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deckPresent):

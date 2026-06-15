@@ -1,4 +1,4 @@
-#include "../../../Common/Quaternion.h"
+#include "Common/Quaternion.h"
 #include"Sphere.h"
 #include"Capsule.h"
 #include"Cube.h"

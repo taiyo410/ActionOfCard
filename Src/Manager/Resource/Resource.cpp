@@ -2,7 +2,7 @@
 #include <wingdi.h>
 #include <EffekseerForDXLib.h>
 #include <cassert>
-#include "../Utility/UtilityCommon.h"
+#include "Utility/UtilityCommon.h"
 #include "Resource.h"
 
 ResourceData::ResourceData(void):

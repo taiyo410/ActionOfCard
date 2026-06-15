@@ -1,15 +1,15 @@
 #pragma once
-#include<map>
+#include <map>
 #include <nlohmann/json.hpp>
-#include "../Manager/Resource/SoundManager.h"
-#include "../../Card/CardBase.h"
-#include "../../Card/CardPresenter.h"
-#include "../Base/CharacterOnHitBase.h"
-#include "../../Object/Common/AnimationController.h"
-#include "../Base/CardActionBase.h"
-#include "../UIData/CharacterUIData.h"
-#include "../Base/ActionBase.h"
-#include "../Object/ObjectBase.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Card/CardBase.h"
+#include "Object/Card/CardPresenter.h"
+#include "Object/Character/Base/CharacterOnHitBase.h"
+#include "Object/Character/Base/CardActionBase.h"
+#include "Object/Character/UIData/CharacterUIData.h"
+#include "Object/Character/Base/ActionBase.h"
+#include "Object/ObjectBase.h"
 
 class AnimationController;
 class UIManager;

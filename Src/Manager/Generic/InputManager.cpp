@@ -1,5 +1,5 @@
 #include <DxLib.h>
-#include "../Manager/Generic/SceneManager.h"
+#include "Manager/Generic/SceneManager.h"
 #include "InputManager.h"
 
 InputManager::InputManager(void):
@@ -8,7 +8,9 @@ InputManager::InputManager(void):
 	mousePos_(),
 	padInfos_(),
 	mouseInfos_(),
-	mouseInfoEmpty_()
+	mouseInfoEmpty_(),
+	joyDInState_(),
+	joyXInState_()
 {
 }
 

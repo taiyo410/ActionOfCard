@@ -1,6 +1,6 @@
 #include <DxLib.h>
-#include "Utility2D.h"
 #include <cmath>
+#include "Utility2D.h"
 
 double Utility2D::Magnitude(const Vector2& v)
 {

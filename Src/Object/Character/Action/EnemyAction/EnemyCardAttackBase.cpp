@@ -1,18 +1,19 @@
 #include "../pch.h"
-#include "../../../Common/AnimationController.h"
-#include "../Object/Common/EffectController.h"
-#include "../Utility/Utility3D.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../ActionController.h"
-#include "../../Base/CharacterBase.h"
-#include"../../Enemy/EnemyLogic.h"
-#include "EnemyCardAttackBase.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Common/EffectController.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Enemy/EnemyLogic.h"
+#include "./EnemyCardAttackBase.h"
 
 EnemyCardAttackBase::EnemyCardAttackBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deckPresent):
-	CardActionBase(_actCntl, _charaObj, _deckPresent)
+	CardActionBase(_actCntl, _charaObj, _deckPresent),
+	atkCnt_()
 {
 }
 

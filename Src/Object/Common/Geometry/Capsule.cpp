@@ -1,10 +1,10 @@
-#include"../../../Utility/Utility3D.h"
-#include "../../../Common/Quaternion.h"
-#include"Model.h"
-#include"Cube.h"
-#include"Sphere.h"
-#include"Line.h"
-#include"Capsule.h"
+#include "Utility/Utility3D.h"
+#include "Common/Quaternion.h"
+#include "./Model.h"
+#include "./Cube.h"
+#include "./Sphere.h"
+#include "./Line.h"
+#include "./Capsule.h"
 
 //***************************************************
 //ƒJƒvƒZƒ‹

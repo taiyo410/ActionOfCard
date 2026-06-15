@@ -1,7 +1,8 @@
 #pragma once
+
 #include <DxLib.h>
-#include "../Common/Vector2.h"
-#include "../Renderer/PixelMaterial.h"
+#include "Common/Vector2.h"
+#include "Renderer/PixelMaterial.h"
 
 class PixelRenderer
 {

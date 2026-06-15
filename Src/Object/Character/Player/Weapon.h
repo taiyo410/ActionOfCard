@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../Base/ItemBase.h"
+#include "Object/Character/Base/ItemBase.h"
+
 class EffectController;
 class CharacterBase;
 
