@@ -18,6 +18,7 @@
 #include "Object/Card/CardSystem.h"	
 #include "Object/Stage.h"	
 #include "./PauseScene.h"
+#include "./GameEventRevolutionScene.h"
 #include "./GameScene.h"
 
 GameScene::GameScene(void)
@@ -44,6 +45,9 @@ GameScene::GameScene(void)
 	UIManager::CreateInstance();
 	CharacterManager::CreateInstance();
 	CollisionManager::CreateInstance();
+
+	pauseScene_ = std::make_shared<PauseScene>();
+	revolutionScene_ = std::make_shared<GameEventRevolutionScene>();
 }
 
 GameScene::~GameScene(void)
@@ -61,8 +65,10 @@ void GameScene::Load(void)
 	buttonFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
 
 	//ポーズ画面のリソース
-	pauseScene_ = std::make_shared<PauseScene>();
 	pauseScene_->Load();
+
+	//革命シーン
+	revolutionScene_->Load();
 
 	//UIマネージャ
 	UIManager::GetInstance().Load();
@@ -88,12 +94,13 @@ void GameScene::Init(void)
 	//演出へ
 	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
 
+	//キャラクターの初期化
 	CharacterManager::GetInstance().Init();
 	UIManager::GetInstance().Init();
 
 	//シェイク状態を初期化
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
-
+	
 	stage_->Init();
 	skyDome_->Init();
 	resMng_.Load(ResourceManager::SRC::GAME_BGM);
@@ -160,6 +167,12 @@ void GameScene::NormalUpdate(void)
 		scnMng_.PushScene(pauseScene_);
 		return;
 	}
+	//デバッグで革命をキーで起こす
+	if (inputMng_.IsTrgDown(KEY_INPUT_1))
+	{
+		scnMng_.PushScene(revolutionScene_);
+		return;
+	}
 	//敵が倒れたらクリアシ－ンへ
 	if (CharacterManager::GetInstance().IsSceneChageClearCondition())
 	{
@@ -224,7 +237,6 @@ void GameScene::DirectionDraw(void)
 	{
 		UIManager::GetInstance().DirectionDraw();
 	}
-
 }
 
 

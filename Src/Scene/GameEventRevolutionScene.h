@@ -32,7 +32,7 @@ public:
 private:
 
 #pragma region メンバー定数
-
+	static constexpr float FADE_TIME = 0.3f;
 #pragma endregion
 
 #pragma region 外部ファイルから読み込み
@@ -44,16 +44,23 @@ private:
 	std::unique_ptr<PixelMaterial>material_;		//マテリアル
 	std::shared_ptr<PixelRenderer>renderer_;		//レンダラー
 
+	float fadeCnt_;			//色反転フェードのカウント
+	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
+
 #pragma endregion
 
 #pragma region メンバー関数
-	/// @brief 更新
-	/// @param  
+	//更新
 	void NormalUpdate(void)override;
-
-	/// @brief 描画
-	/// @param  
+	//描画
 	void NormalDraw(void)override;
+
+	//革命更新
+	void RevolutionFadeIn(void);
+	void RevolutionFadeOut(void);
+
+	//シーンに入った後に行う処理
+	void OnSceneEnter(void)override;
 
 #pragma endregion
 

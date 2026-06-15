@@ -58,6 +58,9 @@ void InputManager::Init(void)
 	Add(KEY_INPUT_ESCAPE);
 	Add(KEY_INPUT_Z);
 
+	//デバッグ
+	Add(KEY_INPUT_1);
+
 	InputManager::MouseInfo info;
 
 	// 左クリック

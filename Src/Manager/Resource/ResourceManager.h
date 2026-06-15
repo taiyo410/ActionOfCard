@@ -71,6 +71,7 @@ public:
 		CARD_REVOLVER_L_ARROW,		//カードリボルバー回転方向の左矢印
 		INTENSIVE_LINE_1,			//集中線画像1(複数画像でアニメーション)
 		INTENSIVE_LINE_2,			//集中線画像2(複数画像でアニメーション)
+		REVERSE_FADE_MASK,			//色反転のマスク
 
 		//スプライト画像
 		NUMBERS_IMGS,				//カード番号
@@ -128,7 +129,7 @@ public:
 		CARD_NORMAL_PS,				//通常カード
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
-		REVOLUTION_POST_PS,			//革命を起こした時のポストエフェクト
+		REVOLUTION_POSTEFF_PS,			//革命を起こした時のポストエフェクト
 		
 		//頂点シェーダ
 		STAGE_VS					//ステージ

@@ -100,5 +100,8 @@ protected:
 
 	//「now loading......」の描画
 	void DrawNowLoading(void);
+
+	//ポストエフェクトの描画
+	void DrawPostEffect(void);
 #pragma endregion
 };

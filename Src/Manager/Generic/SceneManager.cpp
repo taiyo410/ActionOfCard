@@ -36,6 +36,11 @@ void SceneManager::Init(void)
 		Application::SCREEN_SIZE_Y,
 		true);
 
+	postEffScreen_= MakeScreen(
+		Application::SCREEN_SIZE_X,
+		Application::SCREEN_SIZE_Y,
+		true);
+
 	//ウィンドウがアクティブ状態でなくとも処理を行う
 	SetAlwaysRunFlag(true);
 
@@ -121,10 +126,17 @@ void SceneManager::Draw(void)
 		scene->Draw();
 	}
 
+	SetDrawScreen(postEffScreen_);
+	// 画面を初期化
+	ClearDrawScreen();
+
+	// メインスクリーンを画面に描画する
+	DrawGraph(0, 0, mainScreen_, false);
+
 	//ポストエフェクトがあれば描画する
-	if (!postEffectRenderer_.expired())
+	for (const auto& postEff : postEffectRenderers_)
 	{
-		postEffectRenderer_.lock()->Draw();
+		postEff->Draw();
 	}
 
 	// Effekseerにより再生中のエフェクトを描画する。
@@ -136,7 +148,7 @@ void SceneManager::Draw(void)
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// メインスクリーンを画面に描画する
-	DrawGraph(0, 0, mainScreen_, false);
+	DrawGraph(0, 0, postEffScreen_, false);
 }
 
 void SceneManager::CreateScene(const SCENE_ID _sceneId)
@@ -200,6 +212,27 @@ void SceneManager::StartFadeOut(void)
 {
 	//フェードを明ける
 	fader_->SetFade(Fader::STATE::FADE_OUT);
+}
+
+void SceneManager::SetPostEffect(const std::shared_ptr<PixelRenderer> _postEffectRenderer)
+{
+	//寿命チェック
+	postEffectRenderers_.push_back(_postEffectRenderer);
+}
+
+void SceneManager::DeletePostEffect(const std::shared_ptr<PixelRenderer> _postEffectRenderer)
+{
+	//消したいrendererと同じものを探索する(owner_beforeで探索できる)
+	auto it = std::find(
+		postEffectRenderers_.begin()
+		, postEffectRenderers_.end()
+		, _postEffectRenderer);
+
+	//特定のポストエフェクトを削除
+	if (it != postEffectRenderers_.end())
+	{
+		postEffectRenderers_.erase(it);
+	}
 }
 
 SceneManager::SceneManager(void)

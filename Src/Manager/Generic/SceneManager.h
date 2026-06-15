@@ -80,7 +80,11 @@ public:
 
 	/// @brief //ポストエフェクトのセット
 	/// @param _postEffectRenderer ポストエフェクト
-	void SetPostEffect(const std::weak_ptr<PixelRenderer> _postEffectRenderer) { postEffectRenderer_ = _postEffectRenderer; }
+	void SetPostEffect(const std::shared_ptr<PixelRenderer> _postEffectRenderer);
+
+	/// @brief ポストエフェクトの削除
+	/// @param _postEffectRenderer 削除したいポストエフェクト
+	void DeletePostEffect(const std::shared_ptr<PixelRenderer> _postEffectRenderer);
 
 	/// @brief 現在のシーンIDを返す
 	/// @param  
@@ -149,7 +153,7 @@ private:
 	//各種シーン
 	std::list<std::shared_ptr<SceneBase>> scenes_;
 	//ポストエフェクト
-	std::weak_ptr<PixelRenderer>postEffectRenderer_;
+	std::vector<std::shared_ptr<PixelRenderer>>postEffectRenderers_;
 
 	//デルタタイム
 	std::chrono::system_clock::time_point preTime_;
@@ -163,6 +167,7 @@ private:
 	float deltaTime_;			//デルタタイム
 	float totalTime_;			//経過時間
 	int mainScreen_;			//メインスクリーン
+	int postEffScreen_;			//ポストエフェクトスクリーン
 	bool isEndFade_;			//フェードが終了したか
 #pragma endregion
 

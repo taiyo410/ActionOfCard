@@ -4,6 +4,7 @@
 #include "SceneBase.h"
 
 class PauseScene;
+class GameEventRevolutionScene;
 class PixelMaterial;
 class PixelRenderer;
 class CharacterBase;
@@ -76,9 +77,10 @@ private:
 #pragma endregion
 
 #pragma region メンバー変数
-	std::unique_ptr<SkyDome> skyDome_;			//スカイドーム
-	std::unique_ptr<Stage>stage_;				//ステージ
-	std::shared_ptr<PauseScene> pauseScene_;	//ポーズ画面
+	std::unique_ptr<SkyDome> skyDome_;								//スカイドーム
+	std::unique_ptr<Stage>stage_;									//ステージ
+	std::shared_ptr<PauseScene> pauseScene_;						//ポーズ画面
+	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン
 
 	//スローカウンタ(フレーム)
 	int slowFrame_;

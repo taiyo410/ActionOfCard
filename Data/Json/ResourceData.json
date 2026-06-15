@@ -184,9 +184,12 @@
       {
         "name": "CARD_REVOLVER_L_ARROW",
         "handle": "CardDirArrowLeft.png"
+      },
+      {
+        "name": "REVERSE_FADE_MASK",
+        "handle": "FaderMask_1.png"
       }
     ],
-
 
     "images": [
       {
@@ -419,8 +422,8 @@
         "constBufNum": 1
       },
       {
-        "name": "REVOLUTION_POSTEFFECT_PS",
-        "handle": "SelectCardPS.cso",
+        "name": "REVOLUTION_POSTEFF_PS",
+        "handle": "RevolutionPostEffectPS.cso",
         "constBufNum": 1
       }
     ],
