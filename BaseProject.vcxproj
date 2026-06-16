@@ -487,7 +487,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/;$(ProjectDir)Src/</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -500,7 +500,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>./Src/Lib/DxLib;$(ProjectDir)Src/Lib/</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>./Src/Lib/DxLib;./Src/Lib/</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ObjectFileOutput>$(ProjectDir)/Data/Shader/%(Filename).cso</ObjectFileOutput>
