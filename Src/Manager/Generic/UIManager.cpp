@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "Utility/UtilityCommon.h"
 #include "Utility/Utility2D.h"
+#include "Common/Easing.h"
 #include "Manager/Resource/FontManager.h"
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/ButtonUIManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Object/Card/CardSystem.h"
 #include "Object/Character/UI/HpUI.h"
 #include "Object/Card/PlayerCardUI.h"
 #include "Object/Card/EnemyCardUI.h"
@@ -17,6 +20,7 @@ UIManager::UIManager(void):
 	CreateCardUI();
 
 	directionUI_ = std::make_unique<DirectionUI>();
+	easing_ = std::make_unique<Easing>();
 }
 
 void UIManager::CreateHpUI(void)
@@ -27,6 +31,8 @@ void UIManager::CreateHpUI(void)
 
 	hpUi = std::make_unique<HpUI>(CHARACTER_TYPE::ENEMY);
 	characterHpUI_[CHARACTER_TYPE::ENEMY] = std::move(hpUi);
+
+
 }
 
 void UIManager::CreateCardUI(void)
@@ -56,12 +62,27 @@ void UIManager::DrawAttackButtonAndDodgeButton(void)
 	higherPos_ = { Application::SCREEN_HALF_X - 120.0f,80.0f };
 	lowerPos_ = { Application::SCREEN_HALF_X + 120.0f,80.0f };
 
-	Utility2D::DrawGraphForCenter(higherImg_, higherPos_,0.2f);
-	Utility2D::DrawGraphForCenter(lowerImg_, lowerPos_,0.2f);
+	constexpr float scl = 0.2f;
+	CardSystem& cardSystem = CardSystem::GetInstance();
+	if (cardSystem.GetJudgeRule() == CardSystem::ORDER_RULE::NORMAL)
+	{
+		higherImgScl_ = easing_->EaseFunc(scl, 0.24f, scaleEaseCnt_ / 0.5f, Easing::EASING_TYPE::QUAD_BACK);
+		lowerImgScl_ = scl;
+	}
+	else
+	{
+		lowerImgScl_ = easing_->EaseFunc(scl, 0.24f, scaleEaseCnt_ / 0.5f, Easing::EASING_TYPE::QUAD_BACK);
+		higherImgScl_ = scl;
+	}
+	scaleEaseCnt_ = scaleEaseCnt_ > 0.5f ? 0.0f : scaleEaseCnt_ + SceneManager::GetInstance().GetDeltaTime();
 
-	Vector2F arrowLocalPos = { 235,0 };
-	arrowLocalPos *= 0.2f;
-	Utility2D::DrawGraphForCenter(upArrowImg_, higherPos_- arrowLocalPos,0.2f);
+	Utility2D::DrawGraphForCenter(higherImg_, higherPos_, higherImgScl_);
+	Utility2D::DrawGraphForCenter(lowerImg_, lowerPos_, lowerImgScl_);
+
+	Vector2F arrowLocalPos = { 350,0 };
+	arrowLocalPos *= higherImgScl_;
+	Utility2D::DrawGraphForCenter(upArrowImg_, higherPos_- arrowLocalPos, higherImgScl_);
+	Utility2D::DrawGraphForCenter(downArrowImg_, lowerPos_+ arrowLocalPos, scl);
 }
 
 void UIManager::DrawWinLoseUI(void)
@@ -142,7 +163,6 @@ void UIManager::DirectionDraw(void)
 {
 	directionUI_->Draw();
 }
-
 
 void UIManager::RefreshHpUI(const CHARACTER_TYPE _charaType, const HP_DATA _hpData)
 {

@@ -82,7 +82,9 @@ private:
 	//カードUI
 	std::unordered_map<CHARACTER_TYPE, std::unique_ptr<CardUIBase>>cardUI_;
 	//演出用UI
-	std::unique_ptr<DirectionUI>directionUI_;
+	std::unique_ptr<DirectionUI> directionUI_;
+	//イージング
+	std::unique_ptr<Easing> easing_;
 
 	ResourceManager& resMng_;		//リソース
 
@@ -94,6 +96,9 @@ private:
 	int downArrowImg_;			//下矢印画像
 	Vector2F higherPos_;		//数字勝敗画像の座標
 	Vector2F lowerPos_;			//数字勝敗画像の座標
+	float scaleEaseCnt_;		//サイズイージングカウント
+	float higherImgScl_;			//数字の勝敗画像サイズ
+	float lowerImgScl_;			//数字の勝敗画像サイズ
 #pragma endregion
 
 #pragma region メンバー関数
