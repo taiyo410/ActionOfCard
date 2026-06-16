@@ -141,9 +141,6 @@ private:
 	//リロード文字列のセンターからのオフセット
 	static constexpr float RELOAD_STR_OFF_Y = 30.0f;
 
-
-
-
 	//カード残り枚数ゲージシェーダ定数バッファサイズ
 	static constexpr int CARD_NUM_GAUGE_CONST_BUF_SIZE = 3;
 
@@ -223,7 +220,7 @@ private:
 	void MoveUpDownVisibleCards(void);
 
 	//矢印とボタン描画
-	void DrawArrowAndBotton(void);
+	void DrawArrowAndButton(void);
 
 	//現在選択中のカードの配列を取得
 	std::list<std::shared_ptr<CardUIController>>::iterator GetVisibleCurrentIt(void);

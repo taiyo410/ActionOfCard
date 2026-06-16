@@ -39,7 +39,7 @@ void Run::Update(void)
 	{
 		if (actionCtrl_.IsCardDecisionControl())
 		{
-			actionCtrl_.DesideCardAction();
+			actionCtrl_.DecideCardAction();
 			return;
 		}
 	}

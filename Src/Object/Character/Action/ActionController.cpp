@@ -204,15 +204,21 @@ void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
 	}
 }
 
-void ActionController::DesideCardAction(void)
+void ActionController::DecideCardAction(void)
 {
+	//リロードカードであればリロードへ移行
+	if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	{
+		ChangeAction(ACTION_TYPE::CARD_RELOAD);
+		return;
+	}
 	//敵はカード攻撃処理へ
 	if (character_.GetCharaType() == CHARACTER_TYPE::ENEMY)
 	{
 		//手札に移動
 		cardPresent_.PutCard();
 
-		DesideEnemyCardAction();
+		DecideEnemyCardAction();
 		return;
 	}
 
@@ -237,15 +243,12 @@ void ActionController::DesideCardAction(void)
 		cardPresent_.PutCard();
 		ChangeAction(ACTION_TYPE::CARD_MAGIC_THUNDER);
 	}
-	else if(cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
-	{
-		ChangeAction(ACTION_TYPE::CARD_RELOAD);
-	}
+
 }
 void ActionController::ChangeComboCardAttack(void)
 {
 	//空の場合、攻撃不可能な場合はアイドル状態へ
-	if (atkCombos_.empty()||!IsAttacable()||cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	if (atkCombos_.empty()||!IsAttackable()||cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
 	{
 		//コンボ情報を空にする
 		if(!atkCombos_.empty()) atkCombos_.pop();
@@ -394,7 +397,7 @@ void ActionController::DesideAttackOne(void)
 	}
 }
 
-void ActionController::DesideEnemyCardAction(void)
+void ActionController::DecideEnemyCardAction(void)
 {
 	const float distance = logic_.GetTargetDis();
 
@@ -406,7 +409,7 @@ void ActionController::DesideEnemyCardAction(void)
 		//遠距離時
 		if (rand > STOMP_WEIGHT)
 		{
-			//通常攻撃
+			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
 		}
 		else if (rand < JUMP_WEIGHT)
@@ -420,7 +423,7 @@ void ActionController::DesideEnemyCardAction(void)
 		//近距離時
 		if (rand > STOMP_WEIGHT)
 		{
-			//通常攻撃
+			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
 		}
 		else if (rand < JUMP_WEIGHT)
@@ -432,7 +435,7 @@ void ActionController::DesideEnemyCardAction(void)
 	logic_.SetIsActioning(true);
 }
 
-const bool ActionController::IsAttacable(void)
+const bool ActionController::IsAttackable(void)
 {
 	std::vector<CardBase::CARD_TYPE>cardTypes = cardPresent_.GetHandCardType();
 	int handCardTypeSize = static_cast<int>(cardPresent_.GetHandCardType().size());

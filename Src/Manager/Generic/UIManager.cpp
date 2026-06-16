@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Utility/UtilityCommon.h"
+#include "Utility/Utility2D.h"
 #include "Manager/Resource/FontManager.h"
+#include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/ButtonUIManager.h"
 #include "Object/Character/UI/HpUI.h"
 #include "Object/Card/PlayerCardUI.h"
@@ -8,7 +10,8 @@
 #include "Object/DirectionUI.h"
 #include "UIManager.h"
 
-UIManager::UIManager(void)
+UIManager::UIManager(void):
+	resMng_(ResourceManager::GetInstance())
 {
 	CreateHpUI();
 	CreateCardUI();
@@ -37,7 +40,7 @@ void UIManager::CreateCardUI(void)
 	cardUI_[CHARACTER_TYPE::ENEMY] = std::move(cardUI);
 }
 
-void UIManager::DrawAttackBottonAndDodgeBotton(void)
+void UIManager::DrawAttackButtonAndDodgeButton(void)
 {
 	//UŒ‚‚Æ‰ñ”ğƒ{ƒ^ƒ“‚Ì•`‰æ
 	Vector2F btnPos = INIT_BOTTON_POS;
@@ -49,6 +52,21 @@ void UIManager::DrawAttackBottonAndDodgeBotton(void)
 	strPos.y += BOTTON_SIZE + BOTTON_DISTANCE;
 	DrawStringFToHandle(strPos.x, strPos.y, DODGE_BTN_STR.c_str(), UtilityCommon::BLACK, fontHandle_);
 	ButtonUIManager::GetInstance().DrawFromLeftTop(ButtonUIManager::BTN_UI_TYPE::X_BUTTON_COL_PUSH, btnPos, BOTTON_SIZE);
+
+	higherPos_ = { Application::SCREEN_HALF_X - 120.0f,80.0f };
+	lowerPos_ = { Application::SCREEN_HALF_X + 120.0f,80.0f };
+
+	Utility2D::DrawGraphForCenter(higherImg_, higherPos_,0.2f);
+	Utility2D::DrawGraphForCenter(lowerImg_, lowerPos_,0.2f);
+
+	Vector2F arrowLocalPos = { 235,0 };
+	arrowLocalPos *= 0.2f;
+	Utility2D::DrawGraphForCenter(upArrowImg_, higherPos_- arrowLocalPos,0.2f);
+}
+
+void UIManager::DrawWinLoseUI(void)
+{
+
 }
 
 void UIManager::Load(void)
@@ -66,6 +84,10 @@ void UIManager::Load(void)
 	directionUI_->Load();
 
 	fontHandle_= CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
+	higherImg_ = resMng_.Load(ResourceManager::SRC::HIGHER_IMG).handleId_;
+	lowerImg_ = resMng_.Load(ResourceManager::SRC::LOWER_IMG).handleId_;
+	upArrowImg_ = resMng_.Load(ResourceManager::SRC::WIN_ARROW_IMG).handleId_;
+	downArrowImg_ = resMng_.Load(ResourceManager::SRC::LOSE_ARROW_IMG).handleId_;
 }
 
 void UIManager::Init()
@@ -113,7 +135,7 @@ void UIManager::Draw()
 		cardUI.second->Draw();
 	}
 
-	DrawAttackBottonAndDodgeBotton();
+	DrawAttackButtonAndDodgeButton();
 }
 
 void UIManager::DirectionDraw(void)
@@ -136,4 +158,3 @@ void UIManager::SetSkipPer(const float _skipPer)
 {
 	directionUI_->SetSkipGaugePer(_skipPer);
 }
-

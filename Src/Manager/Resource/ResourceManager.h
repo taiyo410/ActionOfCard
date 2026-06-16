@@ -72,6 +72,10 @@ public:
 		INTENSIVE_LINE_1,			//集中線画像1(複数画像でアニメーション)
 		INTENSIVE_LINE_2,			//集中線画像2(複数画像でアニメーション)
 		REVERSE_FADE_MASK,			//色反転のマスク
+		WIN_ARROW_IMG,				//勝ち判定の矢印
+		LOSE_ARROW_IMG,				//負け判定のマスク
+		HIGHER_IMG,					//数字勝ち負けの大きい数を示す画像
+		LOWER_IMG,					//数字勝ち負けの小さい数を示す画像
 
 		//スプライト画像
 		NUMBERS_IMGS,				//カード番号
@@ -143,9 +147,9 @@ public:
 
 	struct RESOURCE_COMMON_PARAM
 	{
-		ResourceData::TYPE type;
-		SRC src;					//素材名
-		std::wstring path;			//素材のパス
+		ResourceData::TYPE type = ResourceData::TYPE::NONE;		//タイプ	
+		SRC src = SRC::NONE;									//素材名
+		std::wstring path = L"";								//素材のパス
 	};
 
 	struct IMGS_PARAMETA

@@ -60,3 +60,14 @@ void Utility2D::DrawBarGraph(const Vector2& _pos, const Vector2& _size, const fl
     // “h‚è‚Â‚Ô‚µ•”•ª‚Ì•`‰æ
 	DrawBox(_pos.x + offset, _pos.y+offset, _pos.x + fillWidth-offset, _pos.y + _size.y-offset, _fillColor, true);
 }
+
+void Utility2D::DrawGraphForCenter(const int _img, const Vector2F _pos, const float _sizeScl)
+{
+    Vector2 size = {};
+    GetGraphSize(_img, &size.x, &size.y);
+    Vector2F sizeF = { static_cast<float>(size.x),static_cast<float>(size.y) };
+    sizeF *= _sizeScl;
+    Vector2F leftUpPos = _pos - sizeF;
+    Vector2F rightDownPos = _pos + sizeF;
+    DrawExtendGraphF(leftUpPos.x, leftUpPos.y, rightDownPos.x, rightDownPos.y, _img,true);
+}

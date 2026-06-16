@@ -2,6 +2,7 @@
 #include "Manager/Generic/InputManager.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/UIManager.h"
 #include "Renderer/PixelMaterial.h"
 #include "Renderer/PixelRenderer.h"
 #include "GameEventRevolutionScene.h"
@@ -80,6 +81,7 @@ void GameEventRevolutionScene::RevolutionFadeIn(void)
 		return;
 	}
 
+	//フェード終了後、一定時間待機
 	if (waitCnt_ > WAIT_TIME)
 	{
 		revolutionFadeFunc_ = [this]() {RevolutionFadeOut(); };

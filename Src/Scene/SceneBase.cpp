@@ -13,7 +13,8 @@ SceneBase::SceneBase(void) :
 	scnMng_(SceneManager::GetInstance()),
 	inputMng_(InputManager::GetInstance()),
 	inputMngS_(InputManagerS::GetInstance()),
-	soundMng_(SoundManager::GetInstance())
+	soundMng_(SoundManager::GetInstance()),
+	postEffectScreen_(UtilityCommon::INITIAL_HANDLE)
 {
 	buttonFontHandle_ = -1;
 	loadingTime_ = -1;

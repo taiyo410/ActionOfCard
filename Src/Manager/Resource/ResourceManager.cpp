@@ -61,7 +61,11 @@ ResourceManager::ResourceManager(void):
 		{"CARD_REVOLVER_L_ARROW" ,SRC::CARD_REVOLVER_L_ARROW},
 		{"INTENSIVE_LINE_1" ,SRC::INTENSIVE_LINE_1},
 		{"INTENSIVE_LINE_2" ,SRC::INTENSIVE_LINE_2},
-		{"REVERSE_FADE_MASK" ,SRC::REVERSE_FADE_MASK},
+		{"REVERSE_FADE_MASK" ,SRC::REVERSE_FADE_MASK },
+		{"WIN_ARROW_IMG" ,SRC::WIN_ARROW_IMG },
+		{"LOSE_ARROW_IMG" ,SRC::LOSE_ARROW_IMG},
+		{"HIGHER_IMG" ,SRC::HIGHER_IMG},
+		{"LOWER_IMG" ,SRC::LOWER_IMG},
 		//複数画像
 		{"NUMBERS_IMGS" ,SRC::NUMBERS_IMGS},
 		{"CONTROLLER_UI_IMGS" ,SRC::CONTROLLER_UI_IMGS},
@@ -233,7 +237,6 @@ std::vector<const ResourceData*> ResourceManager::GetSoundResources(ResourceData
 			}
 		}
 	}
-
 	return retArray;
 }
 
@@ -258,7 +261,6 @@ ResourceManager::~ResourceManager(void)
 
 ResourceData& ResourceManager::_Load(SRC src)
 {
-
 	// ロード済みチェック
 	const auto& lPair = loadedMap_.find(src);
 	if (lPair != loadedMap_.end())
@@ -281,7 +283,6 @@ ResourceData& ResourceManager::_Load(SRC src)
 	loadedMap_.emplace(src, *rPair->second);
 
 	return *rPair->second;
-
 }
 
 const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParameter(const RES_INFO _info, const nlohmann::json& _data )
@@ -303,7 +304,6 @@ const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParamet
 			resParam.path = Application::PATH_SOUND_SE + UtilityCommon::GetWStringFromString(_data["handle"]);
 		}
 	}
-
 	return resParam;
 }
 

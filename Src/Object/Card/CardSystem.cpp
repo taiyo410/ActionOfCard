@@ -30,7 +30,7 @@ std::array<CardSystem::BATTLE_RESULT, CardSystem::ARRAY_NUM> CardSystem::NormalR
 std::array<CardSystem::BATTLE_RESULT, CardSystem::ARRAY_NUM> CardSystem::RevolutionRuleFunc(void)
 {
 	const auto& normalResult= GetNormalResult();
-	std::array<BATTLE_RESULT, ARRAY_NUM> ret = { BATTLE_RESULT::NONE,BATTLE_RESULT::NONE };
+	std::array<BATTLE_RESULT, ARRAY_NUM> ret = normalResult;
 
 	//Ç«ÇøÇÁÇ©Ç™èüÇ¡ÇΩéûÇ…åãâ Çì¸ÇÍë÷Ç¶ÇÈ
 	if (normalResult[FIRST_ATK] == BATTLE_RESULT::SUCCESS_CARD_BREAK ||
@@ -138,14 +138,51 @@ const std::array<CardSystem::BATTLE_RESULT, CardSystem::ARRAY_NUM> CardSystem::G
 	return result;
 }
 
-#ifdef _DEBUG
 void CardSystem::ChangeJudgeRule(void)
 {
 	rule_ = rule_ == ORDER_RULE::NORMAL ? ORDER_RULE::REVOLUTION : ORDER_RULE::NORMAL;
 	changeBattleRule_[rule_]();
 }
+
+#ifdef _DEBUG
 void CardSystem::DrawDebug(void)
 {
+	for (int i = 0; i < 2; i++)
+	{
+		switch (playerResult_[i])
+		{
+		case CardSystem::BATTLE_RESULT::NONE:
+			str[i] = L"NONE";
+			break;
+		case CardSystem::BATTLE_RESULT::SUCCESS_USE:
+			str[i] = L"SUCCESS_USE";
+			break;
+		case CardSystem::BATTLE_RESULT::SUCCESS_USE_CONTINUE:
+			str[i] = L"SUCCESS_USE_CONTINUE";
+			break;
+		case CardSystem::BATTLE_RESULT::SUCCESS_CARD_BREAK:
+			str[i] = L"SUCCESS_CARD_BREAK";
+			break;
+		case CardSystem::BATTLE_RESULT::FAILURE_USE_BE_REFLECTED:
+			str[i] = L"FAILURE_USE_BE_REFLECTED";
+			break;
+		case CardSystem::BATTLE_RESULT::SUCCESS_REFLECT:
+			str[i] = L"SUCCESS_REFLECT";
+			break;
+		case CardSystem::BATTLE_RESULT::GIVE_DRAW:
+			str[i] = L"GIVE_DRAW";
+			break;
+		case CardSystem::BATTLE_RESULT::BE_DRAW:
+			str[i] = L"BE_DRAW";
+			break;
+		case CardSystem::BATTLE_RESULT::RELOAD:
+			str[i] = L"RELOAD";
+			break;
+		default:
+			break;
+		}
+	}
+	DrawFormatString(300, 300, 0x000000, L"battleResult[%d,%d]", playerResult_[0], playerResult_[1]);
 }
 #endif // _DEBUG
 

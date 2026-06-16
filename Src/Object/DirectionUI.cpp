@@ -69,7 +69,7 @@ void DirectionUI::Draw(void)
 	DrawStringFToHandle(leftTop.x + SKIP_BTN_SIZE.x, leftTop.y + SKIP_BTN_STR_OFFSET_Y
 		, SKIP_STR.c_str(), UtilityCommon::BLACK, fontHandle_);
 
-	//方向アニメーション時に集中線描画
+	//咆哮アニメーション時に集中線描画
 	if (CharacterManager::GetInstance().GetIsEnemyRoar())
 	{
 		//集中線描画

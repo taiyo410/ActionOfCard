@@ -103,7 +103,6 @@
       }
     ],
 
-
     "image": [
       {
         "name": "TITLE_BACK_IMG",
@@ -188,6 +187,22 @@
       {
         "name": "REVERSE_FADE_MASK",
         "handle": "FaderMask_1.png"
+      },
+      {
+        "name": "WIN_ARROW_IMG",
+        "handle": "UpArrow.png"
+      },
+      {
+        "name": "LOSE_ARROW_IMG",
+        "handle": "DownArrow.png"
+      },
+      {
+        "name": "HIGHER_IMG",
+        "handle": "Higher.png"
+      },
+      {
+        "name": "LOWER_IMG",
+        "handle": "Lower.png"
       }
     ],
 

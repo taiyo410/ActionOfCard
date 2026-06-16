@@ -54,10 +54,6 @@ public:
 	/// @param  
 	void DrawReloadGauge(const float& _reloadPer);
 
-	/// @brief カードの色反転を行うか
-	/// @param _isReverseColorCardDraw 
-	void SetIsReverseCard(const bool _isReverseColorCardDraw);
-
 private:
 
 #pragma region メンバー定数

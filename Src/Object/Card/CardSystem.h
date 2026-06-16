@@ -77,8 +77,14 @@ public:
 	/// @return  カード２枚のカード強さの差
 	const int GetCardDif(void)const { return cardDif_; }
 
-	//カードの勝敗判定を変更する
+	/// @brief カードの勝敗判定を変更する
+	/// @param  
 	void ChangeJudgeRule(void);
+
+	/// @brief カード判定ルールの取得
+	/// @param  
+	/// @return 
+	const ORDER_RULE GetJudgeRule(void) { return rule_; }
 
 #ifdef _DEBUG
 	void DrawDebug(void);
@@ -120,5 +126,6 @@ private:
 	std::array<BATTLE_RESULT, ARRAY_NUM> NormalRuleFunc(void);		//通常
 	std::array<BATTLE_RESULT, ARRAY_NUM> RevolutionRuleFunc(void);	//革命ルール
 
+	std::wstring str[2];
 #pragma endregion
 };

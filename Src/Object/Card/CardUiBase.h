@@ -59,7 +59,7 @@ public:
 		float goalAngle_ = currentAngle_;																//カードの目標の角度
 		double cardScl_ = 1.0;
 		double sclCnt = SCL_LERP_TIME;
-		float disitionCnt_;																				//決定カウント
+		float decisionCnt_;																				//決定カウント
 		float reactCnt_;																				//はじかれるカウント
 		CARD_STATE state_ = CARD_STATE::DRAW_PILE;														//カードの状態
 	};
@@ -197,7 +197,7 @@ protected:
 	int reloadGauge_;					//リロードゲージ
 	Vector2F numPos_;					//カードナンバー座標
 	float cardMoveCnt_;					//カードセレクトの動き時間
-	float disitionCnt_;					//決定後のカウント
+	float decisionCnt_;					//決定後のカウント
 	float reloadPer_;					//リロード割合(カードのゲージ計算用)
 	ResourceManager::SRC cardWinRes_;	//カード勝ったとき流すサウンド
 #pragma endregion
@@ -249,6 +249,6 @@ protected:
 private:
 
 	//カード画像の配列
-	std::map<CardBase::CARD_STATUS, int> cardImgs_;
+	std::map<CardBase::CARD_STATUS, int> cardImages;
 };
 

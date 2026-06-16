@@ -54,12 +54,6 @@ void EnemyCardAttackJump::InitAttack(void)
 		chargeEffScale_ });
 }
 
-//void EnemyCardAttackJump::Update(void)
-//{
-//	//攻撃アクションの内容
-//	AttackUpdate();
-//}
-
 void EnemyCardAttackJump::AttackUpdate(void)
 {
 	//ジャンプチャージ
@@ -155,7 +149,6 @@ void EnemyCardAttackJump::AttackRelease(void)
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
 
 	//チャージエフェクトの消去
-	const int JUMP_CHARGE_EFF_ARRAY = 0;
 	effect_->Stop(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
 	effect_->Delete(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
 

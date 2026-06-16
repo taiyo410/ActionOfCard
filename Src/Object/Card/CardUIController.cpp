@@ -11,7 +11,7 @@ CardUIController::CardUIController(int& _cardNumImgs) :
 	cardNoImg_(_cardNumImgs),
 	status_(),
 	upDownMoveAngle_(0.0f),
-	disitionCnt_(0.0f),
+	decisionCnt_(0.0f),
 	reactCnt_(0.0f),
 	state_(CARD_STATE::DRAW_PILE),
 	cardPos_({0.0f,0.0f}),
@@ -73,10 +73,10 @@ void CardUIController::DecisionMove(void)
 {
 	//カード座標のイージング
 	cardPos_ = easing_->EaseFunc(baseCardPos_, DISITON_CARD_POS,
-		(DISITION_MOVE_CARD_TIME - disitionCnt_) / DISITION_MOVE_CARD_TIME, Easing::EASING_TYPE::CUBIC_OUT);
+		(DISITION_MOVE_CARD_TIME - decisionCnt_) / DISITION_MOVE_CARD_TIME, Easing::EASING_TYPE::CUBIC_OUT);
 
 	//カウントのセット
-	disitionCnt_ -= UtilityCommon::FIXED_DELTA_TIME;
+	decisionCnt_ -= UtilityCommon::FIXED_DELTA_TIME;
 }
 
 void CardUIController::ReactMove(const Vector2F& _goalPos)
@@ -95,7 +95,7 @@ void CardUIController::ReactUpdate(const Vector2F& _goalPos)
 	if (state_ != CARD_STATE::REACT)return;
 
 	//まだ決定移動中ならそちらを優先
-	if (disitionCnt_ > 0.0f)
+	if (decisionCnt_ > 0.0f)
 	{
 		DecisionMove();
 		return;
@@ -156,7 +156,7 @@ void CardUIController::SetStartAngle(void)
 void CardUIController::ResetCount(void)
 {
 	sclCnt_ = SCL_LERP_TIME;
-	disitionCnt_ = DISITION_MOVE_CARD_TIME;
+	decisionCnt_ = DISITION_MOVE_CARD_TIME;
 	cardScl_ = 1.0f;
 	reactCnt_ = REACT_MOVE_CARD_TIME;
 	state_ = CARD_STATE::DRAW_PILE;
@@ -183,7 +183,7 @@ void CardUIController::InitCard(const int& _num)
 
 void CardUIController::ChangeUsedCard(void)
 {
-	if (state_ == CARD_STATE::REACT || state_ == CARD_STATE::USED||disitionCnt_ > 0.0f)return;
+	if (state_ == CARD_STATE::REACT || state_ == CARD_STATE::USED||decisionCnt_ > 0.0f)return;
 	state_ = CARD_STATE::USED;
 }
 

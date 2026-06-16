@@ -148,7 +148,7 @@ public:
 
 	/// @brief カードアクションを決める
 	/// @param  
-	void DesideCardAction(void);
+	void DecideCardAction(void);
 
 	/// @brief 通常攻撃のコンボ
 	/// @param  
@@ -271,8 +271,8 @@ private:
 	void DesideAttackOne(void);
 
 	//敵のアクションをランダムで決める
-	void DesideEnemyCardAction(void);
+	void DecideEnemyCardAction(void);
 
 	//攻撃可能かどうかの判定
-	const bool IsAttacable(void);
+	const bool IsAttackable(void);
 };

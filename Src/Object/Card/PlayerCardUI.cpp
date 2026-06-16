@@ -179,7 +179,7 @@ void PlayerCardUI::Draw(void)
 	CardUIBase::Draw();
 	
 	//矢印とボタン描画
-	DrawArrowAndBotton();
+	DrawArrowAndButton();
 
 #ifdef _DEBUG
 	//DrawDebug();
@@ -696,7 +696,7 @@ void PlayerCardUI::MoveUpDownVisibleCards(void)
 	}
 }
 
-void PlayerCardUI::DrawArrowAndBotton(void)
+void PlayerCardUI::DrawArrowAndButton(void)
 {
 
 	//リボルバー回転方向の左方向矢印の描画

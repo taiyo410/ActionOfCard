@@ -7,6 +7,7 @@
 class HpUI;
 class CardUIBase;
 class DirectionUI;
+class ResourceManager;
 
 class UIManager :
 	public Singleton<UIManager>
@@ -55,10 +56,11 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//フォントサイズ
 	static constexpr int FONT_SIZE = 20;
 
-	//ボタンX座標
+	//ボタン座標
 	static constexpr Vector2F INIT_BOTTON_POS = { 10.0f,60.0f };
 
 	//ボタンサイズ
@@ -72,22 +74,29 @@ private:
 
 	//回避ボタン文字列
 	const std::wstring DODGE_BTN_STR = L"回避";
+#pragma endregion
 
-	//ボタン
-	int imgBtns_;
-
+#pragma region メンバー変数
 	//キャラHPUI
-	std::unordered_map<CHARACTER_TYPE,std::unique_ptr<HpUI>>characterHpUI_;
-
+	std::unordered_map<CHARACTER_TYPE, std::unique_ptr<HpUI>>characterHpUI_;
 	//カードUI
-	std::unordered_map<CHARACTER_TYPE,std::unique_ptr<CardUIBase>>cardUI_;
-
+	std::unordered_map<CHARACTER_TYPE, std::unique_ptr<CardUIBase>>cardUI_;
 	//演出用UI
 	std::unique_ptr<DirectionUI>directionUI_;
 
-	//フォント
-	int fontHandle_;
+	ResourceManager& resMng_;		//リソース
 
+	int imgBtns_;				//ボタン
+	int fontHandle_;			//フォント
+	int lowerImg_;				//数字の勝敗を表す画像(小さい)
+	int higherImg_;				//数字の勝敗を表す画像(大きい)
+	int upArrowImg_;			//上矢印画像
+	int downArrowImg_;			//下矢印画像
+	Vector2F higherPos_;		//数字勝敗画像の座標
+	Vector2F lowerPos_;			//数字勝敗画像の座標
+#pragma endregion
+
+#pragma region メンバー関数
 	//コピー禁止
 	UIManager(void);
 	UIManager(const UIManager& _copy) = delete;
@@ -103,5 +112,9 @@ private:
 	void CreateCardUI(void);
 
 	//攻撃ボタンと回避ボタンの表示
-	void DrawAttackBottonAndDodgeBotton(void);
+	void DrawAttackButtonAndDodgeButton(void);
+
+	//数字の勝敗を表すUIの表示
+	void DrawWinLoseUI(void);
+#pragma endregion
 };

@@ -28,7 +28,7 @@ cardNoImg_(nullptr),
 reloadGauge_(),
 numPos_(),
 cardMoveCnt_(),
-disitionCnt_(),
+decisionCnt_(),
 reloadPer_()
 {
 	cardTypeMap_ = {
@@ -103,7 +103,7 @@ void CardUIBase::LoadCardData(void)
 
 	for (const auto& card : datas)
 	{
-		CardBase::CARD_STATUS status;
+		CardBase::CARD_STATUS status = {0,CardBase::CARD_TYPE::ATTACK};
 		//カードの強さの読み込み
 		if (card.contains(CARD_POWER_PATH))
 		{
@@ -161,7 +161,7 @@ void CardUIBase::AddCardUi(const CardBase::CARD_STATUS _status)
 	int img = -1;
 
 	//同じステータスを見つける
-	auto it = cardImgs_.find(_status);
+	auto it = cardImages.find(_status);
 
 	//画像に番号を合わせる
 	int num = _status.pow - 1;
@@ -171,10 +171,10 @@ void CardUIBase::AddCardUi(const CardBase::CARD_STATUS _status)
 	std::shared_ptr<CardUIController> info = std::make_shared<CardUIController>(drawNumImg);
 
 	//カード画像がない場合は作成して配列に挿入
-	if(it==cardImgs_.end())
+	if(it==cardImages.end())
 	{
 		img = MakeCardNumImg(_status);
-		cardImgs_.emplace(_status, img);
+		cardImages.emplace(_status, img);
 	}
 	else
 	{
