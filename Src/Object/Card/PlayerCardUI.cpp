@@ -1,14 +1,10 @@
-#include <DxLib.h>
-#include <cmath>
-#include <ranges>
-#include <iostream>
-#include <fstream>
-#include <nlohmann/json.hpp>
+#include "pch.h"
 #include "../Utility/UtilityCommon.h"
 #include "../Utility/UtilityDraw.h"
-#include"../Manager/Generic/DataBank.h"
-#include"../Manager/Generic/InputManager.h"
-#include"../Manager/Generic/SceneManager.h"
+#include "../Utility/UtilityJson.h"
+#include "../Manager/Generic/DataBank.h"
+#include "../Manager/Generic/InputManager.h"
+#include "../Manager/Generic/SceneManager.h"
 #include "../Manager/Generic/ButtonUIManager.h"
 #include "../Manager/Resource/ResourceManager.h"
 #include "../Manager/Resource/SoundManager.h"
@@ -23,8 +19,7 @@ PlayerCardUI::PlayerCardUI(void):
 radius_({RADIUS_X,RADIUS_Y}),
 isReloadEnd_(false),
 reloadAnimCurr_(),
-cardNumFrameImg_(UtilityCommon::INITIAL_HANDLE),
-cardNumMaskImg_(UtilityCommon::INITIAL_HANDLE),
+cardNumGaugeImg_(UtilityCommon::INITIAL_HANDLE),
 cardNumBgImg_(UtilityCommon::INITIAL_HANDLE),
 fontHandle_(UtilityCommon::INITIAL_HANDLE),
 reloadFontHandle_(UtilityCommon::INITIAL_HANDLE),
@@ -46,6 +41,7 @@ PlayerCardUI::~PlayerCardUI(void)
 void PlayerCardUI::Load(void)
 {
 	CardUIBase::Load();
+	LoadJsonData();
 
 	//リソースのロード
 	atkCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_ATK_CARD_IMG).handleId_;
@@ -54,8 +50,8 @@ void PlayerCardUI::Load(void)
 
 	reloadCardImg_ = resMng_.Load(ResourceManager::SRC::RELOAD_CARD_IMG).handleId_;
 	reloadGauge_ = resMng_.Load(ResourceManager::SRC::RELOAD_GAUGE).handleId_;
-	cardNumFrameImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_FRAME).handleId_;
-	cardNumMaskImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_MASK).handleId_;
+	//cardNumFrameImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_FRAME).handleId_;
+	cardNumGaugeImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE).handleId_;
 	fontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE,0);
 	reloadFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), RELOAD_FONT_SIZE,0);
 	cardNumBgImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_BACK).handleId_;
@@ -72,7 +68,7 @@ void PlayerCardUI::Init(void)
 	cardGaugePSMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::HPBAR_PS);
 	cardGaugePSRenderer_ = std::make_unique<PixelRenderer>(*cardGaugePSMaterial_);
 
-	cardGaugePSMaterial_->AddTextureBuf(cardNumMaskImg_);
+	cardGaugePSMaterial_->AddTextureBuf(cardNumGaugeImg_);
 	changeMoveState_ = {
 		{CARD_SELECT::NONE, [this]() {ChangeNone(); } },
 		{CARD_SELECT::LEFT, [this]() {ChangeLeft(); } },
@@ -160,8 +156,6 @@ void PlayerCardUI::Draw(void)
 	//カード残り枚数ゲージの描画
 	cardGaugePSRenderer_->Draw();
 
-	//カード枚数ゲージのフレーム
-	DrawExtendGraphF(BAR_POS.x, BAR_POS.y, BAR_POS.x + BAR_SIZE.x, BAR_POS.y + BAR_SIZE.y, cardNumFrameImg_, true);
 
 	int handCardSize = static_cast<int>(handCards_.size());
 
@@ -512,6 +506,35 @@ void PlayerCardUI::UpdateReload(void)
 			ChangeSelectState(CARD_SELECT::NONE);
 		}
 	}
+}
+
+void PlayerCardUI::LoadJsonData(void)
+{
+	const auto& jsonData = resMng_.Load(ResourceManager::SRC::UI_DATA).jsonData;
+	if (!jsonData.contains("PlayerCardUI"))return;
+
+	const auto& cardUIData = jsonData["PlayerCardUI"];
+	visibleCardNum_ = cardUIData.value("visibleCardNum", 0);
+	revolverEllipseRadius_ = UtilityJson::GetLoadVector2F("revolverEllipseRadius", cardUIData);
+
+	const auto& cardNumGaugeData = cardUIData["cardNumGauge"];
+	cardNumGaugePos_ = UtilityJson::GetLoadVector2F("pos", cardNumGaugeData);
+	cardNumGaugeLeftCol_ = UtilityJson::GetLoadColorF("leftColor", cardNumGaugeData);
+	cardNumGaugeRightCol_ = UtilityJson::GetLoadColorF("rightColor", cardNumGaugeData);
+	cardNumGaugeDefaultSize_ = UtilityJson::GetLoadVector2F("defaultSize", cardNumGaugeData);
+
+	float cardNumGaugeSizeScale = cardNumGaugeData.value("scale", 0.0f);
+	cardNumGaugeSizeScale_ = cardNumGaugeDefaultSize_ * cardNumGaugeSizeScale;
+
+	//弾かれる前のゴール座標
+	static constexpr Vector2F REACT_GOAL_CARD_POS = { -200.0f, Application::SCREEN_HALF_Y + 500.0f };
+	Vector2F barBGLocalPos = UtilityJson::GetLoadVector2F("barBGLocalPos", cardUIData);
+	cardNumGaugeBGImgPos_ = cardNumGaugePos_ + barBGLocalPos;
+	Vector2F barBGImgSize = UtilityJson::GetLoadVector2F("barBackGroundSizeMargin", cardUIData);
+	cardNumGaugeBGImgSize_ = cardNumGaugeSizeScale_ + barBGImgSize;
+
+
+
 }
 
 void PlayerCardUI::MoveCardAll(const float& _moveTImeMax)

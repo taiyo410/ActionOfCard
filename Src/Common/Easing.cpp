@@ -29,6 +29,7 @@ Easing::Easing(void)
 
 Easing::~Easing(void)
 {
+    easingFuncTable_.clear();
 }
 
 void Easing::SetEasing(const float t, const EASING_TYPE type)

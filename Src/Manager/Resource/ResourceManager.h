@@ -55,18 +55,13 @@ public:
 		GAME_CLEAR_IMG,
 		PLAYER_ATK_CARD_IMG,		//番号なしアタックカード
 		PLAYER_FIRE_CARD_IMG,		//番号なしファイアカード
-		PLAYER_THUNDER_CARD_IMG,		//番号なしサンダーカード
+		PLAYER_THUNDER_CARD_IMG,	//番号なしサンダーカード
 		ENEMY_ATK_CARD_IMG,			//敵番号なしアタックカード
 		RELOAD_CARD_IMG,			//リロードカード
 		RELOAD_GAUGE,				//リロードゲージ
-		P_HP_ARC_OUTLINE,			//円形アウトライン
-		P_HP_LINE_OUT_LINE,			//線形アウトライン
-		P_CARD_NUM_GAUGE_MASK,		//カード枚数ゲージマスク
-		P_CARD_NUM_GAUGE_FRAME,		//カード枚数ゲージフレーム
+		P_CARD_NUM_GAUGE,			//カード枚数ゲージマスク
 		P_CARD_NUM_GAUGE_BACK,		//カード枚数ゲージ背景
-		E_HP_BAR_MASK,				//敵体力体力ゲージマスク
-		E_HP_BAR_FRAME,				//敵体力体力ゲージフレーム
-		E_HP_COVER,					//敵体力ゲージカバー
+		E_HP_BAR,					//敵体力体力ゲージマスク
 		SKIP_BUTTOM_MASK,			//スキップボタン画像
 		CARD_REVOLVER_L_ARROW,		//カードリボルバー回転方向の左矢印
 		INTENSIVE_LINE_1,			//集中線画像1(複数画像でアニメーション)
@@ -123,8 +118,9 @@ public:
 		CHARA_DATA,						//キャラクターデータ
 		DECK_DATA,						//デッキデータ
 		ACTION_DATA,					//アクションデータ
-		COLLISION_DATA,		//アニメーションデータ
-		
+		COLLISION_DATA,					//当たり判定データ
+		UI_DATA,						//UIのパラメータデータ
+
 		//ピクセルシェーダ
 		STAGE_PS,					//ステージ
 		SKYDOME_PS,					//スカイドーム

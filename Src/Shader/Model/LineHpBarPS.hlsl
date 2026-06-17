@@ -17,6 +17,11 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     {
         discard;
     }
+    //ƒQ[ƒW‚Ì˜g‚ğ•`‰æ
+    else if (all(srcCol.rgb < 0.9f))
+    {
+        return srcCol;
+    }
     else if (uv.x > g_hp_lerp)
     {
         float t = uv.x;

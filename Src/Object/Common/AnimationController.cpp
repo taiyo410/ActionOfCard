@@ -438,7 +438,7 @@ void AnimationController::FreezeMovementForAnimation(void)
 	MV1SetFrameUserLocalMatrix(modelId_, spineFrameNum_, mix);
 }
 
-void AnimationController::AnimationDettach(const int _type)
+void AnimationController::AnimationDetach(const int _type)
 {
 	auto& data = animations_.at(_type);
 
@@ -489,7 +489,7 @@ void AnimationController::UpdateBlend(void)
 			anim.second.blendRate = 0.0f;
 
 			//アニメーションデタッチ
-			AnimationDettach(anim.first);
+			AnimationDetach(anim.first);
 		}
 		else
 		{
@@ -522,7 +522,7 @@ void AnimationController::UpdateBlend(void)
 
 			if (anim.second.attachNo != -1)
 			{
-				AnimationDettach(anim.first);
+				AnimationDetach(anim.first);
 			}
 		}
 		isBlend_ = false;

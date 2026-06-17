@@ -31,6 +31,7 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//イージング時間
 	static constexpr float EASING_TIME = 1.0f;
 
@@ -39,12 +40,18 @@ private:
 
 	//イージングY座標上限
 	static constexpr float BACK_TITLE_STRING_POS_EASE_LIMIT = 40;
+#pragma endregion
+
+#
+
 
 	//ゲームクリア画像
 	int imgGameClear_;
 
 	//サウンド
 	SoundManager& soundMng_;
+
+
 
 	//イージング
 	std::unique_ptr<Easing>easing_;

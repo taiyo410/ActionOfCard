@@ -64,7 +64,8 @@ GameScene::~GameScene(void)
 	CardSystem::GetInstance().Destroy();
 	CollisionManager::GetInstance().Destroy();
 	CharacterManager::GetInstance().Destroy();
-	UIManager::GetInstance().Destroy();
+	UIManager::GetInstance().Destroy(); 
+	changeUpdate_.clear();
 }
 
 void GameScene::Load(void)
@@ -240,6 +241,9 @@ void GameScene::ChangeClearDirection()
 	//スカイドームをクリア状態へ
 	skyDome_->ChangePhase(SkyDome::PHASE::CLEAR);
 
+	//反転フェーダの削除
+	scnMng_.DeletePostEffect(invertRenderer_);
+
 	updateFunc_ = [this]() {ClearDirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };
 }
@@ -251,6 +255,9 @@ void GameScene::ChangeOverDirection(void)
 
 	//カメラのリセット
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
+
+	//反転フェーダの削除
+	scnMng_.DeletePostEffect(invertRenderer_);
 
 	updateFunc_ = [this]() {OverDirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };

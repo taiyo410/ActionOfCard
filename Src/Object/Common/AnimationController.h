@@ -39,10 +39,9 @@ public :
 		VECTOR invalidPos = {};		//座標移動無効化用
 		VECTOR firstPos = {};		//移動量格納
 		VECTOR movePow = {};		//座標移動無効化用
-		bool isStop;				// アニメーションを止めたままにする
+		bool isStop = false;				// アニメーションを止めたままにする
 		int isPriority = false;		//優先されているか
 		float blendRate = 0.0f;		//ブレンド率
-
 		ANIMATION_VARIABLE variable;		//アニメーションの可変パラメータ
 	};
 
@@ -166,39 +165,25 @@ public :
 
 private :
 
-	//ヒップフレームの番号
-	static constexpr int HIP_FRAME_NO = 0;
-
-	//シーンマネージャ
-	SceneManager& scnMng_;
-
+#pragma region メンバー変数
+	//イージング
+	std::unique_ptr<Easing>easing_;
+	// 種類別のアニメーションデータ
+	std::map<int, ANIMATION_PARAMETER> animations_;
 	//状態更新
 	std::function<void(const float _spdScl)>stateUpdate_;
-
 	//更新配列
 	std::vector<std::function<void(const float _spdScl)>>stateUpdates_;
 
-	//イージング
-	std::unique_ptr<Easing>easing_;
+	SceneManager& scnMng_;		//シーンマネージャ
+	int modelId_;				// モデルのハンドルID
+	int playType_;				//再生の種類
+	bool isBlend_;				//ブレンドしているか
+	VECTOR invalidBlendPos_;	// アニメーションの座標移動を無効化するためのオフセット
+	int spineFrameNum_;			//モデルの腰番号
+#pragma endregion
 
-	// モデルのハンドルID
-	int modelId_;
-
-	// 種類別のアニメーションデータ
-	std::map<int, ANIMATION_PARAMETER> animations_;
-
-	//再生の種類
-	int playType_;
-
-	//ブレンドしているか
-	bool isBlend_;
-
-	// アニメーションの座標移動を無効カウするためのオフセット
-	VECTOR invalidBlendPos_;
-
-	//モデルの腰番号
-	int spineFrameNum_;
-
+#pragma region メンバー関数
 	//状態別更新
 	void UpdateNone(void);		//アニメーションブレンド
 	void UpdateBlend(void);		//アニメーションブレンド
@@ -208,7 +193,7 @@ private :
 	void FreezeMovementForAnimation(void);
 
 	//アニメーションデタッチ
-	void AnimationDettach(const int _type);
-
+	void AnimationDetach(const int _type);
+#pragma endregion
 };
 

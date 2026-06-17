@@ -80,23 +80,6 @@ ResourceData::ResourceData(TYPE type, const std::wstring& path
 	handleIds_(nullptr)
 {
 	AddFunc();
-
-	//サウンドの状態設定関数の表に、状態に応じた関数を追加する
-	if(pitch_!=0.0f)
-	{
-		setCreateFunc_[SET_SOUND_STATUS::PITCH] = [this]() { SetCreateSoundPitchRate(pitch_); };
-		setReturnStatusFunc_[SET_SOUND_STATUS::PITCH] = [this]() { SetCreateSoundPitchRate(0.0f);  };
-	}
-	if(timeStretch_!=1.0f)
-	{
-		setCreateFunc_[SET_SOUND_STATUS::TIME_STRETCH] = [this]() {SetCreateSoundTimeStretchRate(timeStretch_); }; 
-		setReturnStatusFunc_[SET_SOUND_STATUS::TIME_STRETCH] = [this]() { SetCreateSoundTimeStretchRate(1.0f); };
-	}
-	if(loopEndTime_!=0|| loopStartTime_<loopEndTime_)
-	{ 
-		setCreateFunc_[SET_SOUND_STATUS::LOOP_START] = [this]() { SetCreateSoundLoopAreaTimePos(loopStartTime_, loopEndTime_); };
-		setReturnStatusFunc_[SET_SOUND_STATUS::LOOP_START] = [this]() { SetCreateSoundLoopAreaTimePos(0, 0); };
-	}
 }
 
 ResourceData::ResourceData(TYPE type, const std::wstring& path, int constBufNum):
@@ -129,7 +112,6 @@ ResourceData::~ResourceData(void)
 void ResourceData::Load(void)
 {
 	loadFunc_[type_]();
-
 	//読み込みできたか確認
 	assert(handleId_ != -1); // 読み込みに失敗してたら即終了
 }
@@ -151,6 +133,11 @@ void ResourceData::CopyHandle(int* imgs)
 	{
 		imgs[i] = handleIds_[i];
 	}
+}
+
+void ResourceData::ReleaseFunc(void)
+{
+	loadFunc_.clear();
 }
 
 void ResourceData::AddFunc(void)
@@ -220,6 +207,22 @@ void ResourceData::LoadSound(void)
 	if(volume_!=UtilityCommon::RATIO_MAX)
 	{
 		ChangeVolumeSoundMem(static_cast<int>(VOLUME_MAX * volume_), handleId_);
+	}
+	//サウンドの状態設定関数の表に、状態に応じた関数を追加する
+	if (pitch_ != 0.0f)
+	{
+		setCreateFunc_[SET_SOUND_STATUS::PITCH] = [this]() { SetCreateSoundPitchRate(pitch_); };
+		setReturnStatusFunc_[SET_SOUND_STATUS::PITCH] = [this]() { SetCreateSoundPitchRate(0.0f);  };
+	}
+	if (timeStretch_ != 1.0f)
+	{
+		setCreateFunc_[SET_SOUND_STATUS::TIME_STRETCH] = [this]() {SetCreateSoundTimeStretchRate(timeStretch_); };
+		setReturnStatusFunc_[SET_SOUND_STATUS::TIME_STRETCH] = [this]() { SetCreateSoundTimeStretchRate(1.0f); };
+	}
+	if (loopEndTime_ != 0 || loopStartTime_ < loopEndTime_)
+	{
+		setCreateFunc_[SET_SOUND_STATUS::LOOP_START] = [this]() { SetCreateSoundLoopAreaTimePos(loopStartTime_, loopEndTime_); };
+		setReturnStatusFunc_[SET_SOUND_STATUS::LOOP_START] = [this]() { SetCreateSoundLoopAreaTimePos(0, 0); };
 	}
 }
 

@@ -54,7 +54,6 @@ void Player::LoadCharacter(void)
 		const auto& handBornNoData = data["ModelData"]["handFrameNum"];
 		handFrameNo_ = handBornNoData.value("handFrameNum", 0);
 	}
-
 }
 
 void Player::InitCharacter(void)
@@ -199,4 +198,3 @@ void Player::MakeColliderGeometry(void)
 	onHit_->Init();
 	onHit_->Load();
 }
-

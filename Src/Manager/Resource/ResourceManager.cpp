@@ -49,14 +49,9 @@ ResourceManager::ResourceManager(void):
 		{"ENEMY_ATK_CARD_IMG" ,SRC::ENEMY_ATK_CARD_IMG},
 		{"RELOAD_CARD_IMG" ,SRC::RELOAD_CARD_IMG},
 		{"RELOAD_GAGE" ,SRC::RELOAD_GAUGE},
-		{"P_HP_ARC_OUTLINE" ,SRC::P_HP_ARC_OUTLINE },
-		{"P_HP_LINE_OUT_LINE" ,SRC::P_HP_LINE_OUT_LINE},
-		{"P_CARD_NUM_GAUGE_MASK" ,SRC::P_CARD_NUM_GAUGE_MASK},
-		{"P_CARD_NUM_GAUGE_FRAME" ,SRC::P_CARD_NUM_GAUGE_FRAME},
+		{"P_CARD_NUM_GAUGE" ,SRC::P_CARD_NUM_GAUGE},
 		{"P_CARD_NUM_GAUGE_BACK" ,SRC::P_CARD_NUM_GAUGE_BACK},
-		{"E_HP_BAR_MASK" ,SRC::E_HP_BAR_MASK},
-		{"E_HP_BAR_FRAME" ,SRC::E_HP_BAR_FRAME},
-		{"E_HP_COVER" ,SRC::E_HP_COVER},
+		{"E_HP_BAR" ,SRC::E_HP_BAR},
 		{"SKIP_BUTTOM_MASK" ,SRC::SKIP_BUTTOM_MASK },
 		{"CARD_REVOLVER_L_ARROW" ,SRC::CARD_REVOLVER_L_ARROW},
 		{"INTENSIVE_LINE_1" ,SRC::INTENSIVE_LINE_1},
@@ -107,6 +102,7 @@ ResourceManager::ResourceManager(void):
 		{"DECK_DATA" ,SRC::DECK_DATA},
 		{"ACTION_DATA" ,SRC::ACTION_DATA},
 		{"COLLISION_DATA" ,SRC::COLLISION_DATA},
+		{"UI_DATA" ,SRC::UI_DATA},
 		//ピクセルシェーダ
 		{"STAGE_PS",SRC::STAGE_PS},
 		{"SKYDOME_PS",SRC::SKYDOME_PS},
@@ -278,6 +274,9 @@ ResourceData& ResourceManager::_Load(SRC src)
 
 	// ロード処理
 	rPair->second->Load();
+
+	//ロード関数ポインタの解放
+	//rPair->second->ReleaseFunc();
 
 	// 念のためコピーコンストラクタ
 	loadedMap_.emplace(src, *rPair->second);

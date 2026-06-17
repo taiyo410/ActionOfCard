@@ -58,19 +58,20 @@ private:
 	//見せるカード枚数
 	static constexpr int VISIBLE_CARD_MAX = 6;
 
-	//カード角度間隔
-	static constexpr float VISIBLE_ANGLE_OFFSET = 22.6f;
-
 	//先頭に追加するときの戻る枚数
 	static constexpr int PREV_CARD_COUNT = 2;
 
 	//現在カードの前にある枚数
 	static constexpr int CARDS_BEFORE_CURRENT = 1;
 
-	//始点角度
-	static constexpr float START_ANGLE = 0.0f;
-	//終点角度
-	static constexpr float END_ANGLE = 135.0f;
+	//カード残り枚数ゲージシェーダ定数バッファサイズ
+	static constexpr int CARD_NUM_GAUGE_CONST_BUF_SIZE = 3;
+
+	//カード残り枚数ゲージシェーダ定数バッファインデックス
+	static constexpr int CARD_NUM_GAUGE_CONST_BUF_IDX = 2;
+
+	//選択カード番号
+	static constexpr int SELECT_CARD_NO = 1;
 
 	//カード角度関連
 	static constexpr int ARROUND_NUM = 16;			//一周当たりの枚数		
@@ -84,14 +85,14 @@ private:
 	static constexpr float RADIUS_X = 186.0f;	//横半径
 	static constexpr float RADIUS_Y = 214.0f;	//縦半径
 
+	//ゲージ座標
+	static constexpr Vector2F BAR_POS = { 30.0f,Application::SCREEN_SIZE_Y - 70 };
+
 	//バーの色(明るい緑)
 	static constexpr FLOAT4 BAR_LIGHT_GREEN = { 0.2f, 0.6f, 1.0f,0.0f };
 
 	//バーの色(青)
 	static constexpr FLOAT4 BAR_BLUE = { 0.2f, 1.0f, 0.4f,0.0f };
-
-	//ゲージ座標
-	static constexpr Vector2F BAR_POS = { 30.0f,Application::SCREEN_SIZE_Y - 70 };
 
 	//ゲージの大きさ
 	static constexpr float BAR_SCALE = 0.1f;
@@ -107,51 +108,54 @@ private:
 
 	//弾かれる前のゴール座標
 	static constexpr Vector2F REACT_GOAL_CARD_POS = { -200.0f, Application::SCREEN_HALF_Y + 500.0f };
-	//フォントの輪郭幅
-	static constexpr int FONT_EDGE_SIZE = 2;
-	static constexpr Vector2F FONT_POS = { BAR_POS.x,550.0f };
 
-	//カードリボルバー矢印座標
-	static constexpr Vector2F REVOLVER_ARROW_SIZE = { 79.9f,68.0f };
-	static constexpr float REVOLVER_ARROW_SCL = 0.8f;
-
-	//スケールを含めた矢印サイズ
-	static constexpr Vector2F REVOLVER_ARROW_SCL_SIZE =
-	{ REVOLVER_ARROW_SIZE.x * REVOLVER_ARROW_SCL, REVOLVER_ARROW_SIZE.y * REVOLVER_ARROW_SCL, };
 
 	//矢印回転角度
 	static constexpr float REVOLVER_ARROW_L_ANGLE = 40.0f;
-
 	//矢印座標
 	static constexpr Vector2F REVOLVER_ARROW_L_POS = { 57.0f,331.0f };
 	static constexpr Vector2F REVOLVER_ARROW_R_POS = { 128.0f,331.0f };
-
+	//カードリボルバー矢印座標
+	static constexpr Vector2F REVOLVER_ARROW_SIZE = { 79.0f,68.0f };
+	static constexpr float REVOLVER_ARROW_SCL = 0.8f;
 	//右矢印回転角度
 	static constexpr float REVOLVER_ARROW_R_ANGLE = 321.0f;
-
 	//ボタンサイズ
 	static constexpr float REVOLVER_BTN_SIZE = 60.0f;
 
 	//ボタン座標と矢印の間隔
 	static constexpr float REVOLVER_BTN_ARROW_OFFSET = 10.0f;
+
+	//スケールを含めた矢印サイズ
+	static constexpr Vector2F REVOLVER_ARROW_SCL_SIZE =
+	{ REVOLVER_ARROW_SIZE.x * REVOLVER_ARROW_SCL, REVOLVER_ARROW_SIZE.y * REVOLVER_ARROW_SCL, };
+
+
 	//フォントサイズ
 	static constexpr int FONT_SIZE = 32;
 	static constexpr int RELOAD_FONT_SIZE = 20;
 
+	//カード残り枚数のフォント座標
+	static constexpr Vector2F FONT_POS = { BAR_POS.x,550.0f };
+
 	//リロード文字列のセンターからのオフセット
 	static constexpr float RELOAD_STR_OFF_Y = 30.0f;
 
-	//カード残り枚数ゲージシェーダ定数バッファサイズ
-	static constexpr int CARD_NUM_GAUGE_CONST_BUF_SIZE = 3;
-
-	//カード残り枚数ゲージシェーダ定数バッファインデックス
-	static constexpr int CARD_NUM_GAUGE_CONST_BUF_IDX = 2;
-
-	//選択カード番号
-	static constexpr int SELECT_CARD_NO = 1;
-
 	//リロード文字列
 	std::wstring RELOAD_STR = L"RELOAD";
+#pragma endregion
+#pragma region 外部ファイル読み込み
+	int visibleCardNum_;					//見せカードの枚数
+	Vector2F revolverEllipseRadius_;		//リボルバー楕円の半径
+	Vector2F cardNumGaugePos_;				//カード残り枚数のゲージ
+	FLOAT4 cardNumGaugeLeftCol_;			//カード枚数ゲージの左側の色
+	FLOAT4 cardNumGaugeRightCol_;			//カード枚数ゲージ右側の色
+	Vector2F cardNumGaugeDefaultSize_;		//カード枚数ゲージデフォルトサイズ
+	Vector2F cardNumGaugeSizeScale_;		//カード枚数ゲージサイズの倍率
+
+	Vector2F cardNumGaugeBGImgPos_;			//カード枚数ゲージの背景の座標
+	Vector2F cardNumGaugeBGImgSize_;		//カード枚数ゲージの背景のサイズ
+
 #pragma endregion
 
 #pragma region メンバー変数
@@ -167,8 +171,7 @@ private:
 	Vector2F radius_;		//半径
 	bool isReloadEnd_;		//リロード終了
 	float cardNumPer_;		//残りカード枚数ゲージ
-	int cardNumFrameImg_;	//残りカード枚数ゲージ
-	int cardNumMaskImg_;	//残りカード枚数マスク画像
+	int cardNumGaugeImg_;	//残りカード枚数マスク画像
 	int cardNumBgImg_;		//残りカード枚数ゲージ背景
 	int fontHandle_;		//フォントハンドル
 	int reloadFontHandle_;	//リロードのフォントハンドル
@@ -191,6 +194,9 @@ private:
 	void UpdateDecision(void)override;		//決定
 	void UpdateReloadWait(void)override;	//リロード待機(リロードゲージのチャージ)
 	void UpdateReload(void);				//リロード
+
+	//Jsonからパラメータ取得
+	void LoadJsonData(void);
 
 	//すべてのカードの移動
 	void MoveCardAll(const float& _moveTImeMax);
