@@ -138,9 +138,6 @@ void CharacterBase::UpdateNormalCommon(void)
 {
 	//ロジックによる操作の受付
 	AcceptLogicControl();
-
-	//回転の同期
-	UpdatePost();
 }
 
 void CharacterBase::UpdateDirectionCommon(void)
