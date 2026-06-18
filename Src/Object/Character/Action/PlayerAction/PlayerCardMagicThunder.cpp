@@ -28,6 +28,10 @@ void PlayerCardMagicThunder::InitAttack(void)
 	targetPos_ = actionCtrl_.GetInput().GetTargetTransform().pos;
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE), animVar_);
 
+	//‘ÎÛ‚Ì•ûŒü‚ÉŒü‚­
+	isTurnable_ = true;
+	actionCtrl_.GetInput().GetLookAtTargetDir();
+
 	changeState_[STATE::SPELL_CAST]();
 }
 

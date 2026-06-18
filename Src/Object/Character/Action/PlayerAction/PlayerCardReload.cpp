@@ -124,7 +124,7 @@ void PlayerCardReload::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	const auto& data = _data.jsonData;
 	reloadTime_ = data.value("reloadTime", 0.0f);
 	reloadEffScl_ = data.value("effectScale", 0.0f);
-	animLoopEndStep_ = data.value("animLoopStartStep", 0.0f);
+	animLoopStartStep_ = data.value("animLoopStartStep", 0.0f);
 	animLoopEndStep_ = data.value("animLoopEndStep", 0.0f);
 }
 

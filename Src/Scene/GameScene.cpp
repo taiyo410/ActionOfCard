@@ -169,7 +169,6 @@ void GameScene::NormalUpdate(void)
 void GameScene::NormalDraw(void)
 {
 	ObjectDraw();
-	DrawFormatString(300, 370, 0x000000, L"%f", fadeCnt_);
 }
 
 void GameScene::DirectionDraw(void)
