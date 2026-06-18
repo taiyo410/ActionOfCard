@@ -34,7 +34,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     srcCol.rgb += area;
     
     //革命時、カードを反転させる
-    if (g_isRevolution==1.0)
+    if (g_isRevolution == 1.0)
     {
         srcCol = 1.0f - srcCol;
     }
