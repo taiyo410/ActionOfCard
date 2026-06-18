@@ -530,7 +530,7 @@ void PlayerCardUI::LoadJsonData(void)
 	Vector2F cardNumGaugeDefaultSize = UtilityJson::GetLoadVector2F("defaultSize", cardNumGaugeData);
 	float cardNumGaugeSizeScale = cardNumGaugeData.value("scale", 0.0f);
 	cardNumGaugeSize_ = cardNumGaugeDefaultSize * cardNumGaugeSizeScale;
-	Vector2F barBGLocalPos = UtilityJson::GetLoadVector2F("barBGLocalPos", cardUIData);
+	Vector2F barBGLocalPos = UtilityJson::GetLoadVector2F("barBackGroundLocalPos", cardUIData);
 	cardNumGaugeBGImgPos_ = cardNumGaugePos_ + barBGLocalPos;
 	Vector2F barBGImgSize = UtilityJson::GetLoadVector2F("barBackGroundSizeMargin", cardUIData);
 	cardNumGaugeBGImgSize_ = cardNumGaugeSize_ + barBGImgSize;

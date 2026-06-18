@@ -39,6 +39,7 @@ void PlayerCardMagicFire::InitAttack(void)
 	toTargetDir_ = actionCtrl_.GetInput().GetToTargetDir();
 	actCnt_ = 0.0f;
 	//‘ÎÛ‚Ì•ûŒü‚ÉŒü‚­
+	isTurnable_ = true;
 	actionCtrl_.GetInput().GetLookAtTargetDir();
 	//‰Š‚ðoŒ»‚³‚¹‚é
 	fireBall_->Init();

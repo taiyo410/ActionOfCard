@@ -27,9 +27,10 @@ void PlayerCardAttackOneMiddle::InitAttack(void)
 
 	midAtkOverCnt_ = comboTIme_;
 
+	isTurnable_ = true;
 	//“Ë‚«UŒ‚‚Ì•ûŒü‚ÉŒü‚­
 	actionCtrl_.GetInput().GetLookAtTargetDir();
-	isTurnable_ = true;
+
 }
 
 void PlayerCardAttackOneMiddle::AttackUpdate(void)
