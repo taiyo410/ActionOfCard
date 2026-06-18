@@ -440,7 +440,7 @@ bool GameScene::CheckGameStateTransition(void)
 		return true;
 	}
 	//“G‚ª“|‚ê‚½‚çƒNƒŠƒAƒV|ƒ“‚Ö
-	if (CharacterManager::GetInstance().IsSceneChageClearCondition())
+	if (CharacterManager::GetInstance().IsSceneChangeClearCondition())
 	{
 		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
 		return true;
