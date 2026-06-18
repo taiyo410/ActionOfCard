@@ -229,7 +229,7 @@ void ActionController::DecideCardAction(void)
 		cardPresent_.PutCard();
 
 		//UŒ‚ƒAƒNƒVƒ‡ƒ“‚Ì‘JˆÚ
-		DesideAttackOne();
+		DecideAttackOne();
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
 	{
@@ -378,7 +378,7 @@ const bool ActionController::IsCardRightMoveable(void)
 		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
 }
 
-void ActionController::DesideAttackOne(void)
+void ActionController::DecideAttackOne(void)
 {
 	//‘Šè‚Æ‚Ì‹——£‚ğæ“¾
 	const float dis = logic_.GetTargetDis();

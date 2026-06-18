@@ -9,11 +9,7 @@
 PlayerCardAttackThree::PlayerCardAttackThree(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresenter):
 	PlayerCardAttackBase(_actCntl, _charaObj, _cardPresenter),
 	atkThreeEndCnt_(),
-	atkAnimLerpCnt_(),
-	chargeAnimSpd_(),
-	attackLerpTime_(),
-	cameraShakeLimit_(),
-	attackEndCnt_()
+	atkAnimLerpCnt_()
 {
 }
 
@@ -61,7 +57,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 	else if (anim_.IsEnd(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3)))		//アニメーション終了でアイドル状態変更
 	{
 		//攻撃終了時間以上なら、アイドル状態へ
-		if (atkThreeEndCnt_ > attackEndCnt_)
+		if (atkThreeEndCnt_ > attackEndTime_)
 		{
 			actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::IDLE);
 			return;
@@ -71,7 +67,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 		atkThreeEndCnt_ += scnMng_.GetDeltaTime();
 
 		//カメラシェイク
-		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / attackEndCnt_, cameraShakeLimit_, Easing::EASING_TYPE::ELASTIC_BACK);
+		scnMng_.GetCamera().lock()->SetShakeStatus(atkThreeEndCnt_ / attackEndTime_, cameraShakeLimit_, Easing::EASING_TYPE::ELASTIC_BACK);
 		scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::ONE_SHAKE);
 	}
 	else if (animStep > atk_.colEndStep)	//攻撃終了後
@@ -98,5 +94,5 @@ void PlayerCardAttackThree::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	cameraShakeLimit_ = _data.jsonData.value("cameraShakeLimit", 0.0f); 
 
 	//攻撃終了後の後隙
-	attackEndCnt_ = _data.jsonData.value("attackEndCount", 0.0f);
+	attackEndTime_ = _data.jsonData.value("attackEndCount", 0.0f);
 }

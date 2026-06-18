@@ -54,8 +54,5 @@ protected:
 
 	//ダメージフラグ
 	bool isDamage_;
-
-
-
 };
 

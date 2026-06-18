@@ -77,20 +77,23 @@
     "revolverArrow_R_Pos": {
       "x": 128.0,
       "y": 331.0
-    }
-    "revolverArrowSize": {
+    },
+    "revolverArrowDefaultSize": {
       "x": 79.0,
       "y": 68.0
     },
+    "revolverArrowScale": 0.8,
     "revolverArrow_L_Angle": 40.0,
     "revolverArrow_R_Angle": 321.0,
-    "revolverArrowScale": 0.8,
     "revolverButtonSize": 60.0,
-    "revolverButtonFromArrowOffset": 10.0
+    "revolverButtonFromArrowOffset": 10.0,
     "cardNumStringPos": {
       "x": 30.0,
       "y": 550.0
-    }
-
+    },
+    "reloadStringOffsetY": 30.0,
+    "reloadString": "RELOAD",
+    "reloadFontSize": 20,
+    "cardNumFontSize": 32
   }
 }

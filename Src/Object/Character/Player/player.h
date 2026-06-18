@@ -83,11 +83,9 @@ private:
 #pragma region メンバー変数
 	std::weak_ptr<Camera>camera_;			//カメラ
 	std::unique_ptr<Weapon>weapon_;			//武器オブジェクト
-
 	InputManager::CONTROLL_TYPE cntl_;		//入力デバイス
-	InputManager::JOYPAD_NO padNum_;	//ゲームパッド番号
-
-	int playerNum_;			//プレイヤー番号
+	InputManager::JOYPAD_NO padNum_;		//ゲームパッド番号
+	int playerNum_;							//プレイヤー番号
 #pragma endregion
 
 #pragma region メンバー関数
@@ -116,6 +114,8 @@ private:
 
 	//当たり判定初期化
 	void MakeColliderGeometry(void) override;
-	void ChangeUpdateOverDirection(void) override;//ゲームオーバーに遷移
+
+	//ゲームオーバーに遷移
+	void ChangeUpdateOverDirection(void) override;
 #pragma endregion
 };

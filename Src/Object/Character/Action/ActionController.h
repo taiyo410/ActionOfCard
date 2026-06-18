@@ -193,11 +193,8 @@ private:
 
 #pragma endregion
 
-	// シーンマネージャ参照
-	SceneManager& scnMng_;
+#pragma region メンバー変数
 
-	//アニメーションコントローラー
-	AnimationController& anim_;
 
 	//状態遷移
 	std::map<ACTION_TYPE, std::function<void(void)>>changeAction_;
@@ -208,29 +205,26 @@ private:
 	//アクション関数ポインタ
 	std::unordered_map<ACTION_TYPE, std::function<void(void)>>actionTable_;
 
-	//先行入力を受けつける溜めの攻撃配列
-	std::queue<ACTION_TYPE>atkCombos_;
+	std::queue<ACTION_TYPE>atkCombos_;		//先行入力を受けつける溜めの攻撃配列
+	//プレイヤーのメインとなるアクション(移動やジャンプなど)
+	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>mainAction_;
 
-	//カードデッキ
-	CardPresenter& cardPresent_;
+	//サブアクション(カードセレクトなど同時並行となるもの)
+	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>subAction_;
 
-	//オブジェクト(当たり判定用)
-	CharacterBase& character_;
+	//アクションの文字列の対応表
+	std::unordered_map<std::string, ACTION_TYPE>actionStrTable_;
 
-	//モデル情報
-	Transform& trans_;
+	SceneManager& scnMng_;				// シーンマネージャ参照
+	AnimationController& anim_;			//アニメーションコントローラー
+	CardPresenter& cardPresent_;		//カードデッキ
+	CharacterBase& character_;			//オブジェクト(当たり判定用)
+	Transform& trans_;					//モデル情報
+	LogicBase& logic_;					//各キャラクターの入力情報
 
-	//各キャラクターの入力情報
-	LogicBase& logic_;
-
-	//状態
-	ACTION_TYPE act_;
-
-	//パッド番号
-	InputManager::JOYPAD_NO padNum_;
-
-	//カード関連
-	bool isCardAct_;	//カードアクション中かどうか
+	ACTION_TYPE act_;					//状態
+	InputManager::JOYPAD_NO padNum_;	//パッド番号
+	bool isCardAct_;					//カードアクション中かどうか
 
 	//移動関連
 	float speed_;			// 移動スピード
@@ -242,16 +236,9 @@ private:
 	Quaternion goalQuaRot_;		//目的の回転
 	float stepRotTime_;			//補完時間
 	VECTOR dir_;				//方向
+#pragma endregion
 
-	//プレイヤーのメインとなるアクション(移動やジャンプなど)
-	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>mainAction_;
-
-	//サブアクション(カードセレクトなど同時並行となるもの)
-	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>subAction_;
-
-	//アクションの文字列の対応表
-	std::unordered_map<std::string, ACTION_TYPE>actionStrTable_;
-
+#pragma region メンバー関数
 	//カード選択
 	void CardMove(void);
 
@@ -268,11 +255,12 @@ private:
 	const bool IsCardRightMoveable(void);
 
 	//敵との距離で1段階目の攻撃を決める
-	void DesideAttackOne(void);
+	void DecideAttackOne(void);
 
 	//敵のアクションをランダムで決める
 	void DecideEnemyCardAction(void);
 
 	//攻撃可能かどうかの判定
 	const bool IsAttackable(void);
+#pragma endregion
 };

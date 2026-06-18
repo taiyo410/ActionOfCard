@@ -108,7 +108,9 @@ public:
     /// @return true:当たっている:false:当たっていない
     const bool HitTarget(void)const;
 
-    //相手の座標情報を取得
+    /// @brief 相手の座標情報を取得
+    /// @param  
+    /// @return 相手の座標情報
     const Transform GetTargetTransform(void);
 
     /// @brief 敵のジャンプチャージ中のカード勝負数
@@ -150,31 +152,18 @@ public:
 
 protected:
 
-	//操作管理用
-	ACT_CNTL actCntl_;
+#pragma region メンバー変数
+    Transform& myTrans_;    //自身のモデル情報
+    ACT_CNTL actCntl_;    //操作管理用
+    VECTOR moveDir_;    //移動方向ベクトル(これをもとにキャラクターが動く)
+    VECTOR inputDir_;    //入力方向(入力していないときは{0,0,0})
+    VECTOR prevMoveDir_;    //前回の移動方向ベクトル
+    ENEMY_ATTACK_TYPE attackType_;    //攻撃種類
+    std::weak_ptr<CharacterBase> targetChara_;    //ターゲット
+    ACT_FLAG isAct_;    //アクション入力がされたかどうか
+    bool isActioning_;    //アクション中
+#pragma endregion
 
-    //移動方向ベクトル(これをもとにキャラクターが動く)
-	VECTOR moveDir_;            
 
-    //入力方向(入力していないときは{0,0,0})
-    VECTOR inputDir_;           
-
-    //前回の移動方向ベクトル
-	VECTOR prevMoveDir_;        
-
-    //攻撃種類
-    ENEMY_ATTACK_TYPE attackType_;
-    
-    //ターゲット
-    std::weak_ptr<CharacterBase> targetChara_;
-
-    //アクション入力がされたかどうか
-    ACT_FLAG isAct_;
-
-    //アクション中
-	bool isActioning_;
-
-    //自身のモデル情報
-    Transform& myTrans_;
 };
 

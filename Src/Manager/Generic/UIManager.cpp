@@ -206,8 +206,12 @@ void UIManager::LoadJsonParameter(void)
 			topButtonPos_ = UtilityJson::GetLoadVector2F("topButtonPos", data);
 			buttonDistanceY_ = data.value("distanceY", 0.0f);
 			buttonSize_ = data.value("size", 0.0f);
-			attackStr_ = UtilityCommon::GetWStringFromString(data.value("attackString", ""));
-			dodgeStr_ = UtilityCommon::GetWStringFromString(data.value("dodgeString", ""));
+			std::string str = data.value("attackString", "");
+			str = UtilityCommon::ConvertUtf8ToSJIS(str);
+			attackStr_ = UtilityCommon::GetWStringFromString(str);
+			str = data.value("dodgeString", "");
+			str = UtilityCommon::ConvertUtf8ToSJIS(str);
+			dodgeStr_ = UtilityCommon::GetWStringFromString(str);
 		}
 		else if (key == "HigherAndLower")
 		{
@@ -217,7 +221,6 @@ void UIManager::LoadJsonParameter(void)
 			arrowLocalPos_ = UtilityJson::GetLoadVector2F("arrowPos", data);
 			easeGoalScl_ = data.value("easingGoalScale", 0.0f);
 			easeTime_ = data.value("easeTime", 0.0f);
-
 		}
 	}
 }

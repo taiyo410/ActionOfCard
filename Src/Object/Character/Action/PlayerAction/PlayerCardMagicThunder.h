@@ -37,23 +37,20 @@ public:
 
 private:
 
-#pragma region 外部ファイル読み込み
-
-#pragma endregion
-
 #pragma region メンバー変数
-    std::shared_ptr<PlayerMagicThunder>thunder_;    //サンダー
+    //サンダー
+    std::shared_ptr<PlayerMagicThunder>thunder_;    
     VECTOR targetPos_;         //敵の座標
 #pragma endregion
 
 #pragma region メンバー関数
     //更新
     void UpdateSpellCast(void) override;     //詠唱中
-    void UpdateMagicAttack(void) override;        //攻撃
+    void UpdateMagicAttack(void) override;   //攻撃
 
     //遷移
     void ChangeSpellCast(void) override;     //詠唱中
-    void ChangeMagicAttack(void) override;        //攻撃
+    void ChangeMagicAttack(void) override;   //攻撃
 #pragma endregion
 
 

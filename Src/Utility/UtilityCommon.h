@@ -133,6 +133,9 @@ public:
 	/// @return 読み込んだJSONデータ
 	static nlohmann::json LoadJsonData(const std::string& filePath);
 
-
+	/// @brief UTF8からSJISへの変換
+	/// @param utf8_str json utf8の文字列(jsonで読み込んだ日本語など)
+	/// @return SJISの文字
+	static std::string ConvertUtf8ToSJIS(const std::string& utf8_str);
 
 };

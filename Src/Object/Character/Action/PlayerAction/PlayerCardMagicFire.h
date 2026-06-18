@@ -40,12 +40,11 @@ public:
 private:
 
 #pragma region 外部ファイル読み込み
-    float actMaxTime_;          //炎のアクション最大時間(一定時間何も起こらなかった場合のアクション時間)
+    float actMaxTime_ = 0.0f;          //炎のアクション最大時間(一定時間何も起こらなかった場合のアクション時間)
 #pragma endregion
 
 #pragma region メンバー変数
     std::shared_ptr<PlayerMagicFire>fireBall_;    //ファイアボール
-
     VECTOR fireLocalPos_;           //炎のローカル座標
     VECTOR toTargetDir_;            //ターゲットへの方向
     float actCnt_;                  //アクション時間カウント
@@ -54,11 +53,11 @@ private:
 #pragma region メンバー関数
     //更新
     void UpdateSpellCast(void) override;     //詠唱中
-    void UpdateMagicAttack(void) override;        //攻撃
+    void UpdateMagicAttack(void) override;   //攻撃
 
     //遷移
     void ChangeSpellCast(void) override;     //詠唱中
-    void ChangeMagicAttack(void) override;        //攻撃
+    void ChangeMagicAttack(void) override;   //攻撃
 #pragma endregion
 };
 

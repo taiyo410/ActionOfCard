@@ -297,22 +297,20 @@ protected:
 	//移動量更新条件の移動ラインの長さ
 	static constexpr float MOVE_LINE_Y_CHECK_VALUE = 1.5f;
 
-	//中心からのZオフセット
-	static constexpr float CENTER_POS_Z_OFFSET = 600.0f;
-
 	//キャラステータスのデータパス
 	const std::string PLAYER_STATUS_DATA = "Player";	//プレイヤー
 	const std::string ENEMY_STATUS_DATA = "Enemy";		//敵
 #pragma endregion
 
 #pragma region 外部ファイル読み込み
+	//使用するモデル
+	ResourceManager::SRC useModelSrc_= ResourceManager::SRC::NONE;		
 	STATUS maxStatus_;						//ステータス最大値
-	ResourceManager::SRC useModelSrc_;		//使用するモデル
-	VECTOR localDeg_;						//ローカル回転
-	VECTOR localPos_;						//ローカル座標
-	float modelScl_;						//モデルの大きさ
-	int spineFrameNo_;						//腰のボーン番号
-	VECTOR battleStartPos_;					//戦闘開始時のスタート座標		
+	VECTOR localDeg_{};						//ローカル回転
+	VECTOR localPos_{};						//ローカル座標
+	float modelScl_=0.0f;					//モデルの大きさ
+	int spineFrameNo_ = 0;					//腰のボーン番号
+	VECTOR battleStartPos_ = {};			//戦闘開始時のスタート座標		
 #pragma endregion
 
 #pragma region メンバー変数
@@ -343,7 +341,6 @@ protected:
 	VECTOR movedPos_;						//移動後座標
 	VECTOR moveDiff_;						//移動前座標
 	VECTOR movePow_;						// 移動量
-
 	ROTATION charaRot_;						//角度関連
 	STATUS status_;							//ステータス
 	UPDATE_PHASE phase_;					//更新フェーズ

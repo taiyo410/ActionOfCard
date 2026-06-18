@@ -48,44 +48,28 @@ public:
 
 protected:
 
-    //ジャンプ溜め中のカード出した回数
-    static constexpr int JAMP_CHARGE_CARD_NUM_MAX = 3;
-
-    //カードデッキ
-    CardPresenter& cardPresent_;
-
+#pragma region メンバー変数
+    std::unique_ptr<EffectController>effect_;    //エフェクトコントローラ
+    CardPresenter& cardPresent_;    //カードデッキ
     //カードアクション関数ポインタ
     std::function<void(void)> cardActFunc_;
-
     //アタックのQueue配列
     std::queue<std::function<void(void)>>cardFuncs_;
+    bool isCombo_;          //コンボフラグ
+    bool isDuelWait_;       //デュエルモードでの待機中フラグ　true:待機中
+    VECTOR atkPos_;         //攻撃座標
+    int atkAnim_;           //攻撃アニメーション
+#pragma endregion
 
-    //エフェクトコントローラ
-    std::unique_ptr<EffectController>effect_;
-
-    //コンボフラグ
-    bool isCombo_;
-
-    //デュエルモードでの待機中フラグ　true:待機中
-    bool isDuelWait_;
-
-    //攻撃座標
-    VECTOR atkPos_;
-
-    //攻撃アニメーション
-	int atkAnim_;
-
-
+#pragma region メンバー関数
     //攻撃のステータスロード
     void LoadAttackStatus(const nlohmann::json& _jsonData, ATK_STATUS& _atkStatus);
 
     //攻撃モーション
-    void AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag,const VECTOR& _localPos);
+    void AttackMotion(const ATK_STATUS& _status, const Collider::TAG& _attackTag, const VECTOR& _localPos);
 
-
-
-	//負けて攻撃が終了
-	void FinishFailureAttack(const Collider::TAG _attackCol);
+    //負けて攻撃が終了
+    void FinishFailureAttack(const Collider::TAG _attackCol);
 
     //攻撃情報をセット
     void SetAtk(const ATK_STATUS& _actType);
@@ -93,7 +77,8 @@ protected:
     //コンボアクション遷移(あれば実装する)
     virtual void ChangeComboAction(void) {};
 
-	//コンボ入力受付
-	void ComboInput(void);
+    //コンボ入力受付
+    void ComboInput(void);
+#pragma endregion
 };
 

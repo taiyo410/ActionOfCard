@@ -22,36 +22,6 @@ class Enemy :public CharacterBase
 
 public:
 
-	//敵のサイズ
-	static constexpr int RADIUS = 25; 
-
-	//プレイヤーのローカル角度
-	static constexpr float MODEL_LOCAL_DEG = 180.0f;
-
-	//敵の大きさの倍率
-	static constexpr float MODEL_SIZE_MULTIPLITER = 5.0f;
-
-	//敵の大きさ
-	static constexpr VECTOR MODEL_SCL = { MODEL_SIZE_MULTIPLITER,MODEL_SIZE_MULTIPLITER,MODEL_SIZE_MULTIPLITER };
-
-	//カード最大枚数
-	static constexpr int CARD_NUM_MAX = 20;
-
-	//アニメーション速度
-	static constexpr float ANIM_SPEED = 10.0f;
-
-	//咆哮アニメーション速度
-	static constexpr float ROAR_ANIM_SPEED = 30.0f;
-
-	//咆哮アニメーション咆哮開始位置
-	static constexpr float ROAR_ANIM_START_ANIM = 50.0f;
-
-	//咆哮アニメーション咆哮終了位置
-	static constexpr float ROAR_ANIM_END_ANIM = 127.0f;
-
-	//カメラシェイク強さ
-	static constexpr float CAM_SHAKE_LIMIT = 10.0f;
-
 	/// @brief デッキの取得
 	/// @param  
 	/// @return 
@@ -96,31 +66,26 @@ private:
 	void DrawDebug(void);
 #endif // _DEBUG
 
-#pragma region 定数
+#pragma region メンバー定数
 	//敵番号(デッキで判定する用)
 	static constexpr int ENEMY_NUM = 1;
 
 	//Enemyの文字列
 	const std::string ENEMY_STR = "Enemy";
-
-	//倒れるエフェクトのスケール
-	static constexpr float DEATH_EFF_SCL = 100.0f;
-	static constexpr VECTOR DEATH_EFF_SCL_VEC = { DEATH_EFF_SCL,DEATH_EFF_SCL,DEATH_EFF_SCL };
-
-	//爆発発生アニメステップ
-	static constexpr float DEATH_BLAST_ANIM_STEP = 93.0f;
 #pragma endregion
 
 #pragma region 外部ファイル読み込み
-	int chestFrameNum_;				//胸のフレーム番号
-	float deathEffScl_;				//死亡エフェクト
-	float deathStartAnimStep_;		//死亡エフェクトの発生アニメステップ
+	int chestFrameNum_ = 0;							//胸のフレーム番号
+	float deathEffectStartAnimStep_ = 0.0f;			//死亡エフェクトの発生アニメステップ
+	VECTOR deathEffectScale_ = {};					//死亡エフェクトサイズの倍率
+	float roarStartAnimStep_ = 0.0f;				//咆哮開始アニメーションステップ
+	float roarEndAnimStep_ = 0.0f;					//咆哮終了アニメーションステップ
+	float roarCameraShakeLimit_ = 0.0f;				//咆哮時のカメラシェイク
 #pragma endregion
 
 #pragma region メンバー変数
 	//咆哮アニメーション
 	AnimationController::ANIMATION_VARIABLE roarAnim_;
-	float modelScl_;	//敵のスケール(死亡時のエフェクトスケールダウン用)
 	bool isRoar_;		//咆哮状態かどうか
 #pragma endregion
 
@@ -146,5 +111,4 @@ private:
 	//クリア演出に変更
 	void ChangeUpdateClearDirection(void)override;
 #pragma endregion
-
 };
