@@ -1,11 +1,11 @@
 ﻿#include<algorithm>
-#include "../../../Common/Quaternion.h"
-#include "../../../Utility/Utility3D.h"
-#include"Model.h"
-#include"Cube.h"
-#include"Capsule.h"
-#include"Line.h"
-#include"Sphere.h"
+#include "Common/Quaternion.h"
+#include "Utility/Utility3D.h"
+#include"./Model.h"
+#include"./Cube.h"
+#include"./Capsule.h"
+#include"./Line.h"
+#include"./Sphere.h"
 
 //***************************************************
 //球

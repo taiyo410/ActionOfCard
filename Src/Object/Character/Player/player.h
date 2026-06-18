@@ -2,10 +2,9 @@
 #include <map>
 #include <functional>
 #include <memory>
-//#include"../../Character/Player/InputController.h"
-#include"../../Card/CardBase.h"
-#include "../Base/CharacterBase.h"
-#include "../Action/ActionController.h"
+#include "Object/Card/CardBase.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Action/ActionController.h"
 
 #define DEBUG_ON
 class AnimationController;
@@ -13,22 +12,12 @@ class ActionController;
 class CardDeck;
 class InputController;
 class Camera;
-class Geometry;
-class Cupsule;
-class Line;
 class PlayerOnHit;
 class PlayerCardUI;
 class Weapon;
 class ModelMaterial;
 class ModelRenderer;
 class PlayerHpUI;
-class Idle;
-class Run;
-class Jump;
-class React;
-class Dodge;
-
-
 class EffectController;
 
 class Player :public CharacterBase
@@ -94,11 +83,9 @@ private:
 #pragma region メンバー変数
 	std::weak_ptr<Camera>camera_;			//カメラ
 	std::unique_ptr<Weapon>weapon_;			//武器オブジェクト
-
 	InputManager::CONTROLL_TYPE cntl_;		//入力デバイス
-	InputManager::JOYPAD_NO padNum_;	//ゲームパッド番号
-
-	int playerNum_;			//プレイヤー番号
+	InputManager::JOYPAD_NO padNum_;		//ゲームパッド番号
+	int playerNum_;							//プレイヤー番号
 #pragma endregion
 
 #pragma region メンバー関数
@@ -127,7 +114,8 @@ private:
 
 	//当たり判定初期化
 	void MakeColliderGeometry(void) override;
-	void ChangeUpdateOverDirection(void) override;//ゲームオーバーに遷移
+
+	//ゲームオーバーに遷移
+	void ChangeUpdateOverDirection(void) override;
 #pragma endregion
 };
-

@@ -1,5 +1,5 @@
-#include "../pch.h"
-#include "PlayerCardMagicBase.h"
+#include "pch.h"
+#include "./PlayerCardMagicBase.h"
 
 PlayerCardMagicBase::PlayerCardMagicBase(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
 	PlayerCardAttackBase(_actCntl, _charaObj, _deck)

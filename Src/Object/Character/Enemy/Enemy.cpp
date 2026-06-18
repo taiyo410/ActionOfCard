@@ -1,17 +1,17 @@
-#include"../Utility/Utility3D.h"
+#include "Utility/Utility3D.h"
+#include "Utility/UtilityJson.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Object/Common/EffectController.h"
+#include "Object/Card/CardDeck.h"
+#include "Object/Character/Action/ActionController.h"
 #include "./EnemyOnHit.h"
 #include "./EnemyRock.h"
-#include "../Enemy/EnemyLogic.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../../Card/CardDeck.h"
-#include "../Object/Common/EffectController.h"
-#include "../Action/ActionController.h"
-#include "Enemy.h"
+#include "./EnemyLogic.h"
+#include "./Enemy.h"
 
-Enemy::Enemy(void):
-	modelScl_(MODEL_SIZE_MULTIPLITER)
+Enemy::Enemy(void)
 {
 	objectName_ = ENEMY_STR;
 	characterType_ = CHARACTER_TYPE::ENEMY;
@@ -46,7 +46,7 @@ void Enemy::UpdateClearDirectionCharacter(void)
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, chestFrameNum_);
 	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, 0, effPos);
 	effect_->Update();
-	if (animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= DEATH_BLAST_ANIM_STEP)
+	if (animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= deathEffectStartAnimStep_)
 	{
 		if (modelScl_ <= 0.0f)
 		{
@@ -78,21 +78,23 @@ void Enemy::DrawCharacter(void)
 
 void Enemy::Draw2D(void)
 {
-
 #ifdef _DEBUG
 	DrawDebug();
 #endif // _DEBUG
 }
+
 void Enemy::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	onHit_->OnHitUpdate(_hitCol);
 }
+
 void Enemy::MoveDirFromInput(void)
 {
 	//入力クラスから角度を取得
 	VECTOR getDir = logic_->GetDir();
 	charaRot_.dir_ = getDir;
 }
+
 void Enemy::SetGoalRotate(void)
 {
 	Quaternion axis= Quaternion::Euler
@@ -117,12 +119,12 @@ void Enemy::UpdateRoarDirection(void)
 		isRoar_ = false;
 		animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::ROAR_ATK), roarAnim_);
 		float roarAnimStep = animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ROAR_ATK));
-		const float ROAR_TIME = ROAR_ANIM_END_ANIM - ROAR_ANIM_SPEED;
-		if (roarAnimStep >= ROAR_ANIM_START_ANIM)
+		const float ROAR_TIME = roarEndAnimStep_ - roarStartAnimStep_;
+		if (roarAnimStep >= roarStartAnimStep_)
 		{
 			//カメラシェイク
-			float t = (roarAnimStep - ROAR_ANIM_START_ANIM) / ROAR_TIME;
-			scnMng_.GetCamera().lock()->SetShakeStatus(t, CAM_SHAKE_LIMIT);
+			float t = (roarAnimStep - roarStartAnimStep_) / ROAR_TIME;
+			scnMng_.GetCamera().lock()->SetShakeStatus(t, roarCameraShakeLimit_);
 			scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::SHAKE);
 
 			//咆哮状態にする
@@ -143,7 +145,7 @@ void Enemy::ChangeUpdateClearDirection(void)
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_FOOT_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
-	effect_->Play(EffectController::EFF_TYPE::E_DEATH, effPos, trans_.quaRot, DEATH_EFF_SCL_VEC);
+	effect_->Play(EffectController::EFF_TYPE::E_DEATH, effPos, trans_.quaRot, deathEffectScale_);
 	animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
 	CharacterBase::ChangeUpdateClearDirection();
 }
@@ -168,6 +170,8 @@ void Enemy::LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _animVar)
 	if (_animVar.name == "Death")
 	{
 		deathAnim_ = _animVar.animVariable;
+		deathEffectScale_ =UtilityJson::GetLoadVector3("deathEffectScale", _animVar.jsonData);							//死亡エフェクト
+		deathEffectStartAnimStep_ = _animVar.jsonData.value("deathEffectStartAnimStep",0.0f);
 	}
 	else if (_animVar.name == "Idle")
 	{
@@ -176,6 +180,9 @@ void Enemy::LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _animVar)
 	else if (_animVar.name == "Roar")
 	{
 		roarAnim_ = _animVar.animVariable;
+		roarStartAnimStep_ = _animVar.jsonData.value("roarStartAnimStep", 0.0f);
+		roarEndAnimStep_ = _animVar.jsonData.value("roarEndAnimStep", 0.0f);
+		roarCameraShakeLimit_ = _animVar.jsonData.value("cameraShakeLimit", 0.0f);
 	}
 }
 

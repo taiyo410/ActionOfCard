@@ -33,10 +33,10 @@ public:
 private:
 
 #pragma region 外部ファイル読み込み
-    float chargeAnimSpd_;       //攻撃3段階目のアニメーション速度
-    float attackLerpTime_;      //アニメスピード保管時間
-    float cameraShakeLimit_;    //カメラシェイクの強さ
-    float attackEndCnt_;        //攻撃終了後の後隙
+    float chargeAnimSpd_ = 0.0f;       //攻撃3段階目のアニメーション速度
+    float attackLerpTime_ = 0.0f;      //アニメスピード保管時間
+    float cameraShakeLimit_ = 0.0f;    //カメラシェイクの強さ
+    float attackEndTime_ = 0.0f;        //攻撃終了後の後隙
 #pragma endregion
 
 #pragma region メンバー変数

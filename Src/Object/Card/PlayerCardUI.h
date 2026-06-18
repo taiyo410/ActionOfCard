@@ -54,58 +54,15 @@ public:
 
 private:
 
-	//楕円の半径
-	static constexpr float RADIUS_X = 186.0f;	//横半径
-	static constexpr float RADIUS_Y = 214.0f;	//縦半径
-
+#pragma region メンバー定数
 	//見せるカード枚数
 	static constexpr int VISIBLE_CARD_MAX = 6;
-
-	//カード角度間隔
-	static constexpr float VISIBLE_ANGLE_OFFSET = 22.6f;
 
 	//先頭に追加するときの戻る枚数
 	static constexpr int PREV_CARD_COUNT = 2;
 
 	//現在カードの前にある枚数
 	static constexpr int CARDS_BEFORE_CURRENT = 1;
-
-	//始点角度
-	static constexpr float START_ANGLE = 0.0f;
-	//終点角度
-	static constexpr float END_ANGLE = 135.0f;
-
-	//カード角度関連
-	static constexpr int ARROUND_NUM = 16;			//一周当たりの枚数		
-	static constexpr int ARROUND_NUM_PER_QUAD = ARROUND_NUM / 4;//90度当たりの枚数
-	static constexpr float ARROUND_PER_DEG = 360.0f / ARROUND_NUM;	//１枚当たりの角度
-	static constexpr float ARROUND_PER_RAD = ARROUND_PER_DEG * DX_PI_F / 180.0f;//ラジアン変換
-	static constexpr float ARROUND_PER_QUAD_DEG = ARROUND_PER_DEG * ARROUND_NUM_PER_QUAD;//90度当たりの枚数
-	static constexpr float ARROUND_PER_QUAD_RAD = ARROUND_PER_QUAD_DEG * DX_PI_F / 180.0f;//90度当たりの枚数
-
-	//バーの色(明るい緑)
-	static constexpr FLOAT4 BAR_LIGHT_GREEN = { 0.2f, 0.6f, 1.0f,0.0f };
-
-	//バーの色(青)
-	static constexpr FLOAT4 BAR_BLUE = { 0.2f, 1.0f, 0.4f,0.0f };
-
-	//ゲージ座標
-	static constexpr Vector2F BAR_POS = { 30.0f,Application::SCREEN_SIZE_Y - 70 };
-
-	//ゲージの大きさ
-	static constexpr float BAR_SCALE = 0.1f;
-
-	//マスクサイズ
-	static constexpr Vector2F BAR_SIZE = { 1095 * BAR_SCALE,618 * BAR_SCALE };
-
-	//ゲージ背景位置
-	static constexpr Vector2F BAR_BG_POS = { BAR_POS.x - 20.0f,BAR_POS.y - 40.0f };
-
-	//ゲージサイズ
-	static constexpr Vector2F BAR_BG_SIZE = { BAR_SIZE.x + 40.0f,BAR_SIZE.y + 70.0f };
-
-	//弾かれる前のゴール座標
-	static constexpr Vector2F REACT_GOAL_CARD_POS = {-200.0f, Application::SCREEN_HALF_Y + 500.0f };
 
 	//カード残り枚数ゲージシェーダ定数バッファサイズ
 	static constexpr int CARD_NUM_GAUGE_CONST_BUF_SIZE = 3;
@@ -116,75 +73,60 @@ private:
 	//選択カード番号
 	static constexpr int SELECT_CARD_NO = 1;
 
-	//フォントサイズ
-	static constexpr int FONT_SIZE = 32;
-	static constexpr int RELOAD_FONT_SIZE = 20;
+	//カード角度関連
+	static constexpr int ARROUND_NUM = 16;			//一周当たりの枚数		
+	static constexpr int ARROUND_NUM_PER_QUAD = ARROUND_NUM / 4;//90度当たりの枚数
+	static constexpr float ARROUND_PER_DEG = 360.0f / ARROUND_NUM;	//１枚当たりの角度
+	static constexpr float ARROUND_PER_RAD = ARROUND_PER_DEG * DX_PI_F / 180.0f;//ラジアン変換
+	static constexpr float ARROUND_PER_QUAD_DEG = ARROUND_PER_DEG * ARROUND_NUM_PER_QUAD;//90度当たりの枚数
+	static constexpr float ARROUND_PER_QUAD_RAD = ARROUND_PER_QUAD_DEG * DX_PI_F / 180.0f;//90度当たりの枚数
 
-	//リロード文字列のセンターからのオフセット
-	static constexpr float RELOAD_STR_OFF_Y = 30.0f;
+#pragma endregion
 
-	//リロード文字列
-	std::wstring RELOAD_STR = L"RELOAD";
+#pragma region 外部ファイル読み込み
+	Vector2F revolverEllipseRadius_{};				//リボルバー楕円の半径
+	FLOAT4 cardNumGaugeLeftCol_{};					//カード枚数ゲージの左側の色
+	FLOAT4 cardNumGaugeRightCol_{};					//カード枚数ゲージ右側の色
+	Vector2F cardNumGaugePos_{};					//カード残り枚数のゲージ
+	Vector2F cardNumGaugeSize_{};					//カード枚数ゲージサイズ
+	Vector2F cardNumGaugeBGImgPos_{};				//カード枚数ゲージの背景の座標
+	Vector2F cardNumGaugeBGImgSize_{};				//カード枚数ゲージの背景のサイズ
+	Vector2F cardReactGoalCardPos_{};				//カード弾きの終点座標
+	Vector2F revolverArrowLPos_{};					//リボルバーの左矢印UI座標
+	Vector2F revolverArrowRPos_{};					//リボルバーの右矢印UI座標
+	Vector2F revolverArrowSize_{};					//リボルバーの矢印サイズ
+	float revolverArrowLAngle_ = 0.0f;				//リボルバー左矢印の傾け角度
+	float revolverArrowRAngle_ = 0.0f;				//リボルバー右矢印の傾け角度
+	float revolverButtonSize_ = 0.0f;				//リボルバーボタンサイズ
+	float revolverArrowScale_ = 0.0f;				//リボルバーの大きさ倍率
+	float revolverButtonFromArrowOffset_ = 0.0f;	//リボルバーボタンから矢印UIのオフセット
+	int reloadFontSize_ = 0;						//リロード文字列のフォントサイズ
+	Vector2F cardNumStringPos_{};					//カード残り枚数(文字)の座標
+	float reloadStrOffsetYFromCard_=0.0f;			//リロードの文字列座標のオフセット
+	std::wstring reloadStr_=L"";					//リロードの文字列
+	int cardNumFontSize_ = 0;						//カード残り枚数のフォントサイズ
+#pragma endregion
 
-	//フォントの輪郭幅
-	static constexpr int FONT_EDGE_SIZE = 2;
-	static constexpr Vector2F FONT_POS = { BAR_POS.x,550.0f };
-
-	//カードリボルバー矢印座標
-	static constexpr Vector2F REVOLVER_ARROW_SIZE = { 79.9f,68.0f };
-	static constexpr float REVOLVER_ARROW_SCL = 0.8f;
-
-	//スケールを含めた矢印サイズ
-	static constexpr Vector2F REVOLVER_ARROW_SCL_SIZE = 
-	{ REVOLVER_ARROW_SIZE.x * REVOLVER_ARROW_SCL, REVOLVER_ARROW_SIZE.y * REVOLVER_ARROW_SCL, };
-
-	//矢印回転角度
-	static constexpr float REVOLVER_ARROW_L_ANGLE = 40.0f;
-
-	//矢印座標
-	static constexpr Vector2F REVOLVER_ARROW_L_POS = { 57.0f,331.0f };
-	static constexpr Vector2F REVOLVER_ARROW_R_POS = { 128.0f,331.0f };
-
-	//右矢印回転角度
-	static constexpr float REVOLVER_ARROW_R_ANGLE = 321.0f;
-
-	//ボタンサイズ
-	static constexpr float REVOLVER_BTN_SIZE = 60.0f;
-
-	//ボタン座標と矢印の間隔
-	static constexpr float REVOLVER_BTN_ARROW_OFFSET = 10.0f;
-
-	//半径
-	Vector2F radius_;
+#pragma region メンバー変数
+	//カード残り枚数のゲージ
+	std::unique_ptr<PixelMaterial> cardGaugePSMaterial_;
+	std::unique_ptr<PixelRenderer> cardGaugePSRenderer_;
 
 	//見せるカード
-	std::list<std::shared_ptr<CardUIController>>visibleCards_;				
-
+	std::list<std::shared_ptr<CardUIController>>visibleCards_;
 	//リロード用の現在のカードイテレータ
-	std::list<std::shared_ptr<CardUIController>>::iterator reloadAnimCurr_;	
+	std::list<std::shared_ptr<CardUIController>>::iterator reloadAnimCurr_;
 
-	//リロード終了
-	bool isReloadEnd_;
+	bool isReloadEnd_;		//リロード終了
+	float cardNumPer_;		//残りカード枚数ゲージ
+	int cardNumGaugeImg_;	//残りカード枚数マスク画像
+	int cardNumBgImg_;		//残りカード枚数ゲージ背景
+	int fontHandle_;		//フォントハンドル
+	int reloadFontHandle_;	//リロードのフォントハンドル
+	int imgRevolverArrow_;	//矢印
+#pragma endregion
 
-	//残りカード枚数ゲージ
-	float cardNumPer_;
-
-	//残りカード枚数ゲージ
-	int cardNumFrameImg_;
-
-	//残りカード枚数マスク画像
-	int cardNumMaskImg_;
-
-	//残りカード枚数ゲージ背景
-	int cardNumBgImg_;
-
-	//フォント
-	int fontHandle_;
-	int reloadFontHandle_;
-
-	//矢印
-	int imgRevolverArrow_;
-
+#pragma region メンバー関数
 	//カード状態遷移
 	void ChangeNone(void)override;			//通常
 	void ChangeLeft(void)override;			//左に移動
@@ -201,6 +143,9 @@ private:
 	void UpdateReloadWait(void)override;	//リロード待機(リロードゲージのチャージ)
 	void UpdateReload(void);				//リロード
 
+	//Jsonからパラメータ取得
+	void LoadJsonData(void);
+
 	//すべてのカードの移動
 	void MoveCardAll(const float& _moveTImeMax);
 
@@ -209,7 +154,7 @@ private:
 
 	//角度を現在角度に設定
 	void SetBasePosVisibleCards(void);
-	
+
 	//見せるカードの更新
 	void UpdateVisibleCard(void);
 
@@ -229,13 +174,10 @@ private:
 	void MoveUpDownVisibleCards(void);
 
 	//矢印とボタン描画
-	void DrawArrowAndBotton(void);
+	void DrawArrowAndButton(void);
 
 	//現在選択中のカードの配列を取得
 	std::list<std::shared_ptr<CardUIController>>::iterator GetVisibleCurrentIt(void);
 	std::list<std::shared_ptr<CardUIController>>::iterator GetSearchHandIt(std::shared_ptr<CardUIController> target);
-
-	//カード残り枚数のゲージ
-	std::unique_ptr<PixelMaterial> cardGaugePSMaterial_;
-	std::unique_ptr<PixelRenderer> cardGaugePSRenderer_;
+#pragma endregion
 };

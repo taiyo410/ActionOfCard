@@ -1,6 +1,6 @@
-#include "Utility3D.h"
 #include <cmath>
 #include "Utility2D.h"
+#include "Utility3D.h"
 
 VECTOR Utility3D::RotXZPos(const VECTOR& centerPos, const VECTOR& radiusPos, float rad)
 {

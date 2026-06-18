@@ -37,13 +37,14 @@ public:
 
 public:
 
-    //足音間隔
-	float footSECnt_;
+#pragma region 外部ファイル読み込み
+    float  footSeDis_;    //足音再生間隔
+#pragma endregion
 
-	//足音音源
-	ResourceManager::SRC footSESrc_;
+#pragma region メンバー変数
+    float footSECnt_;                   //足音間隔
+    ResourceManager::SRC footSESrc_;    //足音音源
+#pragma endregion
 
-    //足音再生間隔
-	float  footSeDis_;
 };
 

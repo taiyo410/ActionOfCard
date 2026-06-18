@@ -1,15 +1,15 @@
 #include "../pch.h"
-#include "../../../Common/AnimationController.h"
-#include "../Utility/Utility3D.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../ActionController.h"
-#include "../../Base/CharacterBase.h"
-#include "../Object/Common/EffectController.h"
-#include "../Object/Character/Enemy/EnemyRock.h"
-#include "EnemyCardAttackStomp.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Object/Common/EffectController.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/CHaracter/Action/ActionController.h"
+#include "Object/CHaracter/Base/CharacterBase.h"
+#include "Object/Character/Enemy/EnemyRock.h"
+#include "./EnemyCardAttackStomp.h"
 
 EnemyCardAttackStomp::EnemyCardAttackStomp(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresent):
 	EnemyCardAttackBase(_actCntl, _charaObj, _cardPresent)
@@ -130,7 +130,6 @@ void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	if (_data.name != "StompAttack")return;
 
 	animVar_ = _data.animVariable;
-
 	const auto& data = _data.jsonData;
 	LoadAttackStatus(data, atk_);
 	cameraShakeTime_ = data.value("cameraShakeTime", 0.0f);
@@ -141,6 +140,7 @@ void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
 	for (int i = 0; i < rockNum_; i++)
 	{
 		std::shared_ptr<EnemyRock> rock = std::make_shared<EnemyRock>(i, atk_.pos);
+		rock->LoadRockData(data);
 		rock_.emplace_back(rock);
 	}
 }

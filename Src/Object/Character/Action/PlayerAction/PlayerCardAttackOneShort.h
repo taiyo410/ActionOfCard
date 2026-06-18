@@ -1,5 +1,7 @@
 #pragma once
+
 #include "./PlayerCardAttackBase.h"
+
 class PlayerCardAttackOneShort :
     public PlayerCardAttackBase
 {

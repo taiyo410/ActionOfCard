@@ -1,6 +1,6 @@
-#include "FontManager.h"
 #include <DxLib.h>
-#include "../Application.h"
+#include "Application.h"
+#include "FontManager.h"
 
 const std::wstring FontManager::FONT_DOT = L"ベストテンDOT";
 const std::wstring FontManager::FONT_BOKUTATI = L"ぼくたちのゴシック";

@@ -5,8 +5,8 @@
 #include <string>			
 #include <vector>			
 #include <functional>
-#include"InputManager.h"
-#include "../../Template/Singleton.h"
+#include "InputManager.h"
+#include "Template/Singleton.h"
 
 //“ü—ÍƒCƒxƒ“ƒg
 enum class INPUT_EVENT

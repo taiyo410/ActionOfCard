@@ -1,30 +1,24 @@
-#include <DxLib.h>
-#include <cmath>
-#include <ranges>
-#include <iostream>
-#include <fstream>
-#include <nlohmann/json.hpp>
-#include "../Utility/UtilityCommon.h"
-#include "../Utility/UtilityDraw.h"
-#include"../Manager/Generic/DataBank.h"
-#include"../Manager/Generic/InputManager.h"
-#include"../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/ButtonUIManager.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Resource/FontManager.h"
-#include "../Renderer/PixelMaterial.h"
-#include "../Renderer/PixelRenderer.h"
-#include "../Card/CardUIController.h"
-#include "../Card/CardSystem.h"
+#include "pch.h"
+#include "Utility/UtilityCommon.h"
+#include "Utility/UtilityDraw.h"
+#include "Utility/UtilityJson.h"
+#include "Manager/Generic/DataBank.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/ButtonUIManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Manager/Resource/FontManager.h"
+#include "Renderer/PixelMaterial.h"
+#include "Renderer/PixelRenderer.h"
+#include "Object/Card/CardUIController.h"
+#include "Object/Card/CardSystem.h"
 #include "PlayerCardUI.h"
 
 PlayerCardUI::PlayerCardUI(void):
-radius_({RADIUS_X,RADIUS_Y}),
 isReloadEnd_(false),
 reloadAnimCurr_(),
-cardNumFrameImg_(UtilityCommon::INITIAL_HANDLE),
-cardNumMaskImg_(UtilityCommon::INITIAL_HANDLE),
+cardNumGaugeImg_(UtilityCommon::INITIAL_HANDLE),
 cardNumBgImg_(UtilityCommon::INITIAL_HANDLE),
 fontHandle_(UtilityCommon::INITIAL_HANDLE),
 reloadFontHandle_(UtilityCommon::INITIAL_HANDLE),
@@ -38,7 +32,7 @@ PlayerCardUI::~PlayerCardUI(void)
 {
 	handCards_.clear();
 	visibleCards_.clear();
-	actions_.clear();
+	actionCards_.clear();
 	changeMoveState_.clear();
 	initialCards_.clear();
 }
@@ -46,33 +40,32 @@ PlayerCardUI::~PlayerCardUI(void)
 void PlayerCardUI::Load(void)
 {
 	CardUIBase::Load();
+	LoadJsonData();
 
 	//リソースのロード
 	atkCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_ATK_CARD_IMG).handleId_;
 	fireCardImg_ = resMng_.Load(ResourceManager::SRC::PLAYER_FIRE_CARD_IMG).handleId_;
 	thunderCardImg_=resMng_.Load(ResourceManager::SRC::PLAYER_THUNDER_CARD_IMG).handleId_;
-
 	reloadCardImg_ = resMng_.Load(ResourceManager::SRC::RELOAD_CARD_IMG).handleId_;
 	reloadGauge_ = resMng_.Load(ResourceManager::SRC::RELOAD_GAUGE).handleId_;
-	cardNumFrameImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_FRAME).handleId_;
-	cardNumMaskImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_MASK).handleId_;
-	fontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE,0);
-	reloadFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), RELOAD_FONT_SIZE,0);
+	cardNumGaugeImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE).handleId_;
+	fontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), cardNumFontSize_,0);
+	reloadFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), reloadFontSize_,0);
 	cardNumBgImg_ = resMng_.Load(ResourceManager::SRC::P_CARD_NUM_GAUGE_BACK).handleId_;
+
 	resMng_.Load(ResourceManager::SRC::CARD_MOVE_SE);
 	resMng_.Load(ResourceManager::SRC::CARD_BE_REFLECTED_SE);
 	resMng_.Load(ResourceManager::SRC::CARD_PUT_SE);
 	cardWinRes_ = ResourceManager::SRC::CARD_BREAK_SE;
 
 	imgRevolverArrow_ = resMng_.Load(ResourceManager::SRC::CARD_REVOLVER_L_ARROW).handleId_;
-
 }
 void PlayerCardUI::Init(void)
 {
 	cardGaugePSMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::HPBAR_PS);
 	cardGaugePSRenderer_ = std::make_unique<PixelRenderer>(*cardGaugePSMaterial_);
 
-	cardGaugePSMaterial_->AddTextureBuf(cardNumMaskImg_);
+	cardGaugePSMaterial_->AddTextureBuf(cardNumGaugeImg_);
 	changeMoveState_ = {
 		{CARD_SELECT::NONE, [this]() {ChangeNone(); } },
 		{CARD_SELECT::LEFT, [this]() {ChangeLeft(); } },
@@ -83,12 +76,12 @@ void PlayerCardUI::Init(void)
 	};
 
 	//マテリアル関連
-	cardGaugePSMaterial_->AddConstBuf(BAR_LIGHT_GREEN);
-	cardGaugePSMaterial_->AddConstBuf(BAR_BLUE);
+	cardGaugePSMaterial_->AddConstBuf(cardNumGaugeLeftCol_);
+	cardGaugePSMaterial_->AddConstBuf(cardNumGaugeRightCol_);
 	cardGaugePSMaterial_->AddConstBuf({ cardNumPer_,cardNumPer_,0.0f,0.0f });
 
 	//頂点作成
-	cardGaugePSRenderer_->MakeSquareVertex(BAR_POS, BAR_SIZE);
+	cardGaugePSRenderer_->MakeSquareVertex(cardNumGaugePos_, cardNumGaugeSize_);
 
 	//Jsonからカードデータを読み込む
 	LoadCardData();
@@ -118,7 +111,7 @@ void PlayerCardUI::Update(void)
 	cardGaugePSMaterial_->SetConstBuf(CARD_NUM_GAUGE_CONST_BUF_IDX, { cardNumPer_,cardNumPer_,0.0f,0.0f });
 
 	//弾かれるカードの大きさ補完
-	ReactMoveCard(REACT_GOAL_CARD_POS);
+	ReactMoveCard(cardReactGoalCardPos_);
 }
 
 void PlayerCardUI::Draw(void)
@@ -132,14 +125,20 @@ void PlayerCardUI::Draw(void)
 			continue;
 		}
 		card->Draw();
+
+		//リロードカードの描画
 		if (card->GetStatus().type == CardBase::CARD_TYPE::RELOAD)
 		{
 			card->DrawReloadGauge(reloadPer_);
 			Vector2F pos = card->GetCenterPos();
-			UtilityDraw::DrawStringCenter(static_cast<int>(pos.x), static_cast<int>(pos.y - RELOAD_STR_OFF_Y), RELOAD_STR, UtilityCommon::WHITE, reloadFontHandle_);
+			UtilityDraw::DrawStringCenter(static_cast<int>(pos.x)
+				, static_cast<int>(pos.y - reloadStrOffsetYFromCard_)
+				, reloadStr_, UtilityCommon::WHITE
+				, reloadFontHandle_);
 		}
 	}
 
+	//選択中のカードが隠れないように選択中のカードだけもう一度描画
 	if (handCurrent_ != handCards_.end())
 	{
 		(*handCurrent_)->DrawSelectCard();
@@ -148,27 +147,28 @@ void PlayerCardUI::Draw(void)
 		{
 			(*handCurrent_)->DrawReloadGauge(reloadPer_);
 			Vector2F pos = (*handCurrent_)->GetCenterPos();
-			UtilityDraw::DrawStringCenter(static_cast<int>(pos.x), static_cast<int>(pos.y - RELOAD_STR_OFF_Y), RELOAD_STR, UtilityCommon::WHITE, reloadFontHandle_);
+			UtilityDraw::DrawStringCenter(static_cast<int>(pos.x)
+				, static_cast<int>(pos.y - reloadStrOffsetYFromCard_)
+				, reloadStr_, UtilityCommon::WHITE, reloadFontHandle_);
 		}
 		//選択カード枠描画
 		(*handCurrent_)->SelectCardDrawFrame();
 	}
 
 	//カード残り枚数ゲージ背景の描画
-	DrawExtendGraphF(BAR_BG_POS.x, BAR_BG_POS.y, BAR_BG_POS.x + BAR_BG_SIZE.x, BAR_BG_POS.y + BAR_BG_SIZE.y, cardNumBgImg_, true);
+	Vector2F rightDownPos= cardNumGaugeBGImgPos_ + cardNumGaugeBGImgSize_;
+	DrawExtendGraphF(cardNumGaugeBGImgPos_.x, cardNumGaugeBGImgPos_.y, rightDownPos.x, rightDownPos.y, cardNumBgImg_, true);
 
 	//カード残り枚数ゲージの描画
 	cardGaugePSRenderer_->Draw();
 
-	//カード枚数ゲージのフレーム
-	DrawExtendGraphF(BAR_POS.x, BAR_POS.y, BAR_POS.x + BAR_SIZE.x, BAR_POS.y + BAR_SIZE.y, cardNumFrameImg_, true);
-
+	//カードの残り枚数
 	int handCardSize = static_cast<int>(handCards_.size());
 
 	//カードの残り枚数の描画
 	DrawFormatStringFToHandle(
-		FONT_POS.x,
-		FONT_POS.y,
+		cardNumStringPos_.x,
+		cardNumStringPos_.y,
 		UtilityCommon::RED,
 		fontHandle_,
 		L"%d",
@@ -179,7 +179,7 @@ void PlayerCardUI::Draw(void)
 	CardUIBase::Draw();
 	
 	//矢印とボタン描画
-	DrawArrowAndBotton();
+	DrawArrowAndButton();
 
 #ifdef _DEBUG
 	//DrawDebug();
@@ -198,7 +198,7 @@ void PlayerCardUI::InitCardUI(void)
 	//初めに配列を初期化
 	handCards_.clear();
 	visibleCards_.clear();
-	actions_.clear();
+	actionCards_.clear();
 
 	//手札にすべての初期札を入れる
 	for (auto& it : initialCards_)
@@ -362,10 +362,10 @@ void PlayerCardUI::ChangeDecision(void)
 		ChangeSelectState(CARD_SELECT::RELOAD_WAIT);
 		return;
 	}
-	actions_.emplace_back(*handCurrent_);
+	actionCards_.emplace_back(*handCurrent_);
 
 	//決定カウントをセット
-	for (auto& act : actions_)
+	for (auto& act : actionCards_)
 	{
 		//弾かれ状態の場合は飛ばす
 		if (act->GetState() == CardUIController::CARD_STATE::REACT)continue;
@@ -463,10 +463,10 @@ void PlayerCardUI::UpdateDecision(void)
 	cardMoveCnt_ -= DELTA;
 
 	//決定移動が終わったカードを探す
-	auto it = std::find_if(actions_.begin(), actions_.end(), [this](auto& act) {return act->GetDecisionCnt() > 0.0f; });
+	auto it = std::find_if(actionCards_.begin(), actionCards_.end(), [this](auto& act) {return act->GetDecisionCnt() > 0.0f; });
 
 	//終わっていたら、NONE状態へ
-	if(it==actions_.end())
+	if(it==actionCards_.end())
 	{
 		SetBasePosVisibleCards();
 		SetBasePosActionCards();
@@ -512,6 +512,45 @@ void PlayerCardUI::UpdateReload(void)
 			ChangeSelectState(CARD_SELECT::NONE);
 		}
 	}
+}
+
+void PlayerCardUI::LoadJsonData(void)
+{
+	const auto& jsonData = resMng_.Load(ResourceManager::SRC::UI_DATA).jsonData;
+	//要素がなければ処理を飛ばす
+	if (!jsonData.contains("PlayerCardUI"))return;
+	const auto& cardUIData = jsonData["PlayerCardUI"];
+
+	//以下読み込み
+	revolverEllipseRadius_ = UtilityJson::GetLoadVector2F("revolverEllipseRadius", cardUIData);
+	const auto& cardNumGaugeData = cardUIData["cardNumGauge"];
+	cardNumGaugePos_ = UtilityJson::GetLoadVector2F("pos", cardNumGaugeData);
+	cardNumGaugeLeftCol_ = UtilityJson::GetLoadColorF("leftColor", cardNumGaugeData);
+	cardNumGaugeRightCol_ = UtilityJson::GetLoadColorF("rightColor", cardNumGaugeData);
+	Vector2F cardNumGaugeDefaultSize = UtilityJson::GetLoadVector2F("defaultSize", cardNumGaugeData);
+	float cardNumGaugeSizeScale = cardNumGaugeData.value("scale", 0.0f);
+	cardNumGaugeSize_ = cardNumGaugeDefaultSize * cardNumGaugeSizeScale;
+	Vector2F barBGLocalPos = UtilityJson::GetLoadVector2F("barBackGroundLocalPos", cardUIData);
+	cardNumGaugeBGImgPos_ = cardNumGaugePos_ + barBGLocalPos;
+	Vector2F barBGImgSize = UtilityJson::GetLoadVector2F("barBackGroundSizeMargin", cardUIData);
+	cardNumGaugeBGImgSize_ = cardNumGaugeSize_ + barBGImgSize;
+	cardReactGoalCardPos_ = UtilityJson::GetLoadVector2F("reactGoalCardPos", cardUIData);
+	revolverArrowLPos_ = UtilityJson::GetLoadVector2F("revolverArrow_L_Pos", cardUIData);
+	revolverArrowRPos_= UtilityJson::GetLoadVector2F("revolverArrow_R_Pos", cardUIData);
+	Vector2F revolverArrowDefaultSize = UtilityJson::GetLoadVector2F("revolverArrowDefaultSize", cardUIData);
+	revolverArrowScale_ = cardUIData.value("revolverArrowScale", 0.0f);
+	revolverArrowSize_ = revolverArrowDefaultSize * revolverArrowScale_;
+	revolverArrowLAngle_ = cardUIData.value("revolverArrow_L_Angle", 0.0f);
+	revolverArrowRAngle_ = cardUIData.value("revolverArrow_R_Angle", 0.0f);
+	revolverButtonSize_ = cardUIData.value("revolverButtonSize", 0.0f);
+	revolverButtonFromArrowOffset_ = cardUIData.value("revolverButtonFromArrowOffset", 0.0f);
+	cardNumStringPos_ = UtilityJson::GetLoadVector2F("cardNumStringPos", cardUIData);
+	reloadStrOffsetYFromCard_ = cardUIData.value("reloadStringOffsetY", 0.0f);
+	std::string str= cardUIData.value("reloadString", "");
+	str = UtilityCommon::ConvertUtf8ToSJIS(str);
+	reloadStr_ = UtilityCommon::GetWStringFromString(str);
+	reloadFontSize_ = cardUIData.value("reloadFontSize", 0);
+	cardNumFontSize_ = cardUIData.value("cardNumFontSize", 0);
 }
 
 void PlayerCardUI::MoveCardAll(const float& _moveTImeMax)
@@ -563,7 +602,6 @@ void PlayerCardUI::UpdateVisibleCard(void)
 		visibleCards_.emplace_back(*endIt);
 	}
 }
-
 
 void PlayerCardUI::EraseHandCard(void)
 {
@@ -696,25 +734,25 @@ void PlayerCardUI::MoveUpDownVisibleCards(void)
 	}
 }
 
-void PlayerCardUI::DrawArrowAndBotton(void)
+void PlayerCardUI::DrawArrowAndButton(void)
 {
 
 	//リボルバー回転方向の左方向矢印の描画
-	DrawRotaGraphF(REVOLVER_ARROW_L_POS.x, REVOLVER_ARROW_L_POS.y
-		, REVOLVER_ARROW_SCL, UtilityCommon::Deg2RadF(REVOLVER_ARROW_L_ANGLE), imgRevolverArrow_, true);
+	DrawRotaGraphF(revolverArrowLPos_.x, revolverArrowLPos_.y
+		, revolverArrowScale_, UtilityCommon::Deg2RadF(revolverArrowLAngle_), imgRevolverArrow_, true);
 
 	//リボルバー回転方向の右方向矢印の描画
-	DrawRotaGraphF(REVOLVER_ARROW_R_POS.x, REVOLVER_ARROW_R_POS.y
-		, REVOLVER_ARROW_SCL, UtilityCommon::Deg2RadF(-REVOLVER_ARROW_L_ANGLE), imgRevolverArrow_, true,true,false);
+	DrawRotaGraphF(revolverArrowRPos_.x, revolverArrowRPos_.y
+		, revolverArrowScale_, UtilityCommon::Deg2RadF(-revolverArrowLAngle_), imgRevolverArrow_, true,true,false);
 
-	Vector2F btnPos = REVOLVER_ARROW_L_POS;
-	btnPos.y -= REVOLVER_ARROW_SCL_SIZE.y / 2 + REVOLVER_BTN_ARROW_OFFSET;
+	Vector2F btnPos = revolverArrowLPos_;
+	btnPos.y -= revolverArrowSize_.y / 2 + revolverButtonFromArrowOffset_;
 
 	//移動矢印の描画
-	ButtonUIManager::GetInstance().DrawFromCenter(ButtonUIManager::BTN_UI_TYPE::LBUTTON_NOPUSH, btnPos, REVOLVER_BTN_SIZE);
-	btnPos = REVOLVER_ARROW_R_POS;
-	btnPos.y -= REVOLVER_ARROW_SCL_SIZE.y / 2 + REVOLVER_BTN_ARROW_OFFSET;
-	ButtonUIManager::GetInstance().DrawFromCenter(ButtonUIManager::BTN_UI_TYPE::RBUTTON_NOPUSH, btnPos, REVOLVER_BTN_SIZE);
+	ButtonUIManager::GetInstance().DrawFromCenter(ButtonUIManager::BTN_UI_TYPE::LBUTTON_NOPUSH, btnPos, revolverButtonSize_);
+	btnPos = revolverArrowRPos_;
+	btnPos.y -= revolverArrowSize_.y / 2 + revolverButtonFromArrowOffset_;
+	ButtonUIManager::GetInstance().DrawFromCenter(ButtonUIManager::BTN_UI_TYPE::RBUTTON_NOPUSH, btnPos, revolverButtonSize_);
 
 }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Base/CardActionBase.h"
+#include "Object/Character/Base/CardActionBase.h"
 class PlayerCardReload :
     public CardActionBase
 {
@@ -39,10 +39,10 @@ public:
 public:
 
 #pragma region 外部ファイル読み込み
-    float reloadTime_;              //リロードにかかる時間
-    float reloadEffScl_;            //リロードエフェクトの大きさ
-    float animLoopStartStep_;       //アニメーションループスタートステップ
-    float animLoopEndStep_;         //アニメーションループ終了ステップ
+    float reloadTime_ = 0.0f;              //リロードにかかる時間
+    float reloadEffScl_ = 0.0f;            //リロードエフェクトの大きさ
+    float animLoopStartStep_ = 0.0f;       //アニメーションループスタートステップ
+    float animLoopEndStep_ = 0.0f;         //アニメーションループ終了ステップ
 #pragma endregion
 
 #pragma region メンバー変数

@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <nlohmann/json.hpp>
-#include "../../Template/Singleton.h"
+#include "Template/Singleton.h"
 #include "Resource.h"
 
 class ResourceManager : 
@@ -55,24 +55,24 @@ public:
 		GAME_CLEAR_IMG,
 		PLAYER_ATK_CARD_IMG,		//番号なしアタックカード
 		PLAYER_FIRE_CARD_IMG,		//番号なしファイアカード
-		PLAYER_THUNDER_CARD_IMG,		//番号なしサンダーカード
+		PLAYER_THUNDER_CARD_IMG,	//番号なしサンダーカード
 		ENEMY_ATK_CARD_IMG,			//敵番号なしアタックカード
 		RELOAD_CARD_IMG,			//リロードカード
 		RELOAD_GAUGE,				//リロードゲージ
-		P_HP_ARC_OUTLINE,			//円形アウトライン
-		P_HP_LINE_OUT_LINE,			//線形アウトライン
-		P_CARD_NUM_GAUGE_MASK,		//カード枚数ゲージマスク
-		P_CARD_NUM_GAUGE_FRAME,		//カード枚数ゲージフレーム
+		P_CARD_NUM_GAUGE,			//カード枚数ゲージマスク
 		P_CARD_NUM_GAUGE_BACK,		//カード枚数ゲージ背景
-		E_HP_BAR_MASK,				//敵体力体力ゲージマスク
-		E_HP_BAR_FRAME,				//敵体力体力ゲージフレーム
-		E_HP_COVER,					//敵体力ゲージカバー
+		E_HP_BAR,					//敵体力体力ゲージマスク
 		SKIP_BUTTOM_MASK,			//スキップボタン画像
 		CARD_REVOLVER_L_ARROW,		//カードリボルバー回転方向の左矢印
 		INTENSIVE_LINE_1,			//集中線画像1(複数画像でアニメーション)
 		INTENSIVE_LINE_2,			//集中線画像2(複数画像でアニメーション)
+		REVERSE_FADE_MASK,			//色反転のマスク
+		WIN_ARROW_IMG,				//勝ち判定の矢印
+		LOSE_ARROW_IMG,				//負け判定のマスク
+		HIGHER_IMG,					//数字勝ち負けの大きい数を示す画像
+		LOWER_IMG,					//数字勝ち負けの小さい数を示す画像
 
-		//複数画像
+		//スプライト画像
 		NUMBERS_IMGS,				//カード番号
 		CONTROLLER_UI_IMGS,			//コントローラーのボタンUI
 
@@ -84,7 +84,7 @@ public:
 		RELOAD_EFF,					//リロードエフェクト
 		RELOAD_END_EFF,				//リロード終了エフェクト
 		FIRE_BALL_EFF,				//炎のエフェクト
-		THUNDER_EFF,				//炎のエフェクト
+		THUNDER_EFF,				//雷のエフェクト
 
 		//サウンド
 		//BGM
@@ -118,7 +118,9 @@ public:
 		CHARA_DATA,						//キャラクターデータ
 		DECK_DATA,						//デッキデータ
 		ACTION_DATA,					//アクションデータ
-		COLLISION_DATA,		//アニメーションデータ
+		COLLISION_DATA,					//当たり判定データ
+		UI_DATA,						//UIのパラメータデータ
+
 		//ピクセルシェーダ
 		STAGE_PS,					//ステージ
 		SKYDOME_PS,					//スカイドーム
@@ -127,6 +129,8 @@ public:
 		CARD_NORMAL_PS,				//通常カード
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
+		REVOLUTION_POSTEFF_PS,			//革命を起こした時のポストエフェクト
+		
 		//頂点シェーダ
 		STAGE_VS					//ステージ
 	};
@@ -139,9 +143,9 @@ public:
 
 	struct RESOURCE_COMMON_PARAM
 	{
-		ResourceData::TYPE type;
-		SRC src;					//素材名
-		std::wstring path;			//素材のパス
+		ResourceData::TYPE type = ResourceData::TYPE::NONE;		//タイプ	
+		SRC src = SRC::NONE;									//素材名
+		std::wstring path = L"";								//素材のパス
 	};
 
 	struct IMGS_PARAMETA

@@ -1,5 +1,5 @@
-#include "InputManager.h"
-#include "DataBank.h"
+#include "./InputManager.h"
+#include "./DataBank.h"
 
 
 void DataBank::Init(void)

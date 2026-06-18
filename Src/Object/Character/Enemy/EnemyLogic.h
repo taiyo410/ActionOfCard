@@ -1,6 +1,8 @@
 #pragma once
-#include "../Base/LogicBase.h"
-#include"../Object/Common/Transform.h"
+
+#include "Object/Common/Transform.h"
+#include "Object/Character/Base/LogicBase.h"
+
 class CharacterBase;
 
 class EnemyLogic :
@@ -8,17 +10,6 @@ class EnemyLogic :
 {
 
 public:
-
-	//CPUの思考ウェイト(高いほど出す頻度が高い)
-	static constexpr int NORMAL_WEIGHT = 60;	//通常攻撃
-	static constexpr int JUMP_WEIGHT = 30;		//ジャンプ攻撃
-
-
-	//攻撃の重み
-	struct ATTACK_WEIGHT {
-		int stomp = NORMAL_WEIGHT;
-		int jump = JUMP_WEIGHT;
-	};
 
 	/// @brief コンストラクタ
 	/// @param _myTrans 自身の情報
@@ -71,9 +62,6 @@ private:
 
 	//カード使用クールタイム
 	float cardCoolCnt_;
-
-	//攻撃の重み付け
-	ATTACK_WEIGHT weight_;
 
 	//硬直時間
 	float freezeCnt_;

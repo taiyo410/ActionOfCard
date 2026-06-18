@@ -1,14 +1,17 @@
-#include "../pch.h"
-#include "../Utility/Utility3D.h"
-#include "../Manager//Generic/SceneManager.h"
-#include "../ActionController.h"
-#include "../Object/Character/Base/CharacterBase.h"
-#include "../Object/Character/Player/PlayerMagicFIre.h"
-#include "../Object/Character/Base/LogicBase.h"
+#include "pch.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Base/LogicBase.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Player/PlayerMagicFIre.h"
 #include "PlayerCardMagicFire.h"
 
 PlayerCardMagicFire::PlayerCardMagicFire(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _deck):
-	PlayerCardMagicBase(_actCntl, _charaObj, _deck)
+	PlayerCardMagicBase(_actCntl, _charaObj, _deck),
+	actCnt_(),
+	fireLocalPos_(),
+	toTargetDir_()
 {
 	fireBall_ = std::make_shared<PlayerMagicFire>(atk_.pos, toTargetDir_);
 	useAnimNum_ = static_cast<int>(CharacterBase::ANIM_TYPE::MAGIC_FIRE);
@@ -34,9 +37,10 @@ void PlayerCardMagicFire::InitAttack(void)
 
 	//敵への方向をセット
 	toTargetDir_ = actionCtrl_.GetInput().GetToTargetDir();
-
 	actCnt_ = 0.0f;
-
+	//対象の方向に向く
+	isTurnable_ = true;
+	actionCtrl_.GetInput().GetLookAtTargetDir();
 	//炎を出現させる
 	fireBall_->Init();
 	character_.DrawItem(fireBall_);

@@ -1,16 +1,16 @@
 #include <string>
 #include <DxLib.h>
-#include "../Application.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Utility/UtilityDraw.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/InputManagerS.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Resource/FontManager.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Common/Easing.h"
+#include "Utility/UtilityCommon.h"
+#include "Utility/UtilityDraw.h"
+#include "Application.h"
+#include "Common/Easing.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/InputManagerS.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Manager/Resource/FontManager.h"
 #include "GameClearScene.h"
 
 GameClearScene::GameClearScene(void):

@@ -1,5 +1,7 @@
 #pragma once
-#include "../../Base/CardActionBase.h"
+
+#include "Object/Character/Base/CardActionBase.h"
+
 class EnemyCardReload :
     public CardActionBase
 {

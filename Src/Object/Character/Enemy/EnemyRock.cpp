@@ -1,20 +1,22 @@
-#include "EnemyRock.h"
-#include "../pch.h"
-#include "../Utility/Utility3D.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Object/Common/Collider.h"
-#include "../Object/Common/Geometry/Sphere.h"
-#include "../Manager/Resource/ResourceManager.h"
+#include "pch.h"
+#include "Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Object/Common/Collider.h"
+#include "Object/Common/Geometry/Sphere.h"
 #include "EnemyRock.h"
 
 EnemyRock::EnemyRock(int& _num, VECTOR& _startPos):
-	num_(_num),
+	createNum_(_num),
 	startPos_(_startPos),
 	distance_(),
 	jumpPow_(),
 	isAlive_(false),
 	isDamaged_(false),
-	modelId_(UtilityCommon::INITIAL_HANDLE)
+	modelId_(UtilityCommon::INITIAL_HANDLE),
+	centerPos_({}),
+	goalPos_({}),
+	velocity_()
 {
 	objectName_ = ROCK_STR;
 }
@@ -26,23 +28,20 @@ EnemyRock::~EnemyRock(void)
 void EnemyRock::Load(void)
 {
 	//モデル
-	trans_.modelId = ResourceManager::GetInstance().LoadModelDuplicate(ResourceManager::SRC::SPHERE_ROCK);
-
-	//岩攻撃力を外部から取得
-	LoadAttackPow();
+	trans_.modelId = resMng_.LoadModelDuplicate(ResourceManager::SRC::SPHERE_ROCK);
 }
 
 void EnemyRock::Init(void)
 {
 	//何個目に生成されたかで角度を変える
-	float angle = ARROUND_PER_RAD * num_;
+	float angle = aroundPerRad_ * createNum_;
 
-	goalPos_.x = startPos_.x + sin(angle) * DISTANCE_RADIUS;
+	goalPos_.x = startPos_.x + sin(angle) * moveDistance_;
 	goalPos_.y = 0.0f;
-	goalPos_.z = startPos_.z - cos(angle) * DISTANCE_RADIUS;
+	goalPos_.z = startPos_.z - cos(angle) * moveDistance_;
 
 	tag_ = Collider::TAG::ROCK;
-	velocity_.y = sqrtf(2.0f * GRAVITY * JUMP_HEIGHT);
+	velocity_.y = sqrtf(2.0f * gravity_ * jumpHeight_);
 
 	isDamaged_ = false;
 
@@ -51,7 +50,7 @@ void EnemyRock::Init(void)
 	noneHitTag_.emplace(Collider::TAG::ENEMY1);
 	noneHitTag_.emplace(Collider::TAG::NML_ATK);
 
-	std::unique_ptr<Geometry> geo = std::make_unique<Sphere>(trans_.pos, ROCK_COL_RADIUS);
+	std::unique_ptr<Geometry> geo = std::make_unique<Sphere>(trans_.pos, radius_);
 	MakeCollider(TAG_PRIORITY::ROCK_SPHERE, {tag_ }, std::move(geo),noneHitTag_);
 
 	trans_.pos = startPos_;
@@ -63,12 +62,12 @@ void EnemyRock::Update(void)
 	if (!isAlive_)return;
 
 	//重力分加速度を引く
-	velocity_.y -= GRAVITY;
+	velocity_.y -= gravity_;
 	jumpPow_.y = velocity_.y;
 
 	//岩座標を更新する
 	VECTOR vec = VNorm(VSub(goalPos_, startPos_));
-	trans_.pos = VAdd(trans_.pos, VScale(vec, MOVE_HORIZONTAL_SPD));
+	trans_.pos = VAdd(trans_.pos, VScale(vec, horizontalMoveSpd_));
 	trans_.pos = VAdd(trans_.pos, jumpPow_);
 
 	trans_.Update();
@@ -90,17 +89,16 @@ void EnemyRock::DeleteRockCollider(void)
 	DeleteCollider(TAG_PRIORITY::ROCK_SPHERE);
 }
 
-void EnemyRock::LoadAttackPow(void)
+void EnemyRock::LoadRockData(const nlohmann::json _jsonData)
 {
-	nlohmann::json j = resMng_.Load(ResourceManager::SRC::ACTION_DATA).jsonData;
-	const std::string DATA_NAME = "Enemy";
-
-	if(j[DATA_NAME].contains("StompAttack"))
-	{
-		auto& atk = j[DATA_NAME]["StompAttack"];
-		if (atk.contains("attackPoint"))
-		{
-			atkPow_ = atk.value("attackPoint", 0.0f);
-		}
-	}
+	atkPow_ = _jsonData.value("attackPoint", 0.0f);
+	gravity_ = _jsonData.value("gravity",0.0f);
+	jumpHeight_ = _jsonData.value("jumpHeight", 0.0f);
+	rockNum_ = _jsonData.value("rockNum", 0);
+	radius_ = _jsonData.value("rockRadius", 0.0f);
+	horizontalMoveSpd_ = _jsonData.value("moveHorizontalSpeed", 0.0f);
+	moveDistance_= _jsonData.value("moveDistance", 0.0f);
+	float aroundPerDeg= 360.0f / rockNum_;
+	//ラジアン変換
+	aroundPerRad_ = aroundPerDeg * DX_PI_F / 180.0f;
 }

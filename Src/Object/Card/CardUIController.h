@@ -149,7 +149,7 @@ public:
 	/// @brief 決定した時のアニメーションカウントの取得
 	/// @param  
 	/// @return 
-	const float& GetDecisionCnt(void)const { return disitionCnt_; }
+	const float& GetDecisionCnt(void)const { return decisionCnt_; }
 
 	/// @brief ステータスの取得
 	/// @param  
@@ -170,7 +170,7 @@ public:
 
 	/// @brief 決定カウントセット
 	/// @param _cnt セットしたいカウント
-	void SetDecisionCount(const float& _cnt) { disitionCnt_ = _cnt; }
+	void SetDecisionCount(const float& _cnt) { decisionCnt_ = _cnt; }
 
 	/// @brief ステータスの取得
 	/// @param _status ステータス
@@ -204,6 +204,7 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//決定したカードの座標
 	static constexpr Vector2F DISITON_CARD_POS = { Application::SCREEN_HALF_X, Application::SCREEN_HALF_Y + 200 };
 
@@ -231,69 +232,31 @@ private:
 	static constexpr float UP_DOWN_MOVE_RADIUS = 5.0f;
 	static constexpr float UP_DOWN_MOVE_SPEED = 0.05f;
 
-	//カード描画
-	std::unique_ptr<CardUIDraw>cardDraw_;
+#pragma endregion
+#pragma region メンバー変数
 
-	//コントローラークラスが使われるイージングの参照
-	std::unique_ptr<Easing>easing_;
+	std::unique_ptr<CardUIDraw>cardDraw_;		//カード描画
+	std::unique_ptr<Easing>easing_;				//コントローラークラスが使われるイージングの参照
 
-	//カードの座標(画面外で初期化)
-	Vector2F cardPos_;		
-
-	//カード上下に動かす移動量
-	float upDownMovePow_;	
-
-	//上下動かし用の角度(sin波で動かすため)
-	float upDownMoveAngle_;	
-
-	//カードを上下に動かす基準の座標
-	Vector2F baseCardPos_;	
-
-	//カードの強さ番号座標(画面外で初期化)
-	Vector2F numPos_;		
-
-	//カードの現在の角度
-	float currentAngle_;	
-
-	//始まり角度
-	float startAngle_;		
-
-	//カードの目標の角度
-	float goalAngle_;	
-
-	//カードのスケール
-	float cardScl_;
-
-	//スケールのイージング用カウント
-	float sclCnt_;
-
-	//決定カウント
-	float disitionCnt_;
-
-	//はじかれるカウント
-	float reactCnt_;													
-
-	//カードの状態
-	CARD_STATE state_;							
-
-	//カードリボルバーの中心
-	Vector2F centerPos_;						
-
-	//カードの種類画像
-	int typeImg_;		
-
-	//カードのステータス
-	CardBase::CARD_STATUS status_;	
-
-	//カードの大きさ
-	Vector2F halfSize_;		
-
-	//カード画像
-	int cardImg_;		
-
-	//カード画像保管
-	std::list<int>cardImgs_;	
-
-	//カード番号イメージ
-	int cardNoImg_;
+	Vector2F cardPos_;					//カードの座標(画面外で初期化)
+	float upDownMovePow_;				//カード上下に動かす移動量
+	float upDownMoveAngle_;				//上下動かし用の角度(sin波で動かすため)
+	Vector2F baseCardPos_;				//カードを上下に動かす基準の座標
+	Vector2F numPos_;					//カードの強さ番号座標(画面外で初期化)
+	float currentAngle_;				//カードの現在の角度
+	float startAngle_;					//始まり角度
+	float goalAngle_;					//カードの目標の角度
+	float cardScl_;						//カードのスケール
+	float sclCnt_;						//スケールのイージング用カウント
+	float decisionCnt_;					//決定カウント
+	float reactCnt_;					//はじかれるカウント
+	CARD_STATE state_;					//カードの状態
+	Vector2F centerPos_;				//カードリボルバーの中心
+	int typeImg_;						//カードの種類画像
+	CardBase::CARD_STATUS status_;		//カードのステータス
+	Vector2F halfSize_;					//カードの大きさ
+	int cardImg_;						//カード画像
+	std::list<int>cardImages;			//カード画像保管
+	int cardNoImg_;						//カード番号イメージ
+#pragma endregion
 };

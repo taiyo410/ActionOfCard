@@ -1,7 +1,7 @@
-#include "../pch.h"
-#include "../Object/Card/CardPresenter.h"
-#include"../ActionController.h"
-#include "EnemyCardReload.h"
+#include "pch.h"
+#include "Object/Card/CardPresenter.h"
+#include "Object/Character/Action/ActionController.h"
+#include "./EnemyCardReload.h"
 
 EnemyCardReload::EnemyCardReload(ActionController& _actCtrl, CharacterBase& _character, CardPresenter& _cardPresent):
 	CardActionBase(_actCtrl,_character,_cardPresent)

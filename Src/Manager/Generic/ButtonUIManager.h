@@ -1,7 +1,7 @@
 #pragma once
 #include <unordered_map>
-#include "../Template/Singleton.h"
-#include "../Common/Vector2F.h"
+#include "Template/Singleton.h"
+#include "Common/Vector2F.h"
 
 class ButtonUIManager :
 	public Singleton<ButtonUIManager>

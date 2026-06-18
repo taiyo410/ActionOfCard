@@ -1,9 +1,9 @@
 #pragma once
-#pragma once
+
 #include <map>
 #include <functional>
-#include "../../Object/Common/Transform.h"
-#include "../ObjectBase.h"
+#include "Object/ObjectBase.h"
+#include "Object/Common/Transform.h"
 
 class Easing;
 class ModelMaterial;

@@ -103,7 +103,6 @@
       }
     ],
 
-
     "image": [
       {
         "name": "TITLE_BACK_IMG",
@@ -146,24 +145,12 @@
         "handle": "ReloadGage.png"
       },
       {
-        "name": "E_HP_BAR_MASK",
-        "handle": "E_HpBarMask.png"
+        "name": "E_HP_BAR",
+        "handle": "E_HpBarFrame2.png"
       },
       {
-        "name": "E_HP_BAR_FRAME",
-        "handle": "E_HpBarFrame.png"
-      },
-      {
-        "name": "E_HP_COVER",
-        "handle": "E_GaugeCover.png"
-      },
-      {
-        "name": "P_CARD_NUM_GAUGE_MASK",
-        "handle": "CardNumGaugeMask.png"
-      },
-      {
-        "name": "P_CARD_NUM_GAUGE_FRAME",
-        "handle": "CardNumGaugeFrame.png"
+        "name": "P_CARD_NUM_GAUGE",
+        "handle": "CardNumGauge.png"
       },
       {
         "name": "P_CARD_NUM_GAUGE_BACK",
@@ -184,9 +171,28 @@
       {
         "name": "CARD_REVOLVER_L_ARROW",
         "handle": "CardDirArrowLeft.png"
+      },
+      {
+        "name": "REVERSE_FADE_MASK",
+        "handle": "FaderMask_1.png"
+      },
+      {
+        "name": "WIN_ARROW_IMG",
+        "handle": "UpArrow.png"
+      },
+      {
+        "name": "LOSE_ARROW_IMG",
+        "handle": "DownArrow.png"
+      },
+      {
+        "name": "HIGHER_IMG",
+        "handle": "Higher.png"
+      },
+      {
+        "name": "LOWER_IMG",
+        "handle": "Lower.png"
       }
     ],
-
 
     "images": [
       {
@@ -378,6 +384,10 @@
       {
         "name": "COLLISION_DATA",
         "handle": "CollisionData.json"
+      },
+      {
+        "name": "UI_DATA",
+        "handle": "UIData.json"
       }
     ],
 
@@ -416,6 +426,11 @@
       {
         "name": "CARD_SELECT_PS",
         "handle": "SelectCardPS.cso",
+        "constBufNum": 1
+      },
+      {
+        "name": "REVOLUTION_POSTEFF_PS",
+        "handle": "RevolutionPostEffectPS.cso",
         "constBufNum": 1
       }
     ],

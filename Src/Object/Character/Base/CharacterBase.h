@@ -1,15 +1,15 @@
 #pragma once
-#include<map>
+#include <map>
 #include <nlohmann/json.hpp>
-#include "../Manager/Resource/SoundManager.h"
-#include "../../Card/CardBase.h"
-#include "../../Card/CardPresenter.h"
-#include "../Base/CharacterOnHitBase.h"
-#include "../../Object/Common/AnimationController.h"
-#include "../Base/CardActionBase.h"
-#include "../UIData/CharacterUIData.h"
-#include "../Base/ActionBase.h"
-#include "../Object/ObjectBase.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Card/CardBase.h"
+#include "Object/Card/CardPresenter.h"
+#include "Object/Character/Base/CharacterOnHitBase.h"
+#include "Object/Character/Base/CardActionBase.h"
+#include "Object/Character/UIData/CharacterUIData.h"
+#include "Object/Character/Base/ActionBase.h"
+#include "Object/ObjectBase.h"
 
 class AnimationController;
 class UIManager;
@@ -297,25 +297,21 @@ protected:
 	//移動量更新条件の移動ラインの長さ
 	static constexpr float MOVE_LINE_Y_CHECK_VALUE = 1.5f;
 
-	//中心からのZオフセット
-	static constexpr float CENTER_POS_Z_OFFSET = 600.0f;
-
 	//キャラステータスのデータパス
 	const std::string PLAYER_STATUS_DATA = "Player";	//プレイヤー
 	const std::string ENEMY_STATUS_DATA = "Enemy";		//敵
 #pragma endregion
 
 #pragma region 外部ファイル読み込み
+	//使用するモデル
+	ResourceManager::SRC useModelSrc_= ResourceManager::SRC::NONE;		
 	STATUS maxStatus_;						//ステータス最大値
-	ResourceManager::SRC useModelSrc_;		//使用するモデル
-	VECTOR localDeg_;						//ローカル回転
-	VECTOR localPos_;						//ローカル座標
-	float modelScl_;						//モデルの大きさ
-	int spineFrameNo_;						//腰のボーン番号
-	VECTOR battleStartPos_;					//戦闘開始時のスタート座標		
-
+	VECTOR localDeg_{};						//ローカル回転
+	VECTOR localPos_{};						//ローカル座標
+	float modelScl_=0.0f;					//モデルの大きさ
+	int spineFrameNo_ = 0;					//腰のボーン番号
+	VECTOR battleStartPos_ = {};			//戦闘開始時のスタート座標		
 #pragma endregion
-
 
 #pragma region メンバー変数
 	std::unique_ptr<EffectController>effect_;				//エフェクト
@@ -345,7 +341,6 @@ protected:
 	VECTOR movedPos_;						//移動後座標
 	VECTOR moveDiff_;						//移動前座標
 	VECTOR movePow_;						// 移動量
-
 	ROTATION charaRot_;						//角度関連
 	STATUS status_;							//ステータス
 	UPDATE_PHASE phase_;					//更新フェーズ
@@ -364,7 +359,6 @@ protected:
 #pragma endregion
 
 #pragma region メンバー関数
-
 	//各キャラクターの基本処理
 	virtual void LoadCharacter(void) = 0;						//ロード
 	virtual void InitCharacter(void) = 0;						//初期化
@@ -419,7 +413,6 @@ private:
 #pragma endregion
 
 #pragma region メンバー関数
-
 	//キャラクター共通の処理
 	void LoadCommon(void);						//ロード
 	void LoadCommonData(void);					//キャラクター共通のデータを外部ファイルから読み込み

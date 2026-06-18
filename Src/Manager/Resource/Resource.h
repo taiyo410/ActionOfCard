@@ -97,6 +97,9 @@ public:
 	/// @param imgs 
 	void CopyHandle(int* imgs);
 
+	//
+	void ReleaseFunc(void);
+
 	// リソースタイプ
 	TYPE type_;
 

@@ -1,4 +1,4 @@
-#include "../pch.h"
+#include "pch.h"
 #include "UtilityJson.h"
 
 const VECTOR UtilityJson::GetLoadVector3(const nlohmann::json& _data)
@@ -50,8 +50,8 @@ const Vector2 UtilityJson::GetLoadVector2(const nlohmann::json& _data)
 {
 	Vector2 ret = {};
 
-	ret.x = _data.value("x", 0.0f);
-	ret.y = _data.value("y", 0.0f);
+	ret.x = _data.value("x", 0);
+	ret.y = _data.value("y", 0);
 	return ret;
 }
 
@@ -63,8 +63,8 @@ const Vector2 UtilityJson::GetLoadVector2(const std::string key, const nlohmann:
 	if (!_data.contains(key))return ret;
 	const auto& posData = _data[key];
 
-	ret.x = posData.value("x", 0.0f);
-	ret.y = posData.value("y", 0.0f);
+	ret.x = posData.value("x", 0);
+	ret.y = posData.value("y", 0);
 	return ret;
 }
 

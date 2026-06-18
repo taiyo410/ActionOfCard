@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerCardAttackBase.h"
+#include "./PlayerCardAttackBase.h"
 
 class ItemBase;
 
@@ -46,9 +46,6 @@ protected:
         SPELL_CAST,
         ATTACK
     };
-
-#pragma region 外部ファイル読み込み
-#pragma endregion
 
 #pragma region メンバー変数
     std::shared_ptr<ItemBase>fireBall_;    //ファイアボール

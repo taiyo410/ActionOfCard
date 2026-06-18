@@ -1,5 +1,6 @@
 #pragma once
-#include "../Base/ActionBase.h"
+
+#include "Object/Character/Base/ActionBase.h"
 
 class Idle :
     public ActionBase

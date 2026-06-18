@@ -1,8 +1,8 @@
-#include "../pch.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Application.h"
-#include "../Common/Easing.h"
+#include "pch.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Application.h"
+#include "Common/Easing.h"
 #include "MenuController.h"
 
 MenuController::MenuController(void) :

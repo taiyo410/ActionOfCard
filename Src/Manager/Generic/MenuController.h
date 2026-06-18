@@ -1,6 +1,6 @@
 #pragma once
-#include "../Common/Vector2.h"
-#include "../Common/Easing.h"
+#include "Common/Vector2.h"
+#include "Common/Easing.h"
 
 class Easing;
 class MenuController

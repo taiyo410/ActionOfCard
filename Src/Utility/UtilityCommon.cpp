@@ -1,7 +1,8 @@
-#include<iostream>
-#include<fstream>
+#include <iostream>
+#include <fstream>
+#include <random>
 #include "UtilityCommon.h"
-#include "../Manager/Generic/SceneManager.h"
+#include "Manager/Generic/SceneManager.h"
 
 int UtilityCommon::Round(float v)
 {
@@ -165,7 +166,6 @@ int UtilityCommon::WrapIndex(int index, int max)
     return (index % max + max) % max;
 }
 
-
 std::vector<std::vector<int>> UtilityCommon::LoadCSVData(const std::wstring& filePath)
 {
     std::vector<std::vector<int>> csvData;
@@ -247,6 +247,20 @@ std::string UtilityCommon::GetStringFromWString(const std::wstring& wstr)
     return result;
 }
 
+float UtilityCommon::GetMersenneRandomNumber(const float _min, const float _max)
+{
+    // —”¶¬Ší‚ğì¬
+    std::random_device rd;
+    std::mt19937 mt(rd());
+
+    // ®”—”
+    std::uniform_int_distribution<int> dist(_min, _max);
+
+    float value = static_cast<float>(dist(mt));
+
+    return value;
+}
+
 nlohmann::json UtilityCommon::LoadJsonData(const std::string& filePath)
 {
     using json = nlohmann::json;
@@ -259,4 +273,16 @@ nlohmann::json UtilityCommon::LoadJsonData(const std::string& filePath)
     json j;
     ifs >> j;
     return j;
+}
+
+std::string UtilityCommon::ConvertUtf8ToSJIS(const std::string& utf8_str)
+{
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, nullptr, 0);
+    std::wstring wstr(wlen, L'\0');
+    MultiByteToWideChar(CP_UTF8, 0, utf8_str.c_str(), -1, &wstr[0], wlen);
+
+    int sjlen = WideCharToMultiByte(932, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    std::string sjis(sjlen, '\0');
+    WideCharToMultiByte(932, 0, wstr.c_str(), -1, &sjis[0], sjlen, nullptr, nullptr);
+    return sjis;
 }

@@ -6,6 +6,7 @@ cbuffer cbParam : register(b4)
     float4 g_color_2;
     float g_hp_Per;
     float g_hp_lerp; 
+    float g_invert;
     float2 dummy;
 }
 float4 main(PS_INPUT PSInput) : SV_TARGET0
@@ -15,6 +16,11 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     if (srcCol.a < 0.01f)
     {
         discard;
+    }
+    //ƒQ[ƒW‚Ì˜g‚ð•`‰æ
+    else if (all(srcCol.rgb < 0.9f))
+    {
+        return srcCol;
     }
     else if (uv.x > g_hp_lerp)
     {
@@ -33,6 +39,12 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     else if (uv.x < g_hp_lerp)
     {
         srcCol.rgb = float3(1.0f, 0.0f, 0.0f);
+    }
+    
+    //Šv–½ó‘ÔŽžAUI‚ÌF‚ð”½“]‚³‚¹‚é
+    if(g_invert==1.0)
+    {
+        srcCol.rgb = 1.0 - srcCol.rgb;
     }
     
     return srcCol;

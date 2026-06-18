@@ -86,13 +86,13 @@ void EnemyCardUI::ChangeNone(void)
 void EnemyCardUI::ChangeDecision(void)
 {
 	//アクション配列に入れる
-	actions_.emplace_back(*handCurrent_);
+	actionCards_.emplace_back(*handCurrent_);
 
 	//現在の選択カードを増やす
 	handCurrent_++;
 
 	//使用中状態に移行。カードUIを動かす
-	for (auto& act : actions_)
+	for (auto& act : actionCards_)
 	{
 		act->ChangeDicisionEnemyCardMove();
 		act->ChangeUsing();
@@ -117,10 +117,10 @@ void EnemyCardUI::UpdateDecision(void)
 	DecisionMoveCardAll();
 
 	//決定移動が終わったものを探す
-	auto it = std::find_if(actions_.begin(), actions_.end(), [this](auto& act) {return act->GetDecisionCnt() > 0.0f; });
+	auto it = std::find_if(actionCards_.begin(), actionCards_.end(), [this](auto& act) {return act->GetDecisionCnt() > 0.0f; });
 
 	//終わっていたらNONE状態へ移行
-	if (it == actions_.end())
+	if (it == actionCards_.end())
 	{
 		SetBasePosActionCards();
 		ChangeSelectState(CARD_SELECT::NONE);
@@ -135,7 +135,7 @@ void EnemyCardUI::UpdateReloadWait(void)
 
 void EnemyCardUI::UpdateDrawCardUI(void)
 {
-	for (auto& card : actions_)
+	for (auto& card : actionCards_)
 	{
 		card->Update();
 	}

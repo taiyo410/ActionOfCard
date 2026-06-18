@@ -1,4 +1,5 @@
 #pragma once
+
 #include "../Base/ActionBase.h"
 #include "../Object/Common/Transform.h"
 
@@ -34,19 +35,14 @@ public:
 
 private:
 
-    //通常移動スピードにプラスする
-    static constexpr float ADD_DODGE_SPEED = 16.0f;
+#pragma region 外部ファイル読み込み
+    //回避アニメーションの変数
+    float dodgeAnimStep_ = 0.0f;
+#pragma endregion
 
-    //回避を終えるアニメーションステップ
-    static constexpr float END_DODGE_ANIM_STEP = 30.0f;
+#pragma region メンバー変数
+    VECTOR dodgeDir_;       //回避方向
+    float dodgeSpdAdd_;    //回避速度の加減
+#pragma endregion
 
-    //回避方向
-    VECTOR dodgeDir_;
-
-	//回避アニメーションの変数
-    float dodgeAnimStep_;
-
-	//回避速度の加減
-	float dodgeSpdAdd_;
 };
-

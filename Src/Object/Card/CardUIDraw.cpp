@@ -1,18 +1,20 @@
-#include "../pch.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Resource/FontManager.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Renderer/PixelMaterial.h"
-#include "../Renderer/PixelRenderer.h"
-#include "../Common/Easing.h"
+#include "pch.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Resource/FontManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Renderer/PixelMaterial.h"
+#include "Renderer/PixelRenderer.h"
+#include "Common/Easing.h"
+#include "Object/Card/CardSystem.h"
 #include "CardUIDraw.h"
 
 CardUIDraw::CardUIDraw(int& _typeImg,Vector2F& _centerPos, float& _scl):
 	typeImg_(_typeImg),
 	centerPos_(_centerPos),
 	scl_(_scl),
-	selectEaseCnt_()
+	selectEaseCnt_(),
+	shaderSetRevolutionCard_()
 {
 	//通常カードシェーダ
 	normalCardPSMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::CARD_NORMAL_PS);
@@ -41,17 +43,11 @@ void CardUIDraw::Init(void)
 
 	easing_ = std::make_unique<Easing>();
 
-	trans_.pos = CARD_INIT_POS;
-	trans_.quaRot = Quaternion();
-	trans_.scl = { CARD_SCL,CARD_SCL,CARD_SCL };
-	trans_.quaRotLocal =
-		Quaternion::Euler({ 0.0f,0.0f,0.0f });
-
 	//通常カードシェーダ
 	normalCardPSMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::CARD_NORMAL_PS);
 	normalCardPSMaterial_->AddTextureBuf(typeImg_);
 	normalCardPSMaterial_->AddConstBuf({ 0.0f,0.0f, 0.0f,1.0f });		//カードの色
-	normalCardPSMaterial_->AddConstBuf({ 1.0f,0.0f, size_.x,size_.y });		//サイズ
+	normalCardPSMaterial_->AddConstBuf({ 1.0f,0.0f, 0.0f,0.0f });		//サイズ
 	normalCardPSRenderer_ = std::make_unique<PixelRenderer>(*normalCardPSMaterial_);
 	normalCardPSRenderer_->MakeSquareVertex(rightTopPos_, size_);
 
@@ -80,7 +76,6 @@ void CardUIDraw::Update(void)
 
 void CardUIDraw::Draw(void)
 {
-	normalCardPSMaterial_->SetConstBuf(NORMAL_CARD_CONST_BUN_NUM, { 0.0f,0.0f, 0.0f,1.0f });		//カードの色
 	DrawCard();
 }
 
@@ -100,6 +95,10 @@ void CardUIDraw::DrawSelectCard(void)
 	DrawCard();
 }
 
+void CardUIDraw::DrawReverseColorCard(void)
+{
+}
+
 void CardUIDraw::DrawCard(void)
 {
 	//画像サイズ取得
@@ -110,6 +109,11 @@ void CardUIDraw::DrawCard(void)
 
 	//左上の座標
 	Vector2F rightTopPos = centerPos_ - halfSize_ * scl_;
+
+	//カードの色
+	const CardSystem::ORDER_RULE judgeRule = CardSystem::GetInstance().GetJudgeRule();
+	float setShaderCol = judgeRule == CardSystem::ORDER_RULE::NORMAL ? 0.0f : 1.0f;
+	normalCardPSMaterial_->SetConstBuf(NORMAL_CARD_CONST_BUN_NUM, { 0.0f,0.0f, setShaderCol,1.0f });		
 
 	//レンダラーにセット
 	normalCardPSRenderer_->SetSize(size_ * scl_);

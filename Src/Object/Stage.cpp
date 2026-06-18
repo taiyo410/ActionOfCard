@@ -1,11 +1,12 @@
-#include "../Utility/Utility3D.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Renderer/ModelMaterial.h"
-#include "../Renderer/ModelRenderer.h"
-#include"../Object/Common/Geometry/Model.h"
-#include "Stage.h"
+#include "Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Renderer/ModelMaterial.h"
+#include "Renderer/ModelRenderer.h"
+#include "Object/Common/Geometry/Model.h"
+#include "./Stage.h"
 
 Stage::Stage(void)
 {
@@ -67,7 +68,6 @@ void Stage::Draw(void)
 {
 	MV1DrawModel(wallTrans_.modelId);
 	renderer_->Draw();
-
 }
 
 void Stage::OnHit(const std::weak_ptr<Collider> _hitCol)

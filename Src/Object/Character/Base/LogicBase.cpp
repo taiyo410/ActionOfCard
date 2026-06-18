@@ -1,9 +1,9 @@
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
 #include "./CharacterBase.h"
-#include "../Base/CardActionBase.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../../../Manager/Generic/Camera.h"
-#include"../Utility/Utility3D.h"
-#include "LogicBase.h"
+#include "./CardActionBase.h"
+#include "./LogicBase.h"
 
 LogicBase::LogicBase(Transform& _myTrans):
 	myTrans_(_myTrans),

@@ -1,8 +1,10 @@
 #pragma once
+
 #include <memory>
 #include "SceneBase.h"
 
 class PauseScene;
+class GameEventRevolutionScene;
 class PixelMaterial;
 class PixelRenderer;
 class CharacterBase;
@@ -50,11 +52,10 @@ public:
 	/// @brief 解放
 	/// @param  
 	void Release(void)override;
+
 private:
 
-	//BGM
-	static constexpr float BGM_GAME_VOL = 0.5f;
-
+#pragma region メンバー定数
 	//集中線シェーダー関連
 	//定数バッファの個数
 	static constexpr int INTENSIVE_CBUFFER_NUM = 1;
@@ -74,38 +75,67 @@ private:
 	//ボタン長押し文字のY座標オフセット
 	static constexpr float SKIP_BTN_STR_OFFSET_Y = 16.0f;
 
-	//ポストエフェクト用スクリーン
-	int postEffectScreen_;
+	//革命時間の最大、最小時間
+	static constexpr float REVOLUTION_TIME_MIN = 8.0f;
+	static constexpr float REVOLUTION_TIME_MAX = 15.0f;
 
-	//スローカウンタ(フレーム)
-	int slowFrame_;
+	//革命時間関連	
+	static constexpr float FADE_TIME = 0.3f;	//フェード時間
+	static constexpr float WAIT_TIME = 1.0f;	//フェードイン後の待機時間
+#pragma endregion
+
+#pragma region メンバー変数
+	std::unique_ptr<SkyDome> skyDome_;								//スカイドーム
+	std::unique_ptr<Stage> stage_;									//ステージ
+	std::shared_ptr<PauseScene> pauseScene_;						//ポーズ画面
+	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン
+	//ポストエフェクト
+	std::unique_ptr<PixelMaterial> invertMaterial_;		//マテリアル
+	std::shared_ptr<PixelRenderer> invertRenderer_;		//レンダラー
 
 	//更新フェーズ
 	UPDATE_PHASE updatePhase_;											//更新
-	std::map<UPDATE_PHASE, std::function<void(void)>>changeUpdate_;		//遷移
+	std::map<UPDATE_PHASE, std::function<void(void)>> changeUpdate_;		//遷移
 
-	//スカイドーム
-	std::unique_ptr<SkyDome> skyDome_;
+	float fadeCnt_;										//色反転フェードのカウント
+	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
+	float waitCnt_;										//シーン待機時間
+	int slowFrame_;										//スローカウンタ(フレーム)
+	bool isSkippingDirection_;							//スキップ中
+	float skipKeepCnt_;									//長押しカウンタ
+	float revolutionCnt_;								//革命変化時間カウント
+	float revolutionRondomTime_;						//ランダムで革命時間を決める
 
-	//ステージ
-	std::unique_ptr<Stage>stage_;
+#pragma endregion
 
-	//ポーズ画面
-	std::shared_ptr<PauseScene> pauseScene_;
+	//処理の変更
+	void OnSceneEnter(void) override;
 
-	//プレイヤー
-	std::unique_ptr<Player>player_;
-
-	//敵
-	std::unique_ptr<Enemy>enemy_;
-
-	//スキップ中
-	bool isSkippingDirection_;
-	//長押しカウンタ
-	float skipKeepCnt_;
+	//各オブジェクトの処理
+	void ObjectLoad(void);		//ロード
+	void ObjectInit(void);		//初期化
+	void ObjectUpdate(void);	//更新
+	void ObjectDraw(void);		//描画
 
 	//演出更新のスキップ
 	void CheckSkip(void);
+
+	//演出スキップ
+	void Skip(void);
+
+	//革命ポストエフェクトのロード
+	void LoadInvertEffect(void);
+
+	//革命開始時の更新処理
+	void RevolutionUpdate(void);
+
+	//シーンのフェーズを切り替える
+	bool CheckGameStateTransition(void);
+
+	//革命フェード更新
+	void RevolutionInvertFadeNone(void);	//革命フェードなし
+	void RevolutionInvertFadeIn(void);		//革命時の色反転フェードイン
+	void RevolutionInvertFadeOut(void);		//革命時の色反転フェードアウト
 
 	//更新関数
 	void NoneUpdate(void);				//何もしない
@@ -133,9 +163,4 @@ private:
 	void ChangeNormal(void);
 	void ChangeSlow(void);
 
-	//処理の変更
-	void OnSceneEnter(void) override;
-
-	//演出スキップ
-	void Skip(void);
 };

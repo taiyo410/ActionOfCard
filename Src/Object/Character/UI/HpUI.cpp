@@ -1,13 +1,13 @@
-#include "../pch.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Application.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Common/Easing.h"
-#include "../Renderer/PixelRenderer.h"
-#include "../Renderer/PixelMaterial.h"
-#include "HpUI.h"
+#include "pch.h"
+#include "Utility/UtilityCommon.h"
+#include "Application.h"
+#include "Common/Easing.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Renderer/PixelRenderer.h"
+#include "Renderer/PixelMaterial.h"
+#include "./HpUI.h"
 
 HpUI::HpUI(CHARACTER_TYPE _charaType):
 	charaType_(_charaType),
@@ -39,9 +39,7 @@ HpUI::~HpUI(void)
 void HpUI::Load(void)
 {
 	//リソースのロード
-	hpMask_ = resMng_.Load(ResourceManager::SRC::E_HP_BAR_MASK).handleId_;
-	barCoverHandle_ = resMng_.Load(ResourceManager::SRC::E_HP_COVER).handleId_;
-	barFrame_ = resMng_.Load(ResourceManager::SRC::E_HP_BAR_FRAME).handleId_;
+	hpMask_ = resMng_.Load(ResourceManager::SRC::E_HP_BAR).handleId_;
 
 	//Jsonからデータを読み込む
 	LoadJsonHpUI();
@@ -164,7 +162,7 @@ void HpUI::LoadJsonHpUI(void)
 
 void HpUI::Draw(void)
 {
-	DrawExtendGraphF(barCoverPos_.x, barCoverPos_.y, barCoverPos_.x + BAR_COVER_SIZE.x, barCoverPos_.y + BAR_COVER_SIZE.y, barFrame_, true);
+	//DrawExtendGraphF(barCoverPos_.x, barCoverPos_.y, barCoverPos_.x + BAR_COVER_SIZE.x, barCoverPos_.y + BAR_COVER_SIZE.y, barFrame_, true);
 	renderer_->Draw(barPos_.x, barPos_.y);
-	DrawExtendGraphF(barCoverPos_.x, barCoverPos_.y, barCoverPos_.x + BAR_COVER_SIZE.x, barCoverPos_.y + BAR_COVER_SIZE.y, barCoverHandle_, true);
+	//DrawExtendGraphF(barCoverPos_.x, barCoverPos_.y, barCoverPos_.x + BAR_COVER_SIZE.x, barCoverPos_.y + BAR_COVER_SIZE.y, barCoverHandle_, true);
 }

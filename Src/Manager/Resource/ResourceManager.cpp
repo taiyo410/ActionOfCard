@@ -1,6 +1,6 @@
 #include <DxLib.h>
-#include "../../Application.h"
-#include "../Utility/UtilityCommon.h"
+#include "Application.h"
+#include "Utility/UtilityCommon.h"
 #include "Resource.h"
 #include "ResourceManager.h"
 
@@ -49,18 +49,18 @@ ResourceManager::ResourceManager(void):
 		{"ENEMY_ATK_CARD_IMG" ,SRC::ENEMY_ATK_CARD_IMG},
 		{"RELOAD_CARD_IMG" ,SRC::RELOAD_CARD_IMG},
 		{"RELOAD_GAGE" ,SRC::RELOAD_GAUGE},
-		{"P_HP_ARC_OUTLINE" ,SRC::P_HP_ARC_OUTLINE },
-		{"P_HP_LINE_OUT_LINE" ,SRC::P_HP_LINE_OUT_LINE},
-		{"P_CARD_NUM_GAUGE_MASK" ,SRC::P_CARD_NUM_GAUGE_MASK},
-		{"P_CARD_NUM_GAUGE_FRAME" ,SRC::P_CARD_NUM_GAUGE_FRAME},
+		{"P_CARD_NUM_GAUGE" ,SRC::P_CARD_NUM_GAUGE},
 		{"P_CARD_NUM_GAUGE_BACK" ,SRC::P_CARD_NUM_GAUGE_BACK},
-		{"E_HP_BAR_MASK" ,SRC::E_HP_BAR_MASK},
-		{"E_HP_BAR_FRAME" ,SRC::E_HP_BAR_FRAME},
-		{"E_HP_COVER" ,SRC::E_HP_COVER},
+		{"E_HP_BAR" ,SRC::E_HP_BAR},
 		{"SKIP_BUTTOM_MASK" ,SRC::SKIP_BUTTOM_MASK },
 		{"CARD_REVOLVER_L_ARROW" ,SRC::CARD_REVOLVER_L_ARROW},
 		{"INTENSIVE_LINE_1" ,SRC::INTENSIVE_LINE_1},
 		{"INTENSIVE_LINE_2" ,SRC::INTENSIVE_LINE_2},
+		{"REVERSE_FADE_MASK" ,SRC::REVERSE_FADE_MASK },
+		{"WIN_ARROW_IMG" ,SRC::WIN_ARROW_IMG },
+		{"LOSE_ARROW_IMG" ,SRC::LOSE_ARROW_IMG},
+		{"HIGHER_IMG" ,SRC::HIGHER_IMG},
+		{"LOWER_IMG" ,SRC::LOWER_IMG},
 		//複数画像
 		{"NUMBERS_IMGS" ,SRC::NUMBERS_IMGS},
 		{"CONTROLLER_UI_IMGS" ,SRC::CONTROLLER_UI_IMGS},
@@ -102,6 +102,7 @@ ResourceManager::ResourceManager(void):
 		{"DECK_DATA" ,SRC::DECK_DATA},
 		{"ACTION_DATA" ,SRC::ACTION_DATA},
 		{"COLLISION_DATA" ,SRC::COLLISION_DATA},
+		{"UI_DATA" ,SRC::UI_DATA},
 		//ピクセルシェーダ
 		{"STAGE_PS",SRC::STAGE_PS},
 		{"SKYDOME_PS",SRC::SKYDOME_PS},
@@ -110,6 +111,7 @@ ResourceManager::ResourceManager(void):
 		{"CARD_NORMAL_PS",SRC::CARD_NORMAL_PS},
 		{"CARD_RELOAD_PS",SRC::CARD_RELOAD_PS},
 		{"CARD_SELECT_PS",SRC::CARD_SELECT_PS},
+		{"REVOLUTION_POSTEFF_PS",SRC::REVOLUTION_POSTEFF_PS},
 		//頂点シェーダ
 		{"STAGE_VS",SRC::STAGE_VS}
 	};
@@ -231,7 +233,6 @@ std::vector<const ResourceData*> ResourceManager::GetSoundResources(ResourceData
 			}
 		}
 	}
-
 	return retArray;
 }
 
@@ -256,7 +257,6 @@ ResourceManager::~ResourceManager(void)
 
 ResourceData& ResourceManager::_Load(SRC src)
 {
-
 	// ロード済みチェック
 	const auto& lPair = loadedMap_.find(src);
 	if (lPair != loadedMap_.end())
@@ -275,11 +275,13 @@ ResourceData& ResourceManager::_Load(SRC src)
 	// ロード処理
 	rPair->second->Load();
 
+	//ロード関数ポインタの解放
+	//rPair->second->ReleaseFunc();
+
 	// 念のためコピーコンストラクタ
 	loadedMap_.emplace(src, *rPair->second);
 
 	return *rPair->second;
-
 }
 
 const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParameter(const RES_INFO _info, const nlohmann::json& _data )
@@ -301,7 +303,6 @@ const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParamet
 			resParam.path = Application::PATH_SOUND_SE + UtilityCommon::GetWStringFromString(_data["handle"]);
 		}
 	}
-
 	return resParam;
 }
 

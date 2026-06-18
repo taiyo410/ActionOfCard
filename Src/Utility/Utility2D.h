@@ -1,5 +1,6 @@
 #pragma once
-#include "../Common/Vector2.h"
+
+#include "Common/Vector2.h"
 
 class Utility2D
 {
@@ -38,6 +39,12 @@ public:
 	/// @param fillColor バー本体色
 	/// @param offset オフセット
 	static void DrawBarGraph(const Vector2& pos, const Vector2& size, const float per, const unsigned int backColor, const unsigned int fillColor, const int offset = 2);
+
+	/// @brief センター座標による画像の描画
+	/// @param _img 画像ハンドル
+	/// @param pos 座標
+	/// @param size サイズ
+	static void DrawGraphForCenter(const int _img, const Vector2F _pos, const float _sizeScl = 1.0f);
 
 };
 

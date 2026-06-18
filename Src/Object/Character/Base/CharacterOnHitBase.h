@@ -1,5 +1,5 @@
 #pragma once
-#include"../Object/ObjectBase.h"
+#include"Object/ObjectBase.h"
 
 class ActionController;
 class CharacterBase;
@@ -54,6 +54,7 @@ public:
 
 protected:
 
+#pragma region メンバー定数
 	//当たり判定の押し出し回数
 	static constexpr int COL_TRY_CNT_MAX = 10;
 
@@ -62,35 +63,25 @@ protected:
 
 	//押し出す移動量
 	static constexpr float POSITION_OFFSET = 0.1f;
+#pragma endregion
 
-	//プレイヤー
-	ActionController& actionCtrl_;
-
-	//移動量
-	VECTOR& movedPos_;
-	VECTOR& moveDiff_;
-
-	//プレイヤーの情報
-	Transform& trans_;
-
-	//相手の身体を当たったかどうか
-	bool isHitTarget_;
+#pragma region メンバー変数
+	ActionController& actionCtrl_;	//アクションコントローラー
+	CharacterBase& character_;		//キャラクターの情報
+	Transform& trans_;	//プレイヤーの情報
+	VECTOR& movedPos_;	//移動後座標
+	VECTOR& moveDiff_;	//移動前と移動後の差
+	bool isHitTarget_;	//相手の身体を当たったかどうか
 
 	//当たり判定ごとの更新
 	std::map<Collider::TAG, std::function<void(const std::weak_ptr<Collider> _hitCol)>>colUpdates_;
-
 	//当たり判定関係
 	std::map<ObjectBase::TAG_PRIORITY, std::shared_ptr<Collider>>& colParam_;
+	Collider::TAG tag_;		//プレイヤーの当たり判定タグ
+	HIT_POINT hitPoint_;	//当たった箇所
+#pragma endregion
 
-	//プレイヤーの当たり判定タグ
-	Collider::TAG tag_;
-
-	//キャラクターの情報
-	CharacterBase& character_;
-
-	//当たった箇所
-	HIT_POINT hitPoint_;
-
+#pragma region メンバー関数
 	//モデルの当たった時の共通処理
 	void HitModelCommon(const std::weak_ptr<Collider> _hitCol);
 
@@ -99,4 +90,5 @@ protected:
 	void CollStage(const std::weak_ptr<Collider> _hitCol);				//ステージ
 	virtual void CollChara(const std::weak_ptr<Collider> _hitCol) = 0;	//キャラクター同士
 	void CollFire(const std::weak_ptr<Collider>_hitCol);				//炎
+#pragma endregion
 };

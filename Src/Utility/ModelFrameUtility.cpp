@@ -1,5 +1,5 @@
-#include "../Utility/Utility3D.h"
-#include "../Object/Common/Transform.h"
+#include "Utility/Utility3D.h"
+#include "Object/Common/Transform.h"
 #include "ModelFrameUtility.h"
 
 void ModelFrameUtility::GetFrameWorldMatrix(

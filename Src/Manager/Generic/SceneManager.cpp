@@ -1,13 +1,15 @@
 #include <chrono>
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
-#include "../Generic/DataBank.h"
-#include "../../Scene/TitleScene.h"
-#include "../../Scene/GameScene.h"
-#include "../../Scene/GameClearScene.h"
-#include "../../Scene/GameOverScene.h"
-#include "../Resource/ResourceManager.h"
-#include "../Generic/ButtonUIManager.h"
+#include "Manager/Generic/DataBank.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/ButtonUIManager.h"
+#include "Scene/TitleScene.h"
+#include "Scene/GameScene.h"
+#include "Scene/GameEventRevolutionScene.h"
+#include "Scene/GameClearScene.h"
+#include "Scene/GameOverScene.h"
+#include "Renderer/PixelRenderer.h"
 #include "SceneManager.h"
 #include "Camera.h"
 
@@ -30,6 +32,11 @@ void SceneManager::Init(void)
 	preTime_ = std::chrono::system_clock::now();
 
 	mainScreen_ = MakeScreen(
+		Application::SCREEN_SIZE_X,
+		Application::SCREEN_SIZE_Y,
+		true);
+
+	postEffScreen_= MakeScreen(
 		Application::SCREEN_SIZE_X,
 		Application::SCREEN_SIZE_Y,
 		true);
@@ -119,8 +126,18 @@ void SceneManager::Draw(void)
 		scene->Draw();
 	}
 
-	// 主にポストエフェクト用
-	camera_->Draw();
+	SetDrawScreen(postEffScreen_);
+	// 画面を初期化
+	ClearDrawScreen();
+
+	// メインスクリーンを画面に描画する
+	DrawGraph(0, 0, mainScreen_, false);
+
+	//ポストエフェクトがあれば描画する
+	for (const auto& postEff : postEffectRenderers_)
+	{
+		postEff->Draw();
+	}
 
 	// Effekseerにより再生中のエフェクトを描画する。
 	DrawEffekseer3D();
@@ -131,18 +148,20 @@ void SceneManager::Draw(void)
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// メインスクリーンを画面に描画する
-	DrawGraph(0, 0, mainScreen_, false);
+	DrawGraph(0, 0, postEffScreen_, false);
 }
 
-void SceneManager::CreateScene(std::shared_ptr<SceneBase> scene)
+void SceneManager::CreateScene(const SCENE_ID _sceneId)
 {
-	if (scenes_.empty())
+	const std::shared_ptr<SceneBase> scenePtr_ = createScenePtr_[_sceneId]();
+
+;	if (scenes_.empty())
 	{
-		scenes_.push_back(scene);
+		scenes_.push_back(scenePtr_);
 	}
 	else
 	{
-		scenes_.front() = scene;
+		scenes_.front() = scenePtr_;
 	}
 
 	//データのロード
@@ -195,7 +214,26 @@ void SceneManager::StartFadeOut(void)
 	fader_->SetFade(Fader::STATE::FADE_OUT);
 }
 
+void SceneManager::SetPostEffect(const std::shared_ptr<PixelRenderer> _postEffectRenderer)
+{
+	//寿命チェック
+	postEffectRenderers_.push_back(_postEffectRenderer);
+}
 
+void SceneManager::DeletePostEffect(const std::shared_ptr<PixelRenderer> _postEffectRenderer)
+{
+	//消したいrendererと同じものを探索する(owner_beforeで探索できる)
+	auto it = std::find(
+		postEffectRenderers_.begin()
+		, postEffectRenderers_.end()
+		, _postEffectRenderer);
+
+	//特定のポストエフェクトを削除
+	if (it != postEffectRenderers_.end())
+	{
+		postEffectRenderers_.erase(it);
+	}
+}
 
 SceneManager::SceneManager(void)
 {
@@ -216,6 +254,14 @@ SceneManager::SceneManager(void)
 	camera_ = nullptr;
 
 	totalTime_ = -1.0f;
+
+	createScenePtr_ = {
+		{SCENE_ID::TITLE,[this]() {return std::make_shared<TitleScene>(); }},
+		{SCENE_ID::GAME,[this]() {return std::make_shared<GameScene>(); }},
+		{SCENE_ID::REVOLUTION_START,[this]() {return std::make_shared<GameEventRevolutionScene>(); }},
+		{SCENE_ID::GAME_CLEAR,[this]() {return std::make_shared<GameClearScene>(); }},
+		{SCENE_ID::GAME_OVER,[this]() {return std::make_shared<GameOverScene>(); }}
+	};
 }
 
 void SceneManager::ResetDeltaTime(void)
@@ -242,26 +288,12 @@ void SceneManager::DoChangeScene(SCENE_ID sceneId)
 	}
 
 	//シーン生成
-	switch (sceneId_)
-	{
-	case SCENE_ID::TITLE:
-		CreateScene(std::make_unique<TitleScene>());
-		break;
-	case SCENE_ID::GAME:
-		CreateScene(std::make_unique<GameScene>());
- 		break;
-	case SCENE_ID::GAME_CLEAR:
-		CreateScene(std::make_unique<GameClearScene>());
-		break;
-	case SCENE_ID::GAME_OVER:
-		CreateScene(std::make_unique<GameOverScene>());
-		break;
-	}
+	CreateScene(sceneId_);
 
+	//デルタタイムリセット
 	ResetDeltaTime();
 
 	waitSceneId_ = SCENE_ID::NONE;
-
 }
 
 const Fader& SceneManager::GetFader(void)

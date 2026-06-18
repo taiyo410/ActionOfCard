@@ -1,5 +1,6 @@
 #pragma once
-#include "../Object/ObjectBase.h"
+
+#include "Object/ObjectBase.h"
 
 class EnemyRock :
     public ObjectBase
@@ -57,73 +58,40 @@ public:
     /// @return 岩の攻撃力
     const float GetAttackPow(void) { return atkPow_; }
 
+    /// @brief 外部ファイル読み込み
+    /// @param _jsonData 
+    void LoadRockData(const nlohmann::json _jsonData);
+
 private:
 
+#pragma region メンバー定数
     //オブジェクト名に使用する文字列
     const std::string ROCK_STR = "StompRock";
+#pragma endregion
 
-    //ジャンプ力
-    static constexpr float POW_JUMP = 100.0f;
-
-    //重力
-    static constexpr float GRAVITY = 1.3f;
-
-    //ジャンプ高さ
-    static constexpr float JUMP_HEIGHT = 300.0f;
-
-    //キャラ同士の間隔
-    static constexpr float DISTANCE_RADIUS = 100.0f;
-
-    //岩の角度関連
-    static constexpr int ARROUND_NUM = 8;			//1周で出す岩の数	
-    static constexpr float ARROUND_PER_DEG = 360.0f / ARROUND_NUM;	//岩と岩の間隔
-    static constexpr float ARROUND_PER_RAD = ARROUND_PER_DEG * DX_PI_F / 180.0f;//ラジアン変換
-
-    //当たり判定球の半径
-	static constexpr float ROCK_COL_RADIUS = 150.0f;
-
-    //水平方面への移動速度
-    static constexpr float MOVE_HORIZONTAL_SPD = 20.0f;
 
 #pragma region 外部ファイル読み込み
-    //攻撃力
-    float atkPow_;
+    float atkPow_ = 0.0f;               //攻撃力
+    float gravity_ = 0.0f;              //重力
+    float jumpHeight_ = 0.0f;           //ジャンプ力
+    int rockNum_ = 0;                 //岩の生成数
+    float radius_ = 0.0f;               //岩の半径
+    float horizontalMoveSpd_ = 0.0f;    //水平方向への移動速度
+    float aroundPerRad_ = 0.0f;         //岩と岩の間隔
+    float moveDistance_ = 0.0f;         //岩の動く距離
 #pragma endregion
 
 #pragma region メンバー変数
-    //番号
-    int num_;
 
-    //センター座標
-    VECTOR centerPos_;
-
-    //初期座標
-    VECTOR& startPos_;
-
-    //岩を放物線で飛ばすためのY
-    VECTOR jumpPow_;
-
-    //移動量
-    VECTOR velocity_;
-
-    //飛距離
-    float distance_;
-
-    //目標の座標
-    VECTOR goalPos_;
-
-    //モデルID
-    int modelId_;
-
-    //生存(攻撃時にセット)
-    bool isAlive_;
-
-    //ダメージ処理済みフラグ
-    bool isDamaged_;
-#pragma endregion
-
-#pragma region メンバー関数
-    //岩の攻撃力を外部から取得
-    void LoadAttackPow(void);
+    int createNum_;         //何個目に生成されたか
+    VECTOR centerPos_;      //センター座標
+    VECTOR& startPos_;      //初期座標
+    VECTOR jumpPow_;        //岩を放物線で飛ばすためのY
+    VECTOR velocity_;       //移動量
+    float distance_;        //飛距離
+    VECTOR goalPos_;        //目標の座標
+    int modelId_;           //モデルID
+    bool isAlive_;          //生存(攻撃時にセット)
+    bool isDamaged_;        //ダメージ処理済みフラグ
 #pragma endregion
 };

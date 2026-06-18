@@ -1,6 +1,6 @@
-#include "../ObjectBase.h"
-#include "../Character/Base/CharacterBase.h"
 #include "Geometry/Geometry.h"
+#include "Object/ObjectBase.h"
+#include "Object/Character/Base/CharacterBase.h"
 #include "Collider.h"
 
 Collider::Collider(ObjectBase& _parent, const std::set<TAG> _tags, std::unique_ptr<Geometry>_geometry, const std::set<TAG> _notHitTags) :

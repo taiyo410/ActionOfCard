@@ -1,5 +1,5 @@
 #include <DxLib.h>
-#include "../Manager/Generic/SceneManager.h"
+#include "Manager/Generic/SceneManager.h"
 #include "InputManager.h"
 
 InputManager::InputManager(void):
@@ -8,7 +8,9 @@ InputManager::InputManager(void):
 	mousePos_(),
 	padInfos_(),
 	mouseInfos_(),
-	mouseInfoEmpty_()
+	mouseInfoEmpty_(),
+	joyDInState_(),
+	joyXInState_()
 {
 }
 
@@ -55,6 +57,9 @@ void InputManager::Init(void)
 	//ポーズシーンを開く
 	Add(KEY_INPUT_ESCAPE);
 	Add(KEY_INPUT_Z);
+
+	//デバッグ
+	Add(KEY_INPUT_1);
 
 	InputManager::MouseInfo info;
 

@@ -1,10 +1,10 @@
-#include "../pch.h"
-#include"./ActionController.h"
-#include"../../Common/AnimationController.h"
-#include"../Base/CharacterBase.h"
-#include"../Utility/Utility3D.h"
-#include"../Base/LogicBase.h"
-#include "Dodge.h"
+#include "pch.h"
+#include "Utility/Utility3D.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "Object/Character/Base/LogicBase.h"
+#include "./ActionController.h"
+#include "./Dodge.h"
 
 Dodge::Dodge(ActionController& _actCntl, CharacterBase& _character):
 	ActionBase(_actCntl, _character),

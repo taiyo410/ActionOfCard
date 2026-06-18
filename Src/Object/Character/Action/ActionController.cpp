@@ -1,31 +1,30 @@
-#include"../Utility/Utility3D.h"
-#include"../Utility/UtilityCommon.h"
-#include"../Player/Player.h"
-#include"../Player/PlayerLogic.h"
-#include "../../../Manager/Generic/Camera.h"
-#include "../../../Manager/Generic/SceneManager.h"
-#include "../../../Manager/Resource/ResourceManager.h"
-#include"../Object/Card/CardSystem.h"
-#include "../../../Object/Common/AnimationController.h"
-#include"../../Card/CardDeck.h"
-#include"../../Card/CardBase.h"
-#include"../../Card/CardUIBase.h"
-#include"../Base/ActionBase.h"
-#include"../Action/Idle.h"
-#include"../Action/Run.h"
-#include"../Action/React.h"
-#include"../Action/Dodge.h"
-#include"../Action/PlayerAction/PlayerCardAttackOneShort.h"
-#include"../Action/PlayerAction/PlayerCardAttackOneMiddle.h"
-#include"../Action/PlayerAction/PlayerCardAttackTwo.h"
-#include"../Action/PlayerAction/PlayerCardAttackThree.h"
-#include"../Action/PlayerAction/PlayerCardMagicFire.h"
-#include"../Action/PlayerAction/PlayerCardMagicThunder.h"
-#include"../Action/PlayerAction/PlayerCardReload.h"
-#include"../Action/EnemyAction/EnemyCardAttackJump.h"
-#include"../Action/EnemyAction/EnemyCardAttackStomp.h"
-#include"../Action/EnemyAction/EnemyCardReload.h"
-
+#include "Utility/Utility3D.h"
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Card/CardSystem.h"
+#include "Object/Card/CardDeck.h"
+#include "Object/Card/CardBase.h"
+#include "Object/Card/CardUIBase.h"
+#include "Object/Character/Player/Player.h"
+#include "Object/Character/Player/PlayerLogic.h"
+#include "Object/Character/Base/ActionBase.h"
+#include "./Idle.h"
+#include "./Run.h"
+#include "./React.h"
+#include "./Dodge.h"
+#include "./PlayerAction/PlayerCardAttackOneShort.h"
+#include "./PlayerAction/PlayerCardAttackOneMiddle.h"
+#include "./PlayerAction/PlayerCardAttackTwo.h"
+#include "./PlayerAction/PlayerCardAttackThree.h"
+#include "./PlayerAction/PlayerCardMagicFire.h"
+#include "./PlayerAction/PlayerCardMagicThunder.h"
+#include "./PlayerAction/PlayerCardReload.h"
+#include "./EnemyAction/EnemyCardAttackJump.h"
+#include "./EnemyAction/EnemyCardAttackStomp.h"
+#include "./EnemyAction/EnemyCardReload.h"
 #include "ActionController.h"
 
 ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, Transform& _trans, CardPresenter& _deck, AnimationController& _anim, InputManager::JOYPAD_NO _padNum) :
@@ -205,15 +204,21 @@ void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
 	}
 }
 
-void ActionController::DesideCardAction(void)
+void ActionController::DecideCardAction(void)
 {
+	//リロードカードであればリロードへ移行
+	if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	{
+		ChangeAction(ACTION_TYPE::CARD_RELOAD);
+		return;
+	}
 	//敵はカード攻撃処理へ
 	if (character_.GetCharaType() == CHARACTER_TYPE::ENEMY)
 	{
 		//手札に移動
 		cardPresent_.PutCard();
 
-		DesideEnemyCardAction();
+		DecideEnemyCardAction();
 		return;
 	}
 
@@ -224,7 +229,7 @@ void ActionController::DesideCardAction(void)
 		cardPresent_.PutCard();
 
 		//攻撃アクションの遷移
-		DesideAttackOne();
+		DecideAttackOne();
 	}
 	else if (cardPresent_.GetCardType() == CardBase::CARD_TYPE::FIRE)
 	{
@@ -238,15 +243,12 @@ void ActionController::DesideCardAction(void)
 		cardPresent_.PutCard();
 		ChangeAction(ACTION_TYPE::CARD_MAGIC_THUNDER);
 	}
-	else if(cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
-	{
-		ChangeAction(ACTION_TYPE::CARD_RELOAD);
-	}
+
 }
 void ActionController::ChangeComboCardAttack(void)
 {
 	//空の場合、攻撃不可能な場合はアイドル状態へ
-	if (atkCombos_.empty()||!IsAttacable()||cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	if (atkCombos_.empty()||!IsAttackable()||cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
 	{
 		//コンボ情報を空にする
 		if(!atkCombos_.empty()) atkCombos_.pop();
@@ -376,7 +378,7 @@ const bool ActionController::IsCardRightMoveable(void)
 		&& selectState != CardUIBase::CARD_SELECT::RELOAD;
 }
 
-void ActionController::DesideAttackOne(void)
+void ActionController::DecideAttackOne(void)
 {
 	//相手との距離を取得
 	const float dis = logic_.GetTargetDis();
@@ -395,7 +397,7 @@ void ActionController::DesideAttackOne(void)
 	}
 }
 
-void ActionController::DesideEnemyCardAction(void)
+void ActionController::DecideEnemyCardAction(void)
 {
 	const float distance = logic_.GetTargetDis();
 
@@ -407,7 +409,7 @@ void ActionController::DesideEnemyCardAction(void)
 		//遠距離時
 		if (rand > STOMP_WEIGHT)
 		{
-			//通常攻撃
+			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
 		}
 		else if (rand < JUMP_WEIGHT)
@@ -421,7 +423,7 @@ void ActionController::DesideEnemyCardAction(void)
 		//近距離時
 		if (rand > STOMP_WEIGHT)
 		{
-			//通常攻撃
+			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
 		}
 		else if (rand < JUMP_WEIGHT)
@@ -433,7 +435,7 @@ void ActionController::DesideEnemyCardAction(void)
 	logic_.SetIsActioning(true);
 }
 
-const bool ActionController::IsAttacable(void)
+const bool ActionController::IsAttackable(void)
 {
 	std::vector<CardBase::CARD_TYPE>cardTypes = cardPresent_.GetHandCardType();
 	int handCardTypeSize = static_cast<int>(cardPresent_.GetHandCardType().size());

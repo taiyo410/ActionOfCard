@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ObjectBase.h"
 
 class ModelRenderer;
@@ -55,6 +56,11 @@ public:
     void OnHit(const std::weak_ptr<Collider> _hitCol)override;
 
 private:
+
+#pragma region ƒƒ“ƒo[’è”
+
+#pragma endregion
+
 
     //•Ç‚Ìî•ñ
     Transform wallTrans_;

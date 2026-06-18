@@ -28,7 +28,7 @@ cardNoImg_(nullptr),
 reloadGauge_(),
 numPos_(),
 cardMoveCnt_(),
-disitionCnt_(),
+decisionCnt_(),
 reloadPer_()
 {
 	cardTypeMap_ = {
@@ -51,7 +51,7 @@ void CardUIBase::ChangeSelectState(const CARD_SELECT _select)
 
 void CardUIBase::ChangeUsedActionCard(void)
 {
-	for (auto& act : actions_)
+	for (auto& act : actionCards_)
 	{
 		act->ChangeUsedCard();
 	}
@@ -60,7 +60,7 @@ void CardUIBase::ChangeUsedActionCard(void)
 void CardUIBase::ChangeReactActionCard(void)
 {
 	PlayCardSound();
-	for (auto& act : actions_)
+	for (auto& act : actionCards_)
 	{
 		act->ChangeReactCard();
 	}
@@ -103,7 +103,7 @@ void CardUIBase::LoadCardData(void)
 
 	for (const auto& card : datas)
 	{
-		CardBase::CARD_STATUS status;
+		CardBase::CARD_STATUS status = {0,CardBase::CARD_TYPE::ATTACK};
 		//カードの強さの読み込み
 		if (card.contains(CARD_POWER_PATH))
 		{
@@ -149,8 +149,8 @@ void CardUIBase::Update(void)
 
 void CardUIBase::Draw(void)
 {
-	if (actions_.empty())return;
-	for (auto& card : actions_)
+	if (actionCards_.empty())return;
+	for (auto& card : actionCards_)
 	{
 		card->Draw();
 	}
@@ -161,7 +161,7 @@ void CardUIBase::AddCardUi(const CardBase::CARD_STATUS _status)
 	int img = -1;
 
 	//同じステータスを見つける
-	auto it = cardImgs_.find(_status);
+	auto it = cardImages.find(_status);
 
 	//画像に番号を合わせる
 	int num = _status.pow - 1;
@@ -171,10 +171,10 @@ void CardUIBase::AddCardUi(const CardBase::CARD_STATUS _status)
 	std::shared_ptr<CardUIController> info = std::make_shared<CardUIController>(drawNumImg);
 
 	//カード画像がない場合は作成して配列に挿入
-	if(it==cardImgs_.end())
+	if(it==cardImages.end())
 	{
 		img = MakeCardNumImg(_status);
-		cardImgs_.emplace(_status, img);
+		cardImages.emplace(_status, img);
 	}
 	else
 	{
@@ -196,7 +196,7 @@ void CardUIBase::AddCardUi(const CardBase::CARD_STATUS _status)
 void CardUIBase::DecisionMoveCardAll(void)
 {
 	//選択したカードの情報を取得
-	for (auto& card : actions_)
+	for (auto& card : actionCards_)
 	{
 		if (card->GetState() == CardUIController::CARD_STATE::REACT)continue;
 
@@ -207,16 +207,16 @@ void CardUIBase::DecisionMoveCardAll(void)
 void CardUIBase::UpdateUsedCard(void)
 {
 	//アクション中のカードがなければ飛ばす
-	if (actions_.empty())return;
+	if (actionCards_.empty())return;
 
 	//使用済みカードを消す
-	for (auto& act : actions_)
+	for (auto& act : actionCards_)
 	{
 		act->EraseUsedCard();
 	}
 
 	//消去アニメーションが終わったカードはアクション配列から削除
-	std::erase_if(actions_, [](auto& act) 
+	std::erase_if(actionCards_, [](auto& act) 
 		{
 			float cnt = act->GetSclCnt();
 			return cnt < 0.0f;
@@ -226,7 +226,7 @@ void CardUIBase::UpdateUsedCard(void)
 void CardUIBase::ReactMoveCard(const Vector2F& _goalPos)
 {
 	//選択したカードの情報を取得
-	for (auto& card : actions_)
+	for (auto& card : actionCards_)
 	{
 		card->ReactUpdate(_goalPos);
 	}
@@ -318,7 +318,7 @@ const int CardUIBase::GetTypeImg(const CardBase::CARD_STATUS _status)
 
 void CardUIBase::SetBasePosActionCards(void)
 {
-	for (auto& card : actions_)
+	for (auto& card : actionCards_)
 	{
 		card->SetBaseCardPos();
 	}

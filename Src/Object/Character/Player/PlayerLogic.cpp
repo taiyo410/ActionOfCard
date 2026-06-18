@@ -1,8 +1,7 @@
-#include"../Object/Character/Player/Player.h"
-#include"../Utility/Utility3D.h"
-#include "../Object/Character/Base/CharacterBase.h"
-
-#include "../../../Manager/Generic/Camera.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/Camera.h"
+#include "Object/Character/Player/Player.h"
+#include "Object/Character/Base/CharacterBase.h"
 #include "PlayerLogic.h"
 
 PlayerLogic::PlayerLogic(Transform& _myTrans,bool& _isCanMoveAble , InputManager::JOYPAD_NO _padNum, InputManager::CONTROLL_TYPE _cntl):

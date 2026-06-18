@@ -1,6 +1,6 @@
-#include "../pch.h"
-#include "../Object/Common/EffectController.h"
-#include "ItemBase.h"
+#include "pch.h"
+#include "Object/Common/EffectController.h"
+#include "./ItemBase.h"
 
 ItemBase::ItemBase(void):
 	isDamage_(false)

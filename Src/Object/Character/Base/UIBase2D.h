@@ -1,7 +1,10 @@
 #pragma once
-#include<memory>
-#include "../Common/Vector2F.h"
+
+#include <memory>
+#include "Common/Vector2F.h"
+
 class Easing;
+
 class UIBase2D
 {
 public:

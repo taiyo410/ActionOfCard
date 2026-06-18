@@ -1,7 +1,7 @@
 #pragma once
 
 #include<DxLib.h>
-#include"../../../Common/Quaternion.h"
+#include"Common/Quaternion.h"
 
 class Model;
 class Cube;

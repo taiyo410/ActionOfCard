@@ -46,46 +46,17 @@ public:
 	/// @param  
 	void DrawSelectCard(void);
 
+	/// @brief 革命時、カードの色を反転
+	/// @param  
+	void DrawReverseColorCard(void);
+
 	/// @brief リロードゲージ描画
 	/// @param  
 	void DrawReloadGauge(const float& _reloadPer);
 
 private:
 
-	//通常カードのシェーダパス
-	std::wstring NORMAL_CARD_SHADER_PATH = L"CardNormalPS.cso";
-
-	//リロードカードのシェーダパス
-	std::wstring RELOAD_CARD_SHADER_PATH = L"CardReloadPS.cso";
-
-	//選択枠シェーダパス
-	std::wstring SELECT_FRAME_SHADER_PATH = L"SelectCardPS.cso";
-
-	//カード強さ番号の倍率
-	static constexpr float CARD_SCL = 0.5f;
-
-	//カード初期座標
-	static constexpr VECTOR CARD_INIT_POS = { 50.0f,200.0f,0.0f };
-
-	//選択中のフォグの強さ
-	static constexpr float SELECT_FOG_STRENGTH = 0.3f;
-
-	//選択カード枠の大きさイージング時間
-	static constexpr float SELECT_CARD_FRAME_EASING_TIME = 1.0f;
-
-	//選択カード枠移動量
-	static constexpr float SELECT_CARD_FRAME_MOVE_AMOUNT = 10.0f;
-
-	//フレーム固定座標
-	static constexpr Vector2F LEFT_UP_FRAME_POS = { 19.5f,343.0f };
-	static constexpr Vector2F RIGHT_DOWN_FRAME_POS = { 140.0f,509.0f };
-
-	//シェーダの定数バッファスロット
-	static constexpr int CONST_BUF_SLOT_NUM = 3;
-
-	//選択カードの定数バッファスロット
-	static constexpr int CARD_NUM_CONST_BUF_SIZE = 3;
-
+#pragma region メンバー定数
 	//リロードカードの割合の定数バッファスロット
 	static constexpr int RELOAD_PER_CONST_BUF_SIZE = 1;
 
@@ -94,54 +65,56 @@ private:
 
 	//通常カードの色の定数バッファ
 	static constexpr int NORMAL_CARD_CONST_BUN_NUM = 1;
+#pragma endregion
 
-	//選択カードアウトラインサイズ
-	static constexpr float SELECT_CARD_OUTLINE_SIZE = 100.0f;	
+#pragma region 外部ファイル読み込み
+	float selectCardFogPow_;			//選択カードのフォグの強さ
+	float selectCardFrameEaseTime_;		//選択カードイージング時間
+	float selectCardFrameMoveAmount_;	//選択カード枠拡大縮小の移動量
+#pragma endregion
 
-	//通常カードピクセルマテリアル
-	std::unique_ptr<PixelMaterial> normalCardPSMaterial_;
-
-	//通常カードピクセルレンダラー
-	std::unique_ptr<PixelRenderer> normalCardPSRenderer_;
+#pragma region メンバー変数
+	//通常カードピクセルシェーダー
+	std::unique_ptr<PixelMaterial> normalCardPSMaterial_;	//マテリアル
+	std::unique_ptr<PixelRenderer> normalCardPSRenderer_;	//レンダラー
 
 	//リロードカード
-	std::unique_ptr<PixelMaterial> reloadCardPSMaterial_;
-	std::unique_ptr<PixelRenderer> reloadCardPSRenderer_;
+	std::unique_ptr<PixelMaterial> reloadCardPSMaterial_;	//マテリアル
+	std::unique_ptr<PixelRenderer> reloadCardPSRenderer_;	//レンダラー
 
-	//選択カード枠マテリアル
-	std::unique_ptr<PixelMaterial> selectFramePSMaterial_;
-	std::unique_ptr<PixelRenderer> selectFramePSRenderer_;
+	//選択カード枠
+	std::unique_ptr<PixelMaterial> selectFramePSMaterial_;	//マテリアル
+	std::unique_ptr<PixelRenderer> selectFramePSRenderer_;	//レンダラー
 
-	//イージング
-	std::unique_ptr<Easing>easing_;
+	std::unique_ptr<Easing>easing_;		//イージング
 
-	//カードの種類画像
-	int& typeImg_;		
+	Vector2F halfSize_;						//カードの半分大きさ
+	Vector2F size_;							//カードの大きさ
+	Vector2F& centerPos_;					//中心座標
+	Vector2F rightTopPos_;					//左上座標
+	Vector2F leftDownPos_;					//右下座標
+	int& typeImg_;							//カードの種類画像
+	float& scl_;							//サイズ
+	float selectEaseCnt_;					//選択枠イージングカウント
+	float shaderSetRevolutionCard_;			//革命時のシェーダーセット変数
+#pragma endregion
 
-	//カードの半分大きさ
-	Vector2F halfSize_;	
-
-	//カードの大きさ
-	Vector2F size_;			
-
-	//中心座標
-	Vector2F& centerPos_;	
-
-	//左上座標
-	Vector2F rightTopPos_;	
-
-	//右下座標
-	Vector2F leftDownPos_;	
-
-	//サイズ
-	float& scl_;			
-
-	//選択枠イージングカウント
-	float selectEaseCnt_;	
-
+#pragma region メンバー関数
 	//カードの描画
 	void DrawCard(void);
 
 	//選択枠イージング
 	void SelectFrameEasing(void);
+#pragma endregion
+
+	//選択中のフォグの強さ
+	static constexpr float SELECT_FOG_STRENGTH = 0.4f;
+
+	//選択カード枠の大きさイージング時間
+	static constexpr float SELECT_CARD_FRAME_EASING_TIME = 1.0f;
+
+	//選択カード枠移動量
+	static constexpr float SELECT_CARD_FRAME_MOVE_AMOUNT = 10.0f;
+
+
 };

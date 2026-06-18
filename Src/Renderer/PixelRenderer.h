@@ -1,7 +1,8 @@
 #pragma once
+
 #include <DxLib.h>
-#include "../Common/Vector2.h"
-#include "../Renderer/PixelMaterial.h"
+#include "Common/Vector2.h"
+#include "Renderer/PixelMaterial.h"
 
 class PixelRenderer
 {
@@ -63,6 +64,9 @@ public:
 	void Draw(void);
 	void Draw(float x, float y);
 	void DrawFromCenter(float centerX, float centerY);
+
+	//ポストエフェクトの描画
+	void DrawPostEffect(void);
 
 private:
 

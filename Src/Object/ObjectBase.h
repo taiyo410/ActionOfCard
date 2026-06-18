@@ -4,7 +4,7 @@
 #include <vector>
 #include <nlohmann/json.hpp>
 #include "Common/Transform.h"
-#include "../Common/IntVector3.h"
+#include "Common/IntVector3.h"
 #include "./Common/Collider.h"
 
 class ResourceManager;

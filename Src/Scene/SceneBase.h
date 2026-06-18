@@ -1,7 +1,7 @@
 #pragma once
-#include<functional>
-#include "../Common/Vector2.h"
-#include "../Application.h"
+#include <functional>
+#include "Common/Vector2.h"
+#include "Application.h"
 
 class SceneManager;
 class ResourceManager;
@@ -59,6 +59,7 @@ public:
 
 protected:
 	
+#pragma region メンバー定数
 	//Now Loading文字列
 	const std::wstring NOW_LOAD_STR = L"Now loading";
 
@@ -67,26 +68,25 @@ protected:
 
 	//クリアシーンとゲームオーバーシーンの戻る説明の文字列
 	const std::wstring BACK_TITLE_SCENE_STR = L"'B'ボタンまたは'スペースキー'でタイトルに戻る";
+#pragma endregion
 
-	// リソース管理
-	ResourceManager& resMng_;
-	InputManager& inputMng_;
-	InputManagerS& inputMngS_;
-	SceneManager& scnMng_;
-	SoundManager& soundMng_;
+#pragma region メンバー変数
 
-	//更新処理
-	std::function<void(void)> updateFunc_;
+	ResourceManager& resMng_;		// リソース管理
+	InputManager& inputMng_;		//入力
+	InputManagerS& inputMngS_;		//スティックなどの入力
+	SceneManager& scnMng_;			//シーンマネージャ
+	SoundManager& soundMng_;		//サウンドマネージャ
 
-	//描画処理
-	std::function<void(void)> drawFunc_;
+	std::function<void(void)> updateFunc_;	//更新処理
+	std::function<void(void)> drawFunc_;	//描画処理
 
-	//ローディング経過時間
-	float loadingTime_;
+	float loadingTime_;				//ローディング経過時間
+	int buttonFontHandle_;			//選択ボタンフォントハンドル
+	int postEffectScreen_;			//ポストエフェクト用スクリーン
+#pragma endregion
 
-	//選択ボタンフォントハンドル
-	int buttonFontHandle_;
-
+#pragma region メンバー関数
 	//更新関数
 	virtual void LoadingUpdate(void);
 	virtual void NormalUpdate(void);
@@ -97,7 +97,8 @@ protected:
 
 	//ローディング処理から通常処理へ
 	virtual void OnSceneEnter(void);
-	
+
 	//「now loading......」の描画
 	void DrawNowLoading(void);
+#pragma endregion
 };

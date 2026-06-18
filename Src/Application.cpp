@@ -143,7 +143,6 @@ Application::Application(void):
 	fps_(nullptr),
 	fontMng_(nullptr)
 {
-
 }
 
 void Application::InitEffekseer(void)

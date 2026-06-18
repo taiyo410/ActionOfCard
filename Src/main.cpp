@@ -3,7 +3,7 @@
 #include <crtdbg.h>
 #include <stdlib.h>
 #include <iostream>
-#include "Application.h"
+#include "./Application.h"
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 
 // WinMainä÷êî

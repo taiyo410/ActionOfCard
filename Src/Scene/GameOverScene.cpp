@@ -1,16 +1,17 @@
-#include "../pch.h"
-#include "../Utility/UtilityCommon.h"
-#include "../Manager/Generic/InputManagerS.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Utility/UtilityDraw.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Resource/FontManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/Camera.h"
+#include "pch.h"
+#include "Utility/UtilityCommon.h"
+#include "Utility/UtilityDraw.h"
+#include "Manager/Generic/InputManagerS.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Manager/Resource/FontManager.h"
 #include "GameOverScene.h"
 
 GameOverScene::GameOverScene(void):
-	soundMng_(SoundManager::GetInstance())
+	soundMng_(SoundManager::GetInstance()),
+	imgGameOver_(UtilityCommon::INITIAL_HANDLE)
 {
 	//更新関数のセット
 	updateFunc_ = [this]() {LoadingUpdate(); };

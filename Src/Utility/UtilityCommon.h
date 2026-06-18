@@ -5,8 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include <nlohmann/json.hpp>
-#include "../Common/Vector2.h"
-#include "../Common/Vector2F.h"
+#include "Common/Vector2.h"
+#include "Common/Vector2F.h"
 
 class UtilityCommon
 {
@@ -122,11 +122,20 @@ public:
 	/// @return wstringオブジェクト
 	static std::string GetStringFromWString(const std::wstring& wstr);
 
+	/// @brief メルセンヌでのランダム数を取得
+	/// @param _min 最小値
+	/// @param _max 最大値
+	/// @return ランダムな値
+	static float GetMersenneRandomNumber(const float _min, const float _max);
+
 	/// @brief JSONファイルの読み込み
 	/// @param filePath ファイルパス
 	/// @return 読み込んだJSONデータ
 	static nlohmann::json LoadJsonData(const std::string& filePath);
 
-
+	/// @brief UTF8からSJISへの変換
+	/// @param utf8_str json utf8の文字列(jsonで読み込んだ日本語など)
+	/// @return SJISの文字
+	static std::string ConvertUtf8ToSJIS(const std::string& utf8_str);
 
 };

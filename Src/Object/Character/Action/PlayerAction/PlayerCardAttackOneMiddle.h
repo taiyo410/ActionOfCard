@@ -36,14 +36,13 @@ public:
 private:
 
 #pragma region 外部ファイル読み込み
-    float attackTime_;                      //中距離移動時間
-    float initVelocity_;                    //中距離初期速度
-    float comboTIme_;                       //中距離移動コンボ受付時間
+    float attackTime_ = 0.0f;                      //中距離移動時間
+    float initVelocity_ = 0.0f;                    //中距離初期速度
+    float comboTIme_ = 0.0f;                       //中距離移動コンボ受付時間
 #pragma endregion
 
 #pragma region メンバー変数
     std::unique_ptr<Easing>easing_;         //イージング
-
     float midAtkCnt_;                       //中距離攻撃突きカウント
     float midAtkOverCnt_;                   //中距離攻撃突きオーバーカウント
 #pragma endregion

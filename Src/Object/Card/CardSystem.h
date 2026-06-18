@@ -1,6 +1,7 @@
 #pragma once
-#include<vector>
-#include<memory>
+#include <vector>
+#include <memory>
+#include <unordered_map>
 #include "../../Template/Singleton.h"
 
 class CardDeck;
@@ -42,6 +43,13 @@ public:
 		RELOAD			//リロード
 	};
 
+	//
+	enum class ORDER_RULE
+	{
+		NORMAL,			//通常
+		REVOLUTION		//革命(小さい値が勝つルール)
+	};
+
 	/// @brief ストックカードのカードを比較する
 	/// @param  
 	void CompareCards(void);
@@ -69,15 +77,40 @@ public:
 	/// @return  カード２枚のカード強さの差
 	const int GetCardDif(void)const { return cardDif_; }
 
+	/// @brief カードの勝敗判定を変更する
+	/// @param  
+	void ChangeJudgeRule(void);
+
+	/// @brief カード判定ルールの取得
+	/// @param  
+	/// @return 
+	const ORDER_RULE GetJudgeRule(void) { return rule_; }
+
 #ifdef _DEBUG
 	void DrawDebug(void);
 #endif // _DEBUG
 
 private:
 
+#pragma region メンバー定数
 	//カードが出ていない状態の強さ
 	static constexpr int CARD_POW_NONE = -1;
+#pragma endregion
 
+
+#pragma region メンバー変数
+	std::function<std::array<BATTLE_RESULT, ARRAY_NUM>(void)>battleRuleFunc_;	//カード比較
+	std::unordered_map<ORDER_RULE, std::function<void(void)>>changeBattleRule_;
+	int putCardPow_[ARRAY_NUM];				//場に出ているカード
+	bool canPut_;							//カードを場に出せるか
+	BATTLE_RESULT playerResult_[ARRAY_NUM];	//結果返す時のプレイヤーの識別
+	BATTLE_RESULT preResult_[ARRAY_NUM];	//攻撃前のカード勝利結果
+	ORDER_RULE rule_;						//勝敗ルール
+	int cardDif_;							//2枚のカードの強さの差
+	bool isFirstAtk_[ARRAY_NUM];			//先出しかどうか true:先出し
+#pragma endregion
+
+#pragma region メンバー関数
 	//デストラクタ
 	CardSystem(void);
 
@@ -86,21 +119,13 @@ private:
 	CardSystem& operator=(const CardSystem&) = delete;
 	~CardSystem(void)override = default;
 
-	//場に出ているカード
-	int putCardPow_[ARRAY_NUM];
+	//カード勝敗判定の取得
+	const std::array<BATTLE_RESULT,ARRAY_NUM> GetNormalResult(void);
 
-	//カードを場に出せるか
-	bool canPut_;
+	//ルール
+	std::array<BATTLE_RESULT, ARRAY_NUM> NormalRuleFunc(void);		//通常
+	std::array<BATTLE_RESULT, ARRAY_NUM> RevolutionRuleFunc(void);	//革命ルール
 
-	//結果返す時のプレイヤーの識別
-	BATTLE_RESULT playerResult_[ARRAY_NUM];
-
-	//攻撃前のカード勝利結果
-	BATTLE_RESULT preResult_[ARRAY_NUM];
-
-	//2枚のカードの強さの差
-	int cardDif_;
-
-	//先出しかどうか true:先出し
-	bool isFirstAtk_[ARRAY_NUM];
+	std::wstring str[2];
+#pragma endregion
 };

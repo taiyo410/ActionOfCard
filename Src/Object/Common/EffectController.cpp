@@ -1,7 +1,7 @@
-#include<DxLib.h>
-#include<EffekseerForDXLib.h>
-#include<Effekseer.h>
-#include "../../Manager/Generic/SceneManager.h"
+#include <DxLib.h>
+#include <EffekseerForDXLib.h>
+#include <Effekseer.h>
+#include "Manager/Generic/SceneManager.h"
 #include "EffectController.h"
 
 EffectController::EffectController(void)

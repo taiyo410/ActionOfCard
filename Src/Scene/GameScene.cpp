@@ -1,28 +1,35 @@
 #include <DxLib.h>
-#include "../Application.h"
-#include "../Common/Fader.h"
-#include "../Manager/Resource/FontManager.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Manager/Generic/InputManager.h"
-#include "../Manager/Generic/ButtonUIManager.h"
-#include "../Manager/Generic/UIManager.h"
-#include "../Manager/Game/CollisionManager.h"
-#include "../Manager/Game/CharacterManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Generic/DataBank.h"
-#include "../Renderer/PixelMaterial.h"
-#include "../Renderer/PixelRenderer.h"
-#include "../Object/Character/Player/Player.h"
-#include "../Object/SkyDome/SkyDome.h"
-#include "../Object/Character/Enemy/Enemy.h"
-#include "../Object/Card/CardSystem.h"	
-#include "../Object/Stage.h"	
-#include "PauseScene.h"
-#include "GameScene.h"
+#include "Utility/UtilityCommon.h"
+#include "Application.h"
+#include "Common/Fader.h"
+#include "Manager/Resource/FontManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/ButtonUIManager.h"
+#include "Manager/Generic/UIManager.h"
+#include "Manager/Game/CollisionManager.h"
+#include "Manager/Game/CharacterManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Manager/Generic/DataBank.h"
+#include "Renderer/PixelMaterial.h"
+#include "Renderer/PixelRenderer.h"
+#include "Object/SkyDome/SkyDome.h"
+#include "Object/Card/CardSystem.h"	
+#include "Object/Stage.h"	
+#include "./PauseScene.h"
+#include "./GameEventRevolutionScene.h"
+#include "./GameScene.h"
 
-GameScene::GameScene(void)
+GameScene::GameScene(void):
+	revolutionCnt_(),
+	fadeCnt_(),
+	isSkippingDirection_(),
+	revolutionRondomTime_(),
+	skipKeepCnt_(),
+	slowFrame_(),
+	waitCnt_()
 {
 	//更新関数のセット
 	updateFunc_ = [this]() {LoadingUpdate(); };
@@ -46,6 +53,9 @@ GameScene::GameScene(void)
 	UIManager::CreateInstance();
 	CharacterManager::CreateInstance();
 	CollisionManager::CreateInstance();
+
+	pauseScene_ = std::make_shared<PauseScene>();
+	revolutionScene_ = std::make_shared<GameEventRevolutionScene>();
 }
 
 GameScene::~GameScene(void)
@@ -54,33 +64,16 @@ GameScene::~GameScene(void)
 	CardSystem::GetInstance().Destroy();
 	CollisionManager::GetInstance().Destroy();
 	CharacterManager::GetInstance().Destroy();
-	UIManager::GetInstance().Destroy();
+	UIManager::GetInstance().Destroy(); 
+	changeUpdate_.clear();
 }
 
 void GameScene::Load(void)
 {
 	//フォントの登録
 	buttonFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
-
-	//ポーズ画面のリソース
-	pauseScene_ = std::make_shared<PauseScene>();
-	pauseScene_->Load();
-
-	//UIマネージャ
-	UIManager::GetInstance().Load();
-
-	//ボタンUIマネージャ
-	ButtonUIManager::GetInstance().Load();
-
-	//ステージ
-	stage_ = std::make_unique<Stage>();
-
-	//スカイドーム
-	skyDome_ = std::make_unique<SkyDome>();
-	skyDome_->Load();
-
-	//キャラクター
-	CharacterManager::GetInstance().Load();
+	LoadInvertEffect();			//反転フェードシェーダのロード
+	ObjectLoad();				//オブジェクトのロード
 }
 
 void GameScene::Init(void)
@@ -90,16 +83,20 @@ void GameScene::Init(void)
 	//演出へ
 	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
 
-	CharacterManager::GetInstance().Init();
-	UIManager::GetInstance().Init();
+	//革命になるランダム時間を決める
+	float rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
+	revolutionRondomTime_ = rand;
+	revolutionCnt_ = revolutionRondomTime_;
+	revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
+	fadeCnt_ = 0.0f;
+	waitCnt_ = WAIT_TIME;
 
 	//シェイク状態を初期化
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
-
-	stage_->Init();
-	skyDome_->Init();
 	resMng_.Load(ResourceManager::SRC::GAME_BGM);
 	soundMng_.Play(ResourceManager::SRC::GAME_BGM, SoundManager::PLAYTYPE::LOOP);
+
+	ObjectInit();
 }
 
 void GameScene::Release(void)
@@ -156,39 +153,14 @@ void GameScene::FadeUpdate(void)
 
 void GameScene::NormalUpdate(void)
 {
-	//ポーズ画面へ遷移
-	if (inputMng_.IsTrgDown(KEY_INPUT_ESCAPE)||inputMng_.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1,InputManager::JOYPAD_BTN::SELECT_BUTTON))
-	{
-		scnMng_.PushScene(pauseScene_);
-		return;
-	}
-	//敵が倒れたらクリアシ－ンへ
-	if (CharacterManager::GetInstance().IsSceneChangeClearCondition())
-	{
-		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
-		return;
-	}
-	//自分が倒れたらゲームオーバーシーンへ
-	else if (CharacterManager::GetInstance().IsSceneChangeGameOverCondition())
-	{
-		ChangeUpdatePhase(UPDATE_PHASE::OVER_DIRECTION);
-		return;
-	}
+	//シーン変更されたら処理を飛ばす
+	if (CheckGameStateTransition())return;
 
-	//ステージ
-	stage_->Update();
+	//革命時間の更新
+	RevolutionUpdate();
 
-	//キャラクターの更新
-	CharacterManager::GetInstance().Update();
-
-	//カード勝敗状態の監視
-	CardSystem::GetInstance().CompareCards();
-
-	//UIの更新
-	UIManager::GetInstance().Update();
-
-	//更新はアクション中のみ
-	CollisionManager::GetInstance().Update();
+	//各オブジェクトの更新
+	ObjectUpdate();
 
 	//終了した当たり判定の消去
 	CollisionManager::GetInstance().Sweep();
@@ -196,18 +168,8 @@ void GameScene::NormalUpdate(void)
 
 void GameScene::NormalDraw(void)
 {
-	//プレイヤー
-	skyDome_->Draw();
-
-	//ステージ
-	stage_->Draw();
-
-	//キャラクター
-	CharacterManager::GetInstance().Draw();
-	CharacterManager::GetInstance().Draw2D();
-	
-	//UI
-	UIManager::GetInstance().Draw();
+	ObjectDraw();
+	DrawFormatString(300, 370, 0x000000, L"%f", fadeCnt_);
 }
 
 void GameScene::DirectionDraw(void)
@@ -226,9 +188,7 @@ void GameScene::DirectionDraw(void)
 	{
 		UIManager::GetInstance().DirectionDraw();
 	}
-
 }
-
 
 void GameScene::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 {
@@ -281,6 +241,9 @@ void GameScene::ChangeClearDirection()
 	//スカイドームをクリア状態へ
 	skyDome_->ChangePhase(SkyDome::PHASE::CLEAR);
 
+	//反転フェーダの削除
+	scnMng_.DeletePostEffect(invertRenderer_);
+
 	updateFunc_ = [this]() {ClearDirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };
 }
@@ -292,6 +255,9 @@ void GameScene::ChangeOverDirection(void)
 
 	//カメラのリセット
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
+
+	//反転フェーダの削除
+	scnMng_.DeletePostEffect(invertRenderer_);
 
 	updateFunc_ = [this]() {OverDirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };
@@ -382,6 +348,47 @@ void GameScene::OnSceneEnter(void)
 	//演出状態へ移行
 	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
 }
+
+void GameScene::ObjectLoad(void)
+{
+	pauseScene_->Load();					//ポーズ画面のリソース
+	revolutionScene_->Load();				//革命シーン
+	UIManager::GetInstance().Load();		//UIマネージャ
+	ButtonUIManager::GetInstance().Load();	//ボタンUIマネージャ
+	stage_ = std::make_unique<Stage>();		//ステージ
+	skyDome_ = std::make_unique<SkyDome>();	//スカイドーム
+	skyDome_->Load();
+	CharacterManager::GetInstance().Load();	//キャラクター
+}
+
+void GameScene::ObjectInit(void)
+{
+	CharacterManager::GetInstance().Init();
+	UIManager::GetInstance().Init();
+	stage_->Init();
+	skyDome_->Init();
+}
+
+void GameScene::ObjectUpdate(void)
+{
+	stage_->Update();	//ステージ
+	CharacterManager::GetInstance().Update();	//キャラクターの更新
+	CardSystem::GetInstance().CompareCards();	//カード勝敗状態の監視
+	UIManager::GetInstance().Update();			//UIの更新
+	CollisionManager::GetInstance().Update();	//更新はアクション中のみ
+}
+
+void GameScene::ObjectDraw(void)
+{
+	skyDome_->Draw();	//プレイヤー
+	stage_->Draw();		//ステージ
+	//キャラクター
+	CharacterManager::GetInstance().Draw();
+	CharacterManager::GetInstance().Draw2D();
+	//UI
+	UIManager::GetInstance().Draw();
+}
+
 void GameScene::Skip(void)
 {
 	//すでにtrueの場合、処理を飛ばす
@@ -392,4 +399,108 @@ void GameScene::Skip(void)
 
 	//演出スキップフラグ
 	isSkippingDirection_ = true;
+}
+
+void GameScene::LoadInvertEffect(void)
+{
+	//ポストエフェクトのシーンハンドル生成
+	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
+	invertMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::REVOLUTION_POSTEFF_PS);
+
+	//メインスクリーン
+	const int mainScreen = scnMng_.GetMainScreen();
+	invertMaterial_->AddTextureBuf(mainScreen);
+
+	//マスク画像
+	const int maskImg = resMng_.Load(ResourceManager::SRC::REVERSE_FADE_MASK).handleId_;
+	invertMaterial_->AddTextureBuf(maskImg);
+	invertMaterial_->AddConstBuf({ fadeCnt_ ,0.0f,0.0f,0.0f });
+
+	invertRenderer_ = std::make_shared<PixelRenderer>(*invertMaterial_);
+	invertRenderer_->MakeScreenVertex();
+}
+
+void GameScene::RevolutionUpdate(void)
+{
+	//革命更新
+	revolutionFadeFunc_();
+
+	//シェーダー関連の更新
+	const int mainScreen = scnMng_.GetMainScreen();
+	invertMaterial_->SetTextureBuf(0, mainScreen);
+	invertMaterial_->SetConstBuf(0, { fadeCnt_ / FADE_TIME ,0.0f,0.0f,0.0f });
+}
+
+bool GameScene::CheckGameStateTransition(void)
+{
+	//ポーズ画面へ遷移
+	if (inputMng_.IsTrgDown(KEY_INPUT_ESCAPE) || inputMng_.IsPadBtnTrgDown(InputManager::JOYPAD_NO::PAD1, InputManager::JOYPAD_BTN::SELECT_BUTTON))
+	{
+		scnMng_.PushScene(pauseScene_);
+		return true;
+	}
+	//敵が倒れたらクリアシ－ンへ
+	if (CharacterManager::GetInstance().IsSceneChageClearCondition())
+	{
+		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
+		return true;
+	}
+	//自分が倒れたらゲームオーバーシーンへ
+	else if (CharacterManager::GetInstance().IsSceneChangeGameOverCondition())
+	{
+		ChangeUpdatePhase(UPDATE_PHASE::OVER_DIRECTION);
+		return true;
+	}
+	return false;
+}
+
+void GameScene::RevolutionInvertFadeNone(void)
+{
+	//ランダム時間ごとに革命と中将ルールを切り替える
+	if (revolutionCnt_ < 0.0f)
+	{
+		//ランダムで革命状態の時間を決める
+		float rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
+		revolutionRondomTime_ = rand;
+		revolutionCnt_ = revolutionRondomTime_;
+
+		//ルールを切り替える
+		CardSystem::GetInstance().ChangeJudgeRule();
+		scnMng_.SetPostEffect(invertRenderer_);
+		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeIn(); };
+		return;
+	}
+	revolutionCnt_ -= scnMng_.GetDeltaTime();
+}
+
+void GameScene::RevolutionInvertFadeIn(void)
+{
+	if (fadeCnt_ < FADE_TIME)
+	{
+		fadeCnt_ += scnMng_.GetDeltaTime();
+		return;
+	}
+
+	//フェード終了後、一定時間待機
+	if (waitCnt_ < 0.0f)
+	{
+		waitCnt_ = WAIT_TIME;
+		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeOut(); };
+		return;
+	}
+	waitCnt_ -= scnMng_.GetDeltaTime();
+}
+
+void GameScene::RevolutionInvertFadeOut(void)
+{
+	if (fadeCnt_ > 0.0f)
+	{
+		fadeCnt_ -= scnMng_.GetDeltaTime();
+	}
+	else
+	{
+		scnMng_.DeletePostEffect(invertRenderer_);
+		fadeCnt_ = 0.0f;
+		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
+	}
 }

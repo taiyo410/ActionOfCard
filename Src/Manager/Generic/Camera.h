@@ -2,10 +2,10 @@
 #include <DxLib.h>
 #include <functional>
 #include <map>
-#include "../../Common/Quaternion.h"
-#include "../../Object/ObjectBase.h"
-#include "../Template/Singleton.h"
-#include "../Common/Easing.h"
+#include "Common/Quaternion.h"
+#include "Object/ObjectBase.h"
+#include "Template/Singleton.h"
+#include "Common/Easing.h"
 
 class Transform;
 class Easing;

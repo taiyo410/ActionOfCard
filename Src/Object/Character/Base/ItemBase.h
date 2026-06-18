@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Object/ObjectBase.h"
+#include "Object/ObjectBase.h"
 
 class EffectController;
 
@@ -54,8 +54,5 @@ protected:
 
 	//ダメージフラグ
 	bool isDamage_;
-
-
-
 };
 

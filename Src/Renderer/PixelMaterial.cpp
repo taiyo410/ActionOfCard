@@ -1,6 +1,6 @@
-#include "../Application.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "PixelMaterial.h"
+#include "Application.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "./PixelMaterial.h"
 
 PixelMaterial::PixelMaterial(const ResourceManager::SRC _psSrc):
 	resMng_(ResourceManager::GetInstance())

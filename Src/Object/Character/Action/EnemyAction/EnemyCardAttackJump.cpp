@@ -1,14 +1,14 @@
 #include "../pch.h"
-#include "../../../Common/AnimationController.h"
-#include "../Object/Common/EffectController.h"
-#include "../Utility/Utility3D.h"
-#include "../Manager/Generic/Camera.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Manager/Generic/SceneManager.h"
-#include "../ActionController.h"
-#include "../../Base/CharacterBase.h"
-#include "EnemyCardAttackJump.h"
+#include "Utility/Utility3D.h"
+#include "Manager/Generic/Camera.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Object/Common/AnimationController.h"
+#include "Object/Common/EffectController.h"
+#include "Object/Character/Action/ActionController.h"
+#include "Object/Character/Base/CharacterBase.h"
+#include "./EnemyCardAttackJump.h"
 
 EnemyCardAttackJump::EnemyCardAttackJump(ActionController& _actCntl, CharacterBase& _charaObj, CardPresenter& _cardPresent):
 	EnemyCardAttackBase(_actCntl, _charaObj, _cardPresent),
@@ -53,12 +53,6 @@ void EnemyCardAttackJump::InitAttack(void)
 		chargeEffScale_ ,
 		chargeEffScale_ });
 }
-
-//void EnemyCardAttackJump::Update(void)
-//{
-//	//攻撃アクションの内容
-//	AttackUpdate();
-//}
 
 void EnemyCardAttackJump::AttackUpdate(void)
 {
@@ -155,7 +149,6 @@ void EnemyCardAttackJump::AttackRelease(void)
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
 
 	//チャージエフェクトの消去
-	const int JUMP_CHARGE_EFF_ARRAY = 0;
 	effect_->Stop(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
 	effect_->Delete(EffectController::EFF_TYPE::E_JUMP_CHARGE, jumpChargeEffNum_);
 

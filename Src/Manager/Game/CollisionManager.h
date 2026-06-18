@@ -1,11 +1,11 @@
 #pragma once
 
-#include<vector>
-#include<memory>
-#include<map>
-#include<functional>
-#include"../Template/Singleton.h"
-#include"../Object/Common/Collider.h"
+#include <vector>
+#include <memory>
+#include <map>
+#include <functional>
+#include "Template/Singleton.h"
+#include "Object/Common/Collider.h"
 
 class CollisionManager :public Singleton<CollisionManager>
 {

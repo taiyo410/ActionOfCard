@@ -188,21 +188,18 @@
         "isLoop": false
       }
     },
-    "Death": {
-      "animation": {
-        "useAnim": "E_DEATH",
-        "animSpeed": 10.0,
-        "detachSpeed": 5.0,
-        "isLoop": false
-      }
-    },
     "StompAttack": {
       "colStartAnimCnt": 22.0,
       "colEndAnimCnt": 46.0,
-      "attackPoint": 10.0,
       "cameraShakeTime": 1.0,
       "cameraShakeLimit": 30.0,
+      "attackPoint": 10.0,
       "rockNum": 9,
+      "gravity": 1.3,
+      "jumpHeight": 300.0,
+      "rockRadius": 150.0,
+      "moveHorizontalSpeed": 20.0,
+      "moveDistance": 100.0,
       "animation": {
         "useAnim": "E_STOMP_ATK",
         "animSpeed": 10.0,
@@ -241,12 +238,30 @@
         "isLoop": true
       }
     },
+    "Death": {
+      "deathEffectStartAnimStep": 93.0,
+      "deathEffectScale": {
+        "x": 100.0,
+        "y": 100.0,
+        "z": 100.0
+      },
+      "animation": {
+        "useAnim": "E_DEATH",
+        "animSpeed": 10.0,
+        "detachSpeed": 5.0,
+        "isLoop": false
+      }
+    },
     "Roar": {
+      "roarStartAnimStep": 50.0,
+      "roarEndAnimStep": 127.0,
+      "cameraShakeLimit": 10.0,
       "animation": {
         "useAnim": "E_ROAR_ATK",
         "animSpeed": 30.0,
         "detachSpeed": 5.0,
         "isLoop": false
+
       }
     }
   }
