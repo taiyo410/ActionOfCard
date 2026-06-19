@@ -34,7 +34,7 @@ void Stage::Init(void)
 		Quaternion::Euler({ 0.0f,0.0f, 0.0f });
 	wallTrans_.scl= { WALL_SCL ,WALL_SCL ,WALL_SCL };
 
-	scnMng_.GetCamera().lock()->SetStageTransform(&wallTrans_);
+	scnMng_.GetCamera().lock()->SetStageTransform(&trans_);
 
 	//ƒJƒvƒZƒ‹
 	tag_ = Collider::TAG::STAGE;

@@ -11,8 +11,6 @@
 
 Line::Line(const VECTOR& _pos, const Quaternion& _rot, const VECTOR _localPosPoint1, const VECTOR _localPosPoint2) : 
 	Geometry(_pos, _rot, 0.0f, _localPosPoint1, _localPosPoint2, {},-1)
-	//localPosPoint1_(_localPosPoint1),
-	//localPosPoint2_(_localPosPoint2)
 {
 	hitInfo_ = {};
 }

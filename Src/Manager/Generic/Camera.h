@@ -377,6 +377,9 @@ private:
 	//イージング演出次のタイプ格納
 	float directionEasingTime_;
 
+	//移動後座標
+	VECTOR prePos_;
+
 	// カメラを初期位置に戻す
 	void SetDefault(void);
 

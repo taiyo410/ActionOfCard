@@ -54,7 +54,6 @@ public:
 	/// @return クォータニオン角度
 	inline const Quaternion& GetColRot(void)const { return quaRot_; }
 
-
 	/// @brief 1つ目の点の座標を取得
 	/// @param  
 	/// @return 
@@ -89,7 +88,6 @@ public:
 	/// @brief 2つ目の点の座標の設定
 	/// @param _pos  2つ目の点の座標
 	inline void SetLocalPosPoint2(const VECTOR _pos) { localPosPoint2_ = _pos; }
-
 
 	/// @brief 半径の取得
 	/// @param  
@@ -183,7 +181,6 @@ protected:
 	//線
 	VECTOR localPosPoint1_;	//1つ目の点の座標
 	VECTOR localPosPoint2_;	//2つ目の点の座標
-
 
 	//キューブ
 	OBB obb_;			//回転バウンディングボックス

@@ -21,6 +21,7 @@ Camera::Camera(void):
 	mode_(MODE::NONE),
 	pos_(),
 	targetPos_(),
+	prePos_(),
 	followTransform_(nullptr),
 	isChangingCamera_(false),
 	changeTargetLerpCnt_(CHANGE_TARGET_LERP_TIME),
@@ -221,7 +222,6 @@ void Camera::SyncFollow(const Transform* _followTransform)
 
 	// ƒJƒƒ‰‚Ìã•ûŒü
 	cameraUp_ = gRot.GetUp();
-
 }
 
 void Camera::SyncTargetFollow(void)
@@ -409,7 +409,7 @@ void Camera::SetBeforeDrawFixedPoint(void)
 
 void Camera::SetBeforeDrawFollow(void)
 {
-	VECTOR prePos = pos_;
+	prePos_ = pos_;
 	if (followTransform_ == nullptr)
 	{
 		ChangeMode(MODE::FIXED_POINT);
@@ -423,6 +423,8 @@ void Camera::SetBeforeDrawFollow(void)
 
 	//ƒJƒƒ‰‚Ì‰Ÿ‚µo‚µ
 	Collision();
+
+	Utility3D::MoveLimit(prePos_, pos_, COLLISION_BACK_DIS, stageTransform_->pos, { Stage::STAGE_SIZE,0.0f, Stage::STAGE_SIZE });
 
 	if (InputManager::GetInstance().IsTrgDown(KEY_INPUT_T))
 	{

@@ -131,5 +131,13 @@ public:
 	/// @param _vec 反転したいベクトル
 	/// @return 
 	static const VECTOR ReverseValue(const VECTOR _vec);
+
+	/// @brief 正方形の移動制限
+	/// @param _objectPos オブジェクトの座標
+	/// @param _movedPos 移動後座標
+	/// @param _bodyRadius 体半径
+	/// @param _stagePos ステージ座標
+	/// @param _stageSize ステージサイズ
+	static void MoveLimit(VECTOR& _objectPos, VECTOR& _movedPos,const float _bodyRadius,const VECTOR& _stagePos,const VECTOR& _stageSize);
 };
 

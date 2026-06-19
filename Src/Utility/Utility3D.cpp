@@ -249,6 +249,49 @@ const VECTOR Utility3D::ReverseValue(const VECTOR _vec)
     return VScale(_vec, RESERVE_NUM);
 }
 
+void Utility3D::MoveLimit(VECTOR& _objectPos, VECTOR& _movedPos,const float _bodyRadius,const VECTOR& _stagePos,const VECTOR& _stageSize)
+{
+    //カプセルを考慮したステージの制限サイズ
+    VECTOR subRadiusSize = { _stageSize.x - _bodyRadius,0.0f,_stageSize.z - _bodyRadius };
+
+    //センターサイズ
+    VECTOR sizeHalf = VScale(subRadiusSize, 0.5f);
+
+    //制限
+    VECTOR limit = VAdd(_stagePos, sizeHalf);
+
+    //移動ベクトル
+    VECTOR moveVec = Utility3D::GetMoveVec(_objectPos, _movedPos);
+
+    //カプセル関係を考慮した移動座標
+    VECTOR addPos = VScale(moveVec, _bodyRadius);
+
+    //制限座標
+    VECTOR limitPos = VAdd(_objectPos, addPos);
+
+    //押し出しベクトル
+    VECTOR pushVec = Utility3D::GetMoveVec(_movedPos, _objectPos);
+    pushVec.y = 0.0f;
+
+    //移動制限
+    if (limitPos.x > limit.x)
+    {
+        _movedPos.x = limit.x;
+    }
+    if (limitPos.x < -limit.x)
+    {
+        _movedPos.x = -limit.x;
+    }
+    if (limitPos.z > limit.z)
+    {
+        _movedPos.z = limit.z;
+    }
+    if (limitPos.z <= -limit.z)
+    {
+        _movedPos.z = -limit.z;
+    }
+}
+
 
 
 
