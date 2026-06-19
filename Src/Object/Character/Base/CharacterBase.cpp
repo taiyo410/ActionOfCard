@@ -300,22 +300,23 @@ void CharacterBase::MoveLimit(const VECTOR& _stagePos,const VECTOR& _stageSize)
 	pushVec.y = 0.0f;
 	VECTOR pushPow = VScale(pushVec, actionCtrl_->GetSpd());
 
+	if (Utility3D::EqualsVZero(pushPow))return;
 	//ˆÚ“®§ŒÀ
-	if (limitPos.x >= limit.x)
+	if (limitPos.x > limit.x)
 	{
-		movedPos_.x = limit.x + pushPow.x;
+		movedPos_.x = limit.x;
 	}
-	if (limitPos.x <= -limit.x)
+	if (limitPos.x < -limit.x)
 	{
-		movedPos_.x = -limit.x + pushPow.x;
+		movedPos_.x = -limit.x;
 	}
-	if (limitPos.z >= limit.z)
+	if (limitPos.z > limit.z)
 	{
-		movedPos_.z = limit.z + pushPow.z;
+		movedPos_.z = limit.z;
 	}
 	if (limitPos.z <= -limit.z)
 	{
-		movedPos_.z = -limit.z + pushPow.z;
+		movedPos_.z = -limit.z;
 	}
 }
 

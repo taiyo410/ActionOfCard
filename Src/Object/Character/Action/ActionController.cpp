@@ -403,7 +403,6 @@ void ActionController::DecideEnemyCardAction(void)
 
 	//ランダムの数値取得
 	int rand = GetRand(UtilityCommon::PERCENT_MAX);
-
 	if (distance > ATK_DISTANCE)
 	{
 		//遠距離時
@@ -412,7 +411,7 @@ void ActionController::DecideEnemyCardAction(void)
 			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
 		}
-		else if (rand < JUMP_WEIGHT)
+		else if (rand <= JUMP_WEIGHT)
 		{
 			//ジャンプ
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
@@ -421,7 +420,7 @@ void ActionController::DecideEnemyCardAction(void)
 	else
 	{
 		//近距離時
-		if (rand > STOMP_WEIGHT)
+		if (rand >= STOMP_WEIGHT)
 		{
 			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);

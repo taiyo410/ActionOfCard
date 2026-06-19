@@ -37,8 +37,10 @@ GameScene::GameScene(void):
 	//描画関数のセット
 	drawFunc_ = [this]() {LoadingDraw(); };
 
+	//ポストエフェクトのスクリーン生成
 	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
 
+	//更新テーブル
 	changeUpdate_ = {
 	{UPDATE_PHASE::NONE,[this]() {ChangeNone(); }},
 	{UPDATE_PHASE::FADE,[this]() {ChangeFade(); }},
@@ -49,11 +51,13 @@ GameScene::GameScene(void):
 	{UPDATE_PHASE::SLOW,[this]() {ChangeSlow(); }}
 	};
 
+	//各シングルトンクラスの生成
 	CardSystem::CreateInstance();
 	UIManager::CreateInstance();
 	CharacterManager::CreateInstance();
 	CollisionManager::CreateInstance();
 
+	//シーンの生成
 	pauseScene_ = std::make_shared<PauseScene>();
 	revolutionScene_ = std::make_shared<GameEventRevolutionScene>();
 }

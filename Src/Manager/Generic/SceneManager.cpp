@@ -110,40 +110,9 @@ void SceneManager::Update(void)
 
 void SceneManager::Draw(void)
 {
-	// 描画先グラフィック領域の指定
-	// (３Ｄ描画で使用するカメラの設定などがリセットされる)
-	SetDrawScreen(mainScreen_);
+	MainScreenDraw();
 
-	// 画面を初期化
-	ClearDrawScreen();
-
-	// カメラ設定
-	camera_->SetBeforeDraw();
-
-	// 描画
-	for (auto& scene : scenes_)
-	{
-		scene->Draw();
-	}
-
-	SetDrawScreen(postEffScreen_);
-	// 画面を初期化
-	ClearDrawScreen();
-
-	// メインスクリーンを画面に描画する
-	DrawGraph(0, 0, mainScreen_, false);
-
-	//ポストエフェクトがあれば描画する
-	for (const auto& postEff : postEffectRenderers_)
-	{
-		postEff->Draw();
-	}
-
-	// Effekseerにより再生中のエフェクトを描画する。
-	DrawEffekseer3D();
-	
-	// 暗転・明転
-	fader_->Draw();
+	PostEffectScreen();
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
@@ -333,4 +302,46 @@ void SceneManager::SceneChangeFade(void)
 		DoChangeScene(waitSceneId_);
 		fader_->SetFade(Fader::STATE::NONE);
 	}
+}
+
+void SceneManager::MainScreenDraw(void)
+{
+	// 描画先グラフィック領域の指定
+	// (３Ｄ描画で使用するカメラの設定などがリセットされる)
+	SetDrawScreen(mainScreen_);
+
+	// 画面を初期化
+	ClearDrawScreen();
+
+	// カメラ設定
+	camera_->SetBeforeDraw();
+
+	// 描画
+	for (auto& scene : scenes_)
+	{
+		scene->Draw();
+	}
+
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer3D();
+}
+
+void SceneManager::PostEffectScreen(void)
+{
+	SetDrawScreen(postEffScreen_);
+	// 画面を初期化
+	ClearDrawScreen();
+
+	// メインスクリーンを画面に描画する
+	DrawGraph(0, 0, mainScreen_, false);
+
+	//ポストエフェクトがあれば描画する
+	for (const auto& postEff : postEffectRenderers_)
+	{
+		postEff->Draw();
+	}
+
+	// 暗転・明転
+	fader_->Draw();
+
 }

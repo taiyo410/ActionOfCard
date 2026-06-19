@@ -35,7 +35,7 @@
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneShort.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardReload.cpp" />
     <ClCompile Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicFire.cpp" />
-    <ClCompile Include="Src\Object\Character\Player\PlayerMagicFIre.cpp" />
+    <ClCompile Include="Src\Object\Character\Player\PlayerMagicFire.cpp" />
     <ClCompile Include="Src\Manager\Generic\MenuController.cpp" />
     <ClCompile Include="Src\Object\Card\CardPresenter.cpp" />
     <ClCompile Include="Src\Manager\Generic\ButtonUIManager.cpp" />
@@ -142,7 +142,7 @@
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardAttackOneShort.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardReload.h" />
     <ClInclude Include="Src\Object\Character\Action\PlayerAction\PlayerCardMagicFire.h" />
-    <ClInclude Include="Src\Object\Character\Player\PlayerMagicFIre.h" />
+    <ClInclude Include="Src\Object\Character\Player\PlayerMagicFire.h" />
     <ClInclude Include="Src\Manager\Generic\MenuController.h" />
     <ClInclude Include="Src\Object\Card\CardPresenter.h" />
     <ClInclude Include="Src\Manager\Generic\ButtonUIManager.h" />

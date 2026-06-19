@@ -186,5 +186,12 @@ private:
 
 	//シーン遷移用フェード
 	void SceneChangeFade(void);
+
+	//メインスクリーンに描画 
+	void MainScreenDraw(void);
+
+	//ポストエフェクトスクリーンの描画
+	void PostEffectScreen(void);
+
 #pragma endregion
 };

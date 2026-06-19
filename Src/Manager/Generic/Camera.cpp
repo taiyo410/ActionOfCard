@@ -345,6 +345,7 @@ void Camera::Collision(void)
 	//腰座標を常に取得する
 	followFramePos_ = MV1GetFramePosition(followTransform_->modelId, FOLLOW_FRAME_NUM);
 
+	//モデルとラインの当たり判定チェック
 	auto hits = MV1CollCheck_LineDim(stageTransform_->modelId
 		, -1, pos_, followFramePos_);
 

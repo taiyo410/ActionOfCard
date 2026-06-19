@@ -110,38 +110,38 @@ void CharacterOnHitBase::HitModelCommon(const std::weak_ptr<Collider> _hitCol)
 	trans.pos = movedPos_;
 	trans.Update();
 
-	//プレイヤーの体の球が当たったら
-	if (bodyShere->IsHit())
-	{
-		auto& hitInfo = hitModel.GetHitInfo();
-		for (int i = 0; i < hitInfo.HitNum; i++)
-		{
-			hitPoint_.isSide = true;
-			//当たっている部分の情報を取得
-			auto hit = hitInfo.Dim[i];
+	////プレイヤーの体の球が当たったら
+	//if (bodyShere->IsHit())
+	//{
+	//	auto& hitInfo = hitModel.GetHitInfo();
+	//	for (int i = 0; i < hitInfo.HitNum; i++)
+	//	{
+	//		hitPoint_.isSide = true;
+	//		//当たっている部分の情報を取得
+	//		auto hit = hitInfo.Dim[i];
 
-			//一定回数の押し出し処理をする
-			for (int tryCnt = 0; tryCnt < COL_TRY_CNT_MAX; tryCnt++)
-			{
-				int pHit = HitCheck_Sphere_Triangle(trans.pos, bodyShere->GetGeometry().GetRadius()
-					, hit.Position[0], hit.Position[1], hit.Position[2]);
+	//		//一定回数の押し出し処理をする
+	//		for (int tryCnt = 0; tryCnt < COL_TRY_CNT_MAX; tryCnt++)
+	//		{
+	//			int pHit = HitCheck_Sphere_Triangle(trans.pos, bodyShere->GetGeometry().GetRadius()
+	//				, hit.Position[0], hit.Position[1], hit.Position[2]);
 
-				if (pHit)
-				{
-					VECTOR normal = hit.Normal;
-					//y座標を抜いて押しだす
-					normal.y = 0.0f;
-					movedPos_ = VAdd(movedPos_, VScale(normal, HIT_NORMAL_OFFSET));
+	//			if (pHit)
+	//			{
+	//				VECTOR normal = hit.Normal;
+	//				//y座標を抜いて押しだす
+	//				normal.y = 0.0f;
+	//				movedPos_ = VAdd(movedPos_, VScale(normal, HIT_NORMAL_OFFSET));
 
-					//カプセルを移動させる
-					trans.pos = movedPos_;
-					trans.Update();
-					continue;
-				}
-				break;
-			}
-		}
-	}
+	//				//カプセルを移動させる
+	//				trans.pos = movedPos_;
+	//				trans.Update();
+	//				continue;
+	//			}
+	//			break;
+	//		}
+	//	}
+	//}
 
 	//移動前の座標を格納する
 	moveDiff_ = trans_.pos;
