@@ -106,6 +106,11 @@ const bool Model::IsHit(Line& _line)
 	return col.HitFlag;
 }
 
+const bool Model::IsHit(Plane& _line)
+{
+	return false;
+}
+
 void Model::HitAfter(void)
 {
 	if (hitInfo_.HitNum > 0 && hitInfo_.Dim != nullptr) 

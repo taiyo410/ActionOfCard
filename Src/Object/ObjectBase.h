@@ -20,6 +20,11 @@ public:
 	enum class  TAG_PRIORITY
 	{
 		STAGE,
+		WALL_BACK,
+		WALL_LEFT,
+		WALL_RIGHT,
+		WALL_FRONT,
+		CAMERA_2_PLAYER_LINE,
 		BODY,
 		MOVE_LINE,
 		UPDOWN_LINE,
@@ -136,6 +141,7 @@ private:
 	void MakeCubeCollision(const std::string& _priStr, const nlohmann::json& _data);		//キューブ
 	void MakeSphereCollision(const std::string& _priStr, const nlohmann::json& _data);		//球体
 	void MakeModelCollision(const std::string& _priStr, const nlohmann::json& _data);		//モデル
+	void MakePlaneCollision(const std::string& _priStr, const nlohmann::json& _data);		//プレーン
 
 	//当たらないタグの取得
 	const std::set<Collider::TAG> GetNoneHitTag(const nlohmann::json& _data);

@@ -128,6 +128,16 @@ void Camera::SetBeforeDraw(void)
 
 void Camera::Draw(void)
 {
+	for (const auto& col : collider_)
+	{
+		col.second->GetGeometry().Draw();
+	}
+	DrawFormatString(100, 200, 0xffffff, L"cameraPos(%f,%f,%f)", pos_.x, pos_.y, pos_.z);
+}
+
+void Camera::OnHit(const std::weak_ptr<Collider> _hitCol)
+{
+	int i = 0;
 }
 
 void Camera::ChangeSub(const  SUB_MODE _subMode)
@@ -142,6 +152,11 @@ void Camera::SetFollow(const Transform* follow,const VECTOR _localCenterPos)
 {
 	followTransform_ = follow;
 	followLocalCenterPos_ = _localCenterPos;
+
+	//カメラとプレイヤーを結ぶ線分の当たり判定を作成
+	std::unique_ptr<Geometry> geo = std::make_unique<Line>(pos_, followTransform_->pos);
+	MakeCollider(ObjectBase::TAG_PRIORITY::CAMERA_2_PLAYER_LINE, { Collider::TAG::CAMERA }, std::move(geo)
+		, { Collider::TAG::PLAYER1,Collider::TAG::ENEMY1,Collider::TAG::ROCK });
 }
 
 void Camera::SetTarget(const Transform* _target)
@@ -161,6 +176,11 @@ void Camera::SetShakeStatus(const float t, const float limit
 	initLimit_ = limit;
 	oneShakeTime_ = shakeTime;
 	easeType_ = _easeType;
+}
+
+void Camera::SetStageTransform(const Transform* _stageTrans)
+{
+	stageTransform_ = _stageTrans;
 }
 
 VECTOR Camera::GetForward(void) const
@@ -424,7 +444,7 @@ void Camera::SetBeforeDrawFollow(void)
 	//カメラの押し出し
 	Collision();
 
-	Utility3D::MoveLimit(prePos_, pos_, COLLISION_BACK_DIS, stageTransform_->pos, { Stage::STAGE_SIZE,0.0f, Stage::STAGE_SIZE });
+	//Utility3D::MoveLimit(prePos_, pos_, COLLISION_BACK_DIS, stageTransform_->pos, { Stage::STAGE_SIZE,0.0f, Stage::STAGE_SIZE });
 
 	if (InputManager::GetInstance().IsTrgDown(KEY_INPUT_T))
 	{

@@ -36,6 +36,7 @@ public:
 	const bool IsHit(Sphere& _sphere) override;				//球
 	const bool IsHit(Capsule& _capsule) override;			//カプセル
 	const bool IsHit(Line& _line) override;					//ライン
+	const bool IsHit(Plane& _line) override;				//プレーン
 
 	/// @brief ヒット後の処理
 	/// @param  

@@ -8,6 +8,7 @@ class Cube;
 class Sphere;
 class Capsule;
 class Line;
+class Plane;
 
 class Geometry
 {
@@ -19,6 +20,22 @@ public:
 		VECTOR vMin;
 		VECTOR vMax;
 		VECTOR axis[3];
+	};
+
+	//プレーン
+	struct PLANE
+	{
+		VECTOR centerPos;
+		float halfW;
+		float halfH;
+	};
+
+	//プレーンの当たり判定結果
+	struct PLANE_HIT
+	{
+		VECTOR hitPos;  // 交点座標
+		float  t;      // 線分上のパラメータ [0,1]
+		VECTOR normal; // 当たった面の法線
 	};
 
 	//通常色
@@ -39,6 +56,7 @@ public:
 	virtual const bool IsHit(Sphere& _sphere) = 0;			//球
 	virtual const bool IsHit(Capsule& _capsule) = 0;		//カプセル
 	virtual const bool IsHit(Line& _line) = 0;				//線
+	virtual const bool IsHit(Plane& _line) = 0;				//線
 	
 	/// @brief 衝突後の処理
 	/// @param  
@@ -68,12 +86,12 @@ public:
 	/// @brief 回転済みの1つ目の点の座標を取得
 	/// @param  
 	/// @return 
-	inline const VECTOR GetPosPoint1(void) const { return GetRotPos(localPosPoint1_); }
+	virtual const VECTOR GetPosPoint1(void) const { return GetRotPos(localPosPoint1_); }
 	
 	/// @brief 回転済みの2つ目の点の座標を取得
 	/// @param  
 	/// @return 
-	inline const VECTOR GetPosPoint2(void) const { return GetRotPos(localPosPoint2_); }
+	virtual const VECTOR GetPosPoint2(void) const { return GetRotPos(localPosPoint2_); }
 
 	/// @brief 中心座標の取得
 	/// @param  
@@ -138,6 +156,11 @@ public:
 	/// @return 箱の最大地点
 	inline const VECTOR GetVecMax(void)const { return obb_.vMax; }
 
+	/// @brief プレーンの当たり判定での衝突位置や法線方向
+	/// @param  
+	/// @return 
+	inline const PLANE_HIT& GetPlaneHit(void)const { return planeHitInfo_; }
+
 	/// @brief 回転バウンティボックスの設定
 	/// @param _obb 回転バウンティボックス
 	inline void SetObb(const OBB& _obb) { obb_ = _obb; }
@@ -169,7 +192,8 @@ protected:
 	const VECTOR GetRotPos(const VECTOR& _localPos) const;
 
 	//親の座標
-	const VECTOR& pos_;			
+	const VECTOR& pos_;	
+
 	//親の回転
 	const Quaternion& quaRot_;	
 
@@ -184,6 +208,10 @@ protected:
 
 	//キューブ
 	OBB obb_;			//回転バウンディングボックス
+
+	//プレーン
+	PLANE plane_;
+	PLANE_HIT planeHitInfo_;	//プレーンの当たり判定結果
 
 	//モデル
 	int parentModelId_;					//親のモデルID

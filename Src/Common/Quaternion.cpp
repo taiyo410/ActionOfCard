@@ -386,10 +386,8 @@ Quaternion Quaternion::Normalize(const Quaternion& q)
 
 Quaternion Quaternion::Normalized(void) const
 {
-
     double mag = sqrt(w * w + x * x + y * y + z * z);
     return Quaternion(w / mag, x / mag, y / mag, z / mag);
-
 }
 
 void Quaternion::Normalize(void)

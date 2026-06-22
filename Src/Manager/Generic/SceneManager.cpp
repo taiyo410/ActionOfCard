@@ -322,6 +322,9 @@ void SceneManager::MainScreenDraw(void)
 		scene->Draw();
 	}
 
+	//カメラ
+	camera_->Draw();
+
 	// Effekseerにより再生中のエフェクトを描画する。
 	DrawEffekseer3D();
 }

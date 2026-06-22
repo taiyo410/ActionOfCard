@@ -11,9 +11,13 @@ public:
 	/// @param _rot 追従する親の回転
 	/// @param _localPosPoint1 1つ目の点の座標
 	/// @param _localPosPoint2 2つ目の点の座標
-	Line(const VECTOR& _pos, const Quaternion& _rot, const VECTOR _localPosPoint1, const VECTOR _localPosPoint2);
+	Line(const VECTOR& _pos, const Quaternion& _rot, const VECTOR& _localPosPoint1, const VECTOR& _localPosPoint2);
 
-	
+	/// @brief 2点間をつなぐオブジェクトの線分
+	/// @param _objPos1 1つめの物体の座標
+	/// @param _objPos2 2つめの物体の座標
+	Line(const VECTOR& _objPos1, const VECTOR& _objPos2);
+
 	/// @brief コピーコンストラクタ
 	/// @param _copyBase コピー元
 	/// @param _pos 追従する親の座標
@@ -34,7 +38,14 @@ public:
 	const bool IsHit(Sphere& _sphere)override;
 	const bool IsHit(Capsule& _capsule) override;
 	const bool IsHit(Line& _line) override;
+	const bool IsHit(Plane& _line) override;
+
+	const VECTOR GetPosPoint1(void)const override;
+	const VECTOR GetPosPoint2(void)const override;
 
 private:
+	// 参照で持つ場合の追加メンバー
+	const VECTOR* externalPoint1_ = nullptr;
+	const VECTOR* externalPoint2_ = nullptr;
 
 };

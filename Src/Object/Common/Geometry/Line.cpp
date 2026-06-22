@@ -9,10 +9,17 @@
 //ê¸
 //***************************************************
 
-Line::Line(const VECTOR& _pos, const Quaternion& _rot, const VECTOR _localPosPoint1, const VECTOR _localPosPoint2) : 
+Line::Line(const VECTOR& _pos, const Quaternion& _rot, const VECTOR& _localPosPoint1, const VECTOR& _localPosPoint2) : 
 	Geometry(_pos, _rot, 0.0f, _localPosPoint1, _localPosPoint2, {},-1)
 {
 	hitInfo_ = {};
+}
+
+Line::Line(const VECTOR& _objPos1, const VECTOR& _objPos2):
+	Geometry(_objPos1, Quaternion(), 0.0f, {}, {}, {}, -1),
+	externalPoint1_(&_objPos1),
+	externalPoint2_(&_objPos2)
+{
 }
 
 Line::Line(const Line& _copyBase, const VECTOR& _pos, const Quaternion& _rot) : 
@@ -31,6 +38,11 @@ void Line::Draw(void)
 	VECTOR point2 = GetRotPos(localPosPoint2_);
 
 	DrawLine3D(point1, point2, NORMAL_COLOR);
+
+	if (externalPoint1_ != nullptr && externalPoint2_ != nullptr)
+	{
+		DrawLine3D(*externalPoint1_, *externalPoint2_, NORMAL_COLOR);
+	}
 }
 
 const bool Line::IsHit(Geometry& _geometry)
@@ -95,4 +107,21 @@ const bool Line::IsHit(Line& _line)
 
 	//åç∑ÇµÇΩ
 	return distance <= EPSILON;
+}
+
+const bool Line::IsHit(Plane& _line)
+{
+	return false;
+}
+
+const VECTOR Line::GetPosPoint1(void) const
+{
+	if (externalPoint1_) return *externalPoint1_;
+	return GetRotPos(localPosPoint1_);
+}
+
+const VECTOR Line::GetPosPoint2(void) const
+{
+	if (externalPoint2_) return *externalPoint2_;
+	return GetRotPos(localPosPoint2_);
 }

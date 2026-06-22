@@ -10,6 +10,7 @@
 
 Stage::Stage(void)
 {
+	objectName_ = STAGE_STR;
 }
 
 Stage::~Stage(void)
@@ -18,6 +19,7 @@ Stage::~Stage(void)
 
 void Stage::Load(void)
 {
+	MakeColliderFromJsonData();
 }
 
 void Stage::Init(void)
@@ -40,9 +42,7 @@ void Stage::Init(void)
 	tag_ = Collider::TAG::STAGE;
 
 	//ìñÇΩÇËîªíËçÏê¨
-	std::unique_ptr<Geometry>geo = std::make_unique<Model>(trans_.pos, trans_.quaRot, trans_.modelId);
-	MakeCollider(TAG_PRIORITY::STAGE,{ tag_ }, std::move(geo), { Collider::TAG::NML_ATK });
-	tagPrioritys_.emplace_back(TAG_PRIORITY::STAGE);
+	MakeColliderFromJsonData();
 
 	//É}ÉeÉäÉAÉã
 	material_=std::make_unique<ModelMaterial>(
@@ -66,10 +66,13 @@ void Stage::Update(void)
 
 void Stage::Draw(void)
 {
-	MV1DrawModel(wallTrans_.modelId);
+	//MV1DrawModel(wallTrans_.modelId);
 	renderer_->Draw();
 
-
+	for (const auto& col : collider_)
+	{
+		col.second->GetGeometry().Draw();
+	}
 }
 
 void Stage::OnHit(const std::weak_ptr<Collider> _hitCol)

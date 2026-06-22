@@ -43,6 +43,16 @@ public:
 	static double SqrMagnitude(const VECTOR& v);
 	static double SqrMagnitude(const VECTOR& v1, const VECTOR& v2);
 
+	/// @brief ラジアン(rad)から度(deg)
+	/// @param rad ラジアン
+	/// @return 
+	static VECTOR Rad2Deg3D(const VECTOR& _radVec);
+
+	/// @brief 度(deg)からラジアン(rad)
+	/// @param deg 度
+	/// @return 
+	static VECTOR Deg2RadD3D(const VECTOR& _degVec);
+
 	/// @brief 2つのベクトル間の距離を求める
 	/// @param v1 ベクトル1
 	/// @param v2 ベクトル2

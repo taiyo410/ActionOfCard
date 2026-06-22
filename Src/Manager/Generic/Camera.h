@@ -10,7 +10,7 @@
 class Transform;
 class Easing;
 
-class Camera
+class Camera:public ObjectBase
 {
 
 public:
@@ -111,11 +111,11 @@ public:
 
 	/// @brief 初期化
 	/// @param  
-	void Init(void);
+	void Init(void) override;
 
 	/// @brief 更新
 	/// @param  
-	void Update(void);
+	void Update(void) override;
 
 	/// @brief カメラの設定
 	/// @param  
@@ -124,6 +124,10 @@ public:
 	/// @brief 描画
 	/// @param  
 	void Draw(void);
+
+	/// @brief 衝突後処理
+	/// @param _hitCol コライダ
+	void OnHit(const std::weak_ptr<Collider> _hitCol) override;
 
 	/// @brief カメラ位置の取得
 	/// @param  
@@ -186,10 +190,7 @@ public:
 
 	/// @brief カメラとステージの当たり判定のためのステージのTransformのセット
 	/// @param _stageTrans ステージのTransform
-	void SetStageTransform(const Transform* _stageTrans)
-	{
-		stageTransform_ = _stageTrans;
-	}
+	void SetStageTransform(const Transform* _stageTrans);
 
 	/// @brief 演出カメラの終了判定の取得
 	/// @param  

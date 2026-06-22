@@ -76,7 +76,6 @@ CharacterBase::~CharacterBase(void)
 void CharacterBase::Load(void)
 {
 	LoadCommon();
-
 	LoadCharacter();
 }
 
@@ -278,47 +277,6 @@ void CharacterBase::MoveLimit(const VECTOR& _stagePos,const VECTOR& _stageSize)
 {
 	const float radius = collider_[TAG_PRIORITY::BODY]->GetGeometry().GetRadius();
 	Utility3D::MoveLimit(trans_.pos, movedPos_, radius, _stagePos, _stageSize);
-	//カプセルを考慮したステージの制限サイズ
-	//VECTOR subRadiusSize={_stageSize.x- radius,0.0f,_stageSize.z- radius};
-
-	////センターサイズ
-	//VECTOR sizeHalf = VScale(subRadiusSize, 0.5f);
-
-	////制限
-	//VECTOR limit = VAdd(_stagePos, sizeHalf);
-
-	////移動ベクトル
-	//VECTOR moveVec = Utility3D::GetMoveVec(trans_.pos, movedPos_);
-
-	////カプセル関係を考慮した移動座標
-	//VECTOR addPos = VScale(moveVec, radius);
-
-	////制限座標
-	//VECTOR limitPos = VAdd(trans_.pos, addPos);
-
-	////押し出しベクトル
-	//VECTOR pushVec = Utility3D::GetMoveVec(movedPos_, moveDiff_);
-	//pushVec.y = 0.0f;
-	//VECTOR pushPow = VScale(pushVec, actionCtrl_->GetSpd());
-
-	//if (Utility3D::EqualsVZero(pushPow))return;
-	////移動制限
-	//if (limitPos.x > limit.x)
-	//{
-	//	movedPos_.x = limit.x;
-	//}
-	//if (limitPos.x < -limit.x)
-	//{
-	//	movedPos_.x = -limit.x;
-	//}
-	//if (limitPos.z > limit.z)
-	//{
-	//	movedPos_.z = limit.z;
-	//}
-	//if (limitPos.z <= -limit.z)
-	//{
-	//	movedPos_.z = -limit.z;
-	//}
 }
 
 void CharacterBase::SetUsedCard(void)

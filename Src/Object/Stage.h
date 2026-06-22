@@ -58,6 +58,8 @@ public:
 private:
 
 #pragma region メンバー定数
+    //ステージ文字列
+    const std::string STAGE_STR = "Stage";
 
 #pragma endregion
 

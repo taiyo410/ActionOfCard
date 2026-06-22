@@ -1,4 +1,5 @@
 #include <cmath>
+#include "UtilityCommon.h"
 #include "Utility2D.h"
 #include "Utility3D.h"
 
@@ -32,6 +33,16 @@ double Utility3D::SqrMagnitude(const VECTOR& v)
 double Utility3D::SqrMagnitude(const VECTOR& v1, const VECTOR& v2)
 {
     return pow(v2.x - v1.x, 2) + pow(v2.y - v1.y, 2) + pow(v2.z - v1.z, 2);
+}
+
+VECTOR Utility3D::Rad2Deg3D(const VECTOR& _radVec)
+{
+    return { UtilityCommon::Rad2DegF(_radVec.x),UtilityCommon::Rad2DegF(_radVec.y),UtilityCommon::Rad2DegF(_radVec.z) };
+}
+
+VECTOR Utility3D::Deg2RadD3D(const VECTOR& _degVec)
+{
+    return { UtilityCommon::Deg2RadF(_degVec.x),UtilityCommon::Deg2RadF(_degVec.y),UtilityCommon::Deg2RadF(_degVec.z) };
 }
 
 double Utility3D::Distance(const VECTOR& v1, const VECTOR& v2)

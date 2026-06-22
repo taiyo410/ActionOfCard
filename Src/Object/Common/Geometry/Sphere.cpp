@@ -189,6 +189,11 @@ const bool Sphere::IsHit(Line& _line)
 	return VSquareSize(diff) <= std::pow(GetRadius(), 2.0);
 }
 
+const bool Sphere::IsHit(Plane& _line)
+{
+	return false;
+}
+
 void Sphere::HitAfter(void)
 {
 	if (hitInfo_.HitNum > 0 && hitInfo_.Dim != nullptr)

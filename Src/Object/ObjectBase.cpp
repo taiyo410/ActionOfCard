@@ -7,6 +7,7 @@
 #include "./Common/Geometry/Cube.h"
 #include "./Common/Geometry/Model.h"
 #include "./Common/Geometry/Sphere.h"
+#include "./Common/Geometry/Plane.h"
 #include "./Common/Geometry/Line.h"
 #include "ObjectBase.h"
 
@@ -21,7 +22,8 @@ ObjectBase::ObjectBase(void)
 		{"line",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeLineCollision(_priStr,_data); }},
 		{"cube",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeCubeCollision(_priStr,_data); }},
 		{"sphere",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeSphereCollision(_priStr,_data); }},
-		{"model",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeModelCollision(_priStr,_data); }}
+		{"model",[this](const std::string& _priStr,const nlohmann::json& _data) {MakeModelCollision(_priStr,_data); }},
+		{"plane",[this](const std::string& _priStr,const nlohmann::json& _data) {MakePlaneCollision(_priStr,_data); }}
 	};
 	
 	//コライダーのタグ
@@ -37,7 +39,11 @@ ObjectBase::ObjectBase(void)
 	};
 	//優先順位用のタグ
 	colTagPriorityStrTable_ = {
-		{"STAGE",TAG_PRIORITY::STAGE},
+		{"Stage",TAG_PRIORITY::STAGE},
+		{"WallLeft",TAG_PRIORITY::WALL_LEFT},
+		{"WallRight",TAG_PRIORITY::WALL_RIGHT},
+		{"WallBack",TAG_PRIORITY::WALL_BACK},
+		{"WallFront",TAG_PRIORITY::WALL_FRONT},
 		{"Body",TAG_PRIORITY::BODY},
 		{"MoveLine",TAG_PRIORITY::MOVE_LINE},
 		{"UpdownLine",TAG_PRIORITY::UPDOWN_LINE},
@@ -181,7 +187,7 @@ void ObjectBase::MakeCubeCollision(const std::string& _priStr, const nlohmann::j
 	//優先順位用タグの取得
 	auto it = colTagPriorityStrTable_.find(_priStr);
 
-	//球のパラメーター取得
+	//キューブのパラメーター取得
 	const VECTOR min = UtilityJson::GetLoadVector3("min", _data);
 	const VECTOR max = UtilityJson::GetLoadVector3("max", _data);
 	
@@ -189,7 +195,12 @@ void ObjectBase::MakeCubeCollision(const std::string& _priStr, const nlohmann::j
 	const VECTOR halfSize = UtilityJson::GetLoadVector3("halfSize", _data);
 
 	//コライダーの生成
-	std::unique_ptr<Geometry>geo = std::make_unique<Cube>(trans_.pos, trans_.quaRot,halfSize);
+	std::unique_ptr<Geometry>geo = std::make_unique<Cube>(trans_.pos, trans_.quaRot, min,max);
+	if (!Utility3D::EqualsVZero(halfSize))
+	{
+		geo = std::make_unique<Cube>(trans_.pos, trans_.quaRot, halfSize);
+	}
+	
 
 	//最大頂点と最小頂点が指定されていた場合の生成
 	if (Utility3D::EqualsVZero(min) || Utility3D::EqualsVZero(max))
@@ -232,6 +243,27 @@ void ObjectBase::MakeModelCollision(const std::string& _priStr, const nlohmann::
 
 	//コライダーの生成
 	std::unique_ptr<Geometry>geo = std::make_unique<Model>(trans_.pos,trans_.quaRot,modelId);
+	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
+	tagPrioritys_.emplace_back(it->second);
+}
+
+void ObjectBase::MakePlaneCollision(const std::string& _priStr, const nlohmann::json& _data)
+{
+	//当たらないタグの取得
+	std::set<Collider::TAG> noneHitTag = GetNoneHitTag(_data);
+
+	//優先順位用タグの取得
+	auto it = colTagPriorityStrTable_.find(_priStr);
+
+	//プレーンのパラメーター取得
+	const VECTOR centerLocalPos = UtilityJson::GetLoadVector3("localCenterPos", _data);
+	VECTOR localRotDeg = UtilityJson::GetLoadVector3("localRotDeg", _data);
+	localRotDeg = Utility3D::Rad2Deg3D(localRotDeg);
+	const VECTOR min = UtilityJson::GetLoadVector3("min", _data);
+	const VECTOR max = UtilityJson::GetLoadVector3("max", _data);
+
+	//コライダーの生成
+	std::unique_ptr<Geometry>geo = std::make_unique<Plane>(trans_.pos, trans_.quaRot, centerLocalPos, localRotDeg, min, max);
 	MakeCollider(it->second, { tag_ }, std::move(geo), noneHitTag);
 	tagPrioritys_.emplace_back(it->second);
 }

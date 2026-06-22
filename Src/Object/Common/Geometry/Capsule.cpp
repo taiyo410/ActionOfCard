@@ -173,6 +173,11 @@ const bool Capsule::IsHit(Line& _line)
 	return distance <= GetRadius();
 }
 
+const bool Capsule::IsHit(Plane& _line)
+{
+	return false;
+}
+
 void Capsule::HitAfter(void)
 {
 	if (hitInfo_.HitNum > 0 && hitInfo_.Dim != nullptr)

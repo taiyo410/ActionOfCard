@@ -15,8 +15,16 @@
 Cube::Cube(const VECTOR& _pos, const Quaternion& _rot, const VECTOR _min, const VECTOR _max) :
 	Geometry(_pos, _rot, 0.0f, {}, {}, { _min,_max,{} },-1)
 {
-	//obb_.vMin = _min;
-	//obb_.vMax = _max;
+	obb_.vMin = VGet(
+		std::min(_min.x, _max.x),
+		std::min(_min.y, _max.y),
+		std::min(_min.z, _max.z)
+	);
+	obb_.vMax = VGet(
+		std::max(_min.x, _max.x),
+		std::max(_min.y, _max.y),
+		std::max(_min.z, _max.z)
+	);
 
 	UpdateObbAxis();
 }
@@ -271,11 +279,10 @@ const bool Cube::IsHit(Line& _line)
 	return true;
 }
 
-//void Cube::SetHalfSize(const VECTOR& _halfSize)
-//{
-//	obb_.vMin = VScale(_halfSize, -1.0f);
-//	obb_.vMax = _halfSize;
-//}
+const bool Cube::IsHit(Plane& _line)
+{
+	return false;
+}
 
 void Cube::UpdateObbAxis(void) 
 {

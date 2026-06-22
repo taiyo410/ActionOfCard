@@ -115,5 +115,100 @@
         "normalAttack"
       ]
     }
+  },
+  "Stage": {
+    "Stage": {
+      "geometry": "model",
+      "useSrc": "STAGE",
+      "noneHitTag": [
+        "normalAttack"
+      ]
+    },
+    "WallBack": {
+      "geometry": "plane",
+      "localCenterPos": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -3000.0
+      },
+      "min": {
+        "x": -3000.0,
+        "y": 0.0,
+        "z": -3000.0
+      },
+      "max": {
+        "x": 3000.0,
+        "y": 0.0,
+        "z": 3000.0
+      },
+      "noneHitTag": [
+        "stage",
+        "player",
+        "enemy",
+        "normalAttack"
+      ]
+    },
+    "WallFront": {
+      "geometry": "plane",
+      "localCenterPos": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 3000.0
+      },
+      "min": {
+        "x": -3000.0,
+        "y": 0.0,
+        "z": -3000.0
+      },
+      "max": {
+        "x": 3000.0,
+        "y": 0.0,
+        "z": 3000.0
+      },
+      "noneHitTag": [
+        "stage",
+        "player",
+        "enemy",
+        "normalAttack"
+      ]
+    },
+    "WallLeft": {
+      "geometry": "cube",
+      "min": {
+        "x": -3000.0,
+        "y": 1000.0,
+        "z": -3000.0
+      },
+      "max": {
+        "x": -3200.0,
+        "y": 10.0,
+        "z": 3000.0
+      },
+      "noneHitTag": [
+        "stage",
+        "player",
+        "enemy",
+        "normalAttack"
+      ]
+    },
+    "WallRight": {
+      "geometry": "cube",
+      "min": {
+        "x": 3000.0,
+        "y": 1000.0,
+        "z": -3000.0
+      },
+      "max": {
+        "x": 3000.0,
+        "y": 10.0,
+        "z": 3000.0
+      },
+      "noneHitTag": [
+        "stage",
+        "player",
+        "enemy",
+        "normalAttack"
+      ]
+    }
   }
 }

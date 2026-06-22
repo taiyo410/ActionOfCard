@@ -85,6 +85,8 @@ void Player::UpdateOverDirectionCharacter(void)
 	{
 		isEndClearDirect_ = true;
 	}
+	//•Ší‚ÌXV
+	weapon_->Update();
 }
 
 void Player::DrawCharacter(void)
@@ -178,6 +180,12 @@ void Player::DrawDebug(void)
 	animCtrl_->DrawDebug();
 
 	cardPresent_->DrawCardDeckError();
+
+	DrawFormatString(100, 100, 0x000000, L"pos(%f,%f,%f)", trans_.pos.x, trans_.pos.y, trans_.pos.z);
+	for (const auto& col : collider_)
+	{
+		col.second->GetGeometry().Draw();
+	}
 }
 
 #endif // _DEBUG
