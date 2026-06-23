@@ -57,6 +57,10 @@ ObjectBase::ObjectBase(void)
 ObjectBase::~ObjectBase(void)
 {
 	collider_.clear();
+	colTagStrTable_.clear();
+	colTagPriorityStrTable_.clear();
+	makeCollisionTable_.clear();
+	tagPrioritys_.clear();
 }
 void ObjectBase::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
