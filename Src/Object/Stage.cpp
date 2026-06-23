@@ -19,7 +19,6 @@ Stage::~Stage(void)
 
 void Stage::Load(void)
 {
-	MakeColliderFromJsonData();
 }
 
 void Stage::Init(void)
