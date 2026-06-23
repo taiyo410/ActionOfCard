@@ -19,6 +19,7 @@ Stage::~Stage(void)
 
 void Stage::Load(void)
 {
+
 }
 
 void Stage::Init(void)

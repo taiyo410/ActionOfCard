@@ -57,7 +57,7 @@ public:
 	virtual const bool IsHit(Sphere& _sphere) = 0;			//球
 	virtual const bool IsHit(Capsule& _capsule) = 0;		//カプセル
 	virtual const bool IsHit(Line& _line) = 0;				//線
-	virtual const bool IsHit(Plane& _line) = 0;				//線
+	virtual const bool IsHit(Plane& _line) = 0;				//プレーン
 	
 	/// @brief 衝突後の処理
 	/// @param  
@@ -83,7 +83,6 @@ public:
 	/// @return 
 	inline const VECTOR GetLocalPosPoint2(void)const { return localPosPoint2_; }
 
-
 	/// @brief 回転済みの1つ目の点の座標を取得
 	/// @param  
 	/// @return 
@@ -98,7 +97,6 @@ public:
 	/// @param  
 	/// @return 
 	const VECTOR GetCenter(void)const;
-
 
 	/// @brief 1つ目の点の座標のセット
 	/// @param _pos 1つ目の点の座標
@@ -139,7 +137,6 @@ public:
 	/// @brief 当たった時の情報設定
 	/// @param _hitInfo 当たった時の情報
 	inline void SetHitInfo(MV1_COLL_RESULT_POLY_DIM _hitInfo) { std::swap(hitInfo_, _hitInfo); }
-
 
 	/// @brief 回転バウンティボックスの取得
 	/// @param  

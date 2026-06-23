@@ -274,7 +274,7 @@ void ObjectBase::MakeModelCollision(const std::string& _priStr, const nlohmann::
 	const int modelId = useSrc == ResourceManager::SRC::NONE ? trans_.modelId : resMng_.LoadModelDuplicate(useSrc);
 
 	//コライダーの生成
-	std::unique_ptr<Geometry>geo = std::make_unique<Model>(trans_.pos,trans_.quaRot,modelId);
+	std::unique_ptr<Geometry>geo = std::make_unique<Model>(trans_.pos,trans_.quaRot, modelId);
 	MakeCollider(it->second, myTags, std::move(geo), noneHitTag);
 	tagPrioritys_.emplace_back(it->second);
 }

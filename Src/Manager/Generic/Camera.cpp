@@ -369,6 +369,8 @@ void Camera::SmoothChangeCamera(void)
 
 void Camera::Collision(void)
 {
+	if (stageTransform_ == nullptr)return;
+
 	//腰座標を常に取得する
 	followFramePos_ = MV1GetFramePosition(followTransform_->modelId, FOLLOW_FRAME_NUM);
 
@@ -445,6 +447,10 @@ void Camera::SetBeforeDrawFollow(void)
 	// カメラ操作
 	ProcessRot();
 
+	////追従対象の座標の更新(プレイヤー座標では、y座標が０で常にモデルと当たっている判定になるため、
+	//// プレイヤーの中心を追従)
+	//followPos_ = VAdd(followTransform_->pos, followLocalPos_);
+
 	// 追従対象との相対位置を同期
 	SyncFollow(followTransform_);
 
@@ -479,10 +485,6 @@ void Camera::SetBeforeDrawTargetPoint(void)
 
 	//入力でのカメラ操作
 	ProcessRot();
-
-	//追従対象の座標の更新(プレイヤー座標では、y座標が０で常にモデルと当たっている判定になるため、
-	// プレイヤーの中心を追従)
-	followPos_ = VAdd(followTransform_->pos, followLocalPos_);
 
 	//ターゲットカメラの追従
 	SyncTargetFollow();

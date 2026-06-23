@@ -279,7 +279,7 @@ ResourceData& ResourceManager::_Load(SRC src)
 	loadedMap_.emplace(src, *rPair->second);
 
 	//return *rPair->second;
-	return loadedMap_.at(src);;
+	return loadedMap_.at(src);
 }
 
 const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParameter(const RES_INFO _info, const nlohmann::json& _data )
