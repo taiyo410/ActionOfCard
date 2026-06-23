@@ -114,6 +114,10 @@ protected:
 	//Json読み込みで当たり判定を生成
 	void MakeColliderFromJsonData(void);
 
+	/// @brief オブジェクト名を指定して当たり判定を生成
+	/// @param _tagName 
+	void MakeColliderFromJsonData(const std::string _tagName);
+
 	/// @brief 特定の配列番号の当たり判定の削除
 	/// @param _priority タグの種類
 	void DeleteCollider(const TAG_PRIORITY _priority);
@@ -145,4 +149,8 @@ private:
 
 	//当たらないタグの取得
 	const std::set<Collider::TAG> GetNoneHitTag(const nlohmann::json& _data);
+
+	//自分のタグの取得
+	const std::set<Collider::TAG> GetMyTags(const nlohmann::json& _data);
+	
 };

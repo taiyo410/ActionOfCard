@@ -252,6 +252,8 @@ private:
 	// カメラが追従対象とするTransform
 	const Transform* followTransform_;
 	VECTOR followLocalCenterPos_;
+	VECTOR followPos_;
+	VECTOR followLocalPos_;
 
 	//カメラの注視点とするターゲットTransform
 	const Transform* targetTransform_;

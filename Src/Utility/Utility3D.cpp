@@ -40,7 +40,7 @@ VECTOR Utility3D::Rad2Deg3D(const VECTOR& _radVec)
     return { UtilityCommon::Rad2DegF(_radVec.x),UtilityCommon::Rad2DegF(_radVec.y),UtilityCommon::Rad2DegF(_radVec.z) };
 }
 
-VECTOR Utility3D::Deg2RadD3D(const VECTOR& _degVec)
+VECTOR Utility3D::Deg2Rad3D(const VECTOR& _degVec)
 {
     return { UtilityCommon::Deg2RadF(_degVec.x),UtilityCommon::Deg2RadF(_degVec.y),UtilityCommon::Deg2RadF(_degVec.z) };
 }

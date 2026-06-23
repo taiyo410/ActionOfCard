@@ -104,6 +104,11 @@ ResourceData::ResourceData(TYPE type, const std::wstring& path, int constBufNum)
 
 ResourceData::~ResourceData(void)
 {
+	// ロード済みであればリリース
+	if (handleId_ != UtilityCommon::INITIAL_HANDLE && handleId_ != -1)
+	{
+		Release();
+	}
 	duplicateModelIds_.clear();
 	loadFunc_.clear();
 	releaseFunc_.clear();

@@ -61,6 +61,9 @@ private:
     //ステージ文字列
     const std::string STAGE_STR = "Stage";
 
+    //壁の文字列(当たり判定生成用)
+    const std::string WALL_STR = "Wall";
+
 #pragma endregion
 
 

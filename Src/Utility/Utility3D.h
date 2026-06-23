@@ -51,7 +51,7 @@ public:
 	/// @brief 度(deg)からラジアン(rad)
 	/// @param deg 度
 	/// @return 
-	static VECTOR Deg2RadD3D(const VECTOR& _degVec);
+	static VECTOR Deg2Rad3D(const VECTOR& _degVec);
 
 	/// @brief 2つのベクトル間の距離を求める
 	/// @param v1 ベクトル1

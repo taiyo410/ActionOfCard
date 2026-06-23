@@ -21,8 +21,9 @@ Plane::Plane(const VECTOR& _centerPos, const Quaternion& _rot
 {
     plane_.centerPos = VScale(VAdd(_min, _max), 0.5f);
     plane_.centerPos = VAdd(plane_.centerPos, _centerLocalPos);
+
     //ローカル回転
-    quaRot_.Euler(_localRotRad);
+    plane_.quaRot = Quaternion::Euler(_localRotRad.x, _localRotRad.y, _localRotRad.z);
 
 	plane_.halfH = (_max.x - _min.x) * 0.5f;
 	plane_.halfW = (_max.z - _min.z) * 0.5f;
@@ -31,8 +32,8 @@ Plane::Plane(const VECTOR& _centerPos, const Quaternion& _rot
 void Plane::Draw(void)
 {
     // 4頂点を計算
-    VECTOR rightVec = VScale(quaRot_.GetRight(), plane_.halfW);
-    VECTOR upVec = VScale(quaRot_.GetUp(), plane_.halfH);
+    VECTOR rightVec = VScale(plane_.quaRot.GetRight(), plane_.halfW);
+    VECTOR upVec = VScale(plane_.quaRot.GetUp(), plane_.halfH);
 
     VECTOR topLeft = VAdd(VAdd(plane_.centerPos, upVec), VScale(rightVec, -1));
     VECTOR topRight = VAdd(VAdd(plane_.centerPos, upVec), rightVec);
@@ -75,12 +76,12 @@ const bool Plane::IsHit(Line& _line)
     VECTOR end = _line.GetPosPoint2();
     VECTOR d = VSub(_line.GetPosPoint2(), _line.GetPosPoint1());
 
-    float denom = VDot(quaRot_.GetForward(), d);
+    float denom = VDot(plane_.quaRot.GetForward(), d);
 
-    // 平行、または裏面からの衝突を無視
-    if (denom >= -1e-6f) return false;
+    // 平行の衝突を無視
+    if (fabsf(denom) < 1e-6f) return false;
 
-    float t = VDot(quaRot_.GetForward(), VSub(plane_.centerPos, start)) / denom;
+    float t = VDot(plane_.quaRot.GetForward(), VSub(plane_.centerPos, start)) / denom;
 
     // 線分の範囲外
     if (t < 0.0f || t > 1.0f) return false;
@@ -90,14 +91,14 @@ const bool Plane::IsHit(Line& _line)
 
     // 矩形の内外判定
     VECTOR local = VSub(hit, plane_.centerPos);
-    float projW = VDot(local, quaRot_.GetRight());
-    float projH = VDot(local, quaRot_.GetUp());
+    float projW = VDot(local, plane_.quaRot.GetRight());
+    float projH = VDot(local, plane_.quaRot.GetUp());
 
     if (fabsf(projW) > plane_.halfW || fabsf(projH) > plane_.halfH)
         return false;
 
     //結果の反映
-    planeHitInfo_ = { hit, t, quaRot_.GetForward() };
+    planeHitInfo_ = { hit, t, plane_.quaRot.GetForward() };
 
     return true;
 }

@@ -26,6 +26,7 @@ public:
 	struct PLANE
 	{
 		VECTOR centerPos;
+		Quaternion quaRot;
 		float halfW;
 		float halfH;
 	};

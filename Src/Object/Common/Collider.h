@@ -21,6 +21,7 @@ public :
 		NML_ATK,			//剣
 		JUMP_ATK,			//ジャンプ
 		STAGE,				//ステージ
+		WALL,				//ステージの壁
 		ROCK,				//敵の攻撃用岩
 		FIRE,				//プレイヤーの炎魔法
 		THUNDER,			//プレイヤーの炎魔法

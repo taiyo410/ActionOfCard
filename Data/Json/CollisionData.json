@@ -146,6 +146,9 @@
         "player",
         "enemy",
         "normalAttack"
+      ],
+      "myTag": [
+        "wall"
       ]
     },
     "WallFront": {
@@ -170,18 +173,31 @@
         "player",
         "enemy",
         "normalAttack"
+      ],
+      "myTag": [
+        "wall"
       ]
     },
     "WallLeft": {
-      "geometry": "cube",
+      "geometry": "plane",
+      "localCenterPos": {
+        "x": 3000.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "localRotDeg": {
+        "x": 0.0,
+        "y": -90.0,
+        "z": 0.0
+      },
       "min": {
         "x": -3000.0,
-        "y": 1000.0,
+        "y": 0.0,
         "z": -3000.0
       },
       "max": {
-        "x": -3200.0,
-        "y": 10.0,
+        "x": 3000.0,
+        "y": 0.0,
         "z": 3000.0
       },
       "noneHitTag": [
@@ -189,13 +205,26 @@
         "player",
         "enemy",
         "normalAttack"
+      ],
+      "myTag": [
+        "wall"
       ]
     },
     "WallRight": {
-      "geometry": "cube",
+      "geometry": "plane",
+      "localCenterPos": {
+        "x": -3000.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "localRotDeg": {
+        "x": 0.0,
+        "y": 90.0,
+        "z": 0.0
+      },
       "min": {
-        "x": 3000.0,
-        "y": 1000.0,
+        "x": -3000.0,
+        "y": 0.0,
         "z": -3000.0
       },
       "max": {
@@ -208,6 +237,9 @@
         "player",
         "enemy",
         "normalAttack"
+      ],
+      "myTag": [
+        "wall"
       ]
     }
   }

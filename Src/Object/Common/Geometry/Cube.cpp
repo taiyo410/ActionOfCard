@@ -7,6 +7,7 @@
 #include "./Capsule.h"
 #include "./Line.h"
 #include "./Cube.h"
+#include "./Plane.h"
 
 //***************************************************
 //箱
@@ -279,9 +280,9 @@ const bool Cube::IsHit(Line& _line)
 	return true;
 }
 
-const bool Cube::IsHit(Plane& _line)
+const bool Cube::IsHit(Plane& _plane)
 {
-	return false;
+	return _plane.IsHit(*this);
 }
 
 void Cube::UpdateObbAxis(void) 

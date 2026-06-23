@@ -56,7 +56,8 @@ Camera::Camera(void):
 	goalPos_(),
 	startAngles_(),
 	startFollowLocalCenterPos_(),
-	targetPoses_()
+	targetPoses_(),
+	followPos_()
 {
 
 }
@@ -137,7 +138,11 @@ void Camera::Draw(void)
 
 void Camera::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
-	int i = 0;
+	auto it = _hitCol.lock()->GetTags().find(Collider::TAG::WALL);
+	if (it != _hitCol.lock()->GetTags().end())
+	{
+		int i = 0;
+	}
 }
 
 void Camera::ChangeSub(const  SUB_MODE _subMode)
@@ -152,9 +157,11 @@ void Camera::SetFollow(const Transform* follow,const VECTOR _localCenterPos)
 {
 	followTransform_ = follow;
 	followLocalCenterPos_ = _localCenterPos;
+	followLocalPos_ = _localCenterPos;
+	followPos_ = VAdd(followTransform_->pos, followLocalPos_);
 
 	//カメラとプレイヤーを結ぶ線分の当たり判定を作成
-	std::unique_ptr<Geometry> geo = std::make_unique<Line>(pos_, followTransform_->pos);
+	std::unique_ptr<Geometry> geo = std::make_unique<Line>(pos_, followPos_);
 	MakeCollider(ObjectBase::TAG_PRIORITY::CAMERA_2_PLAYER_LINE, { Collider::TAG::CAMERA }, std::move(geo)
 		, { Collider::TAG::PLAYER1,Collider::TAG::ENEMY1,Collider::TAG::ROCK });
 }
@@ -472,6 +479,10 @@ void Camera::SetBeforeDrawTargetPoint(void)
 
 	//入力でのカメラ操作
 	ProcessRot();
+
+	//追従対象の座標の更新(プレイヤー座標では、y座標が０で常にモデルと当たっている判定になるため、
+	// プレイヤーの中心を追従)
+	followPos_ = VAdd(followTransform_->pos, followLocalPos_);
 
 	//ターゲットカメラの追従
 	SyncTargetFollow();

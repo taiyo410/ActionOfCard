@@ -4,6 +4,7 @@
 #include"./Sphere.h"
 #include"./Capsule.h"
 #include"./Line.h"
+#include"./Plane.h"
 
 //***************************************************
 //ü
@@ -109,9 +110,9 @@ const bool Line::IsHit(Line& _line)
 	return distance <= EPSILON;
 }
 
-const bool Line::IsHit(Plane& _line)
+const bool Line::IsHit(Plane& _plane)
 {
-	return false;
+	return _plane.IsHit(*this);
 }
 
 const VECTOR Line::GetPosPoint1(void) const
