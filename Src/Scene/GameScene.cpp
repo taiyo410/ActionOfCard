@@ -84,9 +84,6 @@ void GameScene::Init(void)
 {
 	updatePhase_ = UPDATE_PHASE::NONE;
 
-	//演出へ
-	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
-
 	//革命になるランダム時間を決める
 	float rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
 	revolutionRondomTime_ = rand;
@@ -349,7 +346,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//演出状態へ移行
-	ChangeUpdatePhase(UPDATE_PHASE::DIRECTION);
+	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
 }
 
 void GameScene::ObjectLoad(void)
