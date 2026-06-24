@@ -37,9 +37,6 @@ GameScene::GameScene(void):
 	//描画関数のセット
 	drawFunc_ = [this]() {LoadingDraw(); };
 
-	//ポストエフェクトのスクリーン生成
-	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
-
 	//更新テーブル
 	changeUpdate_ = {
 	{UPDATE_PHASE::NONE,[this]() {ChangeNone(); }},
@@ -403,8 +400,6 @@ void GameScene::Skip(void)
 
 void GameScene::LoadInvertEffect(void)
 {
-	//ポストエフェクトのシーンハンドル生成
-	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
 	invertMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::REVOLUTION_POSTEFF_PS);
 
 	//メインスクリーン
@@ -456,7 +451,7 @@ bool GameScene::CheckGameStateTransition(void)
 
 void GameScene::RevolutionInvertFadeNone(void)
 {
-	//ランダム時間ごとに革命と中将ルールを切り替える
+	//ランダム時間ごとに革命と通常ルールを切り替える
 	if (revolutionCnt_ < 0.0f)
 	{
 		//ランダムで革命状態の時間を決める

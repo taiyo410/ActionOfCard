@@ -6,7 +6,6 @@
 
 class CardPresenter;
 class CharacterBase;
-class EffectController;
 
 class CardActionBase :
     public ActionBase
@@ -49,7 +48,6 @@ public:
 protected:
 
 #pragma region メンバー変数
-    std::unique_ptr<EffectController>effect_;    //エフェクトコントローラ
     CardPresenter& cardPresent_;    //カードデッキ
     //カードアクション関数ポインタ
     std::function<void(void)> cardActFunc_;

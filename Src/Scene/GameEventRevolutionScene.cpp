@@ -15,8 +15,6 @@ GameEventRevolutionScene::GameEventRevolutionScene(void):
 
 	//•`‰æŠÖ”‚ÌƒZƒbƒg
 	drawFunc_ = [this]() {NormalDraw(); };
-
-	postEffectScreen_ = MakeScreen(Application::SCREEN_SIZE_X, Application::SCREEN_SIZE_Y, true);
 }
 
 GameEventRevolutionScene::~GameEventRevolutionScene(void)

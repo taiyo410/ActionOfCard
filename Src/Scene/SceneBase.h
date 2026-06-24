@@ -83,7 +83,6 @@ protected:
 
 	float loadingTime_;				//ローディング経過時間
 	int buttonFontHandle_;			//選択ボタンフォントハンドル
-	int postEffectScreen_;			//ポストエフェクト用スクリーン
 #pragma endregion
 
 #pragma region メンバー関数

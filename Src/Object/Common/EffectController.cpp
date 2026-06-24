@@ -105,9 +105,6 @@ const int EffectController::Play(const EFF_TYPE _effType, const VECTOR _pos, con
 	////配列保存
 	int ret = playData.playId;
 
-	////カウンタ増加
-	//effects_[_effType].playNum++;
-
 	//プレイID返す
 	return ret;
 }
@@ -122,7 +119,8 @@ void EffectController::SetPos(const EFF_TYPE _effType, const int _playId, const 
 	}
 
 	//座標の再設定
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 	SetPosPlayingEffekseer3DEffect(it.playId, _pos.x, _pos.y, _pos.z);
 	it.pos = _pos;
 }
@@ -136,7 +134,8 @@ void EffectController::SetQuaRot(const EFF_TYPE _effType, const int _playId, con
 	}
 
 	//playDataの参照を取得
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 	//回転の再設定
 	SetRotationPlayingEffekseer3DEffect(it.playId, _quaRot.ToEuler().x, _quaRot.ToEuler().y, _quaRot.ToEuler().z);
 	it.quaRot = _quaRot;
@@ -151,7 +150,8 @@ void EffectController::SetScale(const EFF_TYPE _effType, const int _playId, cons
 	}
 
 	//playDataの参照を取得
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 	//大きさの再設定
 	SetScalePlayingEffekseer3DEffect(it.playId, _scl.x, _scl.y, _scl.z);
 	it.scl = _scl;
@@ -166,7 +166,8 @@ void EffectController::SetSpeed(const EFF_TYPE _effType, const int _playId, cons
 	}
 
 	//playDataの参照を取得
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 	//速度の再設定
 	SetSpeedPlayingEffekseer3DEffect(it.playId, _speedMultiplier);
 	it.speedMulti = _speedMultiplier;
@@ -181,7 +182,8 @@ void EffectController::SetColor(const EFF_TYPE _effType, const int _playId, cons
 	}
 
 	//playDataの参照を取得
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 
 	//指定エフェクトのカラー変更
 	SetColorPlayingEffekseer3DEffect(it.playId, _color.x, _color.y, _color.z, _color.w);
@@ -197,7 +199,8 @@ void EffectController::Stop(const EFF_TYPE _effType, const int _playId)
 	}
 	
 	//playDataの参照を取得
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 	//エフェクトストップ
 	StopEffekseer3DEffect(it.playId);
 }
@@ -247,7 +250,8 @@ void EffectController::AllDelete(void)
 const bool EffectController::IsEnd(const EFF_TYPE _effType, const int _playId)
 {
 	//再生が終わっているか
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 	if (IsEffekseer3DEffectPlaying(it.playId) == -1)
 	{
 		//終わっていた
@@ -261,7 +265,8 @@ const bool EffectController::IsEnd(const EFF_TYPE _effType, const int _playId)
 void EffectController::RePlay(const EFF_TYPE _effType, const int _playId)
 {
 	//再生中のエフェクト参照の取得
-	PlayData& it = FindPlayData(_effType, _playId).value().get();
+	auto playData = FindPlayData(_effType, _playId);
+	PlayData& it = playData.value().get();
 
 	//各要素
 	VECTOR scl = it.scl;

@@ -37,7 +37,7 @@ void EnemyCardAttackJump::Load(void)
 	resMng_.Load(ResourceManager::SRC::ENEMY_CHARGE_SE);
 
 	//エフェクトの追加
-	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::BLAST).handleId_, EffectController::EFF_TYPE::BLAST);
+	effect_->Add(resMng_.Load(ResourceManager::SRC::BLAST).handleId_, EffectController::EFF_TYPE::BLAST);
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_JUMP_CHARGE_EFF).handleId_, EffectController::EFF_TYPE::E_JUMP_CHARGE);
 }
 

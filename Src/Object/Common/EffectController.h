@@ -25,6 +25,7 @@ public:
 		E_JUMP_CHARGE,	//ジャンプ溜め
 		E_DEATH,		//死んだエフェクト
 		E_DEATH_BLAST,	//死んで爆発
+		REVOLUTION_EFF	//革命エフェクト
 	};
 
 	/// @brief コンストラクタ
@@ -83,11 +84,6 @@ public:
 	/// @param _playId 確認したいエフェクトのプレイID
 	/// @return 
 	const bool IsEnd(const EFF_TYPE _effType, const int _playId);
-	
-	///// @brief 指定したエフェクトがいくつ再生されているか
-	///// @param _effType 確認したいエフェクト
-	///// @return プレイされている数(-1:そもそもそのエフェクトが存在しない)
-	//const int GetPlayNum(const EFF_TYPE _effType);
 
 	/// @brief 座標の再設定
 	/// @param _effType エフェクトの種類
@@ -137,10 +133,8 @@ private:
 	//エフェクトデータ
 	struct EffectData
 	{
-		int resId;							//リソースデータ
-		//std::map<int, PlayData> playData;	//プレイ中のデータ
+		int resId = -1;							//リソースデータ
 		std::list<PlayData> playData;			//プレイ中のデータ
-		//int playNum;						//プレイ中のエフェクトの数
 	};
 
 	//通常倍率

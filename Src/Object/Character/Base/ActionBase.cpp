@@ -3,6 +3,7 @@
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Generic/Camera.h"
 #include "Object/Common/AnimationController.h"
+#include "Object/Common/EffectController.h"
 #include "Object/Character/Action/ActionController.h"
 #include "Object/Character/Base/CharacterBase.h"
 #include "Object/Character/Base/LogicBase.h"
@@ -21,6 +22,7 @@ ActionBase::ActionBase(ActionController& _actCntl,CharacterBase& _character):
 	flinchCnt_(0.0f),
 	isTargetTurn_(false)
 {
+	effect_ = std::make_unique<EffectController>();
 }
 
 ActionBase::~ActionBase()

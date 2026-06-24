@@ -7,6 +7,8 @@
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/ButtonUIManager.h"
 #include "Manager/Generic/SceneManager.h"
+#include "Renderer/PixelMaterial.h"
+#include "Renderer/PixelRenderer.h"
 #include "Object/Card/CardSystem.h"
 #include "Object/Character/UI/HpUI.h"
 #include "Object/Card/PlayerCardUI.h"
@@ -93,6 +95,8 @@ void UIManager::Update(void)
 	{
 		cardUI.second->Update();
 	}
+
+	UpdateRevolutionDirection();
 
 	EasingWinnerUISize();
 }
@@ -193,6 +197,79 @@ void UIManager::UISizeEasing(float& _scl, Vector2F& _arrowPos, const Vector2F& _
 	_arrowPos = _winnerPos + arrowLocalPos * _scl;
 
 	scaleEaseCnt_ += SceneManager::GetInstance().GetDeltaTime();
+}
+
+void UIManager::LoadRevolutionPostEffect(void)
+{
+	invertMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::REVOLUTION_POSTEFF_PS);
+
+	//メインスクリーン
+	const int mainScreen = scnMng_.GetMainScreen();
+	invertMaterial_->AddTextureBuf(mainScreen);
+
+	//マスク画像
+	const int maskImg = resMng_.Load(ResourceManager::SRC::REVERSE_FADE_MASK).handleId_;
+	invertMaterial_->AddTextureBuf(maskImg);
+	invertMaterial_->AddConstBuf({ fadeCnt_ ,0.0f,0.0f,0.0f });
+
+	invertRenderer_ = std::make_shared<PixelRenderer>(*invertMaterial_);
+	invertRenderer_->MakeScreenVertex();
+}
+
+void UIManager::UpdateRevolutionDirection(void)
+{
+	//革命更新
+	revolutionFadeFunc_();
+
+	//シェーダー関連の更新
+	const int mainScreen = scnMng_.GetMainScreen();
+	invertMaterial_->SetTextureBuf(0, mainScreen);
+	invertMaterial_->SetConstBuf(0, { fadeCnt_ / FADE_TIME ,0.0f,0.0f,0.0f });
+}
+
+void UIManager::RevolutionInvertFadeNone(void)
+{
+	//革命開始したらフェード開始
+	if (isStartRevolution_)
+	{
+		scnMng_.SetPostEffect(invertRenderer_);
+		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeIn(); };
+	}
+}
+
+void UIManager::RevolutionInvertFadeIn(void)
+{
+	if (fadeCnt_ < FADE_TIME)
+	{
+		fadeCnt_ += scnMng_.GetDeltaTime();
+		return;
+	}
+
+	//フェード終了後、一定時間待機
+	if (waitCnt_ < 0.0f)
+	{
+		waitCnt_ = WAIT_TIME;
+		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeOut(); };
+		//ルールを切り替える
+		CardSystem::GetInstance().ChangeJudgeRule();
+		return;
+	}
+	waitCnt_ -= scnMng_.GetDeltaTime();
+}
+
+void UIManager::RevolutionInvertFadeOut(void)
+{
+	if (fadeCnt_ > 0.0f)
+	{
+		fadeCnt_ -= scnMng_.GetDeltaTime();
+	}
+	else
+	{
+		scnMng_.DeletePostEffect(invertRenderer_);
+		fadeCnt_ = 0.0f;
+		isStartRevolution_ = false;
+		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
+	}
 }
 
 void UIManager::LoadJsonParameter(void)

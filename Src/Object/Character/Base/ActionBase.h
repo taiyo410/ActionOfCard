@@ -9,6 +9,7 @@ class SceneManager;
 class SoundManager;
 class ActionController;
 class AnimationController;
+class EffectController;
 class CharacterBase;
 class PlayerLogic;
 
@@ -121,8 +122,8 @@ protected:
 	ActionController& actionCtrl_;	//アクションコントローラー
 	AnimationController& anim_;		//アニメーション
 	CharacterBase& character_;		//キャラクター
-		
 	AnimationController::ANIMATION_VARIABLE animVar_;//使用アニメーション
+	std::unique_ptr<EffectController>effect_;    //エフェクトコントローラ
 	float speed_;			//速度
 	float flinchCnt_;		//怯み時間
 	bool isTurnable_;		//方向転換可能かどうか

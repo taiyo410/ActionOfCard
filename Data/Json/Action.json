@@ -265,8 +265,12 @@
     },
     "Revolution": {
       "startRevolutionAnimStep": 35.0,
-      "loopStartStep": 38.0,
-      "loopEndStep": 48.0,
+      "animationLoopStartStep": 38.0,
+      "animationLoopEndStep": 48.0,
+      "animationLoopSpeed": 5.0,
+      "effectScale": 10.0,
+      "effectPlaySpeed": 0.5,
+      "waitTIme": 0.5,
       "animation": {
         "useAnim": "E_REVOLUTION",
         "animSpeed": 30.0,

@@ -10,6 +10,9 @@ class HpUI;
 class CardUIBase;
 class DirectionUI;
 class ResourceManager;
+class SceneManager;
+class PixelMaterial;
+class PixelRenderer;
 
 class UIManager :
 	public Singleton<UIManager>
@@ -56,29 +59,15 @@ public:
 	/// @param _skipPer 
 	void SetSkipPer(const float _skipPer);
 
+	/// @brief 革命開始(演出開始)
+	/// @param  
+	void StartRevolution(void) { isStartRevolution_ = true; }
+
 private:
 
 #pragma region メンバー定数
 	//フォントサイズ
 	static constexpr int FONT_SIZE = 20;
-
-	////ボタン座標
-	//static constexpr Vector2F INIT_BOTTON_POS = { 10.0f,60.0f };
-
-	////ボタンサイズ
-	//static constexpr float BOTTON_SIZE = 50.0f;
-
-	////ボタン同士の間隔
-	//static constexpr float BOTTON_DISTANCE = 10.0f;
-
-	////攻撃ボタン文字列
-	//const std::wstring ATTACK_BTN_STR = L"攻撃(カード使用)";
-
-	////回避ボタン文字列
-	//const std::wstring DODGE_BTN_STR = L"回避";
-
-	//勝敗の矢印のローカル座標
-	//static constexpr Vector2F ARROW_LOCAL_POS = { 350.0f,0.0f };
 
 	//HIGHERの画像の座標
 	static constexpr Vector2F HIGHER_IMG_POS = { Application::SCREEN_HALF_X - 120.0f,80.0f };
@@ -107,6 +96,12 @@ private:
 	float easeTime_;					//イージング時間
 #pragma endregion
 
+#pragma region メンバー定数
+	//革命時間関連	
+	static constexpr float FADE_TIME = 0.3f;	//フェード時間
+	static constexpr float WAIT_TIME = 1.0f;	//フェードイン後の待機時間
+#pragma endregion
+
 
 #pragma region メンバー変数
 	//キャラHPUI
@@ -117,8 +112,12 @@ private:
 	std::unique_ptr<DirectionUI> directionUI_;
 	//イージング
 	std::unique_ptr<Easing> easing_;
+	//ポストエフェクト
+	std::unique_ptr<PixelMaterial> invertMaterial_;		//マテリアル
+	std::shared_ptr<PixelRenderer> invertRenderer_;		//レンダラー
 
 	ResourceManager& resMng_;		//リソース
+	SceneManager& scnMng_;			//シーンマネージャ
 
 	int imgBtns_;				//ボタン
 	int fontHandle_;			//フォント
@@ -133,6 +132,10 @@ private:
 	float scaleEaseCnt_;		//サイズイージングカウント
 	float higherImgScl_;		//数字の勝敗画像サイズ
 	float lowerImgScl_;			//数字の勝敗画像サイズ
+	float fadeCnt_;										//色反転フェードのカウント
+	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
+	float waitCnt_;										//シーン待機時間
+	bool isStartRevolution_;							//革命開始フラグ
 #pragma endregion
 
 #pragma region メンバー関数
@@ -159,9 +162,19 @@ private:
 	//数字の勝敗を表すUIの表示
 	void EasingWinnerUISize(void);
 
-	/// @brief 勝敗判定のUIの画像を補完
-	/// @param  
+	//勝敗判定のUIの画像を補完
 	void UISizeEasing(float& _scl,Vector2F& _arrowPos,const Vector2F& _winnerPos);
+
+	//革命開始のポストエフェクトのロード
+	void LoadRevolutionPostEffect(void);
+
+	//革命演出更新
+	void UpdateRevolutionDirection(void);
+
+	//革命フェード更新
+	void RevolutionInvertFadeNone(void);	//革命フェードなし
+	void RevolutionInvertFadeIn(void);		//革命時の色反転フェードイン
+	void RevolutionInvertFadeOut(void);		//革命時の色反転フェードアウト
 
 	void LoadJsonParameter(void);
 #pragma endregion
