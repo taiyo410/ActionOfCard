@@ -16,7 +16,7 @@ public:
 	/// @brief 2点間をつなぐオブジェクトの線分
 	/// @param _objPos1 1つめの物体の座標
 	/// @param _objPos2 2つめの物体の座標
-	Line(const VECTOR& _objPos1, const VECTOR& _objPos2);
+	Line(const VECTOR* _objPos1, const VECTOR* _objPos2);
 
 	/// @brief コピーコンストラクタ
 	/// @param _copyBase コピー元

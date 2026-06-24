@@ -16,10 +16,10 @@ Line::Line(const VECTOR& _pos, const Quaternion& _rot, const VECTOR& _localPosPo
 	hitInfo_ = {};
 }
 
-Line::Line(const VECTOR& _objPos1, const VECTOR& _objPos2):
-	Geometry(_objPos1, Quaternion(), 0.0f, {}, {}, {}, -1),
-	externalPoint1_(&_objPos1),
-	externalPoint2_(&_objPos2)
+Line::Line(const VECTOR* _objPos1, const VECTOR* _objPos2):
+	Geometry({}, Quaternion(), 0.0f, {}, {}, {}, -1),
+	externalPoint1_(_objPos1),
+	externalPoint2_(_objPos2)
 {
 }
 
@@ -31,6 +31,8 @@ Line::Line(const Line& _copyBase, const VECTOR& _pos, const Quaternion& _rot) :
 
 Line::~Line(void)
 {
+	externalPoint1_ = nullptr; 
+	externalPoint2_ = nullptr;
 }
 
 void Line::Draw(void)

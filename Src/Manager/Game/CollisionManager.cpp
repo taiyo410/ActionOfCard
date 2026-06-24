@@ -112,6 +112,7 @@ CollisionManager::CollisionManager(void)
 	hitRange_[Collider::TAG::ROCK] = HIT_RANGE_ROCK;
 	hitRange_[Collider::TAG::FIRE] = HIT_RANGE_NORMAL;
 	hitRange_[Collider::TAG::THUNDER] = HIT_RANGE_NORMAL;
+	hitRange_[Collider::TAG::WALL] = HIT_RANGE_NORMAL;
 }
 
 CollisionManager::~CollisionManager(void)
@@ -186,9 +187,6 @@ const bool CollisionManager::JudgeIsCollision(const int _col1Num, const int _col
 	const auto& tags1 = colliders3D_[_col1Num]->GetTags();
 	const auto& tags2 = colliders3D_[_col2Num]->GetTags();
 
-
-
-	
 	//1l–Ú‚Ìƒ^ƒO
 	for (auto tag1 : tags1)
 	{

@@ -161,7 +161,7 @@ void Camera::SetFollow(const Transform* follow,const VECTOR _localCenterPos)
 	followPos_ = VAdd(followTransform_->pos, followLocalPos_);
 
 	//カメラとプレイヤーを結ぶ線分の当たり判定を作成
-	std::unique_ptr<Geometry> geo = std::make_unique<Line>(pos_, followPos_);
+	std::unique_ptr<Geometry> geo = std::make_unique<Line>(&pos_, &followPos_);
 	MakeCollider(ObjectBase::TAG_PRIORITY::CAMERA_2_PLAYER_LINE, { Collider::TAG::CAMERA }, std::move(geo)
 		, { Collider::TAG::PLAYER1,Collider::TAG::ENEMY1,Collider::TAG::ROCK });
 }
