@@ -10,7 +10,7 @@
 #include "Common/Easing.h"
 #include "Object/Common/Transform.h"
 #include "Object/Common/Geometry/Sphere.h"
-#include "Object/Common/Geometry/Line.h"
+#include "Object/Common/Geometry/ExternalLine.h"
 #include "Object/Stage.h"
 
 #include "Camera.h"
@@ -141,7 +141,11 @@ void Camera::OnHit(const std::weak_ptr<Collider> _hitCol)
 	auto it = _hitCol.lock()->GetTags().find(Collider::TAG::WALL);
 	if (it != _hitCol.lock()->GetTags().end())
 	{
-		int i = 0;
+		const Geometry::PLANE_HIT& hitInfo = _hitCol.lock()->GetGeometry().GetPlaneHit();
+
+		VECTOR vecToFollow = Utility3D::GetMoveVec(pos_, followFramePos_);
+		//衝突点の少し手前にカメラを配置
+		pos_ = VAdd(hitInfo.hitPos, VScale(vecToFollow, HIT_NORMAL_OFFSET));
 	}
 }
 
@@ -161,7 +165,7 @@ void Camera::SetFollow(const Transform* follow,const VECTOR _localCenterPos)
 	followPos_ = VAdd(followTransform_->pos, followLocalPos_);
 
 	//カメラとプレイヤーを結ぶ線分の当たり判定を作成
-	std::unique_ptr<Geometry> geo = std::make_unique<Line>(&pos_, &followPos_);
+	std::unique_ptr<Geometry> geo = std::make_unique<ExternalLine>(pos_, followPos_);
 	MakeCollider(ObjectBase::TAG_PRIORITY::CAMERA_2_PLAYER_LINE, { Collider::TAG::CAMERA }, std::move(geo)
 		, { Collider::TAG::PLAYER1,Collider::TAG::ENEMY1,Collider::TAG::ROCK });
 }
@@ -448,8 +452,8 @@ void Camera::SetBeforeDrawFollow(void)
 	ProcessRot();
 
 	////追従対象の座標の更新(プレイヤー座標では、y座標が０で常にモデルと当たっている判定になるため、
-	//// プレイヤーの中心を追従)
-	//followPos_ = VAdd(followTransform_->pos, followLocalPos_);
+	// プレイヤーの中心を追従)
+	followPos_ = VAdd(followTransform_->pos, followLocalPos_);
 
 	// 追従対象との相対位置を同期
 	SyncFollow(followTransform_);

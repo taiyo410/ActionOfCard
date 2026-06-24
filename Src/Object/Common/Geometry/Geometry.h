@@ -8,6 +8,7 @@ class Cube;
 class Sphere;
 class Capsule;
 class Line;
+class ExternalLine;
 class Plane;
 
 class Geometry
@@ -51,13 +52,14 @@ public:
 	virtual void Draw(void) = 0;
 
 	//各種当たり判定
-	virtual const bool IsHit(Geometry& _geometry) = 0;		//ジオメトリ
-	virtual const bool IsHit(Model& _model) = 0;			//モデル
-	virtual const bool IsHit(Cube& _cube) = 0;				//キューブ
-	virtual const bool IsHit(Sphere& _sphere) = 0;			//球
-	virtual const bool IsHit(Capsule& _capsule) = 0;		//カプセル
-	virtual const bool IsHit(Line& _line) = 0;				//線
-	virtual const bool IsHit(Plane& _line) = 0;				//プレーン
+	virtual const bool IsHit(Geometry& _geometry) = 0;				//ジオメトリ
+	virtual const bool IsHit(Model& _model) = 0;					//モデル
+	virtual const bool IsHit(Cube& _cube) = 0;						//キューブ
+	virtual const bool IsHit(Sphere& _sphere) = 0;					//球
+	virtual const bool IsHit(Capsule& _capsule) = 0;				//カプセル
+	virtual const bool IsHit(Line& _line) = 0;						//線
+	virtual const bool IsHit(ExternalLine& _externalLine) = 0;		//2つのオブジェクトを結ぶ線
+	virtual const bool IsHit(Plane& _line) = 0;						//プレーン
 	
 	/// @brief 衝突後の処理
 	/// @param  

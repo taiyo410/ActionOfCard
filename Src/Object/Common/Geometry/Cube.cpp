@@ -6,6 +6,7 @@
 #include "./Sphere.h"
 #include "./Capsule.h"
 #include "./Line.h"
+#include "./ExternalLine.h"
 #include "./Cube.h"
 #include "./Plane.h"
 
@@ -203,6 +204,88 @@ const bool Cube::IsHit(Line& _line)
 	// ワールド空間の線分座標
 	VECTOR p1 = _line.GetPosPoint1();
 	VECTOR p2 = _line.GetPosPoint2();
+
+	// OBB のローカル中心（Min/Maxの中点）
+	VECTOR localCenter = VScale(VAdd(obb_.vMin, obb_.vMax), 0.5f);
+
+	// OBB のワールド中心を計算：axisで回転して pos_ を加算
+	VECTOR worldCenter = VAdd(
+		VAdd(
+			VAdd(
+				VScale(obb_.axis[0], localCenter.x),
+				VScale(obb_.axis[1], localCenter.y)
+			),
+			VScale(obb_.axis[2], localCenter.z)
+		),
+		pos_
+	);
+
+	// 線分をOBB空間に変換（ワールド中心 → ローカル）
+	VECTOR rel1 = VSub(p1, worldCenter);
+	VECTOR rel2 = VSub(p2, worldCenter);
+
+	VECTOR local1 = {
+		VDot(rel1, obb_.axis[0]),
+		VDot(rel1, obb_.axis[1]),
+		VDot(rel1, obb_.axis[2])
+	};
+
+	VECTOR local2 = {
+		VDot(rel2, obb_.axis[0]),
+		VDot(rel2, obb_.axis[1]),
+		VDot(rel2, obb_.axis[2])
+	};
+
+	// スラブ法：線分が AABB（Min/Max）と交差するか
+	VECTOR dir = VSub(local2, local1);
+	float tmin = 0.0f, tmax = 1.0f;
+
+	// 各軸 (x, y, z)
+	for (int axis = 0; axis < 3; ++axis)
+	{
+		float start, delta, minB, maxB;
+
+		if (axis == 0) {
+			start = local1.x; delta = dir.x;
+			minB = obb_.vMin.x; maxB = obb_.vMax.x;
+		}
+		else if (axis == 1) {
+			start = local1.y; delta = dir.y;
+			minB = obb_.vMin.y; maxB = obb_.vMax.y;
+		}
+		else {
+			start = local1.z; delta = dir.z;
+			minB = obb_.vMin.z; maxB = obb_.vMax.z;
+		}
+
+		if (fabs(delta) < 1e-6)
+		{
+			// 線が平行で AABB のこの面を貫通しない
+			if (start < minB || start > maxB) return false;
+		}
+		else
+		{
+			float ood = 1.0f / delta;
+			float t1 = (minB - start) * ood;
+			float t2 = (maxB - start) * ood;
+
+			if (t1 > t2) std::swap(t1, t2);
+
+			if (t1 > tmin) tmin = t1;
+			if (t2 < tmax) tmax = t2;
+
+			if (tmin > tmax) return false;
+		}
+	}
+
+	return true;
+}
+
+const bool Cube::IsHit(ExternalLine& _externalLine)
+{
+	// ワールド空間の線分座標
+	VECTOR p1 = _externalLine.GetPosPoint1();
+	VECTOR p2 = _externalLine.GetPosPoint2();
 
 	// OBB のローカル中心（Min/Maxの中点）
 	VECTOR localCenter = VScale(VAdd(obb_.vMin, obb_.vMax), 0.5f);

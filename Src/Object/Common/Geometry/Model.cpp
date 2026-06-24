@@ -3,6 +3,7 @@
 #include"Capsule.h"
 #include"Cube.h"
 #include"Line.h"
+#include"ExternalLine.h"
 #include"Model.h"
 
 //***************************************************
@@ -88,10 +89,13 @@ const bool Model::IsHit(Capsule& _capsule)
 
 const bool Model::IsHit(Line& _line)
 {
+	bool ret = false;
 	VECTOR pos1 = _line.GetPosPoint1();
 	VECTOR pos2 = _line.GetPosPoint2();
+
 	//判定
 	auto col = MV1CollCheck_Line(GetParentModel(), -1, pos1, pos2);
+
 	auto colDim = MV1CollCheck_LineDim(GetParentModel(), -1, pos1, pos2);
 
 	//当たっていたら情報更新
@@ -102,8 +106,44 @@ const bool Model::IsHit(Line& _line)
 
 		_line.SetHitInfo(colDim);
 		SetHitInfo(colDim);
+
+		//当たっているのでtrueを返すようにする
+		ret = true;
 	}
-	return col.HitFlag;
+	return ret;
+}
+
+const bool Model::IsHit(ExternalLine& _externalLine)
+{
+	bool ret = false;
+	VECTOR pos1 = _externalLine.GetPosPoint1();
+	VECTOR pos2 = _externalLine.GetPosPoint2();
+
+	//判定
+	auto col = MV1CollCheck_Line(GetParentModel(), -1, pos1, pos2);
+
+	auto colDim = MV1CollCheck_LineDim(GetParentModel(), -1, pos1, pos2);
+
+	//当たっていたら情報更新
+	if (col.HitFlag)
+	{
+		_externalLine.SetHitLineInfo(col);
+		SetHitLineInfo(col);
+
+		_externalLine.SetHitInfo(colDim);
+		SetHitInfo(colDim);
+
+		//当たっているのでtrueを返すようにする
+		ret = true;
+	}
+
+	//当たり判定情報の解放
+	MV1CollResultPolyDimTerminate(colDim);
+
+	//再初期化
+	std::memset(&colDim, 0, sizeof(colDim));
+
+	return ret;
 }
 
 const bool Model::IsHit(Plane& _line)

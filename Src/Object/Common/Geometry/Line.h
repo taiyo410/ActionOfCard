@@ -38,6 +38,7 @@ public:
 	const bool IsHit(Sphere& _sphere)override;
 	const bool IsHit(Capsule& _capsule) override;
 	const bool IsHit(Line& _line) override;
+	const bool IsHit(ExternalLine& _externalLine) override;
 	const bool IsHit(Plane& _plane) override;
 
 	const VECTOR GetPosPoint1(void)const override;

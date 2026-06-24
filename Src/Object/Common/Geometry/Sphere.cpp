@@ -5,6 +5,7 @@
 #include"./Cube.h"
 #include"./Capsule.h"
 #include"./Line.h"
+#include"./ExternalLine.h"
 #include"./Sphere.h"
 
 //***************************************************
@@ -184,6 +185,23 @@ const bool Sphere::IsHit(Line& _line)
 	t = std::max<float>(0.0f, std::min<float>(1.0f, t));  // 線分内に制限
 
 	VECTOR closestPoint = VAdd(_line.GetPosPoint1(), VScale(d, t));
+	VECTOR diff = VSub(closestPoint, GetColPos());
+
+	return VSquareSize(diff) <= std::pow(GetRadius(), 2.0);
+}
+
+const bool Sphere::IsHit(ExternalLine& _externalLine)
+{
+	//線のベクトル
+	VECTOR d = VSub(_externalLine.GetPosPoint2(), _externalLine.GetPosPoint1());
+
+	//線の先端から球体の中心まで
+	VECTOR m = VSub(GetColPos(), _externalLine.GetPosPoint1());
+
+	float t = VDot(m, d) / VSquareSize(d);
+	t = std::max<float>(0.0f, std::min<float>(1.0f, t));  // 線分内に制限
+
+	VECTOR closestPoint = VAdd(_externalLine.GetPosPoint1(), VScale(d, t));
 	VECTOR diff = VSub(closestPoint, GetColPos());
 
 	return VSquareSize(diff) <= std::pow(GetRadius(), 2.0);

@@ -34,12 +34,13 @@ public:
 	void Draw(void)override;
 
 	//ŠeŽí“–‚½‚è”»’è
-	const bool IsHit(Geometry& _geometry)override;
-	const bool IsHit(Model& _model)override;
-	const bool IsHit(Cube& _cube)override;
-	const bool IsHit(Sphere& _sphere)override;
-	const bool IsHit(Capsule& _capsule)override;
-	const bool IsHit(Line& _line)override;
+	const bool IsHit(Geometry& _geometry) override;
+	const bool IsHit(Model& _model) override;
+	const bool IsHit(Cube& _cube) override;
+	const bool IsHit(Sphere& _sphere) override;
+	const bool IsHit(Capsule& _capsule) override;
+	const bool IsHit(Line& _line) override;
+	const bool IsHit(ExternalLine& _externalLine) override;
 	const bool IsHit(Plane& _plane) override;
 
 private:

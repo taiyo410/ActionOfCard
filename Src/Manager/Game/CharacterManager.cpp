@@ -20,8 +20,8 @@ void CharacterManager::Load(void)
 void CharacterManager::Init(void)
 {
 	//プレイヤーのローカル中心座標をカプセルの中央に合わせ、カメラを演出状態に変更
-	const VECTOR& capTop = characters_[PLAYER_NO]->GetCapsuleTop();
-	const VECTOR& capDown = characters_[PLAYER_NO]->GetCapsuleDown();
+	const VECTOR capTop = characters_[PLAYER_NO]->GetCapsuleTop();
+	const VECTOR capDown = characters_[PLAYER_NO]->GetCapsuleDown();
 	const float playerCenterLocalPosY = (capTop.y - capDown.y) * 0.5f;
 	SceneManager::GetInstance().GetCamera().lock()->SetFollow(&characters_[PLAYER_NO]->GetTransform(), {0.0f,playerCenterLocalPosY ,0.0f});
 

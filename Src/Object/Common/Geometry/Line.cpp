@@ -4,6 +4,7 @@
 #include"./Sphere.h"
 #include"./Capsule.h"
 #include"./Line.h"
+#include"./ExternalLine.h"
 #include"./Plane.h"
 
 //***************************************************
@@ -102,6 +103,45 @@ const bool Line::IsHit(Line& _line)
 	s = std::clamp(s, 0.0f, 1.0f);
 
 	VECTOR closest1 = VAdd(_line.GetPosPoint1(), VScale(u, s));
+	VECTOR closest2 = VAdd(GetPosPoint1(), VScale(v, t));
+	VECTOR diff = VSub(closest1, closest2);
+
+	//ãóó£
+	float distance = sqrt(VDot(diff, diff));
+
+	//åç∑ÇµÇΩ
+	return distance <= EPSILON;
+}
+
+const bool Line::IsHit(ExternalLine& _externalLine)
+{
+	//å¿ÇËÇ»Ç≠è¨Ç≥Ç¢êî
+	const float EPSILON = 1e-6f;
+
+	VECTOR u = VSub(_externalLine.GetPosPoint2(), _externalLine.GetPosPoint1());
+	VECTOR v = VSub(GetPosPoint2(), GetPosPoint1());
+	VECTOR w = VSub(_externalLine.GetPosPoint1(), GetPosPoint1());
+
+	float a = VDot(u, u);
+	float b = VDot(u, v);
+	float c = VDot(v, v);
+	float d = VDot(u, w);
+	float e = VDot(v, w);
+
+	float denom = a * c - b * b;
+	float s = 0.0f, t = 0.0f;
+
+	if (denom != 0.0f) {
+		s = std::clamp((b * e - c * d) / denom, 0.0f, 1.0f);
+	}
+
+	t = (b * s + e) / c;
+	t = std::clamp(t, 0.0f, 1.0f);
+
+	s = (b * t - d) / a;
+	s = std::clamp(s, 0.0f, 1.0f);
+
+	VECTOR closest1 = VAdd(_externalLine.GetPosPoint1(), VScale(u, s));
 	VECTOR closest2 = VAdd(GetPosPoint1(), VScale(v, t));
 	VECTOR diff = VSub(closest1, closest2);
 

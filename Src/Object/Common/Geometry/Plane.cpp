@@ -5,6 +5,7 @@
 #include "Capsule.h"
 #include "Cube.h"
 #include "Line.h"
+#include "ExternalLine.h"
 #include "Plane.h"
 
 Plane::Plane(const VECTOR& _centerPos, const Quaternion& _rot, float _halfW, float _halfH):
@@ -75,6 +76,39 @@ const bool Plane::IsHit(Line& _line)
     VECTOR start = _line.GetPosPoint1();
     VECTOR end = _line.GetPosPoint2();
     VECTOR d = VSub(_line.GetPosPoint2(), _line.GetPosPoint1());
+
+    float denom = VDot(plane_.quaRot.GetForward(), d);
+
+    // 平行の衝突を無視
+    if (fabsf(denom) < 1e-6f) return false;
+
+    float t = VDot(plane_.quaRot.GetForward(), VSub(plane_.centerPos, start)) / denom;
+
+    // 線分の範囲外
+    if (t < 0.0f || t > 1.0f) return false;
+
+    // 交点
+    VECTOR hit = VAdd(start, VScale(d, t));
+
+    // 矩形の内外判定
+    VECTOR local = VSub(hit, plane_.centerPos);
+    float projW = VDot(local, plane_.quaRot.GetRight());
+    float projH = VDot(local, plane_.quaRot.GetUp());
+
+    if (fabsf(projW) > plane_.halfW || fabsf(projH) > plane_.halfH)
+        return false;
+
+    //結果の反映
+    planeHitInfo_ = { hit, t, plane_.quaRot.GetForward() };
+
+    return true;
+}
+
+const bool Plane::IsHit(ExternalLine& _externalLine)
+{
+    VECTOR start = _externalLine.GetPosPoint1();
+    VECTOR end = _externalLine.GetPosPoint2();
+    VECTOR d = VSub(_externalLine.GetPosPoint2(), _externalLine.GetPosPoint1());
 
     float denom = VDot(plane_.quaRot.GetForward(), d);
 

@@ -30,13 +30,14 @@ public:
 	void Draw(void)override;
 
 	//各種当たり判定
-	const bool IsHit(Geometry& _geometry) override;			//ジオメトリ
-	const bool IsHit(Model& _model) override;				//モデル
-	const bool IsHit(Cube& _cube) override;					//キューブ
-	const bool IsHit(Sphere& _sphere) override;				//球
-	const bool IsHit(Capsule& _capsule) override;			//カプセル
-	const bool IsHit(Line& _line) override;					//ライン
-	const bool IsHit(Plane& _line) override;				//プレーン
+	const bool IsHit(Geometry& _geometry) override;			
+	const bool IsHit(Model& _model) override;			
+	const bool IsHit(Cube& _cube) override;				
+	const bool IsHit(Sphere& _sphere) override;				
+	const bool IsHit(Capsule& _capsule) override;		
+	const bool IsHit(Line& _line) override;				
+	const bool IsHit(ExternalLine& _externalLine) override;	
+	const bool IsHit(Plane& _line) override;				
 
 	/// @brief ヒット後の処理
 	/// @param  
