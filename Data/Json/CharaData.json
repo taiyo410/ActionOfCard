@@ -114,7 +114,8 @@
 			"react",
 			"jumpAttack",
 			"stompAttack",
-			"cardReload"
+			"cardReload",
+			"revolution"
 		],
 		"HpBar": {
 			"barPos": {

@@ -72,7 +72,8 @@ public:
 		STOMP_ATK,			//スタンプ攻撃
 		ROAR_ATK,			//咆哮
 		JUMP_ATK,			//ジャンプ攻撃
-		RUSH_ATK			//突進
+		RUSH_ATK,			//突進
+		REVOLUTION			//革命開始アクション
 
 	};
 

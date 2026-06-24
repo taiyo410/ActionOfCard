@@ -25,6 +25,7 @@
 #include "./EnemyAction/EnemyCardAttackJump.h"
 #include "./EnemyAction/EnemyCardAttackStomp.h"
 #include "./EnemyAction/EnemyCardReload.h"
+#include "./EnemyAction/EnemyRevolutionAction.h"
 #include "ActionController.h"
 
 ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, Transform& _trans, CardPresenter& _deck, AnimationController& _anim, InputManager::JOYPAD_NO _padNum) :
@@ -82,6 +83,9 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		}},
 		{ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,[this]() {
 				mainAction_.emplace(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP,std::make_unique<EnemyCardAttackStomp>(*this,character_,cardPresent_));
+		}},
+		{ACTION_TYPE::REVOLUTION,[this]() {
+				mainAction_.emplace(ACTION_TYPE::REVOLUTION,std::make_unique<EnemyRevolutionAction>(*this,character_));
 		}}
 	};
 
@@ -100,6 +104,7 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		{"cardReload", ACTION_TYPE::CARD_RELOAD},
 		{"stompAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP},
 		{"jumpAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP },
+		{"revolution", ACTION_TYPE::REVOLUTION },
 	};
 
 };

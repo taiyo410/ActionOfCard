@@ -38,6 +38,7 @@ ResourceManager::ResourceManager(void):
 		{"E_KNOCK_DOWN",SRC::E_KNOCK_DOWN },
 		{"REACT" ,SRC::REACT},
 		{"E_DEATH" ,SRC::E_DEATH},
+		{"E_REVOLUTION" ,SRC::E_REVOLUTION},
 		//‰æ‘œ
 		{"TITLE_BACK_IMG",SRC::TITLE_BACK_IMG },
 		{"TITLE_LOGO" ,SRC::TITLE_LOGO},
@@ -73,6 +74,7 @@ ResourceManager::ResourceManager(void):
 		{"RELOAD_END_EFF" ,SRC::RELOAD_END_EFF},
 		{"FIRE_BALL_EFF" ,SRC::FIRE_BALL_EFF},
 		{"THUNDER_EFF" ,SRC::THUNDER_EFF},
+		{"REVOLUTION_EFF" ,SRC::REVOLUTION_EFF},
 		//BGM
 		{"TITLE_BGM",SRC::TITLE_BGM},
 		{"GAME_BGM",SRC::GAME_BGM},

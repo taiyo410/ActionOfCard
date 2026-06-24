@@ -261,7 +261,19 @@
         "animSpeed": 30.0,
         "detachSpeed": 5.0,
         "isLoop": false
-
+      }
+    },
+    "Revolution": {
+      "startRevolutionAnimStep": 35.0,
+      "loopStartStep": 38.0,
+      "loopEndStep": 48.0,
+      "animation": {
+        "useAnim": "E_REVOLUTION",
+        "animSpeed": 30.0,
+        "detachSpeed": 5.0,
+        "startStep": 23.0,
+        "endStep": 50.0,
+        "isLoop": false
       }
     }
   }

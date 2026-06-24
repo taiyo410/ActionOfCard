@@ -42,23 +42,23 @@ public:
 	//パンチ有効時間
 	static constexpr float PUNCH_TIME_MAX = 0.5f;
 	
-	//プレイヤーの入力される種類
+	//アクション種類
 	enum class ACTION_TYPE
 	{
-		IDLE,			//何もしてない
-		RUN,			//移動
-		REACT,			//パンチされた状態
-		JUMP,			//ジャンプ
-		CARD_ATTACK_ONE_MIDDLE,	//カードアクション
-		CARD_ATTACK_ONE_SHORT,	//カードアクション
-		CARD_ATTACK_TWO,	//カードアクション
-		CARD_ATTACK_THREE,	//カードアクション
-		CARD_RELOAD,	//カードリロード
-		CARD_MAGIC_FIRE,//カードによる炎魔法
-		CARD_MAGIC_THUNDER,//カードによる炎魔法
-		CARD_ATTACK_ENEMY_JUMP,
-		CARD_ATTACK_ENEMY_STOMP,
-		DODGE,
+		IDLE,						//何もしてない
+		RUN,						//移動
+		REACT,						//パンチされた状態
+		DODGE,						//回避
+		CARD_ATTACK_ONE_MIDDLE,		//カードアクション
+		CARD_ATTACK_ONE_SHORT,		//カードアクション
+		CARD_ATTACK_TWO,			//カードアクション
+		CARD_ATTACK_THREE,			//カードアクション
+		CARD_RELOAD,				//カードリロード
+		CARD_MAGIC_FIRE,			//カードによる炎魔法
+		CARD_MAGIC_THUNDER,			//カードによる炎魔法
+		CARD_ATTACK_ENEMY_JUMP,		//ジャンプ攻撃
+		CARD_ATTACK_ENEMY_STOMP,	//スタンプ攻撃(岩が飛び出る攻撃)
+		REVOLUTION					//革命開始アクション
 	};
 
 	/// @brief コンストラクタ

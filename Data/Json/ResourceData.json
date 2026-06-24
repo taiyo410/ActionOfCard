@@ -99,7 +99,11 @@
       },
       {
         "name": "E_DEATH",
-        "handle": "Animation/Enemy/Mutant Dying.mv1"
+        "handle": "Animation/Enemy/Mutant_Dying.mv1"
+      },
+      {
+        "name": "E_REVOLUTION",
+        "handle": "Animation/Enemy/Mutant_Revolution.mv1"
       }
     ],
 
@@ -246,6 +250,10 @@
       {
         "name": "THUNDER_EFF",
         "handle": "Thunder/Thunder.efkproj"
+      },
+      {
+        "name": "REVOLUTION_EFF",
+        "handle": "Revolution/Revolution.efkproj"
       }
     ],
 

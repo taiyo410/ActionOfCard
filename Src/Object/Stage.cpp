@@ -66,7 +66,7 @@ void Stage::Update(void)
 
 void Stage::Draw(void)
 {
-	//MV1DrawModel(wallTrans_.modelId);
+	MV1DrawModel(wallTrans_.modelId);
 	renderer_->Draw();
 
 	for (const auto& col : collider_)

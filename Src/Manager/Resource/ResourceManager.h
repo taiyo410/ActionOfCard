@@ -47,6 +47,7 @@ public:
 		E_KNOCK_DOWN,				//大ダウン
 		REACT,
 		E_DEATH,					//敵倒れる
+		E_REVOLUTION,				//革命アクション
 
 		//画像
 		TITLE_BACK_IMG,				//タイトル背景
@@ -85,6 +86,7 @@ public:
 		RELOAD_END_EFF,				//リロード終了エフェクト
 		FIRE_BALL_EFF,				//炎のエフェクト
 		THUNDER_EFF,				//雷のエフェクト
+		REVOLUTION_EFF,				//革命エフェクト
 
 		//サウンド
 		//BGM
