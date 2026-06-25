@@ -82,6 +82,15 @@ private:
 	//革命時間関連	
 	static constexpr float FADE_TIME = 0.3f;	//フェード時間
 	static constexpr float WAIT_TIME = 1.0f;	//フェードイン後の待機時間
+
+	//シャドウマップスケール
+	static constexpr int SHADOW_SCALE_X = 256;
+	static constexpr int SHADOW_SCALE_Y = 256;
+
+	//シャドウマップのエリア
+	static constexpr VECTOR SHADOW_MAP_AREA_MIN = { -4000.0f, -1.0f, -4000.0f };
+	static constexpr VECTOR SHADOW_MAP_AREA_MAX = { 4000.0f, -1.0f, 4000.0f };
+
 #pragma endregion
 
 #pragma region メンバー変数
@@ -97,7 +106,7 @@ private:
 	int slowFrame_;										//スローカウンタ(フレーム)
 	bool isSkippingDirection_;							//スキップ中
 	float skipKeepCnt_;									//長押しカウンタ
-
+	int shadowMapHandle_;								//シャドウマップハンドル
 #pragma endregion
 
 	//処理の変更

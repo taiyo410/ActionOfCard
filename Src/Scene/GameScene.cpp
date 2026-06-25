@@ -81,6 +81,15 @@ void GameScene::Init(void)
 	resMng_.Load(ResourceManager::SRC::GAME_BGM);
 	soundMng_.Play(ResourceManager::SRC::GAME_BGM, SoundManager::PLAYTYPE::LOOP);
 
+	//シャドウマップのハンドル生成
+	shadowMapHandle_ = MakeShadowMap(SHADOW_SCALE_X, SHADOW_SCALE_Y);
+
+	//シャドウマップが想定するライト方向を設定
+	SetShadowMapLightDirection(shadowMapHandle_, GetLightDirection());
+
+	//シャドウマップの描画範囲を設定
+	SetShadowMapDrawArea(shadowMapHandle_)
+
 	ObjectInit();
 }
 
