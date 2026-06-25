@@ -58,11 +58,6 @@ public:
 	/// @param  
 	/// @return 1方向に動く移動量
 	const float& GetSpeed(void) { return speed_; }
-
-	/// @brief 方向転換可能かどうかの取得
-	/// @param  
-	/// @return 方向転換可能かどうか
-	const bool& GetIsTurnable(void) { return isTurnable_; }
 	
 	/// @brief 攻撃当たり判定中かの取得
 	/// @param  
@@ -126,7 +121,6 @@ protected:
 	std::unique_ptr<EffectController>effect_;    //エフェクトコントローラ
 	float speed_;			//速度
 	float flinchCnt_;		//怯み時間
-	bool isTurnable_;		//方向転換可能かどうか
 	bool isTargetTurn_;		//敵への方向転換
 	bool isAliveAtkCol_;	//攻撃の当たり判定中か
 	ATK_STATUS atk_;		//現在の攻撃

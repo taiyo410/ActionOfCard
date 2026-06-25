@@ -40,6 +40,10 @@ public:
 	/// @brief UIの描画
 	/// @param  
 	void Draw(void);
+
+	/// @brief ポストエフェクトの削除
+	/// @param  
+	void DeleteRevolutionPostEffect(void);
 	
 	/// @brief 演出時のUI描画
 	/// @param  
@@ -62,6 +66,15 @@ public:
 	/// @brief 革命開始(演出開始)
 	/// @param  
 	void StartRevolution(void) { isStartRevolution_ = true; }
+
+	/// @brief 革命終了フラグ
+	/// @param  
+	/// @return 
+	const bool GetIsEndRevolutionDirection(void) { return isEndRevolution_; }
+
+	/// @brief 革命演出の終了フラグ初期化
+	/// @param  
+	void InitIsEndRevolution(void) { isEndRevolution_ = false; }
 
 private:
 
@@ -136,6 +149,7 @@ private:
 	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
 	float waitCnt_;										//シーン待機時間
 	bool isStartRevolution_;							//革命開始フラグ
+	bool isEndRevolution_;								//革命終了フラグ
 #pragma endregion
 
 #pragma region メンバー関数

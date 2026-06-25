@@ -38,6 +38,14 @@ void PlayerLogic::Update(void)
 	inputUpdates_[cntl_]();
 }
 
+void PlayerLogic::InputMoveDir(void)
+{
+	//カメラの角度を取得
+	VECTOR cameraRot = camera_.lock()->GetAngles();
+	Quaternion cameraQuaRot = camera_.lock()->GetQuaRotOutX();
+	moveDir_ = cameraQuaRot.PosAxis(inputDir_);
+}
+
 void PlayerLogic::InputKeyBoard(void)
 {
 	
@@ -113,10 +121,7 @@ void PlayerLogic::InputAll(void)
 	//移動操作の時はカメラの角度を参照する
 	if (isAct_.isRun && isCanMoveable_)
 	{
-		//カメラの角度を取得
-		VECTOR cameraRot = camera_.lock()->GetAngles();
-		Quaternion cameraQuaRot = camera_.lock()->GetQuaRotOutX();
-		moveDir_ = cameraQuaRot.PosAxis(inputDir_);
+		InputMoveDir();
 	}
 
 	//カードチャージ

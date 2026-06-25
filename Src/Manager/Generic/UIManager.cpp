@@ -17,7 +17,9 @@
 #include "UIManager.h"
 
 UIManager::UIManager(void):
-	resMng_(ResourceManager::GetInstance())
+	resMng_(ResourceManager::GetInstance()),
+	scnMng_(SceneManager::GetInstance()),
+	isEndRevolution_(false)
 {
 	CreateHpUI();
 	CreateCardUI();
@@ -60,6 +62,7 @@ void UIManager::Load(void)
 	}
 
 	LoadJsonParameter();
+	LoadRevolutionPostEffect();
 	directionUI_->Load();
 
 	fontHandle_= CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
@@ -82,6 +85,9 @@ void UIManager::Init(void)
 	}
 
 	directionUI_->Init();
+
+	//革命状態の初期化
+	revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
 }
 
 void UIManager::Update(void)
@@ -121,6 +127,11 @@ void UIManager::Draw(void)
 	DrawAttackButtonAndDodgeButton();
 
 	DrawHigherAndLower();
+}
+
+void UIManager::DeleteRevolutionPostEffect(void)
+{
+	scnMng_.DeletePostEffect(invertRenderer_);
 }
 
 void UIManager::DirectionDraw(void)
@@ -232,7 +243,7 @@ void UIManager::RevolutionInvertFadeNone(void)
 	//革命開始したらフェード開始
 	if (isStartRevolution_)
 	{
-		scnMng_.SetPostEffect(invertRenderer_);
+		scnMng_.SetPostEffect(invertRenderer_); 
 		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeIn(); };
 	}
 }
@@ -268,6 +279,7 @@ void UIManager::RevolutionInvertFadeOut(void)
 		scnMng_.DeletePostEffect(invertRenderer_);
 		fadeCnt_ = 0.0f;
 		isStartRevolution_ = false;
+		isEndRevolution_ = true;
 		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
 	}
 }

@@ -18,7 +18,8 @@ CardActionBase::CardActionBase(ActionController& _actCntl, CharacterBase& _chara
 	cardPresent_(_cardPresent),
 	atkPos_(Utility3D::VECTOR_ZERO),
 	isCombo_(false),
-	isDuelWait_(false)
+	isDuelWait_(false),
+	atkAnim_()
 {
 	effect_ = std::make_unique<EffectController>();
 }
@@ -83,7 +84,7 @@ void CardActionBase::FinishFailureAttack(const Collider::TAG _attackCol)
 
 	//ダメージリアクション状態に移行
 	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
-	actionCtrl_.GetInput().SetIsActioning(false);
+	actionCtrl_.GetLogic().SetIsActioning(false);
 }
 
 void CardActionBase::SetAtk(const ATK_STATUS& _atkStatus)
@@ -97,7 +98,7 @@ void CardActionBase::SetAtk(const ATK_STATUS& _atkStatus)
 
 void CardActionBase::ComboInput(void)
 {
-	if (actionCtrl_.GetInput().GetIsAct().isCardUse)
+	if (actionCtrl_.GetLogic().GetIsAct().isCardUse)
 	{
 		isCombo_ = true;
 	}

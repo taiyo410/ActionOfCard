@@ -10,7 +10,6 @@
 React::React(ActionController& _actCntl, CharacterBase& _character):
 	ActionBase(_actCntl,_character)
 {
-	isTurnable_ = false;
 }
 
 React::~React(void)

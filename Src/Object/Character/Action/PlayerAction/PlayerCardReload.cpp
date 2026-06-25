@@ -55,7 +55,7 @@ void PlayerCardReload::Init(void)
 
 void PlayerCardReload::Update(void)
 {
-	if (actionCtrl_.GetInput().GetIsAct().isCardPushKeep)
+	if (actionCtrl_.GetLogic().GetIsAct().isCardPushKeep)
 	{
 		//リロードのため時間をカウント
 		pushReloadCnt_ += scnMng_.GetDeltaTime();

@@ -33,11 +33,11 @@ void LogicBase::SetTargetCharacter(std::shared_ptr<CharacterBase> _target)
 	targetChara_ = _target;
 }
 
-void LogicBase::GetLookAtTargetDir(void)
+const VECTOR LogicBase::GetLookAtTargetDir(void)const
 {
 	const VECTOR& targetPos = targetChara_.lock()->GetTransform().pos;
 	const VECTOR targetVec = Utility3D::GetMoveVec(myTrans_.pos, targetPos);
-	moveDir_ = targetVec;
+	return targetVec;
 }
 
 const VECTOR LogicBase::GetToTargetDir(void)
@@ -72,4 +72,8 @@ const float LogicBase::GetTargetDis(void) const
 {
 	const VECTOR targetPos = targetChara_.lock()->GetTransform().pos;
 	return static_cast<float>(Utility3D::Distance(myTrans_.pos, targetPos));
+}
+
+void LogicBase::InputMoveDir(void)
+{
 }

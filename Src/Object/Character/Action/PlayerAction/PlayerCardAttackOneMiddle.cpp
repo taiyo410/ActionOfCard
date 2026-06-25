@@ -21,16 +21,11 @@ void PlayerCardAttackOneMiddle::InitAttack(void)
 {
 	//カウントのセット
 	midAtkCnt_ = attackTime_;
-
 	//近距離攻撃のアニメーションをセット
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE), animVar_);
-
 	midAtkOverCnt_ = comboTIme_;
-
-	isTurnable_ = true;
 	//突き攻撃の方向に向く
-	actionCtrl_.GetInput().GetLookAtTargetDir();
-
+	character_.LookAtTargetVec();
 }
 
 void PlayerCardAttackOneMiddle::AttackUpdate(void)

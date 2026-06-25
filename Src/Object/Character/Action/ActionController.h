@@ -99,7 +99,7 @@ public:
 	/// @brief 入力クラスの取得
 	/// @param  
 	/// @return 入力クラス
-	LogicBase& GetInput(void)const { return logic_; }
+	LogicBase& GetLogic(void)const { return logic_; }
 	
 	/// @brief アニメーションの再生
 	/// @param  
@@ -189,12 +189,15 @@ private:
 	static constexpr int JUMP_WEIGHT = 50;		//ジャンプ攻撃
 
 	//プレイヤーに攻撃を仕掛けるプレイヤーとの距離
-	static constexpr float ATK_DISTANCE = 250.0f;
+	static constexpr float ATK_DISTANCE = 500.0f;
+
+	//革命するまでの最小カードアクション回数
+	static constexpr int REVOLUTION_ACT_COUNT_MIN = 2;
+	static constexpr int REVOLUTION_ACT_COUNT_MAX = 5;
 
 #pragma endregion
 
 #pragma region メンバー変数
-
 
 	//状態遷移
 	std::map<ACTION_TYPE, std::function<void(void)>>changeAction_;
@@ -225,6 +228,8 @@ private:
 	ACTION_TYPE act_;					//状態
 	InputManager::JOYPAD_NO padNum_;	//パッド番号
 	bool isCardAct_;					//カードアクション中かどうか
+	int cardActionCnt_;					//カードアクションの回数(敵の革命アクションのクール回数のカウント)
+	int cardActionMaxCnt_;				//カードアクションの最大回数(2~5回のランダム)
 
 	//移動関連
 	float speed_;			// 移動スピード

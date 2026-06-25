@@ -43,7 +43,8 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	atkCombos_(),
 	movePow_(Utility3D::VECTOR_ZERO),
 	moveDir_(Utility3D::VECTOR_ZERO),
-	dir_(Utility3D::VECTOR_ZERO)
+	dir_(Utility3D::VECTOR_ZERO),
+	cardActionCnt_()
 {
 	actionTable_ = {
 		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,character_)); }},
@@ -106,7 +107,6 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 		{"jumpAttack", ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP },
 		{"revolution", ACTION_TYPE::REVOLUTION },
 	};
-
 };
 
 ActionController::~ActionController(void)
@@ -123,6 +123,9 @@ void ActionController::Init(void)
 
 	//初期化の前に追加したアクションの初期化
 	mainAction_[act_]->Init();
+
+	//革命までのアクション回数をランダム指定
+	cardActionMaxCnt_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
 
 	isCardAct_ = false;
 }
@@ -220,9 +223,6 @@ void ActionController::DecideCardAction(void)
 	//敵はカード攻撃処理へ
 	if (character_.GetCharaType() == CHARACTER_TYPE::ENEMY)
 	{
-		//手札に移動
-		cardPresent_.PutCard();
-
 		DecideEnemyCardAction();
 		return;
 	}
@@ -349,13 +349,8 @@ void ActionController::SetFlinchCnt(const float _flinchTime)
 
 void ActionController::MoveDirFromInput(void)
 {
-	character_.MoveDirFromInput();
-
-	if (mainAction_[act_]->GetIsTurnable())
-	{
-		//補完角度の設定(入力角度まで方向転換する)
-		character_.SetGoalRotate();
-	}
+	//補完角度の設定(入力角度まで方向転換する)
+	character_.SetGoalRotate();
 }
 
 void ActionController::DirAndMovePowUpdate(void)
@@ -404,6 +399,16 @@ void ActionController::DecideAttackOne(void)
 
 void ActionController::DecideEnemyCardAction(void)
 {
+	if (cardActionCnt_ >= cardActionMaxCnt_)
+	{
+		//革命へ
+		cardActionCnt_ = 0;
+		//革命までのアクション回数をランダム指定
+		cardActionMaxCnt_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
+		ChangeAction(ACTION_TYPE::REVOLUTION);
+		return;
+	}
+
 	const float distance = logic_.GetTargetDis();
 
 	//ランダムの数値取得
@@ -413,13 +418,25 @@ void ActionController::DecideEnemyCardAction(void)
 		//遠距離時
 		if (rand > STOMP_WEIGHT)
 		{
+			//手札に移動
+			cardPresent_.PutCard();
+
 			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
+
+			//カードアクション回数のカウント
+			cardActionCnt_++;
 		}
 		else if (rand <= JUMP_WEIGHT)
 		{
+			//手札に移動
+			cardPresent_.PutCard();
+
 			//ジャンプ
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
+
+			//カードアクション回数のカウント
+			cardActionCnt_++;
 		}
 	}
 	else
@@ -427,13 +444,25 @@ void ActionController::DecideEnemyCardAction(void)
 		//近距離時
 		if (rand >= STOMP_WEIGHT)
 		{
+			//手札に移動
+			cardPresent_.PutCard();
+
 			//敵の岩攻撃
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
+
+			//カードアクション回数のカウント
+			cardActionCnt_++;
 		}
 		else if (rand < JUMP_WEIGHT)
 		{
+			//手札に移動
+			cardPresent_.PutCard();
+
 			//ジャンプ
 			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
+
+			//カードアクション回数のカウント
+			cardActionCnt_++;
 		}	
 	}
 	logic_.SetIsActioning(true);

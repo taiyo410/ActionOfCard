@@ -22,6 +22,9 @@ void PlayerCardAttackThree::InitAttack(void)
 	//攻撃3段階目のアニメーションを再生
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_3), animVar_);
 
+	//突き攻撃の方向に向く
+	character_.LookAtTargetVec();
+
 	//カウントの初期化
 	atkThreeEndCnt_ = 0.0f;
 	atkAnimLerpCnt_ = 0.0f;

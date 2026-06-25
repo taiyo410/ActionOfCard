@@ -88,23 +88,15 @@ private:
 	std::unique_ptr<SkyDome> skyDome_;								//スカイドーム
 	std::unique_ptr<Stage> stage_;									//ステージ
 	std::shared_ptr<PauseScene> pauseScene_;						//ポーズ画面
-	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン
-	//ポストエフェクト
-	std::unique_ptr<PixelMaterial> invertMaterial_;		//マテリアル
-	std::shared_ptr<PixelRenderer> invertRenderer_;		//レンダラー
+	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン	//レンダラー
 
 	//更新フェーズ
 	UPDATE_PHASE updatePhase_;											//更新
 	std::map<UPDATE_PHASE, std::function<void(void)>> changeUpdate_;		//遷移
 
-	float fadeCnt_;										//色反転フェードのカウント
-	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
-	float waitCnt_;										//シーン待機時間
 	int slowFrame_;										//スローカウンタ(フレーム)
 	bool isSkippingDirection_;							//スキップ中
 	float skipKeepCnt_;									//長押しカウンタ
-	float revolutionCnt_;								//革命変化時間カウント
-	float revolutionRondomTime_;						//ランダムで革命時間を決める
 
 #pragma endregion
 
@@ -123,19 +115,8 @@ private:
 	//演出スキップ
 	void Skip(void);
 
-	//革命ポストエフェクトのロード
-	void LoadInvertEffect(void);
-
-	//革命開始時の更新処理
-	void RevolutionUpdate(void);
-
 	//シーンのフェーズを切り替える
 	bool CheckGameStateTransition(void);
-
-	//革命フェード更新
-	void RevolutionInvertFadeNone(void);	//革命フェードなし
-	void RevolutionInvertFadeIn(void);		//革命時の色反転フェードイン
-	void RevolutionInvertFadeOut(void);		//革命時の色反転フェードアウト
 
 	//更新関数
 	void NoneUpdate(void);				//何もしない

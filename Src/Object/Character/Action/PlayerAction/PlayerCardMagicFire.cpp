@@ -36,11 +36,13 @@ void PlayerCardMagicFire::InitAttack(void)
 	atk_.pos = Utility3D::AddPosRotate(trans.pos, trans.quaRot, fireLocalPos_);
 
 	//敵への方向をセット
-	toTargetDir_ = actionCtrl_.GetInput().GetToTargetDir();
+	toTargetDir_ = actionCtrl_.GetLogic().GetToTargetDir();
 	actCnt_ = 0.0f;
 	//対象の方向に向く
-	isTurnable_ = true;
-	actionCtrl_.GetInput().GetLookAtTargetDir();
+	//isTurnable_ = true;
+	//actionCtrl_.GetLogic().GetLookAtTargetDir();
+	character_.LookAtTargetVec();
+	
 	//炎を出現させる
 	fireBall_->Init();
 	character_.DrawItem(fireBall_);

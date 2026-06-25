@@ -101,10 +101,10 @@ public:
 	struct ROTATION
 	{
 		//回転
-		Quaternion playerRotY_;		//プレイヤーY角度
-		Quaternion goalQuaRot_;		//目的の回転
-		float stepRotTime_;			//補完時間
-		VECTOR dir_;			//方向
+		Quaternion playerRotY_=Quaternion();	//プレイヤーY角度
+		Quaternion goalQuaRot_ = Quaternion();	//目的の回転
+		float stepRotTime_=0.0f;				//補完時間
+		VECTOR dir_ = {};						//方向
 	};
 
 	//各ステータス
@@ -154,6 +154,10 @@ public:
 	/// @brief 攻撃の当たり判定削除
 	/// @param _charaTag 自身のタグ
 	virtual void DeleteAttackCol(const Collider::TAG& _charaTag, const Collider::TAG& _attackCol);
+
+	/// @brief ターゲットの方向に向く
+	/// @param  
+	void LookAtTargetVec(void);
 	
 	/// @brief キャラタグの取得
 	/// @param  
@@ -231,12 +235,12 @@ public:
 	/// @brief カプセルのTop座標を取得
 	/// @param  
 	/// @return カプセルのTop座標
-	const VECTOR& GetCapsuleTop(void);
+	const VECTOR GetCapsuleTop(void)const;
 
 	/// @brief カプセルのDown座標を取得
 	/// @param  
 	/// @return カプセルのTop座標
-	const VECTOR& GetCapsuleDown(void);
+	const VECTOR GetCapsuleDown(void)const;
 
 	/// @brief ロジッククラスにターゲットをセット
 	/// @param _targetChara ターゲット

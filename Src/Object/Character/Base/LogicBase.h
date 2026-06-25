@@ -94,9 +94,9 @@ public:
 	/// @param _trans モデル情報 
     void SetMoveDir(const VECTOR _dir) { moveDir_ = _dir;}
 
-    /// @brief ターゲットの方向を見る
+    /// @brief ターゲットの方向へのベクトルを取得
     /// @param  
-    void GetLookAtTargetDir(void);
+    const VECTOR GetLookAtTargetDir(void)const;
 
     /// @brief ターゲットへの方向を取得する
     /// @param  
@@ -145,6 +145,10 @@ public:
     /// @param  
     /// @return 
     const float GetTargetDis(void)const;
+
+    /// @brief 方向入力を受け付ける
+    /// @param  
+    virtual void InputMoveDir(void);
 
 #ifdef _DEBUG
     virtual void DebugDraw(void) {};

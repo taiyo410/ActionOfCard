@@ -9,7 +9,8 @@ AnimationController::AnimationController(void) :
 	spineFrameNum_(),
 	modelId_(),
 	playType_(-1),
-	isBlend_(false)
+	isBlend_(false),
+	invalidBlendPos_({})
 {
 	easing_ = std::make_unique<Easing>();
 }

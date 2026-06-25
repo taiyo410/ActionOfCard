@@ -24,6 +24,9 @@ void PlayerCardAttackOneShort::InitAttack(void)
 	//突きアニメーションへ
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT), animVar_);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_SHORT);
+
+	//突き攻撃の方向に向く
+	character_.LookAtTargetVec();
 }
 
 void PlayerCardAttackOneShort::AttackUpdate(void)

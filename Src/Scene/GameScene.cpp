@@ -23,13 +23,9 @@
 #include "./GameScene.h"
 
 GameScene::GameScene(void):
-	revolutionCnt_(),
-	fadeCnt_(),
 	isSkippingDirection_(),
-	revolutionRondomTime_(),
 	skipKeepCnt_(),
-	slowFrame_(),
-	waitCnt_()
+	slowFrame_()
 {
 	//更新関数のセット
 	updateFunc_ = [this]() {LoadingUpdate(); };
@@ -73,21 +69,12 @@ void GameScene::Load(void)
 {
 	//フォントの登録
 	buttonFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
-	LoadInvertEffect();			//反転フェードシェーダのロード
 	ObjectLoad();				//オブジェクトのロード
 }
 
 void GameScene::Init(void)
 {
 	updatePhase_ = UPDATE_PHASE::NONE;
-
-	//革命になるランダム時間を決める
-	float rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
-	revolutionRondomTime_ = rand;
-	revolutionCnt_ = revolutionRondomTime_;
-	revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
-	fadeCnt_ = 0.0f;
-	waitCnt_ = WAIT_TIME;
 
 	//シェイク状態を初期化
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
@@ -153,9 +140,6 @@ void GameScene::NormalUpdate(void)
 {
 	//シーン変更されたら処理を飛ばす
 	if (CheckGameStateTransition())return;
-
-	//革命時間の更新
-	RevolutionUpdate();
 
 	//各オブジェクトの更新
 	ObjectUpdate();
@@ -238,8 +222,8 @@ void GameScene::ChangeClearDirection()
 	//スカイドームをクリア状態へ
 	skyDome_->ChangePhase(SkyDome::PHASE::CLEAR);
 
-	//反転フェーダの削除
-	scnMng_.DeletePostEffect(invertRenderer_);
+	//念のため革命のポストエフェクトの削除
+	UIManager::GetInstance().DeleteRevolutionPostEffect();
 
 	updateFunc_ = [this]() {ClearDirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };
@@ -253,8 +237,8 @@ void GameScene::ChangeOverDirection(void)
 	//カメラのリセット
 	scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::NONE);
 
-	//反転フェーダの削除
-	scnMng_.DeletePostEffect(invertRenderer_);
+	//念のため革命のポストエフェクトの削除
+	UIManager::GetInstance().DeleteRevolutionPostEffect();
 
 	updateFunc_ = [this]() {OverDirectionUpdate(); };
 	drawFunc_ = [this]() {DirectionDraw(); };
@@ -398,34 +382,6 @@ void GameScene::Skip(void)
 	isSkippingDirection_ = true;
 }
 
-void GameScene::LoadInvertEffect(void)
-{
-	invertMaterial_ = std::make_unique<PixelMaterial>(ResourceManager::SRC::REVOLUTION_POSTEFF_PS);
-
-	//メインスクリーン
-	const int mainScreen = scnMng_.GetMainScreen();
-	invertMaterial_->AddTextureBuf(mainScreen);
-
-	//マスク画像
-	const int maskImg = resMng_.Load(ResourceManager::SRC::REVERSE_FADE_MASK).handleId_;
-	invertMaterial_->AddTextureBuf(maskImg);
-	invertMaterial_->AddConstBuf({ fadeCnt_ ,0.0f,0.0f,0.0f });
-
-	invertRenderer_ = std::make_shared<PixelRenderer>(*invertMaterial_);
-	invertRenderer_->MakeScreenVertex();
-}
-
-void GameScene::RevolutionUpdate(void)
-{
-	//革命更新
-	revolutionFadeFunc_();
-
-	//シェーダー関連の更新
-	const int mainScreen = scnMng_.GetMainScreen();
-	invertMaterial_->SetTextureBuf(0, mainScreen);
-	invertMaterial_->SetConstBuf(0, { fadeCnt_ / FADE_TIME ,0.0f,0.0f,0.0f });
-}
-
 bool GameScene::CheckGameStateTransition(void)
 {
 	//ポーズ画面へ遷移
@@ -447,55 +403,4 @@ bool GameScene::CheckGameStateTransition(void)
 		return true;
 	}
 	return false;
-}
-
-void GameScene::RevolutionInvertFadeNone(void)
-{
-	//ランダム時間ごとに革命と通常ルールを切り替える
-	if (revolutionCnt_ < 0.0f)
-	{
-		//ランダムで革命状態の時間を決める
-		float rand = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_TIME_MIN, REVOLUTION_TIME_MAX);
-		revolutionRondomTime_ = rand;
-		revolutionCnt_ = revolutionRondomTime_;
-
-		//ルールを切り替える
-		CardSystem::GetInstance().ChangeJudgeRule();
-		scnMng_.SetPostEffect(invertRenderer_);
-		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeIn(); };
-		return;
-	}
-	revolutionCnt_ -= scnMng_.GetDeltaTime();
-}
-
-void GameScene::RevolutionInvertFadeIn(void)
-{
-	if (fadeCnt_ < FADE_TIME)
-	{
-		fadeCnt_ += scnMng_.GetDeltaTime();
-		return;
-	}
-
-	//フェード終了後、一定時間待機
-	if (waitCnt_ < 0.0f)
-	{
-		waitCnt_ = WAIT_TIME;
-		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeOut(); };
-		return;
-	}
-	waitCnt_ -= scnMng_.GetDeltaTime();
-}
-
-void GameScene::RevolutionInvertFadeOut(void)
-{
-	if (fadeCnt_ > 0.0f)
-	{
-		fadeCnt_ -= scnMng_.GetDeltaTime();
-	}
-	else
-	{
-		scnMng_.DeletePostEffect(invertRenderer_);
-		fadeCnt_ = 0.0f;
-		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
-	}
 }

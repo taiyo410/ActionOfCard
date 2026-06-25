@@ -20,26 +20,25 @@ void Idle::Load(void)
 
 void Idle::Init(void)
 {
-	//anim_.Play(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE));
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::IDLE), animVar_);
 }
 
 void Idle::Update(void)
 {
 	//移動
-	if (actionCtrl_.GetInput().GetIsAct().isRun)
+	if (actionCtrl_.GetLogic().GetIsAct().isRun)
 	{
 		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::RUN);
 		return;
 	}
 	//カード使用
-	if (actionCtrl_.IsCardDecisionControl()&&actionCtrl_.GetInput().GetIsAct().isCardUse)
+	if (actionCtrl_.IsCardDecisionControl()&&actionCtrl_.GetLogic().GetIsAct().isCardUse)
 	{
 		actionCtrl_.DecideCardAction();
 		return;
 	}
 	//回避
-	if (actionCtrl_.GetInput().GetIsAct().isDodge)
+	if (actionCtrl_.GetLogic().GetIsAct().isDodge)
 	{
 		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);
 		return;

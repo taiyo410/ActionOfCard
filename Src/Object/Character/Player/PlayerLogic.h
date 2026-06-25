@@ -39,6 +39,10 @@ public:
     /// @param  
     void Update(void)override;
 
+    /// @brief •ûŒü“ü—Í‚ðŽó‚¯•t‚¯‚é
+    /// @param  
+    void InputMoveDir(void) override;
+
 #ifdef _DEBUG
 #endif // _DEBUG_ON
 

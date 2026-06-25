@@ -18,7 +18,7 @@ PlayerCardAttackBase::~PlayerCardAttackBase(void)
 void PlayerCardAttackBase::Init(void)
 {
 	atk_.isDamage = false;
-	isTurnable_ = false;
+	actionCtrl_.GetLogic().SetIsActioning(true);
 	InitAttack();
 }
 
@@ -33,7 +33,7 @@ void PlayerCardAttackBase::Update(void)
 	}
 
 	//‰ñ”ð‚ÅƒAƒNƒVƒ‡ƒ“‚ð’†’f
-	if (actionCtrl_.GetInput().GetIsAct().isDodge
+	if (actionCtrl_.GetLogic().GetIsAct().isDodge
 		&& cardPresent_.GetCardUIState() != CardUIBase::CARD_SELECT::DISITION)
 	{
 		actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::DODGE);

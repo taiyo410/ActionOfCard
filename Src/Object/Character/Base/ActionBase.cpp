@@ -16,11 +16,11 @@ ActionBase::ActionBase(ActionController& _actCntl,CharacterBase& _character):
 	soundMng_(SoundManager::GetInstance()),
 	resMng_(ResourceManager::GetInstance()),
 	character_(_character),
-	isTurnable_(true),
 	isAliveAtkCol_(false),
 	speed_(0.0f),
 	flinchCnt_(0.0f),
-	isTargetTurn_(false)
+	isTargetTurn_(false),
+	useAnimNum_(-1)
 {
 	effect_ = std::make_unique<EffectController>();
 }

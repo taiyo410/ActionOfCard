@@ -141,7 +141,7 @@ void Player::MoveDirFromInput(void)
 void Player::SetGoalRotate(void)
 {
 	//ベクトルからクォータニオンへ
-	Quaternion axis = Quaternion::LookRotation(logic_->GetDir());
+	Quaternion axis = Quaternion::LookRotation(charaRot_.dir_);
 
 	//現在設定されている回転との角度差を取る
 	double angleDiff = Quaternion::Angle(axis, charaRot_.goalQuaRot_);

@@ -29,7 +29,7 @@ void Dodge::Init(void)
 
 	//方向入力されている場合は入力方向、
 	//そうでない場合はプレイヤーの前方向に回避
-	LogicBase& input = actionCtrl_.GetInput();
+	LogicBase& input = actionCtrl_.GetLogic();
 	if (input.GetIsEnteredDir())
 	{
 		dodgeDir_ = input.GetInputDir();
@@ -51,7 +51,7 @@ void Dodge::Update()
 	}
 
 	//回避中はInputクラスへプレイヤーの前情報をセットする
-	actionCtrl_.GetInput().SetMoveDir(dodgeDir_);
+	actionCtrl_.GetLogic().SetMoveDir(dodgeDir_);
 }
 
 void Dodge::LoadAnimVar(const ACTION_LOAD_DATA& _data)

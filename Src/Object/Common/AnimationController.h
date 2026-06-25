@@ -20,14 +20,14 @@ public :
 		float detachSpeed = 1.0f;			//アニメーション終了後の速度
 		bool isLoop = true;					//ループするか
 		bool isMidLoop=false;				//途中ループフラグ
-		float switchLoopReverse = 1.0f;			//途中ループの切り替え用
-		float step = 0.0f;			//ステップ
+		float switchLoopReverse = 1.0f;		//途中ループの切り替え用
+		float step = 0.0f;					//ステップ
 		// アニメーション終了後に繰り返すループステップ
 		float stepEndLoopStart=0.0f;
 		float stepEndLoopEnd=0.0f;
 		float endLoopSpeed=0.0f;
-		VECTOR invalidPos = {};		//座標移動無効化用
-		bool isStop;				// アニメーションを止めたままにする
+		VECTOR invalidPos = {};				//座標移動無効化用
+		bool isStop = false;				// アニメーションを止めたままにする
 	};
 
 	// アニメーションデータ

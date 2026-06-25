@@ -20,6 +20,8 @@ void PlayerCardAttackTwo::InitAttack(void)
 	//攻撃2段階目のアニメーションを再生
 	anim_.PlayBlend(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2), animVar_);
 	atkAnim_ = static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2);
+	//突き攻撃の方向に向く
+	character_.LookAtTargetVec();
 }
 
 void PlayerCardAttackTwo::AttackUpdate(void)

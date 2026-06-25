@@ -27,7 +27,8 @@ CharacterBase::CharacterBase(void) :
 	uiMng_(UIManager::GetInstance()),
 	hitStopFrame_(HIT_STOP_FRAME),
 	isEndClearDirect_(false),
-	animSpdScl_(UtilityCommon::RATIO_MAX)
+	animSpdScl_(UtilityCommon::RATIO_MAX),
+	characterType_(CHARACTER_TYPE::MAX)
 {
 	changePhase_ = {
 		{UPDATE_PHASE::NONE,[this]() {ChangeUpdateNone(); }},
@@ -55,6 +56,7 @@ CharacterBase::CharacterBase(void) :
 		{"JumpAttack", ANIM_TYPE::JUMP_ATK},
 		{"Rush_Atk", ANIM_TYPE::RUSH_ATK},
 		{"Roar", ANIM_TYPE::ROAR_ATK},
+		{"Revolution", ANIM_TYPE::REVOLUTION},
 	};
 
 	loadDataFuncTable_ = {
@@ -205,6 +207,12 @@ void CharacterBase::DeleteAttackCol(const Collider::TAG& _charaTag, const Collid
 	DeleteCollider(TAG_PRIORITY::ATK_SPHERE);
 }
 
+void CharacterBase::LookAtTargetVec(void)
+{
+	VECTOR targetDir = logic_->GetLookAtTargetDir();
+	charaRot_.dir_ = targetDir;
+}
+
 void CharacterBase::UpdatePost(void)
 {
 	//移動後座標の更新
@@ -265,7 +273,6 @@ void CharacterBase::LoadModelDataCommon(const nlohmann::json& _data)
 
 	//アニメーションに必要なモデル情報を渡す
 	animCtrl_->SetModelInfo(trans_.modelId, spineFrameNo_);
-
 }
 
 void CharacterBase::LoadBattleStartPos(const nlohmann::json& _data)
@@ -400,14 +407,14 @@ const CharacterOnHitBase::HIT_POINT& CharacterBase::GetHitPoint(void) const
 	return onHit_->GetHitPoint();
 }
 
-const VECTOR& CharacterBase::GetCapsuleTop(void)
+const VECTOR CharacterBase::GetCapsuleTop(void)const
 {
-	return collider_[TAG_PRIORITY::BODY]->GetGeometry().GetLocalPosPoint1();
+	return collider_.at(TAG_PRIORITY::BODY)->GetGeometry().GetLocalPosPoint1();
 }
 
-const VECTOR& CharacterBase::GetCapsuleDown(void)
+const VECTOR CharacterBase::GetCapsuleDown(void)const
 {
-	return collider_[TAG_PRIORITY::BODY]->GetGeometry().GetLocalPosPoint2();
+	return collider_.at(TAG_PRIORITY::BODY)->GetGeometry().GetLocalPosPoint2();
 }
 
 void CharacterBase::SetLogicTargetCharacter(std::shared_ptr<CharacterBase> _targetChara)

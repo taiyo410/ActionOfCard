@@ -39,13 +39,15 @@ private:
     float animationLoopStartStep_ = 0.0f;           //ループ開始ステップ
     float animationLoopEndStep_ = 0.0f;             //ループ終了ステップ
     float animationLoopSpeed_ = 0.0f;               //ループ中のアニメーションスピード
-    float effectPlaySpeed_;                         //エフェクトの再生速度
+    float effectPlaySpeed_ = 0.0f;                         //エフェクトの再生速度
     VECTOR effectScale_ = {};                       //エフェクトの大きさ
-    float waitTime_;                                //待ち時間
+    float waitTime_ = 0.0f;                                //待ち時間
 #pragma endregion
 
 #pragma region メンバー変数
+    UIManager& uiMng_;          //UIマネージャ
     int effectPlayId_;          //プレイ中のエフェクトID  
     float waitCnt_;             //アクションカウント
+    bool isRevolutionChange_;   //革命をしたか
 #pragma endregion
 };
