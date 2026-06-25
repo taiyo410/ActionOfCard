@@ -68,21 +68,6 @@ void CardPresenter::DeckReload(void)
 	uiMng_.GetCardUI(type_).ChangeSelectState(CardUIBase::CARD_SELECT::RELOAD);
 }
 
-void CardPresenter::ChangeCard(void)
-{
-	//UIを使用済み状態へ移行
-	uiMng_.GetCardUI(type_).ChangeUsedActionCard();
-
-	//現在使っているカードを捨てる
-	deck_.EraseHandCard();
-
-	//手札に移動
-	deck_.MoveUsingCardToDrawPile();
-
-	//決定状態へ移行
-	uiMng_.GetCardUI(type_).ChangeSelectState(CardUIBase::CARD_SELECT::DISITION);
-}
-
 void CardPresenter::EnemyCardReload(void)
 {
 	//内部的なリロード

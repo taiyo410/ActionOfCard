@@ -138,11 +138,6 @@ public:
 	/// @return 
 	ActionBase& GetMainAction(void);
 
-	/// @brief 
-	/// @param  
-	/// @return 
-	const bool GetIsJumpAtk(void)const;
-
 	//アクションごとのアニメーションのロードの通知
 	void AnimLoadNotify(const ACTION_LOAD_DATA& animVar);
 
@@ -212,9 +207,6 @@ private:
 	//プレイヤーのメインとなるアクション(移動やジャンプなど)
 	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>mainAction_;
 
-	//サブアクション(カードセレクトなど同時並行となるもの)
-	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>subAction_;
-
 	//アクションの文字列の対応表
 	std::unordered_map<std::string, ACTION_TYPE>actionStrTable_;
 
@@ -245,7 +237,7 @@ private:
 
 #pragma region メンバー関数
 	//カード選択
-	void CardMove(void);
+	void ProcessCardMove(void);
 
 	//入力方向に応じて方向を決める
 	void MoveDirFromInput(void);

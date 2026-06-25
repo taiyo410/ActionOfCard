@@ -49,7 +49,7 @@ public:
 
 	/// @brief 使用中のカードを消す
 	/// @param _isLose カード負けかどうか
-	void EraseHandCard(const bool _isLose = false);
+	void EraseHandCard(void);
 
 	/// @brief カード選択
 	/// @param  

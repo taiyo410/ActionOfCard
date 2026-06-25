@@ -113,7 +113,6 @@ ActionController::~ActionController(void)
 {
 	StopResource();
 	mainAction_.clear();
-	subAction_.clear();
 	changeAction_.clear();
 }
 
@@ -151,8 +150,8 @@ void ActionController::Update(void)
 	//移動量の更新
 	DirAndMovePowUpdate();
 
-	//カードの移動
-	CardMove();
+	//カードの操作
+	ProcessCardMove();
 }
 
 
@@ -313,7 +312,7 @@ void ActionController::CancelCardActionByDodge(void)
 	}
 }
 
-void ActionController::CardMove(void)
+void ActionController::ProcessCardMove(void)
 {
 	CardUIBase::CARD_SELECT uiState = cardPresent_.GetCardUIState();
 	if (uiState != CardUIBase::CARD_SELECT::NONE)return;

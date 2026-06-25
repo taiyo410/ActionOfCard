@@ -59,7 +59,7 @@ void CardUIController::DrawReloadGauge(const float& _reloadPer)
 	cardDraw_->DrawReloadGauge(_reloadPer);
 }
 
-void CardUIController::SelectCardDrawFrame(void)
+void CardUIController::DrawSelectCardFrame(void)
 {
 	cardDraw_->DrawSelectedFrame();
 }
@@ -112,9 +112,9 @@ void CardUIController::ReactUpdate(const Vector2F& _goalPos)
 	}
 }
 
-void CardUIController::MoveOnRevolver(const float& _cnt,const float& moveTimeMax)
+void CardUIController::MoveOnRevolver(const float& _cnt,const float& _moveTimeMax)
 {
-	float time = (moveTimeMax - _cnt) / moveTimeMax;
+	float time = (_moveTimeMax - _cnt) / _moveTimeMax;
 	float startRad = startAngle_;
 	float goalRad = goalAngle_;
 

@@ -51,7 +51,7 @@ void CardDeck::CardUseUpdate(void)
 	cardSystem.CompareCards();
 }
 
-void CardDeck::EraseHandCard(const bool _isLose)
+void CardDeck::EraseHandCard(void)
 {
 	usingCards_.clear();
 
