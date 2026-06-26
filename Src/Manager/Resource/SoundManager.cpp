@@ -26,7 +26,7 @@ void SoundManager::Play(const SRC _src, const PLAYTYPE _playType)
 {
 	//‰¹Œ¹‚ª“Ç‚İ‚Ü‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒGƒ‰[
 	int handleId = resMng_.GetResource(_src).handleId_;
-	assert(handleId == -1 && NOT_LOAD_ERROR_MESSAGE);
+	assert(handleId != -1 && NOT_LOAD_ERROR_MESSAGE);
 
     //‰¹Œ¹‚ªÄ¶Ï‚İ‚©’²‚×‚é
 	if (CheckSoundMem(handleId) == 1 &&
@@ -37,6 +37,8 @@ void SoundManager::Play(const SRC _src, const PLAYTYPE _playType)
 
     //‰¹Œ¹‚ÌÄ¶
     int i=PlaySoundMem(handleId, GetPlayType(_playType));
+    assert(i != -1 && NOT_LOAD_ERROR_MESSAGE);
+    
 }
 
 void SoundManager::Stop(const SRC _src)

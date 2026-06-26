@@ -261,6 +261,20 @@ float UtilityCommon::GetMersenneRandomNumber(const float _min, const float _max)
     return value;
 }
 
+int UtilityCommon::GetMersenneRandomNumber(const int _min, const int _max)
+{
+    // —”¶¬Ší‚ğì¬
+    std::random_device rd;
+    std::mt19937 mt(rd());
+
+    // ®”—”
+    std::uniform_int_distribution<int> dist(_min, _max);
+
+    int value = dist(mt);
+
+    return value;
+}
+
 nlohmann::json UtilityCommon::LoadJsonData(const std::string& filePath)
 {
     using json = nlohmann::json;

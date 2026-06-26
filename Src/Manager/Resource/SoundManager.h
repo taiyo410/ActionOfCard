@@ -82,6 +82,7 @@ private:
 	
 	//音源が読み込まれていないときのエラーメッセージ
 	const std::string NOT_LOAD_ERROR_MESSAGE = "音源が読み込まれてないです";
+	const std::string NOT_PLAY_ERROR_MESSAGE = "音源が再生されていません";
 
 	//音量マックス値
 	static constexpr float VOLUME_MAX = 255.0f;

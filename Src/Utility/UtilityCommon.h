@@ -127,6 +127,7 @@ public:
 	/// @param _max 最大値
 	/// @return ランダムな値
 	static float GetMersenneRandomNumber(const float _min, const float _max);
+	static int GetMersenneRandomNumber(const int _min, const int _max);
 
 	/// @brief JSONファイルの読み込み
 	/// @param filePath ファイルパス

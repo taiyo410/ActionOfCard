@@ -208,9 +208,9 @@ void ResourceData::LoadSound(void)
 		func.second();
 	}
 
-	//読み込んだサウンドの音量を、設定されている音量にする
 	if(volume_!=UtilityCommon::RATIO_MAX)
 	{
+		//読み込んだサウンドの音量を、設定されている音量にする
 		ChangeVolumeSoundMem(static_cast<int>(VOLUME_MAX * volume_), handleId_);
 	}
 	//サウンドの状態設定関数の表に、状態に応じた関数を追加する

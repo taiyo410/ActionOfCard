@@ -189,6 +189,10 @@ private:
 	//革命するまでの最小カードアクション回数
 	static constexpr int REVOLUTION_ACT_COUNT_MIN = 2;
 	static constexpr int REVOLUTION_ACT_COUNT_MAX = 5;
+	
+	//敵のカードアクションを連続する回数の最小値
+	static constexpr int ACTION_CNT_MIN = 1;
+	static constexpr int ACTION_CNT_MAX = 2;
 
 #pragma endregion
 
@@ -206,22 +210,25 @@ private:
 	std::queue<ACTION_TYPE>atkCombos_;		//先行入力を受けつける溜めの攻撃配列
 	//プレイヤーのメインとなるアクション(移動やジャンプなど)
 	std::map<ACTION_TYPE, std::unique_ptr<ActionBase>>mainAction_;
-
+ 
 	//アクションの文字列の対応表
 	std::unordered_map<std::string, ACTION_TYPE>actionStrTable_;
 
-	SceneManager& scnMng_;				// シーンマネージャ参照
-	AnimationController& anim_;			//アニメーションコントローラー
-	CardPresenter& cardPresent_;		//カードデッキ
-	CharacterBase& character_;			//オブジェクト(当たり判定用)
-	Transform& trans_;					//モデル情報
-	LogicBase& logic_;					//各キャラクターの入力情報
+	SceneManager& scnMng_;					//シーンマネージャ参照
+	AnimationController& anim_;				//アニメーションコントローラー
+	CardPresenter& cardPresent_;			//カードデッキ
+	CharacterBase& character_;				//オブジェクト(当たり判定用)
+	Transform& trans_;						//モデル情報
+	LogicBase& logic_;						//各キャラクターの入力情報
 
-	ACTION_TYPE act_;					//状態
-	InputManager::JOYPAD_NO padNum_;	//パッド番号
-	bool isCardAct_;					//カードアクション中かどうか
-	int cardActionCnt_;					//カードアクションの回数(敵の革命アクションのクール回数のカウント)
-	int cardActionMaxCnt_;				//カードアクションの最大回数(2~5回のランダム)
+	ACTION_TYPE act_;						//状態
+	InputManager::JOYPAD_NO padNum_;		//パッド番号
+	bool isCardAct_;						//カードアクション中かどうか
+	int remainingRevolutionActionCnt_;						//カードアクションの回数(敵の革命アクションのクール回数のカウント)
+	int remainingRevolutionActionCntMax_;					//カードアクションの最大回数(2~5回のランダム)
+	ACTION_TYPE currentUseCardAction_;		//使用中のカードアクション
+	int currentUseCardActionCnt_;			//使用中のカードアクションの回数
+	int currentUseCardActionCntMax_;		//使用中カードアクションの回数
 
 	//移動関連
 	float speed_;			// 移動スピード

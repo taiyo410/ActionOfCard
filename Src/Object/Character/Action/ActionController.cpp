@@ -44,7 +44,10 @@ ActionController::ActionController(CharacterBase& _charaObj, LogicBase& _input, 
 	movePow_(Utility3D::VECTOR_ZERO),
 	moveDir_(Utility3D::VECTOR_ZERO),
 	dir_(Utility3D::VECTOR_ZERO),
-	cardActionCnt_()
+	remainingRevolutionActionCnt_(),
+	currentUseCardAction_(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP),
+	currentUseCardActionCnt_(),
+	currentUseCardActionCntMax_()
 {
 	actionTable_ = {
 		{ACTION_TYPE::IDLE, [this]() {mainAction_.emplace(ACTION_TYPE::IDLE,std::make_unique<Idle>(*this,character_)); }},
@@ -124,7 +127,11 @@ void ActionController::Init(void)
 	mainAction_[act_]->Init();
 
 	//革命までのアクション回数をランダム指定
-	cardActionMaxCnt_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
+	remainingRevolutionActionCntMax_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
+
+	currentUseCardAction_ = ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP;
+	currentUseCardActionCntMax_ = UtilityCommon::GetMersenneRandomNumber(ACTION_CNT_MIN, ACTION_CNT_MAX);
+	currentUseCardActionCnt_ = 0;
 
 	isCardAct_ = false;
 }
@@ -398,72 +405,35 @@ void ActionController::DecideAttackOne(void)
 
 void ActionController::DecideEnemyCardAction(void)
 {
-	if (cardActionCnt_ >= cardActionMaxCnt_)
+	//革命までの残りアクション回数が0以下であれば、革命アクションに遷移
+	if (remainingRevolutionActionCnt_ <= 0)
 	{
 		//革命へ
-		cardActionCnt_ = 0;
+		remainingRevolutionActionCnt_ = remainingRevolutionActionCntMax_;
 		//革命までのアクション回数をランダム指定
-		cardActionMaxCnt_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
+		remainingRevolutionActionCntMax_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
 		ChangeAction(ACTION_TYPE::REVOLUTION);
 		return;
 	}
 
-	const float distance = logic_.GetTargetDis();
-
-	//ランダムの数値取得
-	int rand = GetRand(UtilityCommon::PERCENT_MAX);
-	if (distance > ATK_DISTANCE)
+	//同じアクションが最大アクション回数に達していたら、使用アクションを変える
+	if (currentUseCardActionCnt_ >= currentUseCardActionCntMax_)
 	{
-		//遠距離時
-		if (rand > STOMP_WEIGHT)
-		{
-			//手札に移動
-			cardPresent_.PutCard();
-
-			//敵の岩攻撃
-			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
-
-			//カードアクション回数のカウント
-			cardActionCnt_++;
-		}
-		else if (rand <= JUMP_WEIGHT)
-		{
-			//手札に移動
-			cardPresent_.PutCard();
-
-			//ジャンプ
-			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
-
-			//カードアクション回数のカウント
-			cardActionCnt_++;
-		}
+		//次に使用するアクションを変える
+		currentUseCardAction_ = currentUseCardAction_ == ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP ?
+			ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP : ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP;
+		currentUseCardActionCnt_ = 0;
+		currentUseCardActionCntMax_ = UtilityCommon::GetMersenneRandomNumber(ACTION_CNT_MIN, ACTION_CNT_MAX);
 	}
-	else
-	{
-		//近距離時
-		if (rand >= STOMP_WEIGHT)
-		{
-			//手札に移動
-			cardPresent_.PutCard();
 
-			//敵の岩攻撃
-			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP);
+	//特定のカードアクションへ状態遷移
+	ChangeAction(currentUseCardAction_);
+	currentUseCardActionCnt_++;
+	remainingRevolutionActionCnt_--;
+	//カードを引く
+	cardPresent_.PutCard();
 
-			//カードアクション回数のカウント
-			cardActionCnt_++;
-		}
-		else if (rand < JUMP_WEIGHT)
-		{
-			//手札に移動
-			cardPresent_.PutCard();
-
-			//ジャンプ
-			ChangeAction(ACTION_TYPE::CARD_ATTACK_ENEMY_JUMP);
-
-			//カードアクション回数のカウント
-			cardActionCnt_++;
-		}	
-	}
+	//アクション中フラグセット
 	logic_.SetIsActioning(true);
 }
 

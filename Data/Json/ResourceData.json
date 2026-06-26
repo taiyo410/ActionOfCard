@@ -399,7 +399,6 @@
       }
     ],
 
-
     "pixelShader": [
       {
         "name": "STAGE_PS",
