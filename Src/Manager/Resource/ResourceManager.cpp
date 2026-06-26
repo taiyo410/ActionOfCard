@@ -277,6 +277,9 @@ ResourceData& ResourceManager::_Load(SRC src)
 	// ロード処理
 	rPair->second->Load();
 
+	//ロード関数ポインタの解放
+	rPair->second->ReleaseFunc();
+
 	// 念のためコピーコンストラクタ
 	loadedMap_.emplace(src, *rPair->second);
 
