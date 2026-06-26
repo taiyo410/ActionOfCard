@@ -277,14 +277,10 @@ ResourceData& ResourceManager::_Load(SRC src)
 	// ロード処理
 	rPair->second->Load();
 
-	//ロード関数ポインタの解放
-	rPair->second->ReleaseFunc();
-
 	// 念のためコピーコンストラクタ
 	loadedMap_.emplace(src, *rPair->second);
 
-	return *rPair->second;
-	//return loadedMap_.at(src);
+	return loadedMap_.at(src);
 }
 
 const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParameter(const RES_INFO _info, const nlohmann::json& _data )
