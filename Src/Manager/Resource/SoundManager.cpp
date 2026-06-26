@@ -38,7 +38,6 @@ void SoundManager::Play(const SRC _src, const PLAYTYPE _playType)
     //âπåπÇÃçƒê∂
     int i=PlaySoundMem(handleId, GetPlayType(_playType));
     assert(i != -1 && NOT_LOAD_ERROR_MESSAGE);
-    
 }
 
 void SoundManager::Stop(const SRC _src)
