@@ -76,7 +76,7 @@ public:
 
 	/// @brief 選択カード枠描画
 	/// @param  
-	void SelectCardDrawFrame(void);
+	void DrawSelectCardFrame(void);
 
 	/// @brief 選択カード描画
 	/// @param  
@@ -131,7 +131,7 @@ public:
 
 	/// @brief リボルバー上を移動
 	/// @param  
-	void MoveOnRevolver(const float& _cnt,const float& moveTimeMax);
+	void MoveOnRevolver(const float& _cnt,const float& _moveTimeMax);
 
 	/// @brief 上下にカードを動かす(見栄え用)
 	/// @param  

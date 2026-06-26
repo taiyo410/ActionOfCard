@@ -1,0 +1,146 @@
+@startuml CardOfActionカード設計
+skinparam linetype ortho
+class UIManager<<singleton>> {
+	-cardUI_:CardUIBase[*];
+    +GetCardUI(const CHARACTER_TYPE _charaType):CardUIBase&
+}
+
+class CharacterBase {
+	#std::unique_ptr<CardPresenter>cardPresent_;
+}
+
+package "Character"{
+    class Player
+    class Enemy
+}
+
+
+class CardDeck {
+    +EraseHandCard():void
+    -initDeck_:CardBase[*]
+    -drawPile_:CardBase[*]
+    -usingCards_:CardBase[*]
+}
+
+class CardPresenter{
+    +FinishCard():void
+    +FailureCard():void
+    +PutCard():void
+    +RoleRevolver():void
+    +DeckReload():void
+    +ChangeActionCard():void
+    +IsCardFailure():bool
+    +ChangeUIState(CardUIBase::CARD_SELECT):void
+
+}
+
+abstract class CardUIBase {
+  +AddCardUI(_status : CardBase::CARD_STATUS):void
+  +LoadCardData():void
+  +ChangeSelectState(_select : CARD_SELECT ):void
+  +ChangeUsedActionCard():void
+  +ChangeUsedActionCard():void
+  +ChangeReactActionCard():void
+  +GetSelectState():const CARD_SELECT_STATE
+    - initialCards_ : CardUIController[*]
+    - handCards_ : CardUIController[*]
+    - handCurrent_ : CardUIController
+    - actionCards_ : CardUIController[*]
+}
+class CardUIDraw{
+    +DrawSelectFrame():void
+    +DrawSelectCard():void
+    +DrawReverseColorCard():void
+    +DrawReloadGauge(_reloadPer:float):void
+}
+class CardUIController{
+    +DrawReloadGauge(_reloadPer:float):void
+    +DrawSelectCardFrame():void
+    +DrawSelectCard():void
+    +DisitionMove():void
+    +ReactMove(_goalPos:Vector2F):void
+    +EraseUsedCard():void
+    +ChangeUsedCard():void
+    +ChangeReactCard():void
+    +ChangeUsing():void
+    +ReactUpdate():void
+    +MoveOnRevolver(_cnt:float,_moveTimeMax float)
+    +MoveUpDown():void
+
+}
+
+class PlayerCardUI
+class EnemyCardUI
+
+class ActionController{
+    +ChangeAction(_nextAction:ACTION_TYPE):void
+    -mainAction:ActionBase[*]
+    -ProcessCardMove():void
+}
+
+abstract class ActionBase
+abstract class CardActionBase
+abstract class PlayerCardAttackBase
+abstract class EnemyCardAttackBase
+together{
+    abstract class ActionBase
+    abstract class CardActionBase
+    abstract class PlayerCardAttackBase
+    abstract class EnemyCardAttackBase
+}
+package "CommonAction"
+{
+    class Idle
+    class Run
+    class React
+    class Dodge
+}
+package "PlayerCardAction"
+{
+class PlayerCardAttackOneMiddle
+class PlayerCardAttackOneShort
+class PlayerCardAttackTwo
+class PlayerCardAttackThree
+class PlayerCardMagicBase
+class PlayerCardMagicFire
+class PlayerCardMagicThunder
+class PlayerCardReload
+}
+
+package "EnemyCardAction"
+{
+class EnemyCardAttackJump
+class EnemyCardAttackStomp
+class EnemyCardCardReload
+class EnemyRevolution
+}
+package "CommonAction"
+{
+    class Idle
+    class Run
+    class React
+    class Dodge
+}
+
+CharacterBase<|--Character
+ActionController-->CardPresenter
+CharacterBase-->CardDeck
+CharacterBase-->CardPresenter
+CardPresenter-->CardDeck
+CardPresenter..>UIManager
+ActionController-->ActionBase
+CardActionBase->CardPresenter
+
+CardUIBase<|--PlayerCardUI
+CardUIBase<|--EnemyCardUI
+ActionBase<|--CardActionBase
+ActionBase<|--CommonAction
+CardActionBase<|--PlayerCardAttackBase
+CardActionBase<|--EnemyCardAttackBase
+PlayerCardAttackBase<|--PlayerCardAction
+EnemyCardAttackBase<|--EnemyCardAction
+UIManager-->CardUIBase
+
+CardUIBase --> "0..*" CardUIController
+CardUIController-->CardUIDraw
+@enduml

@@ -152,7 +152,7 @@ void PlayerCardUI::Draw(void)
 				, reloadStr_, UtilityCommon::WHITE, reloadFontHandle_);
 		}
 		//選択カード枠描画
-		(*handCurrent_)->SelectCardDrawFrame();
+		(*handCurrent_)->DrawSelectCardFrame();
 	}
 
 	//カード残り枚数ゲージ背景の描画

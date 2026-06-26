@@ -49,10 +49,6 @@ public:
 	/// @brief デッキクラスでのリロード処理
 	/// @param  
 	void DeckReload(void);
-	
-	/// @brief カード変更
-	/// @param  
-	void ChangeCard(void);
 
 	/// @brief 敵のリロード
 	/// @param  
