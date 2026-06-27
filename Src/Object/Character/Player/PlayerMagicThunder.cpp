@@ -3,6 +3,7 @@
 #include "../Utility/UtilityCommon.h"
 #include "../Manager/Generic/SceneManager.h"
 #include "../Manager/Resource/ResourceManager.h"
+#include "../Manager/Resource/SoundManager.h"
 #include "../Object/Common/Collider.h"
 #include "../Object/Common/Geometry/Line.h"
 #include "../Object/Common/EffectController.h"
@@ -10,7 +11,10 @@
 
 PlayerMagicThunder::PlayerMagicThunder(VECTOR& _targetPos):
 	targetPos_(_targetPos),
-	isAlive_(false)
+	isAlive_(false),
+	downPos_({}),
+	thunderEffPlayId_(UtilityCommon::INITIAL_HANDLE),
+	topPos_({})
 {
 	objectName_ = THUNDER_STR;
 	tag_ = Collider::TAG::THUNDER;
@@ -23,6 +27,7 @@ PlayerMagicThunder::~PlayerMagicThunder(void)
 void PlayerMagicThunder::Load(void)
 {
 	effect_->Add(resMng_.Load(ResourceManager::SRC::THUNDER_EFF).handleId_,EffectController::EFF_TYPE::THUNDER);
+	resMng_.Load(ResourceManager::SRC::THUNDER_SE);
 }
 
 void PlayerMagicThunder::Init(void)
@@ -32,6 +37,7 @@ void PlayerMagicThunder::Init(void)
 	trans_.pos = targetPos_;
 	VECTOR sclVec = { thunderEffScl_ ,thunderEffScl_ ,thunderEffScl_ };
 	thunderEffPlayId_ = effect_->Play(EffectController::EFF_TYPE::THUNDER, trans_.pos, trans_.quaRot, sclVec);
+	soundMng_.Play(ResourceManager::SRC::THUNDER_SE,SoundManager::PLAYTYPE::BACK);
 }
 
 void PlayerMagicThunder::Update(void)

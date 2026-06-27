@@ -1,6 +1,7 @@
 #include "Utility/UtilityJson.h"
 #include "Utility/Utility3D.h"
 #include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Game/CollisionManager.h"
 #include "./Common/Geometry/Capsule.h"
@@ -15,6 +16,7 @@ ObjectBase::ObjectBase(void)
 	: resMng_(ResourceManager::GetInstance()),
 	scnMng_(SceneManager::GetInstance()),
 	tag_(Collider::TAG::NONE),
+	soundMng_(SoundManager::GetInstance()),
 	trans_()
 {
 	makeCollisionTable_ = {

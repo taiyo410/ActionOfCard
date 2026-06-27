@@ -39,8 +39,6 @@ void PlayerCardMagicFire::InitAttack(void)
 	toTargetDir_ = actionCtrl_.GetLogic().GetToTargetDir();
 	actCnt_ = 0.0f;
 	//‘ÎÛ‚Ì•ûŒü‚ÉŒü‚­
-	//isTurnable_ = true;
-	//actionCtrl_.GetLogic().GetLookAtTargetDir();
 	character_.LookAtTargetVec();
 	
 	//‰Š‚ğoŒ»‚³‚¹‚é

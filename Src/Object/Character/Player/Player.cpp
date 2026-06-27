@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Utility/Utility3D.h"
 #include "Utility/Utility2D.h"
 #include "Utility/UtilityCommon.h"
@@ -36,6 +37,12 @@ Player::~Player(void)
 	collider_.clear();
 }
 
+void Player::Update(void)
+{
+	CharacterBase::Update();
+	weapon_->Update();
+}
+
 void Player::UpdateDirectionCharacter(void)
 {
 	//武器の更新
@@ -65,7 +72,6 @@ void Player::InitCharacter(void)
 
 void Player::UpdateNormalCharacter(void)
 {
-	weapon_->Update();
 }
 void Player::UpdateClearDirectionCharacter(void)
 {
@@ -85,8 +91,6 @@ void Player::UpdateOverDirectionCharacter(void)
 	{
 		isEndClearDirect_ = true;
 	}
-	//武器の更新
-	weapon_->Update();
 }
 
 void Player::DrawCharacter(void)
@@ -189,14 +193,6 @@ void Player::DrawDebug(void)
 }
 
 #endif // _DEBUG
-
-void Player::AcceptLogicControl(void)
-{
-	CharacterBase::AcceptLogicControl();
-
-	//武器の更新
-	weapon_->Update();
-}
 
 void Player::MakeColliderGeometry(void)
 {

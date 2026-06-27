@@ -372,6 +372,32 @@
         "soundtype": "SE",
         "name": "GAME_START_SE",
         "handle": "DesideButton.mp3"
+      },
+      {
+        "soundtype": "SE",
+        "name": "FIRE_SPAWN_SE",
+        "handle": "FireSpawn.mp3"
+      },
+      {
+        "soundtype": "SE",
+        "name": "FIRE_HIT_SE",
+        "handle": "FireHit.mp3"
+      },
+      {
+        "soundtype": "SE",
+        "name": "THUNDER_SE",
+        "handle": "Thunder.mp3"
+      },
+      {
+        "soundtype": "SE",
+        "name": "REVOLUTION_SE",
+        "handle": "Revolution.mp3"
+      },
+      {
+        "soundtype": "SE",
+        "name": "E_ROAR_SE",
+        "handle": "EnemyRoarSE.mp3",
+        "pitch": -1000.0
       }
     ],
 

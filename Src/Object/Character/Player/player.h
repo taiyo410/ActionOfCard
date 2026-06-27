@@ -33,6 +33,10 @@ public:
 	/// @param  
 	~Player(void)override;
 
+	/// @brief 更新
+	/// @param  
+	void Update(void)override;
+
 	/// @brief 2D関連の描画
 	/// @param  
 	void Draw2D(void)override;
@@ -56,7 +60,7 @@ public:
 
 	/// @brief 攻撃の当たり判定作成
 	/// @param _charaTag キャラクタータグ
-	/// @param _attackTag 攻撃タグ
+	/// @param _attackTag 攻撃タ
 	/// @param _atkPos 攻撃座標(球の当たり判定用)
 	/// @param _radius 半径(球の当たり判定用)
 	void MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)override;
@@ -108,9 +112,6 @@ private:
 
 	//キャラクター別のモデル情報
 	void LoadModelDataCharacter(const nlohmann::json& _data) override;
-
-	//ロジックによる操作を受け付ける
-	void AcceptLogicControl(void) override;
 
 	//当たり判定初期化
 	void MakeColliderGeometry(void) override;

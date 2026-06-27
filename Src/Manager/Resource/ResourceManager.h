@@ -100,10 +100,15 @@ public:
 		ENEMY_STOMP_SE,				//エネミー爆発音
 		ENEMY_CHARGE_SE,			//エネミーチャージ音
 		ENEMY_JUMP_LAND_SE,			//エネミージャンプ着地音
+		ENEMY_ROAR_SE,				//エネミー咆哮
 		ENEMY_HIT_SE,				//エネミーヒット着地音
+		ENEMY_REVOLUTION_SE,		//革命発生時の音
 		PLAYER_ATTACK_SE,			//プレイヤー攻撃音
 		PLAYER_DODGE_SE,			//プレイヤー回避音
 		PLAYER_HIT_SE,				//プレイヤーヒット音
+		FIRE_SPAWN_SE,				//ファイア出現時の音
+		FIRE_HIT_SE,				//ファイアヒット音
+		THUNDER_SE,					//サンダーの音
 		//カード関連
 		CARD_PUT_SE	,					//カードを引く(アクション開始時)
 		CARD_MOVE_SE,					//カード移動

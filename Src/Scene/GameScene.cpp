@@ -37,7 +37,7 @@ GameScene::GameScene(void):
 	changeUpdate_ = {
 	{UPDATE_PHASE::NONE,[this]() {ChangeNone(); }},
 	{UPDATE_PHASE::FADE,[this]() {ChangeFade(); }},
-	{UPDATE_PHASE::DIRECTION,[this]() {ChangeDirection(); }},
+	{UPDATE_PHASE::START_DIRECTION,[this]() {ChangeDirection(); }},
 	{UPDATE_PHASE::CLEAR_DIRECTION,[this]() {ChangeClearDirection(); }},
 	{UPDATE_PHASE::OVER_DIRECTION,[this]() {ChangeOverDirection(); }},
 	{UPDATE_PHASE::NORMAL,[this]() {ChangeNormal(); }},
@@ -165,7 +165,7 @@ void GameScene::DirectionDraw(void)
 	CharacterManager::GetInstance().Draw();
 
 	//ââèoéûÇÃ2Dï`âÊ
-	if (updatePhase_ == UPDATE_PHASE::DIRECTION)
+	if (updatePhase_ == UPDATE_PHASE::START_DIRECTION)
 	{
 		UIManager::GetInstance().DirectionDraw();
 	}

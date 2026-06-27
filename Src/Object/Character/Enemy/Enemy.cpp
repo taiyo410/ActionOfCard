@@ -126,6 +126,7 @@ void Enemy::UpdateRoarDirection(void)
 			float t = (roarAnimStep - roarStartAnimStep_) / ROAR_TIME;
 			scnMng_.GetCamera().lock()->SetShakeStatus(t, roarCameraShakeLimit_);
 			scnMng_.GetCamera().lock()->ChangeSub(Camera::SUB_MODE::SHAKE);
+			soundMng_.PlayOnce(SoundManager::SRC::ENEMY_ROAR_SE, SoundManager::PLAYTYPE::BACK);
 
 			//咆哮状態にする
 			isRoar_ = true;
@@ -154,6 +155,7 @@ void Enemy::LoadCharacter(void)
 {
 	//エフェクト
 	effect_->Add(resMng_.Load(ResourceManager::SRC::E_DEATH_EFF).handleId_, EffectController::EFF_TYPE::E_DEATH);
+	resMng_.Load(ResourceManager::SRC::ENEMY_ROAR_SE);
 }
 
 void Enemy::InitCharacter(void)

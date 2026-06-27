@@ -25,6 +25,7 @@ void EnemyRevolutionAction::Load(void)
 {
 	//エフェクトの追加
 	effect_->Add(resMng_.Load(ResourceManager::SRC::REVOLUTION_EFF).handleId_, EffectController::EFF_TYPE::REVOLUTION_EFF);
+	resMng_.Load(ResourceManager::SRC::ENEMY_REVOLUTION_SE);
 }
 
 void EnemyRevolutionAction::Init(void)
@@ -55,6 +56,7 @@ void EnemyRevolutionAction::Update(void)
 		//ループ設定
 		anim_.SetMidLoop(static_cast<int>(CharacterBase::ANIM_TYPE::REVOLUTION)
 			, animationLoopStartStep_, animationLoopEndStep_, animationLoopSpeed_);
+		soundMng_.PlayOnce(SoundManager::SRC::ENEMY_REVOLUTION_SE, SoundManager::PLAYTYPE::BACK);
 
 		//勝敗ルールを変える
 		if (!isRevolutionChange_)

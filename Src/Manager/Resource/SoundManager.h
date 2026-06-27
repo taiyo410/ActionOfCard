@@ -44,6 +44,11 @@ public:
 	/// @param _src リソース種類
 	/// @param _playType 再生種類
 	void Play(const SRC _src, const PLAYTYPE _playType);
+
+	/// @brief 1回のみの再生(同じ音の二重再生を防ぎたい場合に使用)
+	/// @param _src 
+	/// @param _playType 
+	void PlayOnce(const SRC _src, const PLAYTYPE _playType);
 	
 	/// @brief 音源の停止
 	/// @param _src リソース種類

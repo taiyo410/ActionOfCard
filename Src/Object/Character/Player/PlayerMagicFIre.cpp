@@ -3,6 +3,7 @@
 #include "Utility/UtilityCommon.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
 #include "Object/Common/Collider.h"
 #include "Object/Common/Geometry/Sphere.h"
 #include "Object/Common/EffectController.h"
@@ -12,7 +13,6 @@ PlayerMagicFire::PlayerMagicFire(VECTOR& _startPos, VECTOR& _dir) :
 	startPos_(_startPos),
 	dir_(_dir),
 	isAlive_(false),
-	moveSpd_(),
 	fireBallEffScl_(),
 	effAlpha_(),
 	effDeleteCnt_()
@@ -29,6 +29,8 @@ PlayerMagicFire::~PlayerMagicFire(void)
 void PlayerMagicFire::Load(void)
 {
 	effect_->Add(resMng_.Load(ResourceManager::SRC::FIRE_BALL_EFF).handleId_, EffectController::EFF_TYPE::FIRE_BALL);
+	resMng_.Load(ResourceManager::SRC::FIRE_SPAWN_SE);
+	resMng_.Load(ResourceManager::SRC::FIRE_HIT_SE);
 }
 
 void PlayerMagicFire::Init(void)
@@ -42,6 +44,9 @@ void PlayerMagicFire::Init(void)
 	fireEffPlayId_=effect_->Play(EffectController::EFF_TYPE::FIRE_BALL
 		, trans_.pos, trans_.quaRot
 		, { fireBallEffScl_,fireBallEffScl_ ,fireBallEffScl_ });
+
+	//SE再生
+	soundMng_.Play(ResourceManager::SRC::FIRE_SPAWN_SE, SoundManager::PLAYTYPE::BACK);
 
 	effDeleteScl_ = fireBallEffScl_;
 }
@@ -69,6 +74,9 @@ void PlayerMagicFire::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 	//当たったら消す
 	DeleteCollider(TAG_PRIORITY::FIRE_SPHERE);
+
+	//ヒットSEを流す
+	soundMng_.PlayOnce(SoundManager::SRC::FIRE_HIT_SE, SoundManager::PLAYTYPE::BACK);
 
 	//エフェクトのフェードアウト
 	ChangeDelete();

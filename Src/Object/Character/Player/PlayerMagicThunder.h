@@ -59,14 +59,13 @@ private:
     const std::string THUNDER_STR = "Thunder";
 #pragma endregion
 
-
 #pragma region 外部ファイル読み込み
-    float thunderEffScl_;       //サンダーエフェクトの大きさ
+    float thunderEffScl_ = 0.0f;       //サンダーエフェクトの大きさ
 #pragma endregion
 
 #pragma region メンバー変数
-    int thunderEffPlayId_;      //サンダーエフェクトのプレイID
-    bool isAlive_;              //サンダー生存状態
+    int thunderEffPlayId_;          //サンダーエフェクトのプレイID
+    bool isAlive_;                  //サンダー生存状態
 #pragma endregion
 
 #pragma region メンバー関数

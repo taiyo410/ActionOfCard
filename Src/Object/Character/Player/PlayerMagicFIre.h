@@ -72,18 +72,17 @@ private:
 
 
 #pragma region 外部ファイル読み込み
-	float moveSpd_;			//移動速度
-	float atkPow_;			//攻撃力
-	float colRadius_;		//当たり判定の半径
-	VECTOR& dir_;			//方向
-	float fireBallEffScl_;	//エフェクトのスケール
-	float effDeleteTime_;	//エフェクトの消去時間
+	float moveSpd_ = 0.0f;			//移動速度
+	float atkPow_ = 0.0f;			//攻撃力
+	float colRadius_ = 0.0f;		//当たり判定の半径
+	float fireBallEffScl_ = 0.0f;	//エフェクトのスケール
+	float effDeleteTime_ = 0.0f;	//エフェクトの消去時間
 #pragma endregion
 
 #pragma region メンバー変数
 	//状態遷移
 	std::function<void(void)>updateState_;			//状態更新
-
+	VECTOR& dir_;				//方向
 	bool isAlive_;				//生存フラグ
 	VECTOR& startPos_;			//攻撃初期位置
 	int fireEffPlayId_;			//エフェクトプレイID

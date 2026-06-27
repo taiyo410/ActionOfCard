@@ -9,6 +9,7 @@
 
 class ResourceManager;
 class SceneManager;
+class SoundManager;
 class Geometry;
 
 class ObjectBase
@@ -83,6 +84,7 @@ protected:
 	// シングルトン参照
 	ResourceManager& resMng_;		//リソース
 	SceneManager& scnMng_;			//シーン
+	SoundManager& soundMng_;
 
 	// モデル制御の基本情報
 	Transform trans_;

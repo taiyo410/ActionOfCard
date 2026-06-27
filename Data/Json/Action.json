@@ -59,7 +59,7 @@
         "animSpeed": 80.0,
         "detachSpeed": 5.0,
         "isLoop": false,
-        "startStep": 13.0,
+        "startStep": 0.0,
         "endStep": 37.0
       }
     },
