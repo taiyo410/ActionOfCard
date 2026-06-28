@@ -23,9 +23,9 @@
       "x": 350.0,
       "y": 0.0
     },
-    "defaultScale": 0.2,
-    "easingGoalScale": 0.24,
-    "easeTime": 1.0
+    "defaultScale": 0.3,
+    "easingGoalScale": 0.35,
+    "easeTime": 2.0
   },
 
   "PlayerCardUI": {
@@ -69,7 +69,6 @@
       "x": -200.0,
       "y": 820.0
     },
-
     "revolverArrow_L_Pos": {
       "x": 57.0,
       "y": 331.0

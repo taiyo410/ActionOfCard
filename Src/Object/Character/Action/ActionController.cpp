@@ -128,6 +128,7 @@ void ActionController::Init(void)
 
 	//革命までのアクション回数をランダム指定
 	remainingRevolutionActionCntMax_ = UtilityCommon::GetMersenneRandomNumber(REVOLUTION_ACT_COUNT_MIN, REVOLUTION_ACT_COUNT_MAX);
+	remainingRevolutionActionCnt_ = remainingRevolutionActionCntMax_;
 
 	currentUseCardAction_ = ACTION_TYPE::CARD_ATTACK_ENEMY_STOMP;
 	currentUseCardActionCntMax_ = UtilityCommon::GetMersenneRandomNumber(ACTION_CNT_MIN, ACTION_CNT_MAX);

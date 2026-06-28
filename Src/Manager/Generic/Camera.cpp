@@ -129,11 +129,6 @@ void Camera::SetBeforeDraw(void)
 
 void Camera::Draw(void)
 {
-	for (const auto& col : collider_)
-	{
-		col.second->GetGeometry().Draw();
-	}
-	DrawFormatString(100, 200, 0xffffff, L"cameraPos(%f,%f,%f)", pos_.x, pos_.y, pos_.z);
 }
 
 void Camera::OnHit(const std::weak_ptr<Collider> _hitCol)

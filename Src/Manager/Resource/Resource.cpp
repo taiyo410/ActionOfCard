@@ -191,17 +191,6 @@ void ResourceData::LoadModel(void)
 void ResourceData::LoadSound(void)
 {
 	constexpr float VOLUME_MAX = 255.0f;  //最大音量
-	//サウンドの状態設定関数の表から、状態に応じた関数を呼び出す
-	for (const auto& func : setCreateFunc_)
-	{
-		func.second();
-	}
-	handleId_ = LoadSoundMem(path_.c_str());
-
-	for (const auto& func : setReturnStatusFunc_)
-	{
-		func.second();
-	}
 
 	if(volume_!=UtilityCommon::RATIO_MAX)
 	{
@@ -224,6 +213,19 @@ void ResourceData::LoadSound(void)
 		setCreateFunc_[SET_SOUND_STATUS::LOOP_START] = [this]() { SetCreateSoundLoopAreaTimePos(loopStartTime_, loopEndTime_); };
 		setReturnStatusFunc_[SET_SOUND_STATUS::LOOP_START] = [this]() { SetCreateSoundLoopAreaTimePos(0, 0); };
 	}
+
+	//サウンドの状態設定関数の表から、状態に応じた関数を呼び出す
+	for (const auto& func : setCreateFunc_)
+	{
+		func.second();
+	}
+	handleId_ = LoadSoundMem(path_.c_str());
+
+	for (const auto& func : setReturnStatusFunc_)
+	{
+		func.second();
+	}
+
 }
 
 void ResourceData::LoadFont(void)

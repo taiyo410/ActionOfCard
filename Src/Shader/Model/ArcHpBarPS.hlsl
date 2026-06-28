@@ -47,7 +47,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     }
     if (angle01 < g_hp_Per * g_start_arc)
     {
-        srcCol.rgb = g_color_1;
+        srcCol.rgb = g_color_1.rgb;
     }
     else if (angle01 < g_hp_lerp * g_start_arc)
     {

@@ -84,12 +84,13 @@ private:
 
 	//HIGHERの画像の座標
 	static constexpr Vector2F HIGHER_IMG_POS = { Application::SCREEN_HALF_X - 120.0f,80.0f };
+	static constexpr Vector2F WIN_RULE_UI_POS = { Application::SCREEN_HALF_X,80.0f };
 
 	//LOWER画像の座標
 	static constexpr Vector2F LOWER_IMG_POS = { Application::SCREEN_HALF_X + 120.0f,80.0f };
 
 	//デフォルトの画像サイズ倍率
-	static constexpr float DEFAULT_SIZE_SCALE = 0.2f;
+	static constexpr float DEFAULT_SIZE_SCALE =  1.0f;
 #pragma endregion
 
 #pragma region 外部ファイル読み込み
@@ -139,9 +140,6 @@ private:
 	int upArrowImg_;			//上矢印画像
 	int downArrowImg_;			//下矢印画像
 	Vector2F higherPos_;		//数字勝敗画像の座標
-	Vector2F lowerPos_;			//数字勝敗画像の座標
-	Vector2F winnerArrowPos_;	//勝ちを表す矢印
-	Vector2F loserArrowPos_;	//負けを表す矢印
 	float scaleEaseCnt_;		//サイズイージングカウント
 	float higherImgScl_;		//数字の勝敗画像サイズ
 	float lowerImgScl_;			//数字の勝敗画像サイズ
@@ -177,7 +175,7 @@ private:
 	void EasingWinnerUISize(void);
 
 	//勝敗判定のUIの画像を補完
-	void UISizeEasing(float& _scl,Vector2F& _arrowPos,const Vector2F& _winnerPos);
+	void UISizeEasing(float& _scl,const Vector2F& _winnerPos);
 
 	//革命開始のポストエフェクトのロード
 	void LoadRevolutionPostEffect(void);

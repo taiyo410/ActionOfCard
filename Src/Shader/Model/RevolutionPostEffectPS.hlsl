@@ -17,7 +17,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET
     float4 srcCol = tex.Sample(texSampler, PSInput.uv);
     
     //テクスチャの反転色を取得
-    float3 reverseCol = 1.0f - srcCol;
+    float3 reverseCol = 1.0f - srcCol.rgb;
 
     //マスク画像の色割合を取得
     float4 maskCol = maskTex.Sample(texSampler, PSInput.uv);

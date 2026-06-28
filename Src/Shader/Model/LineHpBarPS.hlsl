@@ -25,7 +25,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     else if (uv.x > g_hp_lerp)
     {
         float t = uv.x;
-        srcCol.rgb = lerp(g_color_1, g_color_2, t);
+        srcCol.rgb = lerp(g_color_1, g_color_2, t).rgb;
         
         //å≥ÇÃêFÇÊÇËà√Ç≠Ç∑ÇÈ
         srcCol.rgb /= 3.0f;
@@ -33,7 +33,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     if (uv.x < g_hp_Per)
     {
         float t = uv.x;
-        srcCol.rgb = lerp(g_color_1, g_color_2, t);
+        srcCol.rgb = lerp(g_color_1, g_color_2, t).rgb;
         //srcCol.rgb = float3(1.0 * (1.0f - g_hp_Per), 1.0f, 0.0f);
     }
     else if (uv.x < g_hp_lerp)

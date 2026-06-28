@@ -68,11 +68,6 @@ void Stage::Draw(void)
 {
 	MV1DrawModel(wallTrans_.modelId);
 	renderer_->Draw();
-
-	for (const auto& col : collider_)
-	{
-		col.second->GetGeometry().Draw();
-	}
 }
 
 void Stage::OnHit(const std::weak_ptr<Collider> _hitCol)

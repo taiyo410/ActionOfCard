@@ -62,12 +62,12 @@ void CharacterManager::Draw2D(void)
 
 const bool CharacterManager::IsSceneChangeClearCondition(void) const
 {
-	return characters_[ENEMY_NO]->GetStatus().hp <= 0;
+	return characters_[ENEMY_NO]->GetStatus().hp <= 0.0f;
 }
 
 const bool CharacterManager::IsSceneChangeGameOverCondition(void) const
 {
-	return characters_[PLAYER_NO]->GetStatus().hp <= 0;
+	return characters_[PLAYER_NO]->GetStatus().hp <= 0.0f;
 }
 
 const bool CharacterManager::GetIsEnemyRoar(void) const

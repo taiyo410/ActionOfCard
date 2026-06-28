@@ -19,7 +19,8 @@
 UIManager::UIManager(void):
 	resMng_(ResourceManager::GetInstance()),
 	scnMng_(SceneManager::GetInstance()),
-	isEndRevolution_(false)
+	isEndRevolution_(false),
+	waitCnt_(WAIT_TIME)
 {
 	CreateHpUI();
 	CreateCardUI();
@@ -170,42 +171,24 @@ void UIManager::DrawAttackButtonAndDodgeButton(void)
 
 void UIManager::DrawHigherAndLower(void)
 {
-	Utility2D::DrawGraphForCenter(higherImg_, higherImgPos_, higherImgScl_);
-	Utility2D::DrawGraphForCenter(lowerImg_, lowerImgPos_, lowerImgScl_);
+	CardSystem& cardSystem = CardSystem::GetInstance();
+	CardSystem::ORDER_RULE rule = cardSystem.GetJudgeRule();
+	int drawRule = rule == CardSystem::ORDER_RULE::NORMAL ? higherImg_ : lowerImg_;
 
-	Utility2D::DrawGraphForCenter(upArrowImg_, winnerArrowPos_, higherImgScl_);
-	Utility2D::DrawGraphForCenter(downArrowImg_, loserArrowPos_, defaultHigherAndLowerScale_);
+	Utility2D::DrawGraphForCenter(drawRule, WIN_RULE_UI_POS, higherImgScl_);
 }
 
 void UIManager::EasingWinnerUISize(void)
 {
+	UISizeEasing(higherImgScl_, higherImgPos_);
 	CardSystem& cardSystem = CardSystem::GetInstance();
-	if (cardSystem.GetJudgeRule() == CardSystem::ORDER_RULE::NORMAL)
-	{
-		UISizeEasing(higherImgScl_, winnerArrowPos_, higherImgPos_);
-		loserArrowPos_ = lowerImgPos_ + arrowLocalPos_ * defaultHigherAndLowerScale_;
-		lowerImgScl_ = defaultHigherAndLowerScale_;
-	}
-	else
-	{
-		UISizeEasing(lowerImgScl_, winnerArrowPos_, lowerImgPos_);
-		loserArrowPos_ = higherImgPos_ - arrowLocalPos_ * defaultHigherAndLowerScale_;
-		higherImgScl_ = defaultHigherAndLowerScale_;
-	}
 	scaleEaseCnt_ = scaleEaseCnt_ > easeTime_ ?
 		0.0f : scaleEaseCnt_ + SceneManager::GetInstance().GetDeltaTime();
 }
 
-void UIManager::UISizeEasing(float& _scl, Vector2F& _arrowPos, const Vector2F& _winnerPos)
+void UIManager::UISizeEasing(float& _scl,const Vector2F& _winnerPos)
 {
 	_scl = easing_->EaseFunc(defaultHigherAndLowerScale_, easeGoalScl_, scaleEaseCnt_ / easeTime_, Easing::EASING_TYPE::QUAD_BACK);
-
-	CardSystem& cardSystem = CardSystem::GetInstance();
-	CardSystem::ORDER_RULE rule = cardSystem.GetJudgeRule();
-	Vector2F arrowLocalPos = rule == CardSystem::ORDER_RULE::NORMAL ?
-		arrowLocalPos_ * -1.0f : arrowLocalPos_;
-
-	_arrowPos = _winnerPos + arrowLocalPos * _scl;
 
 	scaleEaseCnt_ += SceneManager::GetInstance().GetDeltaTime();
 }

@@ -41,7 +41,7 @@ void PlayerCardAttackOneMiddle::AttackUpdate(void)
 	if (anim_.GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_1_MIDDLE)) >= atk_.colStartStep && midAtkCnt_ > 0.0f) { midAtkCnt_ -= delta; }
 
 	//中距離突きカウントが０以上なら
-	if (midAtkCnt_ > 0.0f/* && !atk_.isDamage*/)
+	if (midAtkCnt_ > 0.0f && !atk_.isDamage)
 	{
 		//スピード減速
 		speed_ = easing_->EaseFunc(initVelocity_, 0.0f
@@ -51,7 +51,7 @@ void PlayerCardAttackOneMiddle::AttackUpdate(void)
 		//攻撃判定生成
 		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 	}
-	else if (midAtkCnt_ <= 0.0f/* || atk_.isDamage*/)		//アニメーション終了でアイドル状態変更
+	else if (midAtkCnt_ <= 0.0f || isHitTarget)		//アニメーション終了でアイドル状態変更
 	{
 		//カウントダウン
 		midAtkOverCnt_ -= delta;
