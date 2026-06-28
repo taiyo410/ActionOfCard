@@ -188,6 +188,11 @@ private:
 	void RevolutionInvertFadeIn(void);		//革命時の色反転フェードイン
 	void RevolutionInvertFadeOut(void);		//革命時の色反転フェードアウト
 
+	//スタンプのような演出
+	void StompInDirection(float& _easeCnt, int& _alphaCnt, float& _scl,const bool _isStompIn, const float _startSize = 0.3f, const float _endSize = 0.1f, const float _time = 0.2f);
+	void StampOutDirection(float& _easeCnt, int& _alphaCnt, float& _scl, const float _startSize = 0.3f, const float _endSize = 0.1f, const float _time = 0.2f);
+
+	//Jsonからのロード
 	void LoadJsonParameter(void);
 #pragma endregion
 };

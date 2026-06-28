@@ -86,7 +86,7 @@ void CardUIBase::PlayCardSound(void)
 	//SE‚Ìd•¡Ä¶‚ğ–h‚®
 	if (!SoundManager::GetInstance().IsPlay(winRes))
 	{
-		SoundManager::GetInstance().Play(winRes, SoundManager::PLAYTYPE::BACK);
+		SoundManager::GetInstance().PlayOnce(winRes, SoundManager::PLAYTYPE::BACK);
 	}
 }
 

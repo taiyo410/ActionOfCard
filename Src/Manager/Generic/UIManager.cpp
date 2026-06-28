@@ -69,8 +69,6 @@ void UIManager::Load(void)
 	fontHandle_= CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
 	higherImg_ = resMng_.Load(ResourceManager::SRC::HIGHER_IMG).handleId_;
 	lowerImg_ = resMng_.Load(ResourceManager::SRC::LOWER_IMG).handleId_;
-	upArrowImg_ = resMng_.Load(ResourceManager::SRC::WIN_ARROW_IMG).handleId_;
-	downArrowImg_ = resMng_.Load(ResourceManager::SRC::LOSE_ARROW_IMG).handleId_;
 }
 
 void UIManager::Init(void)
@@ -264,6 +262,26 @@ void UIManager::RevolutionInvertFadeOut(void)
 		isStartRevolution_ = false;
 		isEndRevolution_ = true;
 		revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
+	}
+}
+
+void UIManager::StompInDirection(float& _easeCnt, int& _alphaCnt,float& _scl, const bool _isStompIn, const float _startSize, const float _endSize, const float _time)
+{
+	// スタンプ演出のイージング計算
+	if (_easeCnt > 0.0f)
+	{
+		_easeCnt -= SceneManager::GetInstance().GetDeltaTime();
+		if (_easeCnt < 0.0f) _easeCnt = 0.0f;
+
+		float t = (_time - _easeCnt) / _time;
+
+		// サイズの補間(スタンプインなら大→小、スタンプアウトなら小→大)
+		_scl = _isStompIn ? easing_->EaseFunc(_startSize, _endSize, t, Easing::EASING_TYPE::QUAD_IN) :
+			easing_->EaseFunc(_endSize, _startSize, t, Easing::EASING_TYPE::QUAD_IN);
+
+		// アルファ値の補間
+		_alphaCnt = _isStompIn ? easing_->EaseFunc(UtilityCommon::ALPHA_MIN, UtilityCommon::ALPHA_MAX, t, Easing::EASING_TYPE::LERP) :
+			easing_->EaseFunc(UtilityCommon::ALPHA_MAX, UtilityCommon::ALPHA_MIN, t, Easing::EASING_TYPE::LERP);
 	}
 }
 

@@ -192,11 +192,6 @@ void ResourceData::LoadSound(void)
 {
 	constexpr float VOLUME_MAX = 255.0f;  //最大音量
 
-	if(volume_!=UtilityCommon::RATIO_MAX)
-	{
-		//読み込んだサウンドの音量を、設定されている音量にする
-		ChangeVolumeSoundMem(static_cast<int>(VOLUME_MAX * volume_), handleId_);
-	}
 	//サウンドの状態設定関数の表に、状態に応じた関数を追加する
 	if (pitch_ != 0.0f)
 	{
@@ -220,6 +215,12 @@ void ResourceData::LoadSound(void)
 		func.second();
 	}
 	handleId_ = LoadSoundMem(path_.c_str());
+
+	if (volume_ != UtilityCommon::RATIO_MAX)
+	{
+		//読み込んだサウンドの音量を、設定されている音量にする
+		ChangeVolumeSoundMem(static_cast<int>(VOLUME_MAX * volume_), handleId_);
+	}
 
 	for (const auto& func : setReturnStatusFunc_)
 	{

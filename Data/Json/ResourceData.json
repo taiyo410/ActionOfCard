@@ -181,14 +181,6 @@
         "handle": "FaderMask_1.png"
       },
       {
-        "name": "WIN_ARROW_IMG",
-        "handle": "UpArrow.png"
-      },
-      {
-        "name": "LOSE_ARROW_IMG",
-        "handle": "DownArrow.png"
-      },
-      {
         "name": "HIGHER_IMG",
         "handle": "Higher2.png"
       },
