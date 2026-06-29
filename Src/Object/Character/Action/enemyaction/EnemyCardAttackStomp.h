@@ -56,10 +56,5 @@ private:
 	bool isGenerateRock_;
 
 #pragma endregion
-
-
-
-
-
 };
 
