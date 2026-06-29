@@ -11,7 +11,8 @@
 #include "./EnemyLogic.h"
 #include "./Enemy.h"
 
-Enemy::Enemy(void)
+Enemy::Enemy(void):
+	deathEffPlayId_(UtilityCommon::INITIAL_HANDLE)
 {
 	objectName_ = ENEMY_STR;
 	characterType_ = CHARACTER_TYPE::ENEMY;
@@ -44,7 +45,7 @@ void Enemy::UpdateDirectionCharacter(void)
 void Enemy::UpdateClearDirectionCharacter(void)
 {
 	VECTOR effPos = MV1GetFramePosition(trans_.modelId, chestFrameNum_);
-	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, 0, effPos);
+	effect_->SetPos(EffectController::EFF_TYPE::E_DEATH, deathEffPlayId_, effPos);
 	effect_->Update();
 	if (animCtrl_->GetAnimStep(static_cast<int>(CharacterBase::ANIM_TYPE::DEATH)) >= deathEffectStartAnimStep_)
 	{
@@ -53,7 +54,7 @@ void Enemy::UpdateClearDirectionCharacter(void)
 			isEndClearDirect_ = true;
 			return;
 		}
-		modelScl_ -= 0.1f;
+		modelScl_ -= deathSclDownDiff_;
 		trans_.scl = { modelScl_,modelScl_,modelScl_ };
 	}
 }
@@ -142,11 +143,11 @@ void Enemy::UpdateRoarDirection(void)
 void Enemy::ChangeUpdateClearDirection(void)
 {
 	isRoar_ = false;
-	VECTOR effPos = MV1GetFramePosition(trans_.modelId, chestFrameNum_);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_FOOT_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_JUMP_LAND_SE);
 	soundMng_.Stop(ResourceManager::SRC::ENEMY_CHARGE_SE);
-	effect_->Play(EffectController::EFF_TYPE::E_DEATH, effPos, trans_.quaRot, deathEffectScale_);
+	VECTOR effPos = MV1GetFramePosition(trans_.modelId, chestFrameNum_);
+	deathEffPlayId_= effect_->Play(EffectController::EFF_TYPE::E_DEATH, effPos, trans_.quaRot, deathEffectScale_);
 	animCtrl_->PlayBlend(static_cast<int>(ANIM_TYPE::DEATH), deathAnim_);
 	CharacterBase::ChangeUpdateClearDirection();
 }
@@ -167,24 +168,25 @@ void Enemy::MakeColliderGeometry(void)
 	MakeColliderFromJsonData();
 	onHit_ = std::make_unique<EnemyOnHit>(*this, movedPos_, moveDiff_, *actionCtrl_, collider_, trans_);
 }
-void Enemy::LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _animVar)
+void Enemy::LoadCharacterActionDataCallBack(const ACTION_LOAD_DATA& _actionVar)
 {
-	if (_animVar.name == "Death")
+	if (_actionVar.name == "Death")
 	{
-		deathAnim_ = _animVar.animVariable;
-		deathEffectScale_ =UtilityJson::GetLoadVector3("deathEffectScale", _animVar.jsonData);							//死亡エフェクト
-		deathEffectStartAnimStep_ = _animVar.jsonData.value("deathEffectStartAnimStep",0.0f);
+		deathAnim_ = _actionVar.animVariable;
+		deathEffectScale_ =UtilityJson::GetLoadVector3("deathEffectScale", _actionVar.jsonData);							//死亡エフェクト
+		deathEffectStartAnimStep_ = _actionVar.jsonData.value("deathEffectStartAnimStep",0.0f);
+		deathSclDownDiff_ = _actionVar.jsonData.value("deathScaleDownDiff", 0.0f);
 	}
-	else if (_animVar.name == "Idle")
+	else if (_actionVar.name == "Idle")
 	{
-		idleAnim_ = _animVar.animVariable;
+		idleAnim_ = _actionVar.animVariable;
 	}
-	else if (_animVar.name == "Roar")
+	else if (_actionVar.name == "Roar")
 	{
-		roarAnim_ = _animVar.animVariable;
-		roarStartAnimStep_ = _animVar.jsonData.value("roarStartAnimStep", 0.0f);
-		roarEndAnimStep_ = _animVar.jsonData.value("roarEndAnimStep", 0.0f);
-		roarCameraShakeLimit_ = _animVar.jsonData.value("cameraShakeLimit", 0.0f);
+		roarAnim_ = _actionVar.animVariable;
+		roarStartAnimStep_ = _actionVar.jsonData.value("roarStartAnimStep", 0.0f);
+		roarEndAnimStep_ = _actionVar.jsonData.value("roarEndAnimStep", 0.0f);
+		roarCameraShakeLimit_ = _actionVar.jsonData.value("cameraShakeLimit", 0.0f);
 	}
 }
 

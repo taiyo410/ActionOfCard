@@ -2,7 +2,6 @@
 #include <DxLib.h>
 #include <iostream>
 #include <fstream>
-#include <nlohmann/json.hpp>
 #include <ranges>
 #include <memory>
 #include <vector>

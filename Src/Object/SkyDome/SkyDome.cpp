@@ -14,9 +14,9 @@ SkyDome::SkyDome(void):
 	colEasingCnt_(0.0f)
 {
 	phaseChanges_ = {
-		{PHASE::NONE,updatePhase_ = [this]() {UpdateNone(); }},
-		{PHASE::BATTLE,updatePhase_ = [this]() {UpdateNone(); }},
-		{PHASE::CLEAR,updatePhase_ = [this]() {UpdateClear(); }}
+		{PHASE::NONE,[this]() {updatePhase_ = [this]() {UpdateNone(); };} },
+		{PHASE::BATTLE,[this]() {updatePhase_ = [this]() {UpdateNone(); }; }},
+		{PHASE::CLEAR,[this]() {updatePhase_ = [this]() {UpdateClear(); }; }}
 	};
 
 	easing_ = std::make_unique<Easing>();
@@ -72,7 +72,6 @@ void SkyDome::Update(void)
 
 void SkyDome::Draw(void)
 {
-	//MV1DrawModel(transform_.modelId);
 	renderer_->Draw();
 }
 
@@ -85,6 +84,7 @@ void SkyDome::ChangePhase(const PHASE _phase)
 
 void SkyDome::UpdateNone(void)
 {
+
 }
 
 void SkyDome::UpdateClear(void)

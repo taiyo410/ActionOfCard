@@ -33,7 +33,7 @@ void PlayerCardAttackTwo::AttackUpdate(void)
 	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
 }
 
-void PlayerCardAttackTwo::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardAttackTwo::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Attack_2")return;
 

@@ -93,15 +93,18 @@ void CharacterBase::LoadCommon(void)
 	actionCtrl_->AddAction();
 
 	//Jsonからアクションごとのデータのロード
-	LoadActionData([this](const ACTION_LOAD_DATA& _animVar)
+	LoadActionData([this](const ACTION_LOAD_DATA& _actionVar)
 		{
 			//アクションコントローラーの全行動クラスに通知
-			actionCtrl_->AnimLoadNotify(_animVar);
-			LoadCharacterActionDataCallBack(_animVar);
+			actionCtrl_->AnimLoadNotify(_actionVar);
+			LoadCharacterActionDataCallBack(_actionVar);
 		});
 
 	//アクションのロード
 	actionCtrl_->Load();
+
+	//衝突後処理のロード
+	onHit_->Load();
 }
 
 void CharacterBase::LoadCommonData(void)

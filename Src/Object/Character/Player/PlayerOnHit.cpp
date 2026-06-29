@@ -2,6 +2,7 @@
 #include "Utility/Utility3D.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Resource/ResourceManager.h"
+#include "Object/Common/EffectController.h"
 #include "Object/Common/Geometry/Sphere.h"
 #include "Object/Common/Geometry/Capsule.h"
 #include "Object/Common/Geometry/Line.h"
@@ -19,7 +20,8 @@ namespace
 }
 PlayerOnHit::PlayerOnHit(CharacterBase& _chara, VECTOR& _movedPos,VECTOR& _moveDiff,
 	ActionController& _action, std::map<ObjectBase::TAG_PRIORITY, std::shared_ptr<Collider>>& _colParam, Transform& _trans):
-	CharacterOnHitBase(_chara,_movedPos,_moveDiff,_action,_colParam,_trans)
+	CharacterOnHitBase(_chara,_movedPos,_moveDiff,_action,_colParam,_trans),
+	hitEffPlayId_(UtilityCommon::INITIAL_HANDLE)
 {
 	//それぞれの当たった処理を格納する
 	using TAG = Collider::TAG;
@@ -29,6 +31,7 @@ PlayerOnHit::PlayerOnHit(CharacterBase& _chara, VECTOR& _movedPos,VECTOR& _moveD
 		{ TAG::STAGE, [this](const std::weak_ptr<Collider>_hitCol) {CollStage(_hitCol); } },
 		{ TAG::ROCK, [this](const std::weak_ptr<Collider>_hitCol) {CollRock(_hitCol); } },
 	};
+	effect_ = std::make_unique<EffectController>();
 }
 
 PlayerOnHit::~PlayerOnHit(void)
@@ -39,6 +42,8 @@ PlayerOnHit::~PlayerOnHit(void)
 
 void PlayerOnHit::Load(void)
 {
+	effect_->Add(ResourceManager::GetInstance().Load(ResourceManager::SRC::P_HIT_EFF).handleId_
+		, EffectController::EFF_TYPE::P_HIT_EFF);
 }
 
 void PlayerOnHit::Init(void)
@@ -116,9 +121,11 @@ void PlayerOnHit::CollNormalAttack(const std::weak_ptr<Collider> _hitCol)
 	//ヒットSE再生
 	SoundManager::GetInstance().Play(ResourceManager::SRC::ENEMY_HIT_SE, SoundManager::PLAYTYPE::BACK);
 
+	const VECTOR& bodyCapCenterPos = colParam_[ObjectBase::TAG_PRIORITY::BODY]->GetGeometry().GetCenter();
+	effect_->Play(EffectController::EFF_TYPE::P_HIT_EFF, bodyCapCenterPos, Quaternion(), HIT_EFF_SCALE_VEC);
+
 	//のけぞり状態へ
 	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);
-	
 }
 
 void PlayerOnHit::CollRock(const std::weak_ptr<Collider> _hitCol)
@@ -140,6 +147,10 @@ void PlayerOnHit::CollRock(const std::weak_ptr<Collider> _hitCol)
 
 	//ヒットSE再生
 	SoundManager::GetInstance().Play(ResourceManager::SRC::ENEMY_HIT_SE, SoundManager::PLAYTYPE::BACK);
+
+	//エフェクト再生
+	const VECTOR& bodyCapCenterPos = colParam_[ObjectBase::TAG_PRIORITY::BODY]->GetGeometry().GetCenter();
+	effect_->Play(EffectController::EFF_TYPE::P_HIT_EFF, bodyCapCenterPos, Quaternion(), HIT_EFF_SCALE_VEC);
 
 	//のけぞり状態へ
 	actionCtrl_.ChangeAction(ActionController::ACTION_TYPE::REACT);

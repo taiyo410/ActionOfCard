@@ -76,6 +76,10 @@ public:
 	/// @param  
 	void InitIsEndRevolution(void) { isEndRevolution_ = false; }
 
+	/// @brief WINUI演出の開始
+	/// @param  
+	void StartWINDirection(void);
+
 private:
 
 #pragma region メンバー定数
@@ -83,7 +87,6 @@ private:
 	static constexpr int FONT_SIZE = 20;
 
 	//HIGHERの画像の座標
-	static constexpr Vector2F HIGHER_IMG_POS = { Application::SCREEN_HALF_X - 120.0f,80.0f };
 	static constexpr Vector2F WIN_RULE_UI_POS = { Application::SCREEN_HALF_X,80.0f };
 
 	//LOWER画像の座標
@@ -91,6 +94,9 @@ private:
 
 	//デフォルトの画像サイズ倍率
 	static constexpr float DEFAULT_SIZE_SCALE =  1.0f;
+
+	//WINUIの演出の補間時間
+	static constexpr float WIN_DIRECTION_TIME = 0.3f;
 #pragma endregion
 
 #pragma region 外部ファイル読み込み
@@ -108,12 +114,24 @@ private:
 	float defaultHigherAndLowerScale_;	//デフォルトのサイズ
 	float easeGoalScl_;					//イージング時の最大サイズ
 	float easeTime_;					//イージング時間
+
+	//WINUIの補間時間
+	static constexpr float WIN_UI_EASE_TIME = 0.2f;
+	static constexpr float WIN_UI_START_SCL = 1.6f;
+	static constexpr float WIN_UI_END_SCL = 1.0f;
+	static constexpr float WIN_UI_WAIT_TIME = 0.2f;
+	float winUIEaseTime_ = 0.0f;
+	float winUIStartScl_ = 0.0f;
+	float winUIEndScl_=0.0f;
+	float winUIWaitTime_ = 0.0f;
+	Vector2F winUIPos_ = {};
 #pragma endregion
 
 #pragma region メンバー定数
 	//革命時間関連	
 	static constexpr float FADE_TIME = 0.3f;	//フェード時間
 	static constexpr float WAIT_TIME = 1.0f;	//フェードイン後の待機時間
+
 #pragma endregion
 
 
@@ -139,6 +157,7 @@ private:
 	int higherImg_;				//数字の勝敗を表す画像(大きい)
 	int upArrowImg_;			//上矢印画像
 	int downArrowImg_;			//下矢印画像
+	int winUIImg_;				//カード勝利画像
 	Vector2F higherPos_;		//数字勝敗画像の座標
 	float scaleEaseCnt_;		//サイズイージングカウント
 	float higherImgScl_;		//数字の勝敗画像サイズ
@@ -146,8 +165,14 @@ private:
 	float fadeCnt_;										//色反転フェードのカウント
 	std::function<void(void)> revolutionFadeFunc_;		//反転フェード更新
 	float waitCnt_;										//シーン待機時間
+	int winAlpha_;										//WINUIのアルファ値
+	float winUIScl_;									//WINUIのスケール
+	float winEaseCnt_;									//WINUIの補完カウント
+	float winUIWaitCnt_;								//WINUI表示時間
+	std::function<void(void)> winUIDirectionFunc_;		//WINUI演出関数
 	bool isStartRevolution_;							//革命開始フラグ
 	bool isEndRevolution_;								//革命終了フラグ
+	bool isWinDirection_;								//スタンプ演出開始フラグ
 #pragma endregion
 
 #pragma region メンバー関数
@@ -171,6 +196,9 @@ private:
 	//HigherとLower画像のイージングなどの描画
 	void DrawHigherAndLower(void);
 
+	//カード勝利した際の演出
+	void DrawWinDirection(void);
+
 	//数字の勝敗を表すUIの表示
 	void EasingWinnerUISize(void);
 
@@ -183,14 +211,22 @@ private:
 	//革命演出更新
 	void UpdateRevolutionDirection(void);
 
+	//WINUI演出の更新
+	void UpdateWinUIDirection(void);
+
 	//革命フェード更新
 	void RevolutionInvertFadeNone(void);	//革命フェードなし
 	void RevolutionInvertFadeIn(void);		//革命時の色反転フェードイン
 	void RevolutionInvertFadeOut(void);		//革命時の色反転フェードアウト
 
+	//WINUI状態遷移
+	void WINUIStompNone(void);
+	void WINUIStompIn(void);
+	void WINUIStompOut(void);
+
 	//スタンプのような演出
-	void StompInDirection(float& _easeCnt, int& _alphaCnt, float& _scl,const bool _isStompIn, const float _startSize = 0.3f, const float _endSize = 0.1f, const float _time = 0.2f);
-	void StampOutDirection(float& _easeCnt, int& _alphaCnt, float& _scl, const float _startSize = 0.3f, const float _endSize = 0.1f, const float _time = 0.2f);
+	void StompInDirection(float& _easeCnt, int& _alpha, float& _scl,const bool _isStompIn
+		, const float _startSize = 1.6f, const float _endSize = 1.2f, const float _time = 0.2f);
 
 	//Jsonからのロード
 	void LoadJsonParameter(void);

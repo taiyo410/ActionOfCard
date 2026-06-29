@@ -103,9 +103,9 @@ private:
 	const std::wstring NO_STR = L"いいえ";
 
 	//ボタンの文字列
-	const std::wstring START_GAME_STR = L"START　GAME";
-	const std::wstring SCREEN_STR = L"SCREEN";
-	const std::wstring EXIT_STR = L"EXIT";
+	const std::wstring START_GAME_STR = L"Game Start";
+	const std::wstring SCREEN_STR = L"Screen";
+	const std::wstring EXIT_STR = L"Exit";
 
 	//メニュー座標の間隔
 	static constexpr float BUTTON_DISTANCE = 100;

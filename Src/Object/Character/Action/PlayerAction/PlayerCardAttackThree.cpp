@@ -80,7 +80,7 @@ void PlayerCardAttackThree::AttackUpdate(void)
 	}
 }
 
-void PlayerCardAttackThree::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardAttackThree::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Attack_3")return;
 

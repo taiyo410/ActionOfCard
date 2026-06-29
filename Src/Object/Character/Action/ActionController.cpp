@@ -210,12 +210,12 @@ void ActionController::ChangeAction(const ACTION_TYPE _act)
 	mainAction_[act_]->Init();
 }
 
-void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& animVar)
+void ActionController::AnimLoadNotify(const ACTION_LOAD_DATA& _actionData)
 {
 	//全行動クラス一斉に通知する
 	for(auto& [type,action]:mainAction_)
 	{
-		action->LoadAnimVar(animVar);
+		action->LoadActionParameter(_actionData);
 	}
 }
 
@@ -260,7 +260,7 @@ void ActionController::DecideCardAction(void)
 void ActionController::ChangeComboCardAttack(void)
 {
 	//空の場合、攻撃不可能な場合はアイドル状態へ
-	if (atkCombos_.empty()||!IsAttackable()||cardPresent_.GetCardType() == CardBase::CARD_TYPE::RELOAD)
+	if (atkCombos_.empty()||!IsAttackable()||cardPresent_.GetCardType() != CardBase::CARD_TYPE::ATTACK)
 	{
 		//コンボ情報を空にする
 		if(!atkCombos_.empty()) atkCombos_.pop();

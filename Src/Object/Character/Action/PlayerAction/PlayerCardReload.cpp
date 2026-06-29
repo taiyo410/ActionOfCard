@@ -115,7 +115,7 @@ void PlayerCardReload::Release(void)
 
 }
 
-void PlayerCardReload::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardReload::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Reload")return;
 

@@ -107,7 +107,7 @@ public:
 	/// @brief アニメーション情報のロード
 	/// @param name アニメーション名
 	/// @param animVar アニメーション変数
-	virtual void LoadAnimVar(const ACTION_LOAD_DATA& animVar) {}
+	virtual void LoadActionParameter(const ACTION_LOAD_DATA& _actionData) {}
 
 protected:
 #pragma region メンバー変数

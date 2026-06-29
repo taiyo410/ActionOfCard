@@ -27,7 +27,16 @@
     "easingGoalScale": 0.35,
     "easeTime": 2.0
   },
-
+  "CardWinUI": {
+    "winUIEaseTime": 0.2,
+    "winUIStartScale": 1.6,
+    "winUIEndScale": 1.0,
+    "winUIWaitTime": 0.5,
+    "winUIPos": {
+      "x": 300.0,
+      "y": 300.0
+    }
+  },
   "PlayerCardUI": {
     "visibleCardNum": 6,
     "revolverEllipseRadius": {

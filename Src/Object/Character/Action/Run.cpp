@@ -71,7 +71,7 @@ void Run::Update(void)
 	}
 }
 
-void Run::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void Run::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Run")return;
 

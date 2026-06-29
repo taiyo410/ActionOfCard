@@ -33,7 +33,7 @@ public:
 
     /// @brief アクションデータのロード
     /// @param animVar 
-    void LoadAnimVar(const ACTION_LOAD_DATA& _data) override;
+    void LoadActionParameter(const ACTION_LOAD_DATA& _data) override;
 
 private:
 

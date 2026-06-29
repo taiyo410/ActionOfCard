@@ -18,6 +18,7 @@ Dodge::~Dodge(void)
 
 void Dodge::Load(void)
 {
+	resMng_.Load(ResourceManager::SRC::PLAYER_DODGE_SE);
 }
 
 void Dodge::Init(void)
@@ -26,6 +27,7 @@ void Dodge::Init(void)
 
 	//回避スピードは通常移動スピードに加算する
 	speed_ = character_.GetStatus().speed + dodgeSpdAdd_;
+	soundMng_.Play(ResourceManager::SRC::PLAYER_DODGE_SE, SoundManager::PLAYTYPE::BACK);
 
 	//方向入力されている場合は入力方向、
 	//そうでない場合はプレイヤーの前方向に回避
@@ -54,7 +56,7 @@ void Dodge::Update()
 	actionCtrl_.GetLogic().SetMoveDir(dodgeDir_);
 }
 
-void Dodge::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void Dodge::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Dodge")return;
 

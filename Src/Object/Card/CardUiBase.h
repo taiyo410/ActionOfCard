@@ -119,7 +119,7 @@ public:
 
 	/// @brief カード勝敗サウンド再生
 	/// @param  
-	void PlayCardSound(void);
+	void StartResultDirection(void);
 
 	/// @brief カードのロード
 	/// @param  

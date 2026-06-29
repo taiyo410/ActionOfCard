@@ -81,12 +81,14 @@ private:
 	float roarStartAnimStep_ = 0.0f;				//咆哮開始アニメーションステップ
 	float roarEndAnimStep_ = 0.0f;					//咆哮終了アニメーションステップ
 	float roarCameraShakeLimit_ = 0.0f;				//咆哮時のカメラシェイク
+	float deathSclDownDiff_=0.0f;							//死亡時のスケールダウン量
 #pragma endregion
 
 #pragma region メンバー変数
 	//咆哮アニメーション
 	AnimationController::ANIMATION_VARIABLE roarAnim_;
 	bool isRoar_;		//咆哮状態かどうか
+	int deathEffPlayId_;	//死亡エフェクトプレイID
 #pragma endregion
 
 #pragma region メンバー関数

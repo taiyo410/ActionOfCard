@@ -37,7 +37,7 @@ void PlayerCardAttackOneShort::AttackUpdate(void)
 	AttackMotion(atk_, Collider::TAG::NML_ATK, {});
 }
 
-void PlayerCardAttackOneShort::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardAttackOneShort::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Attack_1_Short")return;
 

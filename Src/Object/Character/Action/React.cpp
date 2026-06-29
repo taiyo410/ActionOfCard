@@ -52,7 +52,7 @@ void React::Update(void)
 	}
 }
 
-void React::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void React::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "React")return;
 

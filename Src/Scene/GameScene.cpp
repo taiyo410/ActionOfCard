@@ -272,6 +272,8 @@ void GameScene::DirectionUpdate(void)
 
 	//演出UI
 	UIManager::GetInstance().DirectionUpdate();
+	//スカイドーム
+	skyDome_->Update();
 
 	//フェードアウトしているとき、更新を飛ばす
 	if (scnMng_.GetFader().GetState()==Fader::STATE::FADE_OUT)return;
@@ -312,6 +314,9 @@ void GameScene::OverDirectionUpdate(void)
 
 	//キャラクター
 	CharacterManager::GetInstance().Update();
+
+	//スカイドーム
+	skyDome_->Update();
 }
 
 void GameScene::SlowUpdate(void)
@@ -327,7 +332,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//演出状態へ移行
-	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
+	ChangeUpdatePhase(UPDATE_PHASE::START_DIRECTION);
 }
 
 void GameScene::ObjectLoad(void)
@@ -353,6 +358,8 @@ void GameScene::ObjectInit(void)
 void GameScene::ObjectUpdate(void)
 {
 	stage_->Update();	//ステージ
+
+	skyDome_->Update();	//スカイドーム
 	CharacterManager::GetInstance().Update();	//キャラクターの更新
 	CardSystem::GetInstance().CompareCards();	//カード勝敗状態の監視
 	UIManager::GetInstance().Update();			//UIの更新
@@ -392,6 +399,7 @@ bool GameScene::CheckGameStateTransition(void)
 	}
 	//敵が倒れたらクリアシ－ンへ
 	if (CharacterManager::GetInstance().IsSceneChangeClearCondition())
+	//if (inputMng_.IsTrgDown(KEY_INPUT_SPACE))
 	{
 		ChangeUpdatePhase(UPDATE_PHASE::CLEAR_DIRECTION);
 		return true;

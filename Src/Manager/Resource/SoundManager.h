@@ -43,21 +43,21 @@ public:
 	/// @brief 音源の再生
 	/// @param _src リソース種類
 	/// @param _playType 再生種類
-	void Play(const SRC _src, const PLAYTYPE _playType);
+	void Play(const ResourceManager::SRC _src, const PLAYTYPE _playType);
 
 	/// @brief 1回のみの再生(同じ音の二重再生を防ぎたい場合に使用)
 	/// @param _src 
 	/// @param _playType 
-	void PlayOnce(const SRC _src, const PLAYTYPE _playType);
+	void PlayOnce(const ResourceManager::SRC _src, const PLAYTYPE _playType);
 	
 	/// @brief 音源の停止
 	/// @param _src リソース種類
-	void Stop(const SRC _src);
+	void Stop(const ResourceManager::SRC _src);
 
 	/// @brief 再生中かを返す
 	/// @param _src リソース種類
 	/// @return trueの:再生中　false;場合再生していない
-	bool IsPlay(const SRC _src) const;
+	bool IsPlay(const ResourceManager::SRC _src) const;
 
 	/// @brief 読み込んだ音量を設定する
 	/// @param  
@@ -67,7 +67,7 @@ public:
 	/// @brief リソース別の音量をセット
 	/// @param _src 音量調整したいリソース
 	/// @param _volumePercent 設定したい音量
-	void SetSoundVolumeSRC(const SRC _src, const float _volumePercent);
+	void SetSoundVolumeSRC(const ResourceManager::SRC _src, const float _volumePercent);
 
 	/// @brief 音量の設定
 	/// @param _volumePercent 音量パーセント

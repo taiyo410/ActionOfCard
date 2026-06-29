@@ -1,8 +1,10 @@
 #pragma once
 
-#include<vector>
-#include<map>
-#include"Common/Quaternion.h"
+#include <vector>
+#include <map>
+#include <functional>
+#include <optional>
+#include "Common/Quaternion.h"
 
 class EffectController
 {
@@ -22,6 +24,7 @@ public:
 		RELOAD_END,		//カードリロード
 		FIRE_BALL,		//ファイアボール
 		THUNDER,		//雷
+		P_HIT_EFF,		//プレイヤーヒットエフェクト
 		E_JUMP_CHARGE,	//ジャンプ溜め
 		E_DEATH,		//死んだエフェクト
 		E_DEATH_BLAST,	//死んで爆発

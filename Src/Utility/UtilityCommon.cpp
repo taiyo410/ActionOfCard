@@ -254,10 +254,9 @@ float UtilityCommon::GetMersenneRandomNumber(const float _min, const float _max)
     std::mt19937 mt(rd());
 
     // ®”—”
-    std::uniform_int_distribution<int> dist(_min, _max);
+    std::uniform_int_distribution<int> dist(static_cast<float>(_min), static_cast<float>(_max));
 
     float value = static_cast<float>(dist(mt));
-
     return value;
 }
 

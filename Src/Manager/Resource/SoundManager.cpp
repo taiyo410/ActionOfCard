@@ -22,7 +22,7 @@ void SoundManager::Init(void)
 {
 }
 
-void SoundManager::Play(const SRC _src, const PLAYTYPE _playType)
+void SoundManager::Play(const ResourceManager::SRC _src, const PLAYTYPE _playType)
 {
 	//音源が読み込まれていない場合はエラー
 	int handleId = resMng_.GetResource(_src).handleId_;
@@ -40,7 +40,7 @@ void SoundManager::Play(const SRC _src, const PLAYTYPE _playType)
     assert(i != -1 && NOT_LOAD_ERROR_MESSAGE);
 }
 
-void SoundManager::PlayOnce(const SRC _src, const PLAYTYPE _playType)
+void SoundManager::PlayOnce(const ResourceManager::SRC _src, const PLAYTYPE _playType)
 {
     //音源が読み込まれていない場合はエラー
     int handleId = resMng_.GetResource(_src).handleId_;
@@ -57,13 +57,13 @@ void SoundManager::PlayOnce(const SRC _src, const PLAYTYPE _playType)
     assert(i != -1 && NOT_LOAD_ERROR_MESSAGE);
 }
 
-void SoundManager::Stop(const SRC _src)
+void SoundManager::Stop(const ResourceManager::SRC _src)
 {
     //音源の停止
     StopSoundMem(resMng_.GetResource(_src).handleId_);
 }
 
-bool SoundManager::IsPlay(const SRC _src) const
+bool SoundManager::IsPlay(const ResourceManager::SRC _src) const
 {
     const auto res = resMng_.GetResource(_src);
 
@@ -82,7 +82,7 @@ const void SoundManager::SetLoadedSoundsVolume(void)
     }
 }
 
-void SoundManager::SetSoundVolumeSRC(const SRC _src, const float _volumePercent)
+void SoundManager::SetSoundVolumeSRC(const ResourceManager::SRC _src, const float _volumePercent)
 {
     //リソースの取得
 	const ResourceData res = resMng_.GetResource(_src);

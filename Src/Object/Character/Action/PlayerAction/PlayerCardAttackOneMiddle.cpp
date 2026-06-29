@@ -79,7 +79,7 @@ void PlayerCardAttackOneMiddle::AttackRelease(void)
 
 }
 
-void PlayerCardAttackOneMiddle::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardAttackOneMiddle::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Attack_1_Middle")return;
 

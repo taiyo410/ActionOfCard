@@ -45,7 +45,7 @@ void Idle::Update(void)
 	}
 }
 
-void Idle::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void Idle::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if(_data.name!="Idle")return;
 

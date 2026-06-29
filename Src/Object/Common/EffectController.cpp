@@ -32,9 +32,8 @@ void EffectController::Update(void)
 				//ループしない
 				else 
 				{
-					//消去
-					//Delete(effect.first, playData.playId);
-					playData.isDelete = true;
+					//エフェクトの削除
+					Delete(effect.first, playData.playId);
 				}
 			}
 		}
@@ -43,7 +42,10 @@ void EffectController::Update(void)
 	//消去フラグが立っているものを消去
 	for (auto& effect : effects_)
 	{
-		auto it=effect.second.playData.remove_if([](const PlayData& playData) { return playData.isDelete; });
+		effect.second.playData.remove_if([](const PlayData& playData)
+			{
+				return playData.isDelete;
+			});
 	}
 }
 
@@ -224,6 +226,7 @@ void EffectController::Delete(const EFF_TYPE _effType, const int _playId)
 		});
 
 	effects_[_effType].playData.erase(it);
+	it->isDelete = true;
 }
 
 void EffectController::AllStop(void)

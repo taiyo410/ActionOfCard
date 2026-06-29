@@ -53,7 +53,7 @@ void PlayerCardMagicFire::AttackRelease(void)
 	fireBall_->Release();
 }
 
-void PlayerCardMagicFire::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardMagicFire::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "FireMagic")return;
 

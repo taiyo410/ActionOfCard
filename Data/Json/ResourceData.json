@@ -187,6 +187,10 @@
       {
         "name": "LOWER_IMG",
         "handle": "Lower2.png"
+      },
+      {
+        "name": "WIN_IMG",
+        "handle": "WIN.png"
       }
     ],
 
@@ -246,6 +250,10 @@
       {
         "name": "REVOLUTION_EFF",
         "handle": "Revolution/Revolution.efkproj"
+      },
+      {
+        "name": "P_HIT_EFF",
+        "handle": "PlayerHit/hit_eff.efkefc"
       }
     ],
 
@@ -323,6 +331,11 @@
         "name": "P_HIT_SE",
         "handle": "KeyBladeHit.mp3",
         "pitch": -1000.0
+      },
+      {
+        "soundtype": "SE",
+        "name": "P_DODGE_SE",
+        "handle": "PlayerDodge.mp3"
       },
       {
         "soundtype": "SE",

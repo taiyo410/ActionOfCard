@@ -1,18 +1,17 @@
-#include<iostream>
-#include<fstream>
-#include "../../Src/Lib/nlohmann/json.hpp"
-#include "../pch.h"
-#include "../Utility/UtilityCommon.h"
-#include"../Manager/Generic/InputManager.h"
-#include"../Manager/Generic/SceneManager.h"
-#include "../Manager/Resource/ResourceManager.h"
-#include "../Manager/Resource/SoundManager.h"
-#include "../Common/Easing.h"
-#include "../Card/CardUIDraw.h"
-#include "../Card/CardSystem.h"
-#include "../Card/CardUIController.h"
-#include "../Renderer/PixelMaterial.h"
-#include "../Renderer/PixelRenderer.h"
+#include "pch.h"
+#include <nlohmann/json.hpp>
+#include "Utility/UtilityCommon.h"
+#include "Manager/Generic/InputManager.h"
+#include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/UIManager.h"
+#include "Manager/Resource/ResourceManager.h"
+#include "Manager/Resource/SoundManager.h"
+#include "Common/Easing.h"
+#include "Renderer/PixelMaterial.h"
+#include "Renderer/PixelRenderer.h"
+#include "./CardUIDraw.h"
+#include "./CardSystem.h"
+#include "./CardUIController.h"
 #include "CardUIBase.h"
 
 CardUIBase::CardUIBase(void):
@@ -59,14 +58,14 @@ void CardUIBase::ChangeUsedActionCard(void)
 
 void CardUIBase::ChangeReactActionCard(void)
 {
-	PlayCardSound();
+	StartResultDirection();
 	for (auto& act : actionCards_)
 	{
 		act->ChangeReactCard();
 	}
 }
 
-void CardUIBase::PlayCardSound(void)
+void CardUIBase::StartResultDirection(void)
 {
 	CardSystem::BATTLE_RESULT result = CardSystem::GetInstance().GetResult(0);
 	ResourceManager::SRC winRes = ResourceManager::SRC::NONE;
@@ -81,6 +80,7 @@ void CardUIBase::PlayCardSound(void)
 	else if (result == CardSystem::BATTLE_RESULT::SUCCESS_CARD_BREAK)
 	{
 		winRes = ResourceManager::SRC::CARD_BREAK_SE;
+		UIManager::GetInstance().StartWINDirection();
 	}
 
 	//SEÇÃèdï°çƒê∂ÇñhÇÆ

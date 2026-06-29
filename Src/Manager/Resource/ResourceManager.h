@@ -68,10 +68,9 @@ public:
 		INTENSIVE_LINE_1,			//集中線画像1(複数画像でアニメーション)
 		INTENSIVE_LINE_2,			//集中線画像2(複数画像でアニメーション)
 		REVERSE_FADE_MASK,			//色反転のマスク
-		WIN_ARROW_IMG,				//勝ち判定の矢印
-		LOSE_ARROW_IMG,				//負け判定のマスク
 		HIGHER_IMG,					//数字勝ち負けの大きい数を示す画像
 		LOWER_IMG,					//数字勝ち負けの小さい数を示す画像
+		WIN_IMG,					//数字勝ち負けの小さい数を示す画像
 
 		//スプライト画像
 		NUMBERS_IMGS,				//カード番号
@@ -87,6 +86,7 @@ public:
 		FIRE_BALL_EFF,				//炎のエフェクト
 		THUNDER_EFF,				//雷のエフェクト
 		REVOLUTION_EFF,				//革命エフェクト
+		P_HIT_EFF,				//革命エフェクト
 
 		//サウンド
 		//BGM
@@ -211,17 +211,20 @@ public:
 	const SRC GetSrcFromString(const std::string& _str) const;
 private:
 
-	//カード番号画像
-	static constexpr int CARD_NO_X = 5;	//横の数
-	static constexpr int CARD_NO_Y = 2;	//縦の数
-	static constexpr int CARD_NO_SIZE_X = 180;
-	static constexpr int CARD_NO_SIZE_Y = 222;
+	////カード番号画像
+	//static constexpr int CARD_NO_X = 5;	//横の数
+	//static constexpr int CARD_NO_Y = 2;	//縦の数
+	//static constexpr int CARD_NO_SIZE_X = 180;
+	//static constexpr int CARD_NO_SIZE_Y = 222;
 
-	//コントローラーUI画像
-	static constexpr int CONTROLLER_UI_NO_X = 10;
-	static constexpr int CONTROLLER_UI_NO_Y = 10;
-	static constexpr int CONTROLLER_UI_SIZE_X = 128;
-	static constexpr int CONTROLLER_UI_SIZE_Y = 128;
+	////コントローラーUI画像
+	//static constexpr int CONTROLLER_UI_NO_X = 10;
+	//static constexpr int CONTROLLER_UI_NO_Y = 10;
+	//static constexpr int CONTROLLER_UI_SIZE_X = 128;
+	//static constexpr int CONTROLLER_UI_SIZE_Y = 128;
+
+	//JSONファイルで素材が見つからなかった場合のエラー文
+	const std::wstring NONE_SRC_INJSON_STR = L"JSONファイルで名前が見つかりませんでした。";
 
 	// リソース管理の対象
 	std::map<SRC, std::unique_ptr<ResourceData>> resourcesMap_;

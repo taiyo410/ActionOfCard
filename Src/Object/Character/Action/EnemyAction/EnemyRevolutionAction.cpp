@@ -73,7 +73,7 @@ void EnemyRevolutionAction::Release(void)
 			actionCtrl_.GetLogic().SetIsActioning(false);
 }
 
-void EnemyRevolutionAction::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void EnemyRevolutionAction::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "Revolution")return;
 

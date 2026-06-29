@@ -79,7 +79,7 @@ void EnemyCardAttackJump::AttackRelease(void)
 	effect_->Delete(EffectController::EFF_TYPE::BLAST, blastEffNum_);
 }
 
-void EnemyCardAttackJump::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void EnemyCardAttackJump::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "JumpAttack")return;
 	animVar_ = _data.animVariable;

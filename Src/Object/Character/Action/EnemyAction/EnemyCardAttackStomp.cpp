@@ -125,7 +125,7 @@ void EnemyCardAttackStomp::AttackRelease(void)
 	character_.UnRegisterDrawableRocks();
 }
 
-void EnemyCardAttackStomp::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void EnemyCardAttackStomp::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "StompAttack")return;
 

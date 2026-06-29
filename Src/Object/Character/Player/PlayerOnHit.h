@@ -2,8 +2,10 @@
 
 #include "Object/ObjectBase.h"
 #include "Object/Character/Base/CharacterOnHitBase.h"
+
 class ActionController;
 class CharacterBase;
+class EffectController;
 
 class PlayerOnHit 
 	:public CharacterOnHitBase
@@ -40,6 +42,19 @@ public:
 #endif // _DEBUG
 
 private:
+
+#pragma region メンバー定数
+	//ヒットエフェクトサイズ
+	static constexpr float HIT_EFF_SCALE = 100.0f;
+	static constexpr VECTOR HIT_EFF_SCALE_VEC = { HIT_EFF_SCALE ,HIT_EFF_SCALE ,HIT_EFF_SCALE };
+#pragma endregion
+
+
+#pragma region メンバ変数
+	//エフェクト
+	std::unique_ptr<EffectController>effect_;
+	int hitEffPlayId_;		//プレイヤーのヒットエフェクト
+#pragma endregion
 
 #pragma region メンバー関数
 	//衝突後の処理

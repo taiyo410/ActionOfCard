@@ -39,7 +39,7 @@ void PlayerCardMagicThunder::AttackRelease(void)
 	thunder_->Release();
 }
 
-void PlayerCardMagicThunder::LoadAnimVar(const ACTION_LOAD_DATA& _data)
+void PlayerCardMagicThunder::LoadActionParameter(const ACTION_LOAD_DATA& _data)
 {
 	if (_data.name != "FireMagic")return;
 

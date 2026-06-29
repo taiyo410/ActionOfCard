@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <nlohmann/json.hpp>
 #include "Utility/UtilityCommon.h"
 #include "Utility/Utility2D.h"
 #include "Utility/UtilityJson.h"
@@ -16,11 +17,14 @@
 #include "Object/DirectionUI.h"
 #include "UIManager.h"
 
-UIManager::UIManager(void):
+UIManager::UIManager(void) :
 	resMng_(ResourceManager::GetInstance()),
 	scnMng_(SceneManager::GetInstance()),
 	isEndRevolution_(false),
-	waitCnt_(WAIT_TIME)
+	waitCnt_(WAIT_TIME),
+	winUIImg_(UtilityCommon::INITIAL_HANDLE),
+	isWinDirection_(false),
+	winUIScl_(1.0)
 {
 	CreateHpUI();
 	CreateCardUI();
@@ -69,6 +73,7 @@ void UIManager::Load(void)
 	fontHandle_= CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
 	higherImg_ = resMng_.Load(ResourceManager::SRC::HIGHER_IMG).handleId_;
 	lowerImg_ = resMng_.Load(ResourceManager::SRC::LOWER_IMG).handleId_;
+	winUIImg_ = resMng_.Load(ResourceManager::SRC::WIN_IMG).handleId_;
 }
 
 void UIManager::Init(void)
@@ -86,7 +91,8 @@ void UIManager::Init(void)
 	directionUI_->Init();
 
 	//革命状態の初期化
-	revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); };
+	revolutionFadeFunc_ = [this]() {RevolutionInvertFadeNone(); }; 
+	winUIDirectionFunc_ = [this]() { WINUIStompNone(); };
 }
 
 void UIManager::Update(void)
@@ -104,6 +110,8 @@ void UIManager::Update(void)
 	UpdateRevolutionDirection();
 
 	EasingWinnerUISize();
+
+	UpdateWinUIDirection();
 }
 
 void UIManager::DirectionUpdate(void)
@@ -126,6 +134,8 @@ void UIManager::Draw(void)
 	DrawAttackButtonAndDodgeButton();
 
 	DrawHigherAndLower();
+
+	DrawWinDirection();
 }
 
 void UIManager::DeleteRevolutionPostEffect(void)
@@ -153,6 +163,16 @@ void UIManager::SetSkipPer(const float _skipPer)
 	directionUI_->SetSkipGaugePer(_skipPer);
 }
 
+void UIManager::StartWINDirection(void)
+{
+	if (isWinDirection_)return;
+	isWinDirection_ = true;
+	winAlpha_ = 0;
+	winEaseCnt_ = 0.0f;
+	winUIWaitCnt_ = 0.0f;
+	winUIDirectionFunc_ = [this]() {WINUIStompIn(); };
+}
+
 void UIManager::DrawAttackButtonAndDodgeButton(void)
 {
 	//攻撃と回避ボタンの描画
@@ -174,6 +194,14 @@ void UIManager::DrawHigherAndLower(void)
 	int drawRule = rule == CardSystem::ORDER_RULE::NORMAL ? higherImg_ : lowerImg_;
 
 	Utility2D::DrawGraphForCenter(drawRule, WIN_RULE_UI_POS, higherImgScl_);
+}
+
+void UIManager::DrawWinDirection(void)
+{
+	if (winAlpha_ == 0.0f)return;
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, winAlpha_);
+	DrawRotaGraphF(winUIPos_.x, winUIPos_.y,winUIScl_, 0.0f, winUIImg_, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, winAlpha_);
 }
 
 void UIManager::EasingWinnerUISize(void)
@@ -217,6 +245,36 @@ void UIManager::UpdateRevolutionDirection(void)
 	const int mainScreen = scnMng_.GetMainScreen();
 	invertMaterial_->SetTextureBuf(0, mainScreen);
 	invertMaterial_->SetConstBuf(0, { fadeCnt_ / FADE_TIME ,0.0f,0.0f,0.0f });
+}
+
+void UIManager::UpdateWinUIDirection(void)
+{
+	if (!isWinDirection_)return;
+	winUIDirectionFunc_();
+	//if (winUIWaitCnt_ < WIN_UI_WAIT_TIME)
+	//{
+	//	winUIWaitCnt_ += scnMng_.GetDeltaTime();
+	//}
+	//else if (winEaseCnt_ < WIN_UI_EASE_TIME)
+	//{
+	//	//スタンプイン演出
+	//	StompInDirection(winEaseCnt_, winAlpha_, winUIScl_, true
+	//		, WIN_UI_START_SCL, WIN_UI_END_SCL, WIN_UI_EASE_TIME);
+
+	//	if (winEaseCnt_<=0.0f)winEaseCnt_ = 0.0f;
+	//}
+	//else
+	//{
+	//	//スタンプアウト演出
+	//	StompInDirection(winEaseCnt_, winAlpha_, winUIScl_, false
+	//		, WIN_UI_START_SCL, WIN_UI_END_SCL, WIN_UI_EASE_TIME);
+	//	if (winEaseCnt_ <= 0.0f)
+	//	{
+	//		winEaseCnt_ = 0.0f;
+	//		isWinDirection_ = false;
+	//	}
+	//}
+
 }
 
 void UIManager::RevolutionInvertFadeNone(void)
@@ -265,23 +323,64 @@ void UIManager::RevolutionInvertFadeOut(void)
 	}
 }
 
-void UIManager::StompInDirection(float& _easeCnt, int& _alphaCnt,float& _scl, const bool _isStompIn, const float _startSize, const float _endSize, const float _time)
+void UIManager::WINUIStompNone(void)
+{
+}
+
+void UIManager::WINUIStompIn(void)
+{
+	if (winUIWaitCnt_ > 0.0f)
+	{
+		winUIWaitCnt_ -= scnMng_.GetDeltaTime();
+		if (winUIWaitCnt_ <= 0.0f)
+		{
+			winUIWaitCnt_ = 0.0f;
+			winEaseCnt_ = 0.0f;
+			winUIDirectionFunc_ = [this]() {WINUIStompOut(); };
+		}
+		return;
+	}
+	//スタンプイン演出
+	StompInDirection(winEaseCnt_, winAlpha_, winUIScl_, true
+		, winUIStartScl_, winUIEndScl_, winUIEaseTime_);
+
+	if (winEaseCnt_ >= winUIEaseTime_)winUIWaitCnt_ = winUIWaitTime_;
+}
+
+void UIManager::WINUIStompOut(void)
+{
+	//スタンプアウト演出
+	StompInDirection(winEaseCnt_, winAlpha_, winUIScl_, false
+		, winUIStartScl_, winUIEndScl_, winUIEaseTime_);
+	if (winEaseCnt_ >= winUIEaseTime_)
+	{
+		winEaseCnt_ = 0.0f;
+		isWinDirection_ = false;
+		winAlpha_ = 0;
+		winUIDirectionFunc_ = [this]() {WINUIStompNone(); };
+	}
+}
+
+void UIManager::StompInDirection(float& _easeCnt, int& _alpha,float& _scl, const bool _isStompIn, const float _startSize, const float _endSize, const float _time)
 {
 	// スタンプ演出のイージング計算
-	if (_easeCnt > 0.0f)
+	if (_easeCnt <= _time)
 	{
-		_easeCnt -= SceneManager::GetInstance().GetDeltaTime();
-		if (_easeCnt < 0.0f) _easeCnt = 0.0f;
+		_easeCnt += SceneManager::GetInstance().GetDeltaTime();
+		if (_easeCnt > _time) _easeCnt = _time;
 
-		float t = (_time - _easeCnt) / _time;
+		float t = _easeCnt / _time;
 
 		// サイズの補間(スタンプインなら大→小、スタンプアウトなら小→大)
 		_scl = _isStompIn ? easing_->EaseFunc(_startSize, _endSize, t, Easing::EASING_TYPE::QUAD_IN) :
 			easing_->EaseFunc(_endSize, _startSize, t, Easing::EASING_TYPE::QUAD_IN);
 
 		// アルファ値の補間
-		_alphaCnt = _isStompIn ? easing_->EaseFunc(UtilityCommon::ALPHA_MIN, UtilityCommon::ALPHA_MAX, t, Easing::EASING_TYPE::LERP) :
+		_alpha = _isStompIn ? easing_->EaseFunc(UtilityCommon::ALPHA_MIN, UtilityCommon::ALPHA_MAX, t, Easing::EASING_TYPE::LERP) :
 			easing_->EaseFunc(UtilityCommon::ALPHA_MAX, UtilityCommon::ALPHA_MIN, t, Easing::EASING_TYPE::LERP);
+
+		//カウントの減算
+		_easeCnt += scnMng_.GetDeltaTime();
 	}
 }
 
@@ -311,6 +410,14 @@ void UIManager::LoadJsonParameter(void)
 			arrowLocalPos_ = UtilityJson::GetLoadVector2F("arrowPos", data);
 			easeGoalScl_ = data.value("easingGoalScale", 0.0f);
 			easeTime_ = data.value("easeTime", 0.0f);
+		}
+		else if (key == "CardWinUI")
+		{
+			winUIEaseTime_ = data.value("winUIEaseTime", 0.0f);
+			winUIStartScl_ = data.value("winUIStartScale", 0.0f);
+			winUIEndScl_ = data.value("winUIEndScale", 0.0f);
+			winUIWaitTime_ = data.value("winUIWaitTime", 0.0f);
+			winUIPos_ = UtilityJson::GetLoadVector2F("winUIPos", data);
 		}
 	}
 }

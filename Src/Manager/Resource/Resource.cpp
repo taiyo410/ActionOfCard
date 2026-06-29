@@ -226,7 +226,6 @@ void ResourceData::LoadSound(void)
 	{
 		func.second();
 	}
-
 }
 
 void ResourceData::LoadFont(void)

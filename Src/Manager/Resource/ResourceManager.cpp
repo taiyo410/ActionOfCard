@@ -58,10 +58,9 @@ ResourceManager::ResourceManager(void):
 		{"INTENSIVE_LINE_1" ,SRC::INTENSIVE_LINE_1},
 		{"INTENSIVE_LINE_2" ,SRC::INTENSIVE_LINE_2},
 		{"REVERSE_FADE_MASK" ,SRC::REVERSE_FADE_MASK },
-		{"WIN_ARROW_IMG" ,SRC::WIN_ARROW_IMG },
-		{"LOSE_ARROW_IMG" ,SRC::LOSE_ARROW_IMG},
 		{"HIGHER_IMG" ,SRC::HIGHER_IMG},
 		{"LOWER_IMG" ,SRC::LOWER_IMG},
+		{"WIN_IMG" ,SRC::WIN_IMG},
 		//複数画像
 		{"NUMBERS_IMGS" ,SRC::NUMBERS_IMGS},
 		{"CONTROLLER_UI_IMGS" ,SRC::CONTROLLER_UI_IMGS},
@@ -75,6 +74,7 @@ ResourceManager::ResourceManager(void):
 		{"FIRE_BALL_EFF" ,SRC::FIRE_BALL_EFF},
 		{"THUNDER_EFF" ,SRC::THUNDER_EFF},
 		{"REVOLUTION_EFF" ,SRC::REVOLUTION_EFF},
+		{"P_HIT_EFF" ,SRC::P_HIT_EFF},
 		//BGM
 		{"TITLE_BGM",SRC::TITLE_BGM},
 		{"GAME_BGM",SRC::GAME_BGM},
@@ -292,8 +292,15 @@ const ResourceManager::RESOURCE_COMMON_PARAM ResourceManager::GetResourceParamet
 {
 	RESOURCE_COMMON_PARAM resParam;
 	resParam.type = _info.resType;
-	resParam.src = resStr_[_data["name"]];
-	resParam.path = _info.typePath + UtilityCommon::GetWStringFromString(_data["handle"]);
+
+	//素材名の取得
+	const std::string str = _data.value("name", "");
+	auto it = resStr_.find(str);
+	if(it!=resStr_.end())resParam.src = resStr_[str];
+	else { assert(it != resStr_.end() && NONE_SRC_INJSON_STR); }
+
+	//パスの取得
+	resParam.path = _info.typePath + UtilityCommon::GetWStringFromString(_data.value("handle",""));
 
 	//サウンドだった場合のパス
 	if (resParam.type == TYPE::SOUND)
