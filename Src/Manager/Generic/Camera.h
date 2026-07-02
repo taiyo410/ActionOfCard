@@ -83,6 +83,7 @@ public:
 		CHANGE_TARGET,
 		TARGET_POINT,
 		START_DIRECTION,
+		SHADOW_CAMERA,
 	};
 
 	//カメラ演出
@@ -165,6 +166,10 @@ public:
 	/// @brief カメラモードの変更
 	/// @param mode 変更後のカメラモード
 	void ChangeMode(const MODE mode);
+
+	/// @brief カメラのモードを元に戻す
+	/// @param  
+	void UndoCameraMode(void);
 	
 	/// @brief サブ処理の変更
 	/// @param _submode サブ処理(イージングなど)
@@ -200,7 +205,7 @@ public:
 	/// @return 演出カメラの終了判定
 	const bool IsEndDirectionMode(void)
 	{
-		return mode_ == MODE::FOLLOW;
+		return currentMode_ == MODE::FOLLOW;
 	}
 
 	/// @brief 演出カメラのモードの取得
@@ -270,8 +275,11 @@ private:
 	//ステージのTransform
 	const Transform* stageTransform_;
 
-	// カメラモード
-	MODE mode_;
+	// 現在のカメラモード
+	MODE currentMode_;
+
+	// 遷移前のカメラモード
+	MODE preMode_;
 
 	//サブモード
 	SUB_MODE subMode_;
@@ -417,6 +425,7 @@ private:
 	void SetBeforeDrawLerpCamera(void);
 	void SetBeforeDrawTargetPoint(void);
 	void SetBeforeDrawStartDirection(void);
+	void SetBeforeDrawShadowCamera(void);
 
 	//遷移
 	void ChangeFixedPoint(void);
@@ -425,6 +434,7 @@ private:
 	void ChangeTargetLerp(void);
 	void ChangeTargetCamera(void);
 	void ChangeStartDirection(void);
+	void ChangeShadowCamera(void);
 
 	//サブモード別更新
 	void UpdateNone(void);

@@ -81,6 +81,9 @@ void SceneManager::Init3D(void)
 	SetFogEnable(true);
 	SetFogColor(FOG_COLOR_R, FOG_COLOR_G, FOG_COLOR_B);
 	SetFogStartEnd(FOG_START,FOG_END);
+
+	//シャドウマップのテクスチャを作成
+	MakeShadowMapTexture();
 }
 
 void SceneManager::Update(void)
@@ -347,4 +350,28 @@ void SceneManager::PostEffectScreen(void)
 	// 暗転・明転
 	fader_->Draw();
 
+}
+
+void SceneManager::MakeShadowMapTexture(void)
+{
+	// 描画可能テクスチャをシャドウマップ用にする
+	SetCreateDrawValidGraphChannelNum(1);
+
+	// 描画可能テクスチャを浮動小数点型で作成するフラグを有効にする
+	SetDrawValidFloatTypeGraphCreateFlag(TRUE);
+
+	// 描画可能テクスチャの色深度を設定する
+	SetCreateGraphColorBitDepth(COLOR_BIT_DEPTH);
+
+	// シャドウマップ用テクスチャの作成
+	shadowMapTexture_ = MakeScreen(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, false);
+
+	// 描画可能テクスチャを通常の設定に戻す
+	SetDrawValidFloatTypeGraphCreateFlag(FALSE);
+
+	// 描画可能テクスチャのチャンネル数を元に戻す
+	SetCreateDrawValidGraphChannelNum(DEFAULT_CHANNEL_NUM);
+
+	// 描画可能テクスチャの色深度を元に戻す
+	SetCreateGraphChannelBitDepth(0);
 }

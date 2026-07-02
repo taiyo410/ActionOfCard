@@ -132,7 +132,7 @@ public:
 		//ピクセルシェーダ
 		STANDARD_PS,				//通常描画シェーダー
 		TILEMAP_PS,					//タイルマップ
-		CHARACTER_MODEL_PS,			//キャラクターモデル
+		CHARACTER_MODEL_PS,			//キャラクター用のピクセルシェーダ
 		SKYDOME_PS,					//スカイドーム
 		HPBAR_PS,					//HPバー
 		ARCBAR_PS,					//円形ゲージ
@@ -140,11 +140,15 @@ public:
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
 		REVOLUTION_POSTEFF_PS,		//革命を起こした時のポストエフェクト
-		
+		CHARACTER_SHADOW_PS,		//キャラクター用のシャドウシェーダ
+		SHADOW_PS,					//シャドウ用のピクセルシェーダ
+
 		//頂点シェーダ
 		STANDARD_VS,				//通常描画シェーダー
 		TILEMAP_VS,					//タイルマップ
 		CHARACTER_MODEL_VS,			//キャラクターモデル
+		SHADOW_MESH_VS,				//シャドウメッシュ
+		SHADOW_SKINNED_MESH_VS,		//シャドウスキンメッシュ
 	};
 
 	struct RES_INFO

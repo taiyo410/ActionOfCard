@@ -484,6 +484,16 @@
         "name": "CHARACTER_MODEL_PS",
         "handle": "CharacterModelPS.cso",
         "constBufNum": 0
+      },
+      {
+        "name": "CHARACTER_SHADOW_PS",
+        "handle": "CharacterShadowPS.cso",
+        "constBufNum": 3
+      },
+      {
+        "name": "SHADOW_PS",
+        "handle": "ShadowPS.cso",
+        "constBufNum": 0
       }
     ],
 
@@ -502,7 +512,17 @@
       {
         "name": "CHARACTER_MODEL_VS",
         "handle": "CharacterModelVS.cso",
-        "constBufNum": 1
+        "constBufNum": 0
+      },
+      {
+        "name": "SHADOW_MESH_VS",
+        "handle": "ShadowMeshVS.cso",
+        "constBufNum": 0
+      },
+      {
+        "name": "SHADOW_SKINNED_MESH_VS",
+        "handle": "ShadowSkinnedMeshVS.cso",
+        "constBufNum": 0
       }
     ]
   }

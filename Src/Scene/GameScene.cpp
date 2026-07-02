@@ -15,6 +15,7 @@
 #include "Manager/Generic/DataBank.h"
 #include "Renderer/PixelMaterial.h"
 #include "Renderer/PixelRenderer.h"
+#include "Object/Common/Shadow.h"
 #include "Object/SkyDome/SkyDome.h"
 #include "Object/Card/CardSystem.h"	
 #include "Object/Stage.h"	
@@ -53,6 +54,9 @@ GameScene::GameScene(void):
 	//シーンの生成
 	pauseScene_ = std::make_shared<PauseScene>();
 	revolutionScene_ = std::make_shared<GameEventRevolutionScene>();
+
+	//シャドウの生成
+	shadow_ = std::make_unique<Shadow>();
 }
 
 GameScene::~GameScene(void)
@@ -176,6 +180,32 @@ void GameScene::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 	if (updatePhase_ == _phase)return;
 	updatePhase_ = _phase;
 	changeUpdate_[updatePhase_]();
+}
+
+void GameScene::DrawShadow(void)
+{
+	SetDrawScreen(shadow_->GetShadowMapTexture());
+
+	//シャドウ初期化
+	shadow_->DrawInitShadow();
+
+	//通常のメッシュのシャドウマップ描画
+	shadow_->DrawShadowNormal();
+	stage_->DrawShadow();
+	shadow_->ResetShader();
+
+	//スキンメッシュの描画
+	shadow_->DrawShadowSkinned();
+	//CharacterManager::GetInstance().DrawShadow();
+	shadow_->ResetShader();
+
+	SetDrawScreen(scnMng_.GetMainScreen());
+
+	// 画面を初期化
+	ClearDrawScreen();
+
+	// カメラ設定を元に戻す
+	scnMng_.GetCamera().lock()->UndoCameraMode();
 }
 
 void GameScene::ChangeNone(void)
@@ -351,6 +381,7 @@ void GameScene::ObjectInit(void)
 {
 	CharacterManager::GetInstance().Init();
 	UIManager::GetInstance().Init();
+	shadow_->Init();
 	stage_->Init();
 	skyDome_->Init();
 }

@@ -86,6 +86,10 @@ void Stage::Draw(void)
 	renderer_->Draw();
 }
 
+void DrawShadow(void)
+{
+}
+
 void Stage::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 }

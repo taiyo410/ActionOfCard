@@ -111,6 +111,11 @@ public:
 	/// @return メインスクリーンのハンドル
 	inline int GetMainScreen(void) const { return mainScreen_; }
 
+	/// @brief シャドウマップのテクスチャのハンドルを返す
+	/// @param  
+	/// @return シャドウマップのテクスチャ
+	inline int GetShadowMapTexture(void) const { return shadowMapTexture_; }
+
 	/// @brief フェード終了フラグ取得
 	/// @param  
 	/// @return フェード終了フラグ
@@ -144,6 +149,15 @@ private:
 
 	//デルタタイム
 	static constexpr float DELTA_TIME = 1.0f / 60.0f;
+
+	// 色深度
+	static constexpr int COLOR_BIT_DEPTH = 24;
+
+	// シャドウマップサイズ
+	static constexpr int SHADOW_MAP_SIZE = 16000;
+
+	// 通常のチャンネル数
+	static constexpr int DEFAULT_CHANNEL_NUM = 4;
 #pragma endregion
 
 #pragma region メンバー変数
@@ -168,6 +182,7 @@ private:
 	float totalTime_;			//経過時間
 	int mainScreen_;			//メインスクリーン
 	int postEffScreen_;			//ポストエフェクトスクリーン
+	int shadowMapTexture_;		// シャドウマップ用テクスチャのハンドル
 	bool isEndFade_;			//フェードが終了したか
 #pragma endregion
 
@@ -192,6 +207,9 @@ private:
 
 	//ポストエフェクトスクリーンの描画
 	void PostEffectScreen(void);
+
+	//シャドウマップ用テクスチャの作成
+	void MakeShadowMapTexture(void);
 
 #pragma endregion
 };

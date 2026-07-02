@@ -51,6 +51,10 @@ public:
     /// @param  
     void Draw(void)override;
 
+    /// @brief ‰e‚Ì•`‰æ
+    /// @param  
+    void DrawShadow(void);
+
     /// @brief “–‚½‚Á‚½‚Ìˆ—
     /// @param _hitCol ‘Šè‚ÌƒRƒ‰ƒCƒ_
     void OnHit(const std::weak_ptr<Collider> _hitCol)override;
