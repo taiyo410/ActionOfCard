@@ -136,6 +136,10 @@ void ObjectBase::LoadObjectData(void)
 
 }
 
+void ObjectBase::LoadModelData(const std::string& _modelName)
+{
+}
+
 void ObjectBase::MakeColliderFromJsonData(void)
 {
 	const auto& colData = resMng_.Load(ResourceManager::SRC::COLLISION_DATA).jsonData;

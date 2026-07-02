@@ -22,7 +22,7 @@
         "handle": "KeyBlade/KeyBlade1.mv1"
       },
       {
-        "name": "STAGE",
+        "name": "STAGE_FLOOR",
         "handle": "SandStage.mv1"
       },
       {
@@ -427,10 +427,19 @@
       {
         "name": "UI_DATA",
         "handle": "UIData.json"
+      },
+      {
+        "name": "MODEL_DATA",
+        "handle": "ModelData.json"
       }
     ],
 
     "pixelShader": [
+      {
+        "name": "STANDARD_PS",
+        "handle": "StandardPS.cso",
+        "constBufNum": 3
+      },
       {
         "name": "TILEMAP_PS",
         "handle": "TileMapPS.cso",
@@ -470,14 +479,29 @@
         "name": "REVOLUTION_POSTEFF_PS",
         "handle": "RevolutionPostEffectPS.cso",
         "constBufNum": 1
+      },
+      {
+        "name": "CHARACTER_MODEL_PS",
+        "handle": "CharacterModelPS.cso",
+        "constBufNum": 0
       }
     ],
 
 
     "vertexShader": [
       {
+        "name": "STANDARD_VS",
+        "handle": "StandardVS.cso",
+        "constBufNum": 0
+      },
+      {
         "name": "TILEMAP_VS",
         "handle": "TileMapVS.cso",
+        "constBufNum": 1
+      },
+      {
+        "name": "CHARACTER_MODEL_VS",
+        "handle": "CharacterModelVS.cso",
         "constBufNum": 1
       }
     ]

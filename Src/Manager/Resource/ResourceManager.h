@@ -19,8 +19,8 @@ public:
 	{
 		NONE,
 		//モデル
-		STAGE,						//ステージ
-		STAGE_WALL,					//壁
+		STAGE_FLOOR,				//ステージ床
+		STAGE_WALL,					//ステージ壁
 		PLAYER,						//プレイヤー
 		ENEMY,						//敵
 		SKY_DOME,					//スカイドーム
@@ -127,19 +127,24 @@ public:
 		ACTION_DATA,					//アクションデータ
 		COLLISION_DATA,					//当たり判定データ
 		UI_DATA,						//UIのパラメータデータ
+		MODEL_DATA,						//モデルのパラメータデータ
 
 		//ピクセルシェーダ
-		TILEMAP_PS,					//ステージ
+		STANDARD_PS,				//通常描画シェーダー
+		TILEMAP_PS,					//タイルマップ
+		CHARACTER_MODEL_PS,			//キャラクターモデル
 		SKYDOME_PS,					//スカイドーム
 		HPBAR_PS,					//HPバー
 		ARCBAR_PS,					//円形ゲージ
 		CARD_NORMAL_PS,				//通常カード
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
-		REVOLUTION_POSTEFF_PS,			//革命を起こした時のポストエフェクト
+		REVOLUTION_POSTEFF_PS,		//革命を起こした時のポストエフェクト
 		
 		//頂点シェーダ
-		TILEMAP_VS					//ステージ
+		STANDARD_VS,				//通常描画シェーダー
+		TILEMAP_VS,					//タイルマップ
+		CHARACTER_MODEL_VS,			//キャラクターモデル
 	};
 
 	struct RES_INFO

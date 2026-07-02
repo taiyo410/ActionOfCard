@@ -88,6 +88,10 @@
 		},
 		"ModelData": {
 			"model": "ENEMY_1",
+			"spineFrameNum": 1,
+			"handFrameNum": 36,
+			"chestFrameNum": 4,
+			"scale": 5.0,
 			"localDegree": {
 				"x": 0.0,
 				"y": 180.0,
@@ -97,11 +101,7 @@
 				"x": 0.0,
 				"y": 0.0,
 				"z": 0.0
-			},
-			"scale": 5.0,
-			"spineFrameNum": 1,
-			"handFrameNum": 36,
-			"chestFrameNum": 4
+			}
 		},
 		"BattleStartPos": {
 			"x": 0.0,

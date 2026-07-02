@@ -13,7 +13,7 @@ ResourceManager::ResourceManager(void):
 	//素材の登録文字列とSRCの結び付け
 	resStr_ = {
 		//モデル
-		{"STAGE",SRC::STAGE },
+		{"STAGE_FLOOR",SRC::STAGE_FLOOR },
 		{"STAGE_WALL",SRC::STAGE_WALL},
 		{"PLAYER" ,SRC::PLAYER},
 		{"ENEMY_1",SRC::ENEMY},
@@ -110,8 +110,11 @@ ResourceManager::ResourceManager(void):
 		{"ACTION_DATA" ,SRC::ACTION_DATA},
 		{"COLLISION_DATA" ,SRC::COLLISION_DATA},
 		{"UI_DATA" ,SRC::UI_DATA},
+		{"MODEL_DATA" ,SRC::MODEL_DATA},
 		//ピクセルシェーダ
+		{"STANDARD_PS",SRC::STANDARD_PS},
 		{"TILEMAP_PS",SRC::TILEMAP_PS},
+		{"CHARACTER_MODEL_PS",SRC::CHARACTER_MODEL_PS},
 		{"SKYDOME_PS",SRC::SKYDOME_PS},
 		{"HPBAR_PS",SRC::HPBAR_PS},
 		{"ARCBAR_PS",SRC::ARCBAR_PS},
@@ -120,7 +123,9 @@ ResourceManager::ResourceManager(void):
 		{"CARD_SELECT_PS",SRC::CARD_SELECT_PS},
 		{"REVOLUTION_POSTEFF_PS",SRC::REVOLUTION_POSTEFF_PS},
 		//頂点シェーダ
-		{"TILEMAP_VS",SRC::TILEMAP_VS}
+		{"STANDARD_VS",SRC::STANDARD_VS },
+		{"TILEMAP_VS",SRC::TILEMAP_VS},
+		{"CHARACTER_MODEL_VS",SRC::CHARACTER_MODEL_VS}
 	};
 
 	//リソース種類と文字列の結び付け

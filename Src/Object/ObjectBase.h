@@ -136,6 +136,8 @@ protected:
 	//オブジェクト毎に外部データをロード
 	virtual void LoadObjectData(void);
 
+	//モデル情報のロード
+	virtual void LoadModelData(const std::string& _modelName);
 
 private:
 	//当たり判定形状の文字列と生成する関数の対応表

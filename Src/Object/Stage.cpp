@@ -24,7 +24,7 @@ void Stage::Load(void)
 
 void Stage::Init(void)
 {
-	trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::STAGE));
+	trans_.SetModel(resMng_.LoadModelDuplicate(ResourceManager::SRC::STAGE_FLOOR));
 	trans_.pos = Utility3D::VECTOR_ZERO;
 	trans_.quaRotLocal =
 		Quaternion::Euler({ 0.0f,0.0f, 0.0f });
@@ -52,6 +52,22 @@ void Stage::Init(void)
 	material_->AddConstBufVS({ STAGE_UV_SCL,0.0f,0.0f,0.0f });
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId,*material_);
 
+	//壁のマテリアルとレンダラー
+	wallMaterial_ = std::make_unique<ModelMaterial>(
+		ResourceManager::SRC::STANDARD_VS,
+		ResourceManager::SRC::STANDARD_PS
+	);
+
+	//壁の色の乗算入らないので1.0を設定
+	wallMaterial_->AddConstBufPS({ 1.0f,1.0f,1.0f,1.0f });
+
+	//光の方向を取得
+	VECTOR worldRightDir = GetLightDirection();
+	wallMaterial_->AddConstBufPS({ worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
+	//環境光を追加
+	//wallMaterial_->AddConstBufPS({ AMBIENT_VEC.x,AMBIENT_VEC.y,AMBIENT_VEC.z,0.0f });
+	wallRenderer_ = std::make_unique<ModelRenderer>(wallTrans_.modelId,*wallMaterial_);
+
 	//モデル更新
 	trans_.Update();
 
@@ -66,7 +82,7 @@ void Stage::Update(void)
 
 void Stage::Draw(void)
 {
-	MV1DrawModel(wallTrans_.modelId);
+	wallRenderer_->Draw();
 	renderer_->Draw();
 }
 

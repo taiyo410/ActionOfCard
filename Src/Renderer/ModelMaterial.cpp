@@ -9,6 +9,9 @@ ModelMaterial::ModelMaterial(const ResourceManager::SRC _vsSrc, const ResourceMa
 	if (resMng_.Load(_vsSrc).type_ != ResourceData::TYPE::VERTEX_SHADER
 		|| resMng_.Load(_psSrc).type_ != ResourceData::TYPE::PIXEL_SHADER)
 	{
+		assert(resMng_.Load(_vsSrc).type_ == ResourceData::TYPE::VERTEX_SHADER
+			|| resMng_.Load(_psSrc).type_ == ResourceData::TYPE::PIXEL_SHADER
+			&& "シェーダのタイプが不正です");
 		return;
 	}
 

@@ -3,6 +3,8 @@
 #include "Utility/UtilityJson.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Generic/UIManager.h"
+#include "Renderer/ModelMaterial.h"
+#include "Renderer/ModelRenderer.h"
 #include "Object/Common/AnimationController.h"
 #include "Object/Common/EffectController.h"
 #include "Object/Common/Geometry/Capsule.h"
@@ -85,6 +87,12 @@ void CharacterBase::LoadCommon(void)
 {
 	//共通のパラメータのロード
 	LoadCommonData();
+
+	material_ = std::make_unique<ModelMaterial>(
+		ResourceManager::SRC::CHARACTER_MODEL_VS,
+		ResourceManager::SRC::CHARACTER_MODEL_PS);
+
+	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
 
 	//当たり判定の生成
 	MakeColliderGeometry();
@@ -185,7 +193,8 @@ void CharacterBase::Draw(void)
 void CharacterBase::DrawCommon(void)
 {
 	//通常描画
-	MV1DrawModel(trans_.modelId);
+	//MV1DrawModel(trans_.modelId);
+	renderer_->Draw();
 }
 
 void CharacterBase::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)

@@ -251,30 +251,6 @@ void UIManager::UpdateWinUIDirection(void)
 {
 	if (!isWinDirection_)return;
 	winUIDirectionFunc_();
-	//if (winUIWaitCnt_ < WIN_UI_WAIT_TIME)
-	//{
-	//	winUIWaitCnt_ += scnMng_.GetDeltaTime();
-	//}
-	//else if (winEaseCnt_ < WIN_UI_EASE_TIME)
-	//{
-	//	//スタンプイン演出
-	//	StompInDirection(winEaseCnt_, winAlpha_, winUIScl_, true
-	//		, WIN_UI_START_SCL, WIN_UI_END_SCL, WIN_UI_EASE_TIME);
-
-	//	if (winEaseCnt_<=0.0f)winEaseCnt_ = 0.0f;
-	//}
-	//else
-	//{
-	//	//スタンプアウト演出
-	//	StompInDirection(winEaseCnt_, winAlpha_, winUIScl_, false
-	//		, WIN_UI_START_SCL, WIN_UI_END_SCL, WIN_UI_EASE_TIME);
-	//	if (winEaseCnt_ <= 0.0f)
-	//	{
-	//		winEaseCnt_ = 0.0f;
-	//		isWinDirection_ = false;
-	//	}
-	//}
-
 }
 
 void UIManager::RevolutionInvertFadeNone(void)
