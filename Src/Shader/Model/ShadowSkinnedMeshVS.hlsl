@@ -15,7 +15,7 @@
 VS_OUTPUT main(VS_INPUT VSInput)
 {
  
-	VS_OUTPUT ret;
+	VS_OUTPUT ret = (VS_OUTPUT) 0;
  
     int4 boneIdx = clamp(VSInput.blendIndices0, 0, L_W_MAT_MAX_INDEX);
     float4 weight = VSInput.blendWeight0;

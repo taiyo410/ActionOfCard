@@ -44,28 +44,30 @@ void Stage::Init(void)
 	//当たり判定作成
 	MakeColliderFromJsonData();
 
+	//光の方向を取得
+	VECTOR worldRightDir = GetLightDirection();
 	//マテリアル
 	material_=std::make_unique<ModelMaterial>(
 		ResourceManager::SRC::TILEMAP_VS,
-		ResourceManager::SRC::TILEMAP_PS
+		ResourceManager::SRC::SHADOW_STANDARD_PS
 	);
+	material_->SetTextureBuf(8, scnMng_.GetShadowMapTexture());
 	material_->AddConstBufVS({ STAGE_UV_SCL,0.0f,0.0f,0.0f });
+	material_->AddConstBufPS({ worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId,*material_);
 
 	//壁のマテリアルとレンダラー
 	wallMaterial_ = std::make_unique<ModelMaterial>(
 		ResourceManager::SRC::STANDARD_VS,
-		ResourceManager::SRC::STANDARD_PS
+		ResourceManager::SRC::SHADOW_STANDARD_PS
 	);
 
 	//壁の色の乗算入らないので1.0を設定
 	wallMaterial_->AddConstBufPS({ 1.0f,1.0f,1.0f,1.0f });
-
-	//光の方向を取得
-	VECTOR worldRightDir = GetLightDirection();
+	wallMaterial_->SetTextureBuf(8, scnMng_.GetShadowMapTexture());
 	wallMaterial_->AddConstBufPS({ worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
 	//環境光を追加
-	//wallMaterial_->AddConstBufPS({ AMBIENT_VEC.x,AMBIENT_VEC.y,AMBIENT_VEC.z,0.0f });
+	wallMaterial_->AddConstBufPS({ AMBIENT_VEC.x,AMBIENT_VEC.y,AMBIENT_VEC.z,0.0f });
 	wallRenderer_ = std::make_unique<ModelRenderer>(wallTrans_.modelId,*wallMaterial_);
 
 	//モデル更新
@@ -84,6 +86,10 @@ void Stage::Draw(void)
 {
 	wallRenderer_->Draw();
 	renderer_->Draw();
+}
+
+void Stage::DrawShadow(void)
+{
 }
 
 void DrawShadow(void)

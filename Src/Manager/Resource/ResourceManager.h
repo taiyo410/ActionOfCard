@@ -142,6 +142,7 @@ public:
 		REVOLUTION_POSTEFF_PS,		//革命を起こした時のポストエフェクト
 		CHARACTER_SHADOW_PS,		//キャラクター用のシャドウシェーダ
 		SHADOW_PS,					//シャドウ用のピクセルシェーダ
+		SHADOW_STANDARD_PS,			//標準シャドウモデル用のピクセルシェーダ
 
 		//頂点シェーダ
 		STANDARD_VS,				//通常描画シェーダー

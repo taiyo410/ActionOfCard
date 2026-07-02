@@ -159,6 +159,8 @@ void GameScene::NormalDraw(void)
 
 void GameScene::DirectionDraw(void)
 {
+	DrawShadow();
+
 	//プレイヤー
 	skyDome_->Draw();
 
@@ -167,6 +169,7 @@ void GameScene::DirectionDraw(void)
 
 	//キャラクター
 	CharacterManager::GetInstance().Draw();
+
 
 	//演出時の2D描画
 	if (updatePhase_ == UPDATE_PHASE::START_DIRECTION)
@@ -191,12 +194,12 @@ void GameScene::DrawShadow(void)
 
 	//通常のメッシュのシャドウマップ描画
 	shadow_->DrawShadowNormal();
-	stage_->DrawShadow();
+	stage_->Draw();
 	shadow_->ResetShader();
 
 	//スキンメッシュの描画
 	shadow_->DrawShadowSkinned();
-	//CharacterManager::GetInstance().DrawShadow();
+	CharacterManager::GetInstance().Draw();
 	shadow_->ResetShader();
 
 	SetDrawScreen(scnMng_.GetMainScreen());

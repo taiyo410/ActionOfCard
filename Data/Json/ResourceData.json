@@ -494,6 +494,16 @@
         "name": "SHADOW_PS",
         "handle": "ShadowPS.cso",
         "constBufNum": 0
+      },
+      {
+        "name": "SHADOW_PS",
+        "handle": "ShadowPS.cso",
+        "constBufNum": 0
+      },
+      {
+        "name": "SHADOW_STANDARD_PS",
+        "handle": "ShadowStandardPS.cso",
+        "constBufNum": 0
       }
     ],
 
