@@ -111,7 +111,7 @@ ResourceManager::ResourceManager(void):
 		{"COLLISION_DATA" ,SRC::COLLISION_DATA},
 		{"UI_DATA" ,SRC::UI_DATA},
 		//ピクセルシェーダ
-		{"STAGE_PS",SRC::STAGE_PS},
+		{"TILEMAP_PS",SRC::TILEMAP_PS},
 		{"SKYDOME_PS",SRC::SKYDOME_PS},
 		{"HPBAR_PS",SRC::HPBAR_PS},
 		{"ARCBAR_PS",SRC::ARCBAR_PS},
@@ -120,7 +120,7 @@ ResourceManager::ResourceManager(void):
 		{"CARD_SELECT_PS",SRC::CARD_SELECT_PS},
 		{"REVOLUTION_POSTEFF_PS",SRC::REVOLUTION_POSTEFF_PS},
 		//頂点シェーダ
-		{"STAGE_VS",SRC::STAGE_VS}
+		{"TILEMAP_VS",SRC::TILEMAP_VS}
 	};
 
 	//リソース種類と文字列の結び付け

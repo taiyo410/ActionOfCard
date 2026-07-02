@@ -432,8 +432,8 @@
 
     "pixelShader": [
       {
-        "name": "STAGE_PS",
-        "handle": "StagePS.cso",
+        "name": "TILEMAP_PS",
+        "handle": "TileMapPS.cso",
         "constBufNum": 0
       },
       {
@@ -476,8 +476,8 @@
 
     "vertexShader": [
       {
-        "name": "STAGE_VS",
-        "handle": "StageVS.cso",
+        "name": "TILEMAP_VS",
+        "handle": "TileMapVS.cso",
         "constBufNum": 1
       }
     ]

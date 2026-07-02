@@ -29,7 +29,5 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     {
         discard;
     }
- 
     return srcCol + g_color;
-   
 }

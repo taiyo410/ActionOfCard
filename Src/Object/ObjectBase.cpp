@@ -4,6 +4,8 @@
 #include "Manager/Resource/SoundManager.h"
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Game/CollisionManager.h"
+#include "Renderer/ModelMaterial.h"
+#include "Renderer/ModelRenderer.h"
 #include "./Common/Geometry/Capsule.h"
 #include "./Common/Geometry/Cube.h"
 #include "./Common/Geometry/Model.h"
@@ -98,7 +100,6 @@ const bool ObjectBase::IsAliveCollider(const Collider::TAG _chataTag, const Coll
 	}
 	return false;
 }
-
 
 void ObjectBase::DeleteCollider(const TAG_PRIORITY _priority)
 {

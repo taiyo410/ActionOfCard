@@ -218,7 +218,8 @@ void CardDeck::Reload(void)
 	//ŽèŽD‚ÉƒfƒbƒL‚ð“ü‚ê‚Ä‚¢‚­
 	for (const auto& deck : initDeck_)
 	{
-		CardBase* newCard = new CardBase(*deck);
+		CardBase::CARD_STATUS status = deck->GetCardStatus();
+		CardBase* newCard = new CardBase(status);
 		std::unique_ptr<CardBase>deckPtr(newCard);
 		drawPile_.emplace_back(std::move(deckPtr));
 	}

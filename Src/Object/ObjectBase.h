@@ -11,6 +11,8 @@ class ResourceManager;
 class SceneManager;
 class SoundManager;
 class Geometry;
+class ModelMaterial;
+class ModelRenderer;
 
 class ObjectBase
 {
@@ -88,6 +90,10 @@ protected:
 
 	// モデル制御の基本情報
 	Transform trans_;
+
+	//シェーダー関連
+	std::unique_ptr<ModelMaterial> material_;       //マテリアル
+	std::unique_ptr<ModelRenderer> renderer_;       //レンダラー
 
 	//当たり判定関係
 	std::map<TAG_PRIORITY, std::shared_ptr<Collider>> collider_;	//全体の当たり判定情報

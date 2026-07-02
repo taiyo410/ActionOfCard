@@ -16,8 +16,6 @@ Transform::Transform(void)
 	matPos = MGetIdent();
 	quaRot = Quaternion();
 	quaRotLocal = Quaternion();
-
-	collider = nullptr;
 }
 
 Transform::Transform(int model)
@@ -34,8 +32,6 @@ Transform::Transform(int model)
 	matPos = MGetIdent();
 	quaRot = Quaternion();
 	quaRotLocal = Quaternion();
-
-	collider = nullptr;
 }
 
 Transform::~Transform(void)
@@ -44,7 +40,6 @@ Transform::~Transform(void)
 
 void Transform::Update(void)
 {
-
 	// ëÂÇ´Ç≥
 	matScl = MGetScale(scl);
 
@@ -74,8 +69,6 @@ void Transform::Update(void)
 
 	// è’ìÀîªíËÇÃçXêV
 	MV1RefreshCollInfo(modelId);
-
-
 }
 
 void Transform::SetModel(int model)

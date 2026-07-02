@@ -46,8 +46,8 @@ void Stage::Init(void)
 
 	//ƒ}ƒeƒŠƒAƒ‹
 	material_=std::make_unique<ModelMaterial>(
-		ResourceManager::SRC::STAGE_VS,
-		ResourceManager::SRC::STAGE_PS
+		ResourceManager::SRC::TILEMAP_VS,
+		ResourceManager::SRC::TILEMAP_PS
 	);
 	material_->AddConstBufVS({ STAGE_UV_SCL,0.0f,0.0f,0.0f });
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId,*material_);

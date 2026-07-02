@@ -48,7 +48,7 @@ void SkyDome::Init(void)
 	trans_.Update();
 
 	material_ = std::make_unique<ModelMaterial>(
-		ResourceManager::SRC::STAGE_VS,
+		ResourceManager::SRC::TILEMAP_VS,
 		ResourceManager::SRC::SKYDOME_PS
 	);
 	material_->AddConstBufVS({ SIZE_SCL,0.0f,0.0f,0.0f });

@@ -1,5 +1,3 @@
-
-
 #include "../Common/Pixel/PixelShader2DHeader.hlsli"
 // 定数バッファ：スロット4番目(b4と書く)
 cbuffer cbParam : register(b4)

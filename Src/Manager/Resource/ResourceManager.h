@@ -129,7 +129,7 @@ public:
 		UI_DATA,						//UIのパラメータデータ
 
 		//ピクセルシェーダ
-		STAGE_PS,					//ステージ
+		TILEMAP_PS,					//ステージ
 		SKYDOME_PS,					//スカイドーム
 		HPBAR_PS,					//HPバー
 		ARCBAR_PS,					//円形ゲージ
@@ -139,7 +139,7 @@ public:
 		REVOLUTION_POSTEFF_PS,			//革命を起こした時のポストエフェクト
 		
 		//頂点シェーダ
-		STAGE_VS					//ステージ
+		TILEMAP_VS					//ステージ
 	};
 
 	struct RES_INFO
@@ -210,18 +210,6 @@ public:
 	/// @return 
 	const SRC GetSrcFromString(const std::string& _str) const;
 private:
-
-	////カード番号画像
-	//static constexpr int CARD_NO_X = 5;	//横の数
-	//static constexpr int CARD_NO_Y = 2;	//縦の数
-	//static constexpr int CARD_NO_SIZE_X = 180;
-	//static constexpr int CARD_NO_SIZE_Y = 222;
-
-	////コントローラーUI画像
-	//static constexpr int CONTROLLER_UI_NO_X = 10;
-	//static constexpr int CONTROLLER_UI_NO_Y = 10;
-	//static constexpr int CONTROLLER_UI_SIZE_X = 128;
-	//static constexpr int CONTROLLER_UI_SIZE_Y = 128;
 
 	//JSONファイルで素材が見つからなかった場合のエラー文
 	const std::wstring NONE_SRC_INJSON_STR = L"JSONファイルで名前が見つかりませんでした。";
