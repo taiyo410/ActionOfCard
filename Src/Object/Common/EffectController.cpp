@@ -20,6 +20,11 @@ void EffectController::Update(void)
 	{
 		for (auto& playData : effect.second.playData)
 		{
+			if(playData.isDelete)
+			{
+				//íœƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚é‚Ì‚Å‰½‚à‚µ‚È‚¢
+				continue;
+			}
 			//Ä¶‚ªI‚í‚Á‚½‚ç
 			if (IsEffekseer3DEffectPlaying(playData.playId) == -1)
 			{
@@ -225,7 +230,6 @@ void EffectController::Delete(const EFF_TYPE _effType, const int _playId)
 			return data.playId == _playId;
 		});
 
-	effects_[_effType].playData.erase(it);
 	it->isDelete = true;
 }
 
