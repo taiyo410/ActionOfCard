@@ -67,10 +67,10 @@ void ModelRenderer::Draw(void)
 void ModelRenderer::SetReserveVS(void)
 {
 	// 定数バッファハンドル
-	int constBuf = modelMaterial_.GetConstBufVS();
+	int constBuf = modelMaterial_.GetConstBufFloat4VS();
 
 	FLOAT4* constBufsPtr = (FLOAT4*)GetBufferShaderConstantBuffer(constBuf);
-	const auto& constBufs = modelMaterial_.GetConstBufsVS();
+	const auto& constBufs = modelMaterial_.GetConstBufsFloat4VS();
 
 	size_t size = constBufs.size();
 	for (int i = 0; i < size; i++)
@@ -90,7 +90,43 @@ void ModelRenderer::SetReserveVS(void)
 
 	// 頂点シェーダー用の定数バッファを定数バッファレジスタにセット
 	SetShaderConstantBuffer(
-		constBuf, DX_SHADERTYPE_VERTEX, CONSTANT_BUF_SLOT_BEGIN_VS);
+		constBuf, DX_SHADERTYPE_VERTEX, FLOAT4_CONSTANT_BUF_SLOT_BEGIN_VS);
+
+	//MATRIXの定数バッファハンドルを取得
+	int constBufMat = modelMaterial_.GetConstBufMatrixVS();
+
+	//書き込み元のマトリックスの取得
+	const auto& constBufsMat = modelMaterial_.GetConstBufsMatrixVS();
+
+	//必要なバイトサイズ
+	size_t requiredSize = constBufsMat.size() * sizeof(MATRIX);
+
+	//ポインタを取得
+	MATRIX* constBufsMatPtr = (MATRIX*)GetBufferShaderConstantBuffer(constBufMat);
+
+	//バッファへの書き込みが不可な場合
+	if (!constBufsMatPtr)
+	{
+		//処理を終了する
+		return;
+	}
+	//書き込み元のマトリックスが空の場合
+	if (!constBufsMat.empty())
+	{
+		//中身の一括コピー
+		memcpy(constBufsMatPtr, constBufsMat.data(), requiredSize);
+	}
+	for (size_t i = 0; i < constBufsMat.size(); ++i)
+	{
+		//格納
+		constBufsMatPtr[i] = constBufsMat[i];
+	}
+
+	//頂点シェーダー用の定数バッファを更新して書き込んだ内容を反映する
+	UpdateShaderConstantBuffer(constBufMat);
+
+	//MATRIXの頂点シェーダ用定数バッファ定数バッファレジスタにセット
+	SetShaderConstantBuffer(constBufMat, DX_SHADERTYPE_VERTEX, MATRIX_CONSTANT_BUF_SLOT_BEGIN_VS);
 
 	// 頂点シェーダー設定
 	SetUseVertexShader(modelMaterial_.GetShaderVS());

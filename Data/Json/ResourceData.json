@@ -438,72 +438,72 @@
       {
         "name": "STANDARD_PS",
         "handle": "StandardPS.cso",
-        "constBufNum": 3
+        "constBufFloat4Num": 3
       },
       {
         "name": "TILEMAP_PS",
         "handle": "TileMapPS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0
       },
       {
         "name": "SKYDOME_PS",
         "handle": "SkyDomePS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
       },
       {
         "name": "HPBAR_PS",
         "handle": "LineHpBarPS.cso",
-        "constBufNum": 3
+        "constBufFloat4Num": 3
       },
       {
         "name": "ARCBAR_PS",
         "handle": "ArcHpBarPS.cso",
-        "constBufNum": 2
+        "constBufFloat4Num": 2
       },
       {
         "name": "CARD_NORMAL_PS",
         "handle": "CardNormalPS.cso",
-        "constBufNum": 2
+        "constBufFloat4Num": 2
       },
       {
         "name": "CARD_RELOAD_PS",
         "handle": "CardReloadPS.cso",
-        "constBufNum": 2
+        "constBufFloat4Num": 2
       },
       {
         "name": "CARD_SELECT_PS",
         "handle": "SelectCardPS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
       },
       {
         "name": "REVOLUTION_POSTEFF_PS",
         "handle": "RevolutionPostEffectPS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
       },
       {
         "name": "CHARACTER_MODEL_PS",
         "handle": "CharacterModelPS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0
       },
       {
         "name": "CHARACTER_SHADOW_PS",
         "handle": "CharacterShadowPS.cso",
-        "constBufNum": 3
+        "constBufFloat4Num": 3
       },
       {
         "name": "SHADOW_PS",
         "handle": "ShadowPS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0
       },
       {
         "name": "SHADOW_PS",
         "handle": "ShadowPS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0
       },
       {
         "name": "SHADOW_STANDARD_PS",
         "handle": "ShadowStandardPS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 1
       }
     ],
 
@@ -512,27 +512,34 @@
       {
         "name": "STANDARD_VS",
         "handle": "StandardVS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0,
+        "constBufMatrixNum": 2
       },
       {
         "name": "TILEMAP_VS",
         "handle": "TileMapVS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
       },
       {
         "name": "CHARACTER_MODEL_VS",
         "handle": "CharacterModelVS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0,
+        "constBufMatrixNum": 2
+      },
+      {
+        "name": "CHARACTER_SHADOW_VS",
+        "handle": "CharacterShadowVS.cso",
+        "constBufFloat4Num": 0
       },
       {
         "name": "SHADOW_MESH_VS",
         "handle": "ShadowMeshVS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0
       },
       {
         "name": "SHADOW_SKINNED_MESH_VS",
         "handle": "ShadowSkinnedMeshVS.cso",
-        "constBufNum": 0
+        "constBufFloat4Num": 0
       }
     ]
   }

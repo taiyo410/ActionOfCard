@@ -206,9 +206,17 @@ void Camera::ChangeMode(const MODE mode)
 	changeMode_[currentMode_]();
 }
 
-void Camera::UndoCameraMode(void)
+void Camera::UndoShadowCamera(void)
 {
-	currentMode_ = preMode_;
+	// クリップ距離を設定する(SetDrawScreenでリセットされる)
+	SetCameraNearFar(CAMERA_NEAR, CAMERA_FAR);
+
+	// カメラの設定(位置と注視点による制御)
+	SetCameraPositionAndTargetAndUpVec(
+		pos_,
+		targetPos_,
+		cameraUp_
+	);
 }
 
 void Camera::SetDefault(void)
@@ -526,7 +534,9 @@ void Camera::SetBeforeDrawShadowCamera(void)
 	if (target.y > TARGET_LIMIT_Y) { target.y = TARGET_LIMIT_Y; }
 
 	// カメラの視点、注視点を設定
-	SetCameraPositionAndTarget_UpVecY(pos_, target);
+	static constexpr VECTOR LIGHT_POS = { 2976, 2281, 1985 };
+	static constexpr VECTOR LIGHT_TARGET = { 2889, 2127, 2079 };
+	SetCameraPositionAndTarget_UpVecY(LIGHT_POS, LIGHT_TARGET);
 }
 
 void Camera::ChangeFixedPoint(void)

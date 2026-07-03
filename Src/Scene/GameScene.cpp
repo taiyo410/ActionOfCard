@@ -78,6 +78,7 @@ void GameScene::Load(void)
 
 void GameScene::Init(void)
 {
+	scnMng_.MakeShadowMapTexture();
 	updatePhase_ = UPDATE_PHASE::NONE;
 
 	//シェイク状態を初期化
@@ -159,6 +160,8 @@ void GameScene::NormalDraw(void)
 
 void GameScene::DirectionDraw(void)
 {
+
+
 	DrawShadow();
 
 	//プレイヤー
@@ -170,6 +173,15 @@ void GameScene::DirectionDraw(void)
 	//キャラクター
 	CharacterManager::GetInstance().Draw();
 
+	// シャドウマップを描画
+	constexpr int MAPSIZE = 256;
+	DrawExtendGraph(
+		Application::SCREEN_SIZE_X - MAPSIZE,
+		Application::SCREEN_SIZE_Y - MAPSIZE,
+		Application::SCREEN_SIZE_X,
+		Application::SCREEN_SIZE_Y,
+		scnMng_.GetShadowMapTexture(),
+		false);
 
 	//演出時の2D描画
 	if (updatePhase_ == UPDATE_PHASE::START_DIRECTION)
@@ -187,7 +199,7 @@ void GameScene::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 
 void GameScene::DrawShadow(void)
 {
-	SetDrawScreen(shadow_->GetShadowMapTexture());
+	SetDrawScreen(scnMng_.GetShadowMapTexture());
 
 	//シャドウ初期化
 	shadow_->DrawInitShadow();
@@ -208,7 +220,7 @@ void GameScene::DrawShadow(void)
 	ClearDrawScreen();
 
 	// カメラ設定を元に戻す
-	scnMng_.GetCamera().lock()->UndoCameraMode();
+	scnMng_.GetCamera().lock()->UndoShadowCamera();
 }
 
 void GameScene::ChangeNone(void)

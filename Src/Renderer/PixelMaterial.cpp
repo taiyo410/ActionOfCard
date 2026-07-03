@@ -16,7 +16,7 @@ PixelMaterial::PixelMaterial(const ResourceManager::SRC _psSrc):
 	shader_ = resMng_.Load(_psSrc).handleId_;
 
 	// 定数バッファの確保サイズ(FLOAT4をいくつ作るか)
-	constBufFloat4Size_ = resMng_.Load(_psSrc).constBufNum;
+	constBufFloat4Size_ = resMng_.Load(_psSrc).constBufFloat4Num;
 
 	// ピクセルシェーダー用の定数バッファを作成
 	constBuf_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4Size_);

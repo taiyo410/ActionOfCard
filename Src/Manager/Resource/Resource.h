@@ -78,8 +78,8 @@ public:
 	/// @brief シェーダ用のコンストラクタ
 	/// @param type リソースの種類
 	/// @param path リソースパス
-	/// @param constBufNum 定数バッファの個数
-	ResourceData(TYPE type, const std::wstring& path, int constBufNum);
+	/// @param constBufFloat4Num 定数バッファの個数
+	ResourceData(TYPE type, const std::wstring& path, int constBufFloat4Num, int constBufMatrixNum);
 
 	/// @brief デストラクタ
 	/// @param  
@@ -124,8 +124,10 @@ public:
 	LONGLONG loopStartTime_;	//サウンドのループ開始時間(1秒=1000000)
 	LONGLONG loopEndTime_;		//サウンドのループ終了時間(1秒=1000000)
 
-	//シェーダの定数バッファの個数
-	int constBufNum;
+	//シェーダの定数バッファ(FLOAT4)の個数
+	int constBufFloat4Num;
+	//シェーダの定数バッファ(MATRIX)の個数
+	int constBufMatrixNum;
 
 	//JSONデータ
 	nlohmann::json jsonData;

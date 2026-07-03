@@ -82,10 +82,11 @@ ResourceData::ResourceData(TYPE type, const std::wstring& path
 	AddFunc();
 }
 
-ResourceData::ResourceData(TYPE type, const std::wstring& path, int constBufNum):
+ResourceData::ResourceData(TYPE type, const std::wstring& path, int constBufFloat4Num, int constBufMatrixNum):
 	type_(type),
 	path_(path),
-	constBufNum(constBufNum),
+	constBufFloat4Num(constBufFloat4Num),
+	constBufMatrixNum(constBufMatrixNum),
 	numX_(UtilityCommon::INITIAL_HANDLE),
 	numY_(UtilityCommon::INITIAL_HANDLE),
 	sizeX_(UtilityCommon::INITIAL_HANDLE),

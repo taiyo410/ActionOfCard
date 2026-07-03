@@ -130,6 +130,9 @@ public:
 	/// @param  
 	void Fade(void);
 
+	//シャドウマップ用テクスチャの作成
+	void MakeShadowMapTexture(void);
+
 private:
 
 #pragma region メンバー定数
@@ -154,7 +157,7 @@ private:
 	static constexpr int COLOR_BIT_DEPTH = 24;
 
 	// シャドウマップサイズ
-	static constexpr int SHADOW_MAP_SIZE = 16000;
+	static constexpr int SHADOW_MAP_SIZE = 3000;
 
 	// 通常のチャンネル数
 	static constexpr int DEFAULT_CHANNEL_NUM = 4;
@@ -207,9 +210,6 @@ private:
 
 	//ポストエフェクトスクリーンの描画
 	void PostEffectScreen(void);
-
-	//シャドウマップ用テクスチャの作成
-	void MakeShadowMapTexture(void);
 
 #pragma endregion
 };

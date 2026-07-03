@@ -9,11 +9,12 @@
 Shadow::Shadow(void):
 	scnMng_(SceneManager::GetInstance()),
 	charaMng_(CharacterManager::GetInstance()),
-	shadowMapTexture_(UtilityCommon::INITIAL_HANDLE),
 	shadowPsHandle_(UtilityCommon::INITIAL_HANDLE),
 	shadowMeshVSHandle_(UtilityCommon::INITIAL_HANDLE),
 	shadowSkinnedMeshVSHandle_(UtilityCommon::INITIAL_HANDLE)
 {
+	lightViewMatrix_ = MATRIX{};
+	lightProjectionMatrix_ = MATRIX{};
 }
 
 Shadow::~Shadow(void)
@@ -38,12 +39,17 @@ void Shadow::DrawInitShadow(void)
 	SetBackgroundColor(0, 0, 0);
 
 	//カメラをシャドウマップ用に切り替える
-	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::SHADOW_CAMERA);
+	scnMng_.GetCamera().lock()->SetBeforeDrawShadowCamera();
 }
 
 void Shadow::DrawShadowNormal(void)
 {
 	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::SHADOW_CAMERA);
+
+	//設定したカメラのビュー行列と射影行列を取得しておく
+	lightViewMatrix_ = GetCameraViewportMatrix();
+	lightProjectionMatrix_ = GetCameraProjectionMatrix();
+
 	// オリジナルシェーダー使用の設定
 	MV1SetUseOrigShader(TRUE);
 
@@ -58,7 +64,7 @@ void Shadow::DrawShadowSkinned(void)
 {
 	//影用深度記録画像をクリアする
 	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::SHADOW_CAMERA);
-	SetDrawScreen(shadowMapTexture_);
+	//SetDrawScreen(shadowMapTexture_);
 	// オリジナルシェーダー使用の再設定
 	MV1SetUseOrigShader(TRUE);
 

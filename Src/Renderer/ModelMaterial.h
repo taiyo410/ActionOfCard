@@ -59,6 +59,15 @@ public:
 	/// @param contBuf 定数バッファ
 	void SetConstBufPS(int idx, const FLOAT4& contBuf);
 
+	/// @brief 行列の追加
+	/// @param mat 行列
+	void AddConstBufVSMatrix(const MATRIX& mat);
+
+	/// @brief 行列の更新
+	/// @param idx 配列番号
+	/// @param mat 行列
+	void SetConstBufVSMatrix(const int idx,const MATRIX& mat);
+
 	/// @brief テクスチャを更新
 	/// @param slot スロット番号
 	/// @param texDiffuse テクスチャバッファ
@@ -74,20 +83,30 @@ public:
 	/// @return ピクセルシェーダ
 	int GetShaderPS(void) const { return shaderPS_; }
 
-	/// @brief 頂点シェーダ定数バッファハンドルの取得
+	/// @brief FLOAT4の頂点シェーダ定数バッファハンドルの取得
 	/// @param  
-	/// @return 頂点シェーダ定数バッファハンドル
-	int GetConstBufVS(void) const { return constBufVS_; }
+	/// @return FLOAT4の頂点シェーダ定数バッファハンドル
+	int GetConstBufFloat4VS(void) const { return constBufFloat4VS_; }
+
+	/// @brief Matrixの頂点シェーダ定数バッファハンドルの取得
+	/// @param  
+	/// @return Matrixの頂点シェーダ定数バッファハンドル
+	int GetConstBufMatrixVS(void)const { return constBufMatrixVS_; }
 
 	/// @brief ピクセルシェーダ定数バッファハンドルの取得
 	/// @param  
 	/// @return ピクセルシェーダ定数バッファハンドル
 	int GetConstBufPS(void) const { return constBufPS_; }
 
-	/// @brief 頂点シェーダ定数バッファの取得
+	/// @brief FLOAT4頂点シェーダ定数バッファの取得
 	/// @param  
-	/// @return 頂点シェーダ定数バッファ
-	const std::vector<FLOAT4>& GetConstBufsVS(void) const { return constBufsVS_; }
+	/// @return FLOAT4頂点シェーダ定数バッファ
+	const std::vector<FLOAT4>& GetConstBufsFloat4VS(void) const { return constBufsFloat4VS_; }
+
+	/// @brief MATRIX頂点シェーダ定数バッファの取得
+	/// @param  
+	/// @return MATRIX頂点シェーダ定数バッファ
+	const std::vector<MATRIX>& GetConstBufsMatrixVS(void) const { return constBufsMatrixVS_; }
 
 	/// @brief ピクセルシェーダ定数バッファの取得
 	/// @param  
@@ -123,10 +142,16 @@ private:
 	int constBufFloat4SizeVS_;
 
 	// 頂点定数バッファハンドル
-	int constBufVS_;
+	int constBufFloat4VS_;
+
+	//MATRIX用の定数バッファハンドル
+	int constBufMatrixVS_;
 
 	// ピクセル定数バッファの確保サイズ(FLOAT4をいくつ作るか)
 	int constBufFloat4SizePS_;
+
+	//頂点行列定数バッファの確保サイズ(MATRIXをいくつ作るか)
+	int constBufMatrixSizeVS_;
 
 	// ピクセル定数バッファハンドル
 	int constBufPS_;
@@ -135,11 +160,15 @@ private:
 	// テクスチャアドレス
 	TEXADDRESS texAddress_;
 
-	// 定数定数バッファ
-	std::vector<FLOAT4> constBufsVS_;
+	// FLOAT4の定数バッファ
+	std::vector<FLOAT4> constBufsFloat4VS_;
+
+	//MATRIXの定数バッファ
+	std::vector<MATRIX> constBufsMatrixVS_;
 
 	// ピクセル定数バッファ
 	std::vector<FLOAT4> constBufsPS_;
+
 
 	// 画像
 	std::map<int, int> textures_;

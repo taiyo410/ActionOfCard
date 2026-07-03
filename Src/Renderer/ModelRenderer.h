@@ -9,8 +9,11 @@ class ModelRenderer
 
 public:
 
-	// 頂点シェーダ用オリジナル定数バッファの使用開始スロット
-	static constexpr int CONSTANT_BUF_SLOT_BEGIN_VS = 7;
+	// FLAOT4の頂点シェーダ用オリジナル定数バッファの使用開始スロット
+	static constexpr int FLOAT4_CONSTANT_BUF_SLOT_BEGIN_VS = 7;
+
+	// MATRIX頂点シェーダ用オリジナル定数バッファの使用開始スロット
+	static constexpr int MATRIX_CONSTANT_BUF_SLOT_BEGIN_VS = 8;
 
 	// ピクセルシェーダ用オリジナル定数バッファの使用開始スロット
 	static constexpr int CONSTANT_BUF_SLOT_BEGIN_PS = 4;

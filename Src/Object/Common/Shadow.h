@@ -40,10 +40,23 @@ public:
 	/// @param  
 	void ResetShader(void);
 
-	/// @brief シャドウマップ用テクスチャの取得
-	/// @param  
-	/// @return 
-	const int GetShadowMapTexture(void)const { return shadowMapTexture_; }
+	/// @brief ライトビュー行列の取得
+	/// @param
+	/// @return ライトビュー行列
+	const MATRIX& GetLightViewMatrix(void) const { return lightViewMatrix_; }
+
+	/// @brief ライトプロジェクション行列の取得
+	/// @param
+	/// @return ライトプロジェクション行列
+	const MATRIX& GetLightProjectionMatrix(void) const { return lightProjectionMatrix_; }
+
+	/// @brief ライトのビュー行列を設定
+	/// @param lightViewMat ビュー行列
+	void SetLightViewMatrix(const MATRIX& lightViewMat) { lightViewMatrix_ = lightViewMat; }
+
+	/// @brief ライトのプロジェクション行列を設定
+	/// @param lightProjectionMat プロジェクション行列
+	void SetLightProjectionMatrix(const MATRIX& lightProjectionMat) { lightProjectionMatrix_ = lightProjectionMat; }
 
 private:
 
@@ -52,7 +65,7 @@ private:
 	static constexpr int COLOR_BIT_DEPTH = 24;
 
 	// シャドウマップサイズ
-	static constexpr int SHADOW_MAP_SIZE = 16000;
+	static constexpr int SHADOW_MAP_SIZE = 3000;
 
 	// 通常のチャンネル数
 	static constexpr int DEFAULT_CHANNEL_NUM = 4;
@@ -63,10 +76,12 @@ private:
 	SceneManager& scnMng_;				// シーン管理クラスの参照
 	CharacterManager& charaMng_;	// キャラクター管理クラスの参照
 
-	int shadowMapTexture_;			// シャドウマップ用テクスチャのハンドル
 	int shadowPsHandle_;			// シャドウマップ生成用ピクセルシェーダーのハンドル
 	int shadowMeshVSHandle_;		// シャドウマップ生成用メッシュ頂点シェーダーのハンドル
 	int shadowSkinnedMeshVSHandle_;	// シャドウマップ生成用スキンメッシュのハンドル
+
+	MATRIX lightViewMatrix_;			// ライトのビュー行列
+	MATRIX lightProjectionMatrix_;	// ライトのプロジェクション行列
 #pragma endregion
 
 

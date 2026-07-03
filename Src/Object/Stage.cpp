@@ -51,9 +51,16 @@ void Stage::Init(void)
 		ResourceManager::SRC::TILEMAP_VS,
 		ResourceManager::SRC::SHADOW_STANDARD_PS
 	);
-	material_->SetTextureBuf(8, scnMng_.GetShadowMapTexture());
-	material_->AddConstBufVS({ STAGE_UV_SCL,0.0f,0.0f,0.0f });
+
+	const int shadowMapHandle = scnMng_.GetShadowMapTexture();
+	material_->SetTextureBuf(8, shadowMapHandle);
+//	material_->AddConstBufVS({ STAGE_UV_SCL,0.0f,0.0f,0.0f });
 	material_->AddConstBufPS({ worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
+
+	const auto cameraViewMat = GetCameraViewportMatrix();
+	const auto cameraProjectionMat= GetCameraProjectionMatrix();
+	material_->AddConstBufVSMatrix(cameraViewMat);
+	material_->AddConstBufVSMatrix(cameraProjectionMat);
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId,*material_);
 
 	//壁のマテリアルとレンダラー
@@ -68,6 +75,9 @@ void Stage::Init(void)
 	wallMaterial_->AddConstBufPS({ worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
 	//環境光を追加
 	wallMaterial_->AddConstBufPS({ AMBIENT_VEC.x,AMBIENT_VEC.y,AMBIENT_VEC.z,0.0f });
+
+	wallMaterial_->AddConstBufVSMatrix(cameraViewMat);
+	wallMaterial_->AddConstBufVSMatrix(cameraProjectionMat);
 	wallRenderer_ = std::make_unique<ModelRenderer>(wallTrans_.modelId,*wallMaterial_);
 
 	//モデル更新
@@ -84,6 +94,18 @@ void Stage::Update(void)
 
 void Stage::Draw(void)
 {
+	const auto cameraViewMat = GetCameraViewportMatrix();
+	const auto cameraProjectionMat = GetCameraProjectionMatrix();
+
+	//光の方向を取得
+	VECTOR worldRightDir = GetLightDirection();
+
+	wallMaterial_->SetConstBufVSMatrix(0, cameraViewMat);
+	wallMaterial_->SetConstBufVSMatrix(1, cameraProjectionMat);
+	wallMaterial_->SetConstBufPS(0, { worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
+	material_->SetConstBufPS(0, { worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
+	material_->SetConstBufVSMatrix(0, cameraViewMat);
+	material_->SetConstBufVSMatrix(1, cameraProjectionMat);
 	wallRenderer_->Draw();
 	renderer_->Draw();
 }

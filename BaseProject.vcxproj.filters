@@ -857,5 +857,6 @@
     <FxCompile Include="Src\Shader\Model\StandardVS.hlsl" />
     <FxCompile Include="Src\Shader\Model\ShadowSkinnedMeshVS.hlsl" />
     <FxCompile Include="Src\Shader\Model\ShadowStandardPS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\CharacterShadowVS.hlsl" />
   </ItemGroup>
 </Project>

@@ -26,14 +26,14 @@ cbuffer cbParam : register(b4)
     float3 g_light_dir;         // ライト方向
     float dummy;
     
-    //float3 g_ambient_color;     // 環境光
+    //float3 g_ambient_color; // 環境光
     //float dummy2;
     
     //float3 g_spot_light_pos;    // スポットライト位置
     //float g_is_light;           // ライトの電源(0オフ、1オン)
     
     //float3 g_spot_light_dir;    // スポットライト方向
-    float dummy4;
+    //float dummy4;
 }
 
 float4 main(PS_INPUT PSInput) : SV_TARGET0
@@ -43,7 +43,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     // ベースカラー
     float4 texColor = diffuseMapTexture.Sample(diffuseMapSampler, uv);
     float3 material = texColor.rgb;
-    
+
     // 法線計算
     float3 tanNormal = normalize(normalMapTexture.Sample(normalMapSampler, uv).xyz * 2 - 1);
     float3 normal = CalculateNormal(PSInput.tan, PSInput.bin, PSInput.normal, tanNormal);
@@ -60,11 +60,12 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
  
     // 最終カラー 
     float3 litColor = saturate(diffuse) * 0.8f;
+  
     
-    // サブテクスチャ色の取得
-    float4 subTexColor = subTexture.Sample(subSampler, uv);
-    litColor += subTexColor.rgb;
-      
+    //// サブテクスチャ色の取得
+    //float4 subTexColor = subTexture.Sample(subSampler, uv);
+    //litColor += subTexColor.rgb;
+          
     // フォグ適用
    // float3 foggedColor = ApplyFog(litColor, PSInput.fogFactor);
     
@@ -76,6 +77,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     //foggedColor += spotLight * g_is_light;
 
     // 影の影響力を取得
+    return float4(litColor, texColor.a);
     float shadowFactor = ShadowCalculation(PSInput.lightAtPos, shadowMap0Texture, shadowMap0Sampler, PSInput.normal, g_light_dir);
 
     // 最終色に影の係数を乗算

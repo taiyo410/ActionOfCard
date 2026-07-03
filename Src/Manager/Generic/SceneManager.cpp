@@ -81,9 +81,6 @@ void SceneManager::Init3D(void)
 	SetFogEnable(true);
 	SetFogColor(FOG_COLOR_R, FOG_COLOR_G, FOG_COLOR_B);
 	SetFogStartEnd(FOG_START,FOG_END);
-
-	//シャドウマップのテクスチャを作成
-	MakeShadowMapTexture();
 }
 
 void SceneManager::Update(void)

@@ -169,7 +169,7 @@ public:
 
 	/// @brief カメラのモードを元に戻す
 	/// @param  
-	void UndoCameraMode(void);
+	void UndoShadowCamera(void);
 	
 	/// @brief サブ処理の変更
 	/// @param _submode サブ処理(イージングなど)
@@ -215,6 +215,10 @@ public:
 	{
 		return directionMode_;
 	}
+
+	/// @brief シャドウ用カメラに設定する
+	/// @param  
+	void SetBeforeDrawShadowCamera(void);
 
 private:
 
@@ -425,7 +429,6 @@ private:
 	void SetBeforeDrawLerpCamera(void);
 	void SetBeforeDrawTargetPoint(void);
 	void SetBeforeDrawStartDirection(void);
-	void SetBeforeDrawShadowCamera(void);
 
 	//遷移
 	void ChangeFixedPoint(void);

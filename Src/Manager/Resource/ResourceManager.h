@@ -133,6 +133,7 @@ public:
 		STANDARD_PS,				//通常描画シェーダー
 		TILEMAP_PS,					//タイルマップ
 		CHARACTER_MODEL_PS,			//キャラクター用のピクセルシェーダ
+		CHARACTER_SHADOW_PS,		//キャラクター用のシャドウシェーダ
 		SKYDOME_PS,					//スカイドーム
 		HPBAR_PS,					//HPバー
 		ARCBAR_PS,					//円形ゲージ
@@ -140,7 +141,6 @@ public:
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
 		REVOLUTION_POSTEFF_PS,		//革命を起こした時のポストエフェクト
-		CHARACTER_SHADOW_PS,		//キャラクター用のシャドウシェーダ
 		SHADOW_PS,					//シャドウ用のピクセルシェーダ
 		SHADOW_STANDARD_PS,			//標準シャドウモデル用のピクセルシェーダ
 
@@ -148,6 +148,7 @@ public:
 		STANDARD_VS,				//通常描画シェーダー
 		TILEMAP_VS,					//タイルマップ
 		CHARACTER_MODEL_VS,			//キャラクターモデル
+		CHARACTER_SHADOW_VS,			//キャラクターモデル
 		SHADOW_MESH_VS,				//シャドウメッシュ
 		SHADOW_SKINNED_MESH_VS,		//シャドウスキンメッシュ
 	};

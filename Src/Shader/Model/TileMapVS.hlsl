@@ -24,7 +24,7 @@ cbuffer cbParam : register(b7)
  
 VS_OUTPUT main(VS_INPUT VSInput)
 {
-VS_OUTPUT ret;
+VS_OUTPUT ret = (VS_OUTPUT)0;
 // 頂点座標変換 +++++++++++++++++++++++++++++++++++++( 開始 )
     float4 lLocalPosition;
     float4 lWorldPosition;
@@ -40,12 +40,12 @@ VS_OUTPUT ret;
     ret.worldPos = lWorldPosition.xyz; // ワールド座標をピクセルシェーダへ引き継ぐ
 
 // ワールド座標をビュー座標に変換
-    lViewPosition.w = 1.0f;
-    lViewPosition.xyz = mul(lWorldPosition, g_base.viewMatrix);
-    ret.vwPos.xyz = lViewPosition.xyz;
+    //lViewPosition.w = 1.0f;
+    //lViewPosition.xyz = mul(lWorldPosition, g_base.viewMatrix);
+    //ret.vwPos.xyz = lViewPosition.xyz;
 
 // ビュー座標を射影座標に変換
-    ret.svPos = mul(lViewPosition, g_base.projectionMatrix);
+    //ret.svPos = mul(lViewPosition, g_base.projectionMatrix);
 
 // 頂点座標変換 +++++++++++++++++++++++++++++++++++++( 終了 )
     // その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 開始 )

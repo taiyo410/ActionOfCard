@@ -3,47 +3,65 @@
 #include "ModelMaterial.h"
 
 ModelMaterial::ModelMaterial(const ResourceManager::SRC _vsSrc, const ResourceManager::SRC _psSrc):
-	resMng_(ResourceManager::GetInstance())
+	resMng_(ResourceManager::GetInstance()),
+	constBufMatrixSizeVS_(),
+	constBufFloat4SizePS_(),
+	constBufFloat4VS_(),
+	constBufMatrixVS_(),
+	constBufPS_(),
+	shaderPS_(),
+	shaderVS_(),
+	texAddress_()
 {
+	//ロードした素材データ
+	const ResourceData& vsLoadData = resMng_.Load(_vsSrc);
+	//ピクセルシェーダのデータ
+	const ResourceData& psLoadData = resMng_.Load(_psSrc);
+
+
 	//素材タイプが異なる場合は処理を飛ばす
-	if (resMng_.Load(_vsSrc).type_ != ResourceData::TYPE::VERTEX_SHADER
-		|| resMng_.Load(_psSrc).type_ != ResourceData::TYPE::PIXEL_SHADER)
+	if (vsLoadData.type_ != ResourceData::TYPE::VERTEX_SHADER
+		|| psLoadData.type_ != ResourceData::TYPE::PIXEL_SHADER)
 	{
-		assert(resMng_.Load(_vsSrc).type_ == ResourceData::TYPE::VERTEX_SHADER
-			|| resMng_.Load(_psSrc).type_ == ResourceData::TYPE::PIXEL_SHADER
+		assert(vsLoadData.type_ == ResourceData::TYPE::VERTEX_SHADER
+			|| psLoadData.type_ == ResourceData::TYPE::PIXEL_SHADER
 			&& "シェーダのタイプが不正です");
 		return;
 	}
-
+	// ピクセルシェーダのロード
+	shaderPS_ = psLoadData.handleId_;
 
 	// 頂点シェーダのロード
-	shaderVS_ = resMng_.Load(_vsSrc).handleId_;
+	shaderVS_ = vsLoadData.handleId_;
 
 	// 頂点定数バッファの確保サイズ(FLOAT4をいくつ作るか)
-	constBufFloat4SizeVS_ = resMng_.Load(_vsSrc).constBufNum;
+	constBufFloat4SizeVS_ = vsLoadData.constBufFloat4Num;
+
+	//MATRIX定数バッファの確保サイズ
+	constBufMatrixSizeVS_ = vsLoadData.constBufMatrixNum;
 
 	// 頂点シェーダー用の定数バッファを作成
-	constBufVS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizeVS_);
-
-	// ピクセルシェーダのロード
-	shaderPS_ = resMng_.Load(_psSrc).handleId_;
+	//FLOAT4
+	constBufFloat4VS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizeVS_);
+	//MATRIX
+	constBufMatrixVS_ = CreateShaderConstantBuffer(sizeof(MATRIX) * constBufMatrixSizeVS_);
 
 	// ピクセル定数バッファの確保サイズ(FLOAT4をいくつ作るか)
-	constBufFloat4SizePS_ = resMng_.Load(_psSrc).constBufNum;
+	constBufFloat4SizePS_ = psLoadData.constBufFloat4Num;
 
 	// ピクセルシェーダー用の定数バッファを作成
+	//FLOAT4
 	constBufPS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizePS_);
 
 	// テクスチャアドレス
 	texAddress_ = TEXADDRESS::CLAMP;
-
 }
 
 void ModelMaterial::AddConstBufVS(const FLOAT4& contBuf)
 {
-	if (constBufFloat4SizeVS_ > constBufsVS_.size())
+	if (constBufFloat4SizeVS_ > constBufsFloat4VS_.size())
 	{
-		constBufsVS_.emplace_back(contBuf);
+		constBufsFloat4VS_.emplace_back(contBuf);
 	}
 }
 
@@ -57,12 +75,12 @@ void ModelMaterial::AddConstBufPS(const FLOAT4& contBuf)
 
 void ModelMaterial::SetConstBufVS(int idx, const FLOAT4& contBuf)
 {
-	if (idx >= constBufsVS_.size())
+	if (idx >= constBufsFloat4VS_.size())
 	{
 		return;
 	}
 
-	constBufsVS_[idx] = contBuf;
+	constBufsFloat4VS_[idx] = contBuf;
 }
 
 void ModelMaterial::SetConstBufPS(int idx, const FLOAT4& contBuf)
@@ -73,6 +91,24 @@ void ModelMaterial::SetConstBufPS(int idx, const FLOAT4& contBuf)
 	}
 
 	constBufsPS_[idx] = contBuf;
+}
+
+void ModelMaterial::AddConstBufVSMatrix(const MATRIX& mat)
+{
+	if (constBufMatrixSizeVS_ > constBufsMatrixVS_.size())
+	{
+		constBufsMatrixVS_.emplace_back(mat);
+	}
+}
+
+void ModelMaterial::SetConstBufVSMatrix(const int idx, const MATRIX& mat)
+{
+	if (idx >= constBufsMatrixVS_.size())
+	{
+		return;
+	}
+
+	constBufsMatrixVS_[idx] = mat;
 }
 
 void ModelMaterial::SetTextureBuf(int slot, int texDiffuse)
@@ -90,7 +126,7 @@ void ModelMaterial::SetTextureBuf(int slot, int texDiffuse)
 ModelMaterial::~ModelMaterial(void)
 {
 	DeleteShader(shaderVS_);
-	DeleteShaderConstantBuffer(constBufVS_);
+	DeleteShaderConstantBuffer(constBufFloat4VS_);
 	DeleteShader(shaderPS_);
 	DeleteShaderConstantBuffer(constBufPS_);
 }

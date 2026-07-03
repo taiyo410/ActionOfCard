@@ -129,6 +129,7 @@ ResourceManager::ResourceManager(void):
 		{"STANDARD_VS",SRC::STANDARD_VS },
 		{"TILEMAP_VS",SRC::TILEMAP_VS},
 		{"CHARACTER_MODEL_VS",SRC::CHARACTER_MODEL_VS},
+		{"CHARACTER_SHADOW_VS",SRC::CHARACTER_SHADOW_VS},
 		{"SHADOW_MESH_VS",SRC::SHADOW_MESH_VS},
 		{"SHADOW_SKINNED_MESH_VS",SRC::SHADOW_SKINNED_MESH_VS}
 	};
@@ -403,12 +404,17 @@ void ResourceManager::LoadResourceShader(const RES_INFO _info, const nlohmann::j
 	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_info,_data);
 
 	//定数バッファサイズ
-	int constBufNum = 0;
+	int constBufFloat4Num = 0;
+	int constBufMatrixNum = 0;
 
-	//定数バッファサイズを取得
-	constBufNum = _data.value("constBufNum", 0);
+	//FLOAT4の定数バッファサイズを取得
+	constBufFloat4Num = _data.value("constBufFloat4Num", 0);
+
+	//MATRIXの定数バッファサイズを取得
+	constBufMatrixNum = _data.value("constBufMatrixNum", 0);
+
 	//シェーダのリソース情報を渡す
-	res = std::make_unique<ResourceData>(parameter.type, parameter.path, constBufNum);
+	res = std::make_unique<ResourceData>(parameter.type, parameter.path, constBufFloat4Num, constBufMatrixNum);
 
 	//配列に挿入
 	resourcesMap_.emplace(parameter.src, std::move(res));
