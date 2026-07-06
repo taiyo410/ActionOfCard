@@ -46,6 +46,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
 
     // –@üŒvZ
     float3 tanNormal = normalize(normalMapTexture.Sample(normalMapSampler, uv).xyz * 2 - 1);
+    
     float3 normal = CalculateNormal(PSInput.tan, PSInput.bin, PSInput.normal, tanNormal);
  
     // Œõ‚Ì•ûŒü
@@ -77,12 +78,12 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     //foggedColor += spotLight * g_is_light;
 
     // ‰e‚Ì‰e‹¿—Í‚ğæ“¾
-    return float4(litColor, texColor.a);
+    //return float4(litColor, texColor.a);
     float shadowFactor = ShadowCalculation(PSInput.lightAtPos, shadowMap0Texture, shadowMap0Sampler, PSInput.normal, g_light_dir);
 
     // ÅIF‚É‰e‚ÌŒW”‚ğæZ
-    litColor.rgb *= shadowFactor;
+    material.rgb *= shadowFactor;
     
     // F‚Ìo—Í
-    return float4(litColor, texColor.a);
+    return float4(material, texColor.a);
 }

@@ -33,6 +33,9 @@ public:
 	/// @param  
 	void Draw(void);
 
+
+	void DrawShadow(void);
+
 	/// @brief 2D•`‰æ
 	/// @param  
 	void Draw2D(void);

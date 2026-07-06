@@ -63,8 +63,8 @@ VS_OUTPUT ret;
 //// ライト方向(ローカル)
 //    ret.lightDir = float3(0.0f, 0.0f, 0.0f);
     
-// ライトから見た座標
-    ret.lightAtPos = float3(0.0f, 0.0f, 0.0f);
+//// ライトから見た座標
+//    ret.lightAtPos = float3(0.0f, 0.0f, 0.0f);
     
 // その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 終了 )
 // 出力パラメータを返す

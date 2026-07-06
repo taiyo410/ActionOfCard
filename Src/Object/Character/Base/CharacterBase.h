@@ -138,6 +138,10 @@ public:
 	/// @param  
 	void Draw(void)override;
 
+	/// @brief ‰e‚ğì‚é‚½‚ß‚Ìƒ‚ƒfƒ‹•`‰æ
+	/// @param  
+	void DrawShadow(void);
+
 	//2DŠÖ˜A‚Ì•`‰æ
 	virtual void Draw2D(void) = 0;
 

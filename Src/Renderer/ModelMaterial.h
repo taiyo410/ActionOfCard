@@ -127,6 +127,8 @@ public:
 	/// @param texA テクスチャアドレス
 	void SetTextureAddress(TEXADDRESS texA) { texAddress_ = texA; }
 
+	void DrawShaderDebug(void);
+
 private:
 
 	// 頂点シェーダ

@@ -39,17 +39,11 @@ void Shadow::DrawInitShadow(void)
 	SetBackgroundColor(0, 0, 0);
 
 	//カメラをシャドウマップ用に切り替える
-	scnMng_.GetCamera().lock()->SetBeforeDrawShadowCamera();
+	scnMng_.GetCamera().lock()->SetShadowCamera();
 }
 
 void Shadow::DrawShadowNormal(void)
 {
-	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::SHADOW_CAMERA);
-
-	//設定したカメラのビュー行列と射影行列を取得しておく
-	lightViewMatrix_ = GetCameraViewportMatrix();
-	lightProjectionMatrix_ = GetCameraProjectionMatrix();
-
 	// オリジナルシェーダー使用の設定
 	MV1SetUseOrigShader(TRUE);
 
@@ -62,10 +56,13 @@ void Shadow::DrawShadowNormal(void)
 
 void Shadow::DrawShadowSkinned(void)
 {
+	//設定したカメラのビュー行列と射影行列を取得しておく
+	lightViewMatrix_ = GetCameraViewportMatrix();
+	lightProjectionMatrix_ = GetCameraProjectionMatrix();
+
 	//影用深度記録画像をクリアする
-	scnMng_.GetCamera().lock()->ChangeMode(Camera::MODE::SHADOW_CAMERA);
-	//SetDrawScreen(shadowMapTexture_);
-	// オリジナルシェーダー使用の再設定
+	scnMng_.GetCamera().lock()->SetShadowCamera();
+	//オリジナルシェーダー使用の再設定
 	MV1SetUseOrigShader(TRUE);
 
 	// 深度記録画像への剛体メッシュ描画用の頂点シェーダーをセット

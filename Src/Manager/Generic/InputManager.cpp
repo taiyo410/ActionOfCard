@@ -60,6 +60,11 @@ void InputManager::Init(void)
 
 	//デバッグ
 	Add(KEY_INPUT_1);
+	Add(KEY_INPUT_I);
+	Add(KEY_INPUT_J);
+	Add(KEY_INPUT_K);
+	Add(KEY_INPUT_L);
+	Add(KEY_INPUT_I);
 
 	InputManager::MouseInfo info;
 

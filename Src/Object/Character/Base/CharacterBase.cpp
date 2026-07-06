@@ -2,6 +2,7 @@
 #include "Utility/Utility3D.h"
 #include "Utility/UtilityJson.h"
 #include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
 #include "Manager/Generic/UIManager.h"
 #include "Renderer/ModelMaterial.h"
 #include "Renderer/ModelRenderer.h"
@@ -88,12 +89,6 @@ void CharacterBase::LoadCommon(void)
 	//共通のパラメータのロード
 	LoadCommonData();
 
-	material_ = std::make_unique<ModelMaterial>(
-		ResourceManager::SRC::CHARACTER_MODEL_VS,
-		ResourceManager::SRC::CHARACTER_MODEL_PS);
-
-	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
-
 	//当たり判定の生成
 	MakeColliderGeometry();
 
@@ -130,6 +125,17 @@ void CharacterBase::LoadCommonData(void)
 
 void CharacterBase::InitCommon(void)
 {
+	material_ = std::make_unique<ModelMaterial>(
+		ResourceManager::SRC::CHARACTER_MODEL_VS,
+		ResourceManager::SRC::CHARACTER_MODEL_PS);
+
+	const auto cameraViewMat = scnMng_.GetCamera().lock()->GetLightViewMatrix();
+	const auto cameraProjectionMat = scnMng_.GetCamera().lock()->GetLightProjectionMatrix();
+	material_->AddConstBufVSMatrix(cameraViewMat);
+	material_->AddConstBufVSMatrix(cameraProjectionMat);
+
+	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
+
 	trans_.scl = { modelScl_,modelScl_,modelScl_ };
 	trans_.quaRotLocal =
 		Quaternion::Euler({ UtilityCommon::Deg2RadF(localDeg_.x)
@@ -174,6 +180,12 @@ void CharacterBase::Init(void)
 
 void CharacterBase::Update(void)
 {
+	const MATRIX cameraViewMat = GetCameraViewportMatrix();
+	const MATRIX cameraProjectionMat = GetCameraProjectionMatrix();
+	material_->SetConstBufVSMatrix(0,cameraViewMat);
+	material_->SetConstBufVSMatrix(1,cameraProjectionMat);
+	material_->SetTextureBuf(8, scnMng_.GetShadowMapTexture());
+
 	updatePhase_();
 
 	//アニメーションの更新
@@ -190,11 +202,16 @@ void CharacterBase::Draw(void)
 	DrawCharacter();
 }
 
+void CharacterBase::DrawShadow(void)
+{
+	MV1DrawModel(trans_.modelId);
+}
+
 void CharacterBase::DrawCommon(void)
 {
 	//通常描画
-	//MV1DrawModel(trans_.modelId);
-	renderer_->Draw();
+	MV1DrawModel(trans_.modelId);
+	//renderer_->Draw();
 }
 
 void CharacterBase::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)

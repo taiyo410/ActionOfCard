@@ -80,7 +80,6 @@ void Camera::Init(void)
 		{MODE::TARGET_POINT,[this]() {ChangeTargetCamera(); }},
 		{MODE::CHANGE_TARGET,[this]() {ChangeTargetLerp(); }},
 		{MODE::START_DIRECTION ,[this]() {ChangeStartDirection(); }},
-		{MODE::SHADOW_CAMERA ,[this]() {ChangeShadowCamera(); }}
 	};
 
 	//カメラのサブモード
@@ -111,6 +110,32 @@ void Camera::Update(void)
 
 	//イージングなどの更新
 	subUpdate_();
+
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_I))
+	{
+		lightPos_.z += 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_K))
+	{
+		lightPos_.z -= 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_J))
+	{
+		lightPos_.x -= 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_L))
+	{
+		lightPos_.x += 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_I))
+	{
+		lightPos_.y += 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_P))
+	{
+		lightPos_.y -= 10.0f;
+	}
+
 }
 
 void Camera::SetBeforeDraw(void)
@@ -131,6 +156,7 @@ void Camera::SetBeforeDraw(void)
 
 void Camera::Draw(void)
 {
+	DrawFormatString(500, 500, 0xffffff, L"cameraPos(%f,%f)", lightPos_.x, lightPos_.y);
 }
 
 void Camera::OnHit(const std::weak_ptr<Collider> _hitCol)
@@ -516,9 +542,10 @@ void Camera::SetBeforeDrawStartDirection(void)
 	directionUpdate_();
 }
 
-void Camera::SetBeforeDrawShadowCamera(void)
+void Camera::SetShadowCamera(void)
 {
 	constexpr float SIZE = 13250.0f;
+	//constexpr float SIZE = 3000.0f;
 	constexpr float S_NEAR = 10.0f;
 	constexpr float S_FAR = 13050.0f;
 	constexpr float TARGET_LIMIT_Y = 0;
@@ -531,12 +558,18 @@ void Camera::SetBeforeDrawShadowCamera(void)
 
 	// 注視点に制限を設ける
 	VECTOR target = targetPos_;
-	if (target.y > TARGET_LIMIT_Y) { target.y = TARGET_LIMIT_Y; }
+	if (target.y > TARGET_LIMIT_Y) {target.y = TARGET_LIMIT_Y; }
 
 	// カメラの視点、注視点を設定
 	static constexpr VECTOR LIGHT_POS = { 2976, 2281, 1985 };
 	static constexpr VECTOR LIGHT_TARGET = { 2889, 2127, 2079 };
-	SetCameraPositionAndTarget_UpVecY(LIGHT_POS, LIGHT_TARGET);
+	SetCameraPositionAndTarget_UpVecY(lightPos_, targetPos_);
+
+	//設定したカメラのビュー行列と射影行列を取得しておく
+	lightViewMatrix_ = GetCameraViewportMatrix();
+	lightProjectionMatrix_ = GetCameraProjectionMatrix();
+
+
 }
 
 void Camera::ChangeFixedPoint(void)
@@ -578,7 +611,7 @@ void Camera::ChangeStartDirection(void)
 }
 void Camera::ChangeShadowCamera(void)
 {
-	modeUpdate_ = [this]() {SetBeforeDrawShadowCamera(); };
+	modeUpdate_ = [this]() {SetShadowCamera(); };
 }
 void Camera::UpdateNone(void)
 {

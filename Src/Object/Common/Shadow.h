@@ -60,18 +60,6 @@ public:
 
 private:
 
-#pragma region 定数
-	// 色深度
-	static constexpr int COLOR_BIT_DEPTH = 24;
-
-	// シャドウマップサイズ
-	static constexpr int SHADOW_MAP_SIZE = 3000;
-
-	// 通常のチャンネル数
-	static constexpr int DEFAULT_CHANNEL_NUM = 4;
-#pragma endregion
-
-
 #pragma region メンバー変数
 	SceneManager& scnMng_;				// シーン管理クラスの参照
 	CharacterManager& charaMng_;	// キャラクター管理クラスの参照

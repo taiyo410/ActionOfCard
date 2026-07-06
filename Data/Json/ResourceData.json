@@ -529,7 +529,8 @@
       {
         "name": "CHARACTER_SHADOW_VS",
         "handle": "CharacterShadowVS.cso",
-        "constBufFloat4Num": 0
+        "constBufFloat4Num": 0,
+        "constBufMatrixNum": 2
       },
       {
         "name": "SHADOW_MESH_VS",

@@ -160,11 +160,9 @@ void GameScene::NormalDraw(void)
 
 void GameScene::DirectionDraw(void)
 {
-
-
 	DrawShadow();
 
-	//プレイヤー
+	//スカイドーム
 	skyDome_->Draw();
 
 	//ステージ
@@ -172,16 +170,6 @@ void GameScene::DirectionDraw(void)
 
 	//キャラクター
 	CharacterManager::GetInstance().Draw();
-
-	// シャドウマップを描画
-	constexpr int MAPSIZE = 256;
-	DrawExtendGraph(
-		Application::SCREEN_SIZE_X - MAPSIZE,
-		Application::SCREEN_SIZE_Y - MAPSIZE,
-		Application::SCREEN_SIZE_X,
-		Application::SCREEN_SIZE_Y,
-		scnMng_.GetShadowMapTexture(),
-		false);
 
 	//演出時の2D描画
 	if (updatePhase_ == UPDATE_PHASE::START_DIRECTION)
@@ -199,19 +187,29 @@ void GameScene::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 
 void GameScene::DrawShadow(void)
 {
-	SetDrawScreen(scnMng_.GetShadowMapTexture());
+	int shadowMapTex = scnMng_.GetShadowMapTexture();
+	SetDrawScreen(shadowMapTex);
 
 	//シャドウ初期化
 	shadow_->DrawInitShadow();
+	
+	//影用深度記録画像をクリアする
+	constexpr int MAX_COLOR = 255;
+	SetBackgroundColor(MAX_COLOR, MAX_COLOR, MAX_COLOR);
+	ClearDrawScreen();
+	SetBackgroundColor(0, 0, 0);
+
+	//カメラをシャドウマップ用に切り替える
+	scnMng_.GetCamera().lock()->SetShadowCamera();
 
 	//通常のメッシュのシャドウマップ描画
-	shadow_->DrawShadowNormal();
-	stage_->Draw();
-	shadow_->ResetShader();
+	//shadow_->DrawShadowNormal();
+	//stage_->Draw();
+	//shadow_->ResetShader();
 
 	//スキンメッシュの描画
 	shadow_->DrawShadowSkinned();
-	CharacterManager::GetInstance().Draw();
+	CharacterManager::GetInstance().DrawShadow();
 	shadow_->ResetShader();
 
 	SetDrawScreen(scnMng_.GetMainScreen());
@@ -377,7 +375,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//演出状態へ移行
-	ChangeUpdatePhase(UPDATE_PHASE::START_DIRECTION);
+	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
 }
 
 void GameScene::ObjectLoad(void)
@@ -414,6 +412,7 @@ void GameScene::ObjectUpdate(void)
 
 void GameScene::ObjectDraw(void)
 {
+	DrawShadow();
 	skyDome_->Draw();	//プレイヤー
 	stage_->Draw();		//ステージ
 	//キャラクター
@@ -421,6 +420,16 @@ void GameScene::ObjectDraw(void)
 	CharacterManager::GetInstance().Draw2D();
 	//UI
 	UIManager::GetInstance().Draw();
+
+	// シャドウマップを描画
+	constexpr int MAPSIZE = 256;
+	DrawExtendGraph(
+		Application::SCREEN_SIZE_X - MAPSIZE,
+		Application::SCREEN_SIZE_Y - MAPSIZE,
+		Application::SCREEN_SIZE_X,
+		Application::SCREEN_SIZE_Y,
+		scnMng_.GetShadowMapTexture(),
+		false);
 }
 
 void GameScene::Skip(void)

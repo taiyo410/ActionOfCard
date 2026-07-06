@@ -83,7 +83,6 @@ public:
 		CHANGE_TARGET,
 		TARGET_POINT,
 		START_DIRECTION,
-		SHADOW_CAMERA,
 	};
 
 	//カメラ演出
@@ -218,7 +217,17 @@ public:
 
 	/// @brief シャドウ用カメラに設定する
 	/// @param  
-	void SetBeforeDrawShadowCamera(void);
+	void SetShadowCamera(void);
+
+	/// @brief ライトのビュー行列を取得
+	/// @param  
+	/// @return 
+	const MATRIX& GetLightViewMatrix(void) { return lightViewMatrix_; }
+
+	/// @brief ライトのビュー行列を取得
+	/// @param  
+	/// @return 
+	const MATRIX& GetLightProjectionMatrix(void) { return lightProjectionMatrix_; }
 
 private:
 
@@ -287,6 +296,9 @@ private:
 
 	//サブモード
 	SUB_MODE subMode_;
+
+	//ライト座標
+	VECTOR lightPos_ = {};
 
 	//カメラ更新
 	std::function<void(void)>modeUpdate_;
@@ -397,6 +409,10 @@ private:
 
 	//移動後座標
 	VECTOR prePos_;
+
+	//ライトのマトリックス
+	MATRIX lightViewMatrix_;
+	MATRIX lightProjectionMatrix_;
 
 	// カメラを初期位置に戻す
 	void SetDefault(void);

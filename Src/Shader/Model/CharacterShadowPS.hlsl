@@ -66,6 +66,7 @@ float4 main(PS_INPUT PSInput) : SV_TARGET0
     
     //// ‰e‚Ì‰e‹¿—Í‚ğæ“¾
     float shadowFactor = ShadowCalculation(PSInput.lightAtPos, shadowMap0Texture, shadowMap0Sampler, PSInput.normal, lightDir);
+    
     // ÅIF‚É‰e‚ÌŒW”‚ğæZ
     finalColor.rgb *= shadowFactor;
     

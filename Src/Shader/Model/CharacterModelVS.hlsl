@@ -88,10 +88,10 @@ VS_OUTPUT main(VS_INPUT VSInput)
     ret.normal = normalize(ret.normal);
 	// ディフューズカラー
 	ret.diffuse = VSInput.diffuse;
-	//// ライト方向(ローカル)
-	//ret.lightDir = float3(0.0f, 0.0f, 0.0f);
-	//// ライトから見た座標
-	//ret.lightAtPos = float3(0.0f, 0.0f, 0.0f);
+	// ライト方向(ローカル)
+   // ret.lightDir = float3(0.0f, 0.0f, 0.0f);
+	// ライトから見た座標
+    //ret.lightAtPos = float3(0.0f, 0.0f, 0.0f);
 	//// フォグの強さ(0.0:フォグが濃い、1.0:フォグが薄い)
 	//ret.fogFactor =
 	//	clamp((g_fog_end - length(worldPosition.xyz - g_camera_pos)) / (g_fog_end - g_fog_start), 0.0, 1.0);

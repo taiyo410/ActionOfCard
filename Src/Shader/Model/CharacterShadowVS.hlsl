@@ -15,10 +15,7 @@
 cbuffer cbParam : register(b7)
 {
     float3 g_camera_pos;
-    float g_fog_start;
-    
-    float3 g_light_pos;
-    float g_fog_end;
+    float dummy;
 }
 
 // 定数バッファ：スロット8番目

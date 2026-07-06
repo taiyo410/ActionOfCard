@@ -51,7 +51,13 @@ void CharacterManager::Draw(void)
 		chara->Draw();
 	}
 }
-
+void CharacterManager::DrawShadow(void)
+{
+	for (const auto& chara : characters_)
+	{
+		chara->DrawShadow();
+	}
+}
 void CharacterManager::Draw2D(void)
 {
 	for (const auto& chara : characters_)

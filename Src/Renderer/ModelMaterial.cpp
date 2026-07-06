@@ -1,3 +1,4 @@
+#include "Utility\UtilityCommon.h"
 #include "Application.h"
 #include "Manager/Resource/ResourceManager.h"
 #include "ModelMaterial.h"
@@ -6,9 +7,9 @@ ModelMaterial::ModelMaterial(const ResourceManager::SRC _vsSrc, const ResourceMa
 	resMng_(ResourceManager::GetInstance()),
 	constBufMatrixSizeVS_(),
 	constBufFloat4SizePS_(),
-	constBufFloat4VS_(),
-	constBufMatrixVS_(),
-	constBufPS_(),
+	constBufFloat4VS_(UtilityCommon::INITIAL_HANDLE),
+	constBufMatrixVS_(UtilityCommon::INITIAL_HANDLE),
+	constBufPS_(UtilityCommon::INITIAL_HANDLE),
 	shaderPS_(),
 	shaderVS_(),
 	texAddress_()
@@ -42,16 +43,16 @@ ModelMaterial::ModelMaterial(const ResourceManager::SRC _vsSrc, const ResourceMa
 
 	// 頂点シェーダー用の定数バッファを作成
 	//FLOAT4
-	constBufFloat4VS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizeVS_);
+	if (constBufFloat4SizeVS_ > 0)constBufFloat4VS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizeVS_);
 	//MATRIX
-	constBufMatrixVS_ = CreateShaderConstantBuffer(sizeof(MATRIX) * constBufMatrixSizeVS_);
+	if (constBufMatrixSizeVS_ > 0)constBufMatrixVS_ = CreateShaderConstantBuffer(sizeof(MATRIX) * constBufMatrixSizeVS_);
 
 	// ピクセル定数バッファの確保サイズ(FLOAT4をいくつ作るか)
 	constBufFloat4SizePS_ = psLoadData.constBufFloat4Num;
 
 	// ピクセルシェーダー用の定数バッファを作成
 	//FLOAT4
-	constBufPS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizePS_);
+	if (constBufFloat4SizePS_ > 0)constBufPS_ = CreateShaderConstantBuffer(sizeof(FLOAT4) * constBufFloat4SizePS_);
 
 	// テクスチャアドレス
 	texAddress_ = TEXADDRESS::CLAMP;
@@ -120,6 +121,16 @@ void ModelMaterial::SetTextureBuf(int slot, int texDiffuse)
 	else
 	{
 		textures_[slot] = texDiffuse;
+	}
+}
+
+void ModelMaterial::DrawShaderDebug(void)
+{
+	Vector2 drawPos = { 200,200 };
+	for (const auto& constBufFloat4 : constBufsPS_)
+	{
+		DrawFormatString(drawPos.x, drawPos.y, 0xffffff, L"shader(%f,%f,%f,%f)", constBufFloat4.x, constBufFloat4.y, constBufFloat4.z,0.0f);
+		drawPos.y += 50;
 	}
 }
 
