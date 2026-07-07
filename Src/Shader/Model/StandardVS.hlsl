@@ -10,7 +10,7 @@ cbuffer cbParam : register(b7)
 {
     float g_uv_scale;
     float3 dummy;
-    //float4x4 g_LightVPMatrix; // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
+    float4x4 g_LightVPMatrix; // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
     
 }
 // 定数バッファ：スロット8番目
@@ -19,7 +19,7 @@ cbuffer cbParamShadow : register(b8)
     //float4x3 g_light_viewmatrix;
     //float4x4 g_light_projectionMatrix;
     
-    float4x4 g_LightVPMatrix; // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
+    //float4x4 g_LightVPMatrix; // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
 };
 VS_OUTPUT main(VS_INPUT VSInput)
 {

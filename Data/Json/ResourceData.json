@@ -512,7 +512,7 @@
       {
         "name": "STANDARD_VS",
         "handle": "StandardVS.cso",
-        "constBufFloat4Num": 1,
+        "constBufFloat4Num": 5,
         "constBufMatrixNum": 1
       },
       {

@@ -74,7 +74,20 @@ void Stage::Draw(void)
 	wallMaterial_->SetConstBufVSMatrix(0,lightVP);
 
 	material_->SetTextureBuf(8, shadowMapTex);
-	material_->SetConstBufVSMatrix(0, lightVP);
+	// 行列を転置して FLOAT4 に格納
+	FLOAT4 row0 = { lightVP.m[0][0], lightVP.m[1][0], lightVP.m[2][0], lightVP.m[3][0] };
+	FLOAT4 row1 = { lightVP.m[0][1], lightVP.m[1][1], lightVP.m[2][1], lightVP.m[3][1] };
+	FLOAT4 row2 = { lightVP.m[0][2], lightVP.m[1][2], lightVP.m[2][2], lightVP.m[3][2] };
+	FLOAT4 row3 = { lightVP.m[0][3], lightVP.m[1][3], lightVP.m[2][3], lightVP.m[3][3] };
+
+	// Planet（ground_）の定数バッファに正確な行列を転送（インデックス0~3）
+	material_->SetConstBufVS(1, row0);
+	material_->SetConstBufVS(2, row1);
+	material_->SetConstBufVS(3, row2);
+	material_->SetConstBufVS(4, row3);
+
+
+	//material_->SetConstBufVSMatrix(0, lightVP);
 	//material_->SetConstBufVSMatrix(1, cameraProjectionMat);
 	//material_->SetConstBufPS(0, { worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
 
@@ -116,6 +129,10 @@ void Stage::SettingShader(void)
 	material_->AddConstBufPS({ worldLightDir.x,worldLightDir.y,worldLightDir.z,1.0f });
 	material_->AddConstBufPS({ 0.0f,0.0f,0.0f,0.0f });
 	material_->AddConstBufVSMatrix(shadowMat);
+	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
+	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
+	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
+	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
 	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
 
