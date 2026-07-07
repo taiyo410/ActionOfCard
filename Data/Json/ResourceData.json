@@ -512,8 +512,8 @@
       {
         "name": "STANDARD_VS",
         "handle": "StandardVS.cso",
-        "constBufFloat4Num": 0,
-        "constBufMatrixNum": 2
+        "constBufFloat4Num": 1,
+        "constBufMatrixNum": 1
       },
       {
         "name": "TILEMAP_VS",

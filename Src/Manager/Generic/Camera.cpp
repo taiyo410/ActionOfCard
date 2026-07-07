@@ -564,12 +564,6 @@ void Camera::SetShadowCamera(void)
 	static constexpr VECTOR LIGHT_POS = { 2976, 2281, 1985 };
 	static constexpr VECTOR LIGHT_TARGET = { 2889, 2127, 2079 };
 	SetCameraPositionAndTarget_UpVecY(lightPos_, targetPos_);
-
-	//設定したカメラのビュー行列と射影行列を取得しておく
-	lightViewMatrix_ = GetCameraViewportMatrix();
-	lightProjectionMatrix_ = GetCameraProjectionMatrix();
-
-
 }
 
 void Camera::ChangeFixedPoint(void)

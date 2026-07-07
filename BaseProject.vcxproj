@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Src\Object\Common\Shadow.cpp" />
+    <ClCompile Include="Src\Manager\Generic\ShadowManager.cpp" />
     <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyRevolutionAction.cpp" />
     <ClCompile Include="Src\Object\Common\Geometry\ExternalLine.cpp" />
     <ClCompile Include="Src\Object\Common\Geometry\Plane.cpp" />
@@ -130,7 +130,7 @@
     <ClCompile Include="Src\Utility\UtilityJson.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Object\Common\Shadow.h" />
+    <ClInclude Include="Src\Manager\Generic\ShadowManager.h" />
     <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyRevolutionAction.h" />
     <ClInclude Include="Src\Object\Common\Geometry\ExternalLine.h" />
     <ClInclude Include="Src\Object\Common\Geometry\Plane.h" />

@@ -79,5 +79,11 @@ private:
 	//壁のマテリアルとレンダラー
     std::unique_ptr<ModelMaterial> wallMaterial_;
     std::unique_ptr<ModelRenderer> wallRenderer_;
+
+#pragma region メンバー関数
+    //シェーダー設定
+    void SettingShader(void);
+#pragma endregion
+
 };
 

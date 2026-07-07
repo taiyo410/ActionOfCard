@@ -52,6 +52,10 @@ void SkyDome::Init(void)
 		ResourceManager::SRC::SKYDOME_PS
 	);
 	material_->AddConstBufVS({ SIZE_SCL,0.0f,0.0f,0.0f });
+	//material_->AddConstBufVS({ SIZE_SCL,0.0f,0.0f,0.0f });
+	//material_->AddConstBufVS({ SIZE_SCL,0.0f,0.0f,0.0f });
+	//material_->AddConstBufVS({ SIZE_SCL,0.0f,0.0f,0.0f });
+	//material_->AddConstBufVS({ SIZE_SCL,0.0f,0.0f,0.0f });
 	material_->AddConstBufPS({ COLOR_SCL_BATTLE_R, COLOR_SCL_BATTLE_G, COLOR_SCL_BATTLE_B, 1.0f });
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
 
@@ -73,6 +77,7 @@ void SkyDome::Update(void)
 void SkyDome::Draw(void)
 {
 	renderer_->Draw();
+	//MV1DrawModel(trans_.modelId);
 }
 
 void SkyDome::ChangePhase(const PHASE _phase)

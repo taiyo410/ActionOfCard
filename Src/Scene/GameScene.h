@@ -13,8 +13,7 @@ class Player;
 class Enemy;
 class Stage;
 class CardSystem;
-class Shadow;
-
+class ShadowManager;
 class DrawUI3D;
 
 class GameScene : public SceneBase
@@ -90,8 +89,6 @@ private:
 	std::unique_ptr<Stage> stage_;									//ステージ
 	std::shared_ptr<PauseScene> pauseScene_;						//ポーズ画面
 	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン
-	std::unique_ptr<Shadow> shadow_;								//影
-
 
 	//更新フェーズ
 	UPDATE_PHASE updatePhase_;											//更新

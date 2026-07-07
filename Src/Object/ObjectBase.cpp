@@ -3,6 +3,7 @@
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Resource/SoundManager.h"
 #include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/ShadowManager.h"
 #include "Manager/Game/CollisionManager.h"
 #include "Renderer/ModelMaterial.h"
 #include "Renderer/ModelRenderer.h"
@@ -19,6 +20,7 @@ ObjectBase::ObjectBase(void)
 	scnMng_(SceneManager::GetInstance()),
 	tag_(Collider::TAG::NONE),
 	soundMng_(SoundManager::GetInstance()),
+	shadowMng_(ShadowManager::GetInstance()),
 	trans_()
 {
 	makeCollisionTable_ = {

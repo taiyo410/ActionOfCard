@@ -219,16 +219,6 @@ public:
 	/// @param  
 	void SetShadowCamera(void);
 
-	/// @brief ライトのビュー行列を取得
-	/// @param  
-	/// @return 
-	const MATRIX& GetLightViewMatrix(void) { return lightViewMatrix_; }
-
-	/// @brief ライトのビュー行列を取得
-	/// @param  
-	/// @return 
-	const MATRIX& GetLightProjectionMatrix(void) { return lightProjectionMatrix_; }
-
 private:
 
 	//カメラの初期角度
@@ -409,10 +399,6 @@ private:
 
 	//移動後座標
 	VECTOR prePos_;
-
-	//ライトのマトリックス
-	MATRIX lightViewMatrix_;
-	MATRIX lightProjectionMatrix_;
 
 	// カメラを初期位置に戻す
 	void SetDefault(void);

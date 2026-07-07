@@ -29,6 +29,9 @@ public:
 		GAME_OVER,
 	};
 	
+	//ライトの方向
+	static constexpr VECTOR LIGHT_DIR = { 0.0f, -1.0f, 1.0f };
+
 	/// @brief 初期化
 	/// @param  
 	void Init(void);
@@ -111,11 +114,6 @@ public:
 	/// @return メインスクリーンのハンドル
 	inline int GetMainScreen(void) const { return mainScreen_; }
 
-	/// @brief シャドウマップのテクスチャのハンドルを返す
-	/// @param  
-	/// @return シャドウマップのテクスチャ
-	inline int GetShadowMapTexture(void) const { return shadowMapTexture_; }
-
 	/// @brief フェード終了フラグ取得
 	/// @param  
 	/// @return フェード終了フラグ
@@ -130,14 +128,15 @@ public:
 	/// @param  
 	void Fade(void);
 
-	//シャドウマップ用テクスチャの作成
-	void MakeShadowMapTexture(void);
+	//オリジナルシャドウマップ用テクスチャの作成
+	void MakeShadowMapTextureOriginal(void);
+
+	//DxLibの関数を用いてのシャドウマップテクスチャ作成
+	void MakeShadowMapTextureForDxLib(void);
 
 private:
 
 #pragma region メンバー定数
-	//ライトの方向
-	static constexpr VECTOR LIGHT_DIR = { 0.0f, -1.0f, 1.0f };
 
 	//フォグの色
 	static constexpr int FOG_COLOR_R = 5;
@@ -152,15 +151,6 @@ private:
 
 	//デルタタイム
 	static constexpr float DELTA_TIME = 1.0f / 60.0f;
-
-	// 色深度
-	static constexpr int COLOR_BIT_DEPTH = 24;
-
-	// シャドウマップサイズ
-	static constexpr int SHADOW_MAP_SIZE = 3000;
-
-	// 通常のチャンネル数
-	static constexpr int DEFAULT_CHANNEL_NUM = 4;
 #pragma endregion
 
 #pragma region メンバー変数
@@ -185,7 +175,6 @@ private:
 	float totalTime_;			//経過時間
 	int mainScreen_;			//メインスクリーン
 	int postEffScreen_;			//ポストエフェクトスクリーン
-	int shadowMapTexture_;		// シャドウマップ用テクスチャのハンドル
 	bool isEndFade_;			//フェードが終了したか
 #pragma endregion
 

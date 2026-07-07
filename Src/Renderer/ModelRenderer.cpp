@@ -66,6 +66,72 @@ void ModelRenderer::Draw(void)
 
 void ModelRenderer::SetReserveVS(void)
 {
+	//FLOAT4の定数バッファをセット(頂点)
+	SetConstBufFloat4VS();
+
+	//行列の定数バッファをセット(頂点)
+	SetConstBufMatrixVS();
+
+	// 頂点シェーダー設定
+	SetUseVertexShader(modelMaterial_.GetShaderVS());
+}
+
+void ModelRenderer::SetReservePS(void)
+{
+	// ピクセルシェーダーにテクスチャを転送
+	const auto& textures = modelMaterial_.GetTextures();
+	size_t size = textures.size();
+	if (size == 0)
+	{
+		// 前回使用分のテクスチャを引き継がないように
+		SetUseTextureToShader(0, -1);
+	}
+	else
+	{
+		for (const auto& pair : textures)
+		{
+			SetUseTextureToShader(pair.first, pair.second);
+		}
+	}
+
+	//FLOAT4定数バッファのセット
+	SetConstBufFloat4PS();
+
+	// ピクセルシェーダー設定
+	SetUsePixelShader(modelMaterial_.GetShaderPS());
+}
+
+void ModelRenderer::SetConstBufFloat4PS(void)
+{
+	// 定数バッファハンドル
+	int constBuf = modelMaterial_.GetConstBufPS();
+
+	FLOAT4* constBufsPtr = (FLOAT4*)GetBufferShaderConstantBuffer(constBuf);
+	const auto& constBufs = modelMaterial_.GetConstBufsPS();
+
+	size_t size = constBufs.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (i != 0)
+		{
+			constBufsPtr++;
+		}
+		constBufsPtr->x = constBufs[i].x;
+		constBufsPtr->y = constBufs[i].y;
+		constBufsPtr->z = constBufs[i].z;
+		constBufsPtr->w = constBufs[i].w;
+	}
+
+	// ピクセルシェーダー用の定数バッファを更新して書き込んだ内容を反映する
+	UpdateShaderConstantBuffer(constBuf);
+
+	// ピクセルシェーダー用の定数バッファを定数バッファレジスタにセット
+	SetShaderConstantBuffer(
+		constBuf, DX_SHADERTYPE_PIXEL, CONSTANT_BUF_SLOT_BEGIN_PS);
+}
+
+void ModelRenderer::SetConstBufFloat4VS(void)
+{
 	// 定数バッファハンドル
 	int constBuf = modelMaterial_.GetConstBufFloat4VS();
 
@@ -91,7 +157,10 @@ void ModelRenderer::SetReserveVS(void)
 	// 頂点シェーダー用の定数バッファを定数バッファレジスタにセット
 	SetShaderConstantBuffer(
 		constBuf, DX_SHADERTYPE_VERTEX, FLOAT4_CONSTANT_BUF_SLOT_BEGIN_VS);
+}
 
+void ModelRenderer::SetConstBufMatrixVS(void)
+{
 	//MATRIXの定数バッファハンドルを取得
 	int constBufMat = modelMaterial_.GetConstBufMatrixVS();
 
@@ -127,55 +196,4 @@ void ModelRenderer::SetReserveVS(void)
 
 	//MATRIXの頂点シェーダ用定数バッファ定数バッファレジスタにセット
 	SetShaderConstantBuffer(constBufMat, DX_SHADERTYPE_VERTEX, MATRIX_CONSTANT_BUF_SLOT_BEGIN_VS);
-
-	// 頂点シェーダー設定
-	SetUseVertexShader(modelMaterial_.GetShaderVS());
-}
-
-void ModelRenderer::SetReservePS(void)
-{
-	// ピクセルシェーダーにテクスチャを転送
-	const auto& textures = modelMaterial_.GetTextures();
-	size_t size = textures.size();
-	if (size == 0)
-	{
-		// 前回使用分のテクスチャを引き継がないように
-		SetUseTextureToShader(0, -1);
-	}
-	else
-	{
-		for (const auto& pair : textures)
-		{
-			SetUseTextureToShader(pair.first, pair.second);
-		}
-	}
-
-	// 定数バッファハンドル
-	int constBuf = modelMaterial_.GetConstBufPS();
-
-	FLOAT4* constBufsPtr = (FLOAT4*)GetBufferShaderConstantBuffer(constBuf);
-	const auto& constBufs = modelMaterial_.GetConstBufsPS();
-
-	size = constBufs.size();
-	for (int i = 0; i < size; i++)
-	{
-		if (i != 0)
-		{
-			constBufsPtr++;
-		}
-		constBufsPtr->x = constBufs[i].x;
-		constBufsPtr->y = constBufs[i].y;
-		constBufsPtr->z = constBufs[i].z;
-		constBufsPtr->w = constBufs[i].w;
-	}
-
-	// ピクセルシェーダー用の定数バッファを更新して書き込んだ内容を反映する
-	UpdateShaderConstantBuffer(constBuf);
-
-	// ピクセルシェーダー用の定数バッファを定数バッファレジスタにセット
-	SetShaderConstantBuffer(
-		constBuf, DX_SHADERTYPE_PIXEL, CONSTANT_BUF_SLOT_BEGIN_PS);
-
-	// ピクセルシェーダー設定
-	SetUsePixelShader(modelMaterial_.GetShaderPS());
 }

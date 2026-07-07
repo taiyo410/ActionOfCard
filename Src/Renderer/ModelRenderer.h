@@ -44,4 +44,8 @@ private:
 
 	// シェーダ設定(ピクセル)
 	void SetReservePS(void);
+
+	void SetConstBufFloat4PS(void);
+	void SetConstBufFloat4VS(void);
+	void SetConstBufMatrixVS(void);
 };

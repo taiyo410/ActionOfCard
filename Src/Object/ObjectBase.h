@@ -10,6 +10,7 @@
 class ResourceManager;
 class SceneManager;
 class SoundManager;
+class ShadowManager;
 class Geometry;
 class ModelMaterial;
 class ModelRenderer;
@@ -83,10 +84,15 @@ public:
 
 protected:
 
+#pragma region メンバー定数
+	static constexpr int SHADOW_MAP_TEXTURE_NUM = 8;
+#pragma endregion
+
 	// シングルトン参照
 	ResourceManager& resMng_;		//リソース
 	SceneManager& scnMng_;			//シーン
-	SoundManager& soundMng_;
+	SoundManager& soundMng_;		//サウンド
+	ShadowManager& shadowMng_;		//シャドウマネージャー
 
 	// モデル制御の基本情報
 	Transform trans_;
