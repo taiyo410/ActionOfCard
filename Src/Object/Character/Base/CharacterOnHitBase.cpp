@@ -113,4 +113,3 @@ void CharacterOnHitBase::HitModelCommon(const std::weak_ptr<Collider> _hitCol)
 	//ˆÚ“®
 	trans_.pos = movedPos_;
 }
-
