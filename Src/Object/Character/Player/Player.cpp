@@ -182,7 +182,6 @@ void Player::DrawDebug(void)
 {
 	animCtrl_->DrawDebug();
 	cardPresent_->DrawCardDeckError();
-	DrawFormatString(100, 100,0xffffff, L"Action(%d)", static_cast<int>(actionCtrl_->GetActionType()));
 	for (const auto& col : collider_)
 	{
 		col.second->GetGeometry().Draw();
