@@ -26,7 +26,8 @@
 GameScene::GameScene(void):
 	isSkippingDirection_(),
 	skipKeepCnt_(),
-	slowFrame_()
+	slowFrame_(),
+	updatePhase_(UPDATE_PHASE::NONE)
 {
 	//更新関数のセット
 	updateFunc_ = [this]() {LoadingUpdate(); };
@@ -51,6 +52,10 @@ GameScene::GameScene(void):
 	CharacterManager::CreateInstance();
 	CollisionManager::CreateInstance();
 
+	//シャドウマップ生成
+	ShadowManager::CreateInstance();
+	ShadowManager::GetInstance().Init();
+
 	//シーンの生成
 	pauseScene_ = std::make_shared<PauseScene>();
 	revolutionScene_ = std::make_shared<GameEventRevolutionScene>();
@@ -63,6 +68,7 @@ GameScene::~GameScene(void)
 	CollisionManager::GetInstance().Destroy();
 	CharacterManager::GetInstance().Destroy();
 	UIManager::GetInstance().Destroy(); 
+	ShadowManager::GetInstance().Destroy();
 	changeUpdate_.clear();
 }
 
@@ -75,7 +81,6 @@ void GameScene::Load(void)
 
 void GameScene::Init(void)
 {
-	scnMng_.MakeShadowMapTextureForDxLib();
 	updatePhase_ = UPDATE_PHASE::NONE;
 
 	//シェイク状態を初期化
@@ -89,6 +94,7 @@ void GameScene::Init(void)
 void GameScene::Release(void)
 {
 	soundMng_.AllStop();
+	ShadowManager::GetInstance().Release();
 }
 
 void GameScene::CheckSkip(void)
@@ -184,39 +190,10 @@ void GameScene::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 
 void GameScene::DrawShadow(void)
 {
-	shadowMng_.DrawStartSetUp();
+	ShadowManager::GetInstance().DrawStartSetUp();
 	stage_->DrawShadow();
 	CharacterManager::GetInstance().DrawShadow();
-	shadowMng_.DrawEndSetUp();
-	//int shadowMapTex = scnMng_.GetShadowMapTexture();
-	//SetDrawScreen(shadowMapTex);
-	//
-	////影用深度記録画像をクリアする
-	//constexpr int MAX_COLOR = 255;
-	//SetBackgroundColor(MAX_COLOR, MAX_COLOR, MAX_COLOR);
-	//ClearDrawScreen();
-	//SetBackgroundColor(0, 0, 0);
-
-	////カメラをシャドウマップ用に切り替える
-	//scnMng_.GetCamera().lock()->SetShadowCamera();
-
-	////通常のメッシュのシャドウマップ描画
-	////shadow_->DrawShadowNormal();
-
-	////shadow_->ResetShader();
-
-	////スキンメッシュの描画
-	//shadow_->DrawShadowSkinned();
-	//CharacterManager::GetInstance().DrawShadow();
-	//shadow_->ResetShader();
-
-	//SetDrawScreen(scnMng_.GetMainScreen());
-
-	//// 画面を初期化
-	//ClearDrawScreen();
-
-	//// カメラ設定を元に戻す
-	//scnMng_.GetCamera().lock()->UndoShadowCamera();
+	ShadowManager::GetInstance().DrawEndSetUp();
 }
 
 void GameScene::ChangeNone(void)
@@ -373,7 +350,7 @@ void GameScene::SlowUpdate(void)
 void GameScene::OnSceneEnter(void)
 {
 	//演出状態へ移行
-	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
+	ChangeUpdatePhase(UPDATE_PHASE::START_DIRECTION);
 }
 
 void GameScene::ObjectLoad(void)
@@ -392,7 +369,6 @@ void GameScene::ObjectInit(void)
 {
 	CharacterManager::GetInstance().Init();
 	UIManager::GetInstance().Init();
-	//shadow_->Init();
 	stage_->Init();
 	skyDome_->Init();
 }
@@ -420,16 +396,6 @@ void GameScene::ObjectDraw(void)
 	CharacterManager::GetInstance().Draw2D();
 	//UI
 	UIManager::GetInstance().Draw();
-
-	//// シャドウマップを描画
-	//constexpr int MAPSIZE = 256;
-	//DrawExtendGraph(
-	//	Application::SCREEN_SIZE_X - MAPSIZE,
-	//	Application::SCREEN_SIZE_Y - MAPSIZE,
-	//	Application::SCREEN_SIZE_X,
-	//	Application::SCREEN_SIZE_Y,
-	//	scnMng_.GetShadowMapTexture(),
-	//	false);
 }
 
 void GameScene::Skip(void)

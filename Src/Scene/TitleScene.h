@@ -171,9 +171,6 @@ private:
 	//メニューコントローラー
 	std::unique_ptr<MenuController> menuController_;
 
-	//サウンド
-	SoundManager& soundMng_;
-
 	//タイトルロゴ座標
 	Vector2F logoPos_;
 
@@ -184,10 +181,10 @@ private:
 	TITLE_STATE selectState_;
 
 	//タイトル背景
-	int imgTitleBack;
+	int imgTitleBack_;
 
 	//タイトルロゴ
-	int imgTitleLogo;
+	int imgTitleLogo_;
 
 	//現在選んでいるボタン
 	int selectNum_;

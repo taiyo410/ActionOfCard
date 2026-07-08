@@ -349,7 +349,6 @@ protected:
 	//当たり判定の要素
 	VECTOR movedPos_;						//移動後座標
 	VECTOR moveDiff_;						//移動前座標
-	VECTOR movePow_;						// 移動量
 	ROTATION charaRot_;						//角度関連
 	STATUS status_;							//ステータス
 	UPDATE_PHASE phase_;					//更新フェーズ

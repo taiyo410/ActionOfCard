@@ -61,35 +61,13 @@ void Stage::Update(void)
 
 void Stage::Draw(void)
 {
-	material_->SetTextureBuf(8, shadowMng_.GetShadowMapTexture());
-	MATRIX lightVP = ShadowManager::GetInstance().GetShadowMatrix();
+	MATRIX lightVP =shadowMng_.GetShadowMapViewProjectionMat();
 	const int shadowMapTex = shadowMng_.GetShadowMapTexture();
-	//光の方向を取得
-	VECTOR worldRightDir = GetLightDirection();
 
-	//wallMaterial_->SetConstBufVSMatrix(0, cameraViewMat);
-	//wallMaterial_->SetConstBufVSMatrix(1, cameraProjectionMat);
-	//wallMaterial_->SetConstBufPS(0, { worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
-	wallMaterial_->SetTextureBuf(8, shadowMapTex);
+	material_->SetTextureBuf(SHADOW_MAP_TEXTURE_NUM, shadowMapTex);
+	material_->SetConstBufVSMatrix(0, lightVP);
+	wallMaterial_->SetTextureBuf(SHADOW_MAP_TEXTURE_NUM, shadowMapTex);
 	wallMaterial_->SetConstBufVSMatrix(0,lightVP);
-
-	material_->SetTextureBuf(8, shadowMapTex);
-	// 行列を転置して FLOAT4 に格納
-	FLOAT4 row0 = { lightVP.m[0][0], lightVP.m[1][0], lightVP.m[2][0], lightVP.m[3][0] };
-	FLOAT4 row1 = { lightVP.m[0][1], lightVP.m[1][1], lightVP.m[2][1], lightVP.m[3][1] };
-	FLOAT4 row2 = { lightVP.m[0][2], lightVP.m[1][2], lightVP.m[2][2], lightVP.m[3][2] };
-	FLOAT4 row3 = { lightVP.m[0][3], lightVP.m[1][3], lightVP.m[2][3], lightVP.m[3][3] };
-
-	// Planet（ground_）の定数バッファに正確な行列を転送（インデックス0~3）
-	material_->SetConstBufVS(1, row0);
-	material_->SetConstBufVS(2, row1);
-	material_->SetConstBufVS(3, row2);
-	material_->SetConstBufVS(4, row3);
-
-
-	//material_->SetConstBufVSMatrix(0, lightVP);
-	//material_->SetConstBufVSMatrix(1, cameraProjectionMat);
-	//material_->SetConstBufPS(0, { worldRightDir.x,worldRightDir.y,worldRightDir.z,1.0f });
 
 	renderer_->Draw();
 	wallRenderer_->Draw();
@@ -101,23 +79,16 @@ void Stage::DrawShadow(void)
 	MV1DrawModel(wallTrans_.modelId);
 }
 
-void DrawShadow(void)
-{
-}
-
 void Stage::OnHit(const std::weak_ptr<Collider> _hitCol)
 {
 }
 
 void Stage::SettingShader(void)
 {
-
 	//光の方向を取得
-	VECTOR worldLightDir = GetLightDirection();
+	VECTOR worldLightDir = SceneManager::LIGHT_DIR;
 	const int shadowMapHandle = shadowMng_.GetShadowMapTexture();
-	const auto cameraViewMat = shadowMng_.GetLightViewMatrix();
-	const MATRIX& shadowMat = shadowMng_.GetShadowMatrix();
-	const auto cameraProjectionMat = GetCameraProjectionMatrix();
+	MATRIX lightVP = shadowMng_.GetShadowMapViewProjectionMat();
 
 	//マテリアル
 	material_ = std::make_unique<ModelMaterial>(
@@ -125,15 +96,11 @@ void Stage::SettingShader(void)
 		ResourceManager::SRC::STANDARD_PS
 	);
 	material_->SetTextureBuf(SHADOW_MAP_TEXTURE_NUM, shadowMapHandle);
-	material_->AddConstBufPS({ 1.0f,1.0f,1.0f,1.0f });
+	material_->AddConstBufPS(UtilityCommon::DEFAULT_FLOAT4);
 	material_->AddConstBufPS({ worldLightDir.x,worldLightDir.y,worldLightDir.z,1.0f });
-	material_->AddConstBufPS({ 0.0f,0.0f,0.0f,0.0f });
-	material_->AddConstBufVSMatrix(shadowMat);
-	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
-	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
-	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
-	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
-	material_->AddConstBufVS({ STAGE_UV_SCL,1.0f,1.0f,1.0f });
+	material_->AddConstBufPS(UtilityCommon::FLOAT4_ZERO);
+	material_->AddConstBufVS({ STAGE_UV_SCL,0.0f,0.0f,0.0f });
+	material_->AddConstBufVSMatrix(lightVP);
 	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
 
 	//壁のマテリアルとレンダラー
@@ -141,14 +108,11 @@ void Stage::SettingShader(void)
 		ResourceManager::SRC::STANDARD_VS,
 		ResourceManager::SRC::STANDARD_PS
 	);
-	//
 	wallMaterial_->SetTextureBuf(SHADOW_MAP_TEXTURE_NUM, shadowMapHandle);
 	wallMaterial_->AddConstBufPS(UtilityCommon::DEFAULT_FLOAT4);
 	wallMaterial_->AddConstBufPS({ worldLightDir.x,worldLightDir.y,worldLightDir.z,1.0f });
-	wallMaterial_->AddConstBufPS({ 0.0f,0.0f,0.0f,0.0f });
-
-	wallMaterial_->AddConstBufVS({ 1.0,1.0f,1.0f,1.0f });
-
-	wallMaterial_->AddConstBufVSMatrix(shadowMat);
+	wallMaterial_->AddConstBufPS(UtilityCommon::FLOAT4_ZERO);
+	wallMaterial_->AddConstBufVS(UtilityCommon::DEFAULT_FLOAT4);
+	wallMaterial_->AddConstBufVSMatrix(lightVP);
 	wallRenderer_ = std::make_unique<ModelRenderer>(wallTrans_.modelId, *wallMaterial_);
 }

@@ -16,7 +16,15 @@
 #include "TitleScene.h"
 
 TitleScene::TitleScene(void):
-	soundMng_(SoundManager::GetInstance())
+	easeDistanceCnt_(),
+	imgTitleBack_(UtilityCommon::INITIAL_HANDLE),
+	imgTitleLogo_(UtilityCommon::INITIAL_HANDLE),
+	logoEaseCnt_(),
+	logoPos_(),
+	selectBtn_(TITLE_BTN::START_GAME),
+	selectNum_(),
+	selectState_(TITLE_STATE::MAX),
+	yesNoState_(YES_NO::NO)
 {
 	//更新関数のセット
 	updateFunc_ = [this](){ LoadingUpdate(); };
@@ -37,10 +45,10 @@ void TitleScene::Load(void)
 	buttonFontHandle_ = CreateFontToHandle(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE, 0);
 
 	//タイトル画像の読み込み
-	imgTitleBack = resMng_.Load(ResourceManager::SRC::TITLE_BACK_IMG).handleId_;
+	imgTitleBack_ = resMng_.Load(ResourceManager::SRC::TITLE_BACK_IMG).handleId_;
 
 	//タイトルロゴの読み込み
-	imgTitleLogo = resMng_.Load(ResourceManager::SRC::TITLE_LOGO).handleId_;
+	imgTitleLogo_ = resMng_.Load(ResourceManager::SRC::TITLE_LOGO).handleId_;
 
 	//フォントのロード
 	menuController_->LoadFont(FontManager::FONT_APRIL_GOTHIC.c_str(), FONT_SIZE);
@@ -87,7 +95,6 @@ void TitleScene::Init(void)
 	easing_ = std::make_unique<Easing>();
 
 	//状態初期化
-	selectState_ = TITLE_STATE::MENU;
 	ChangeState(TITLE_STATE::EASE_MENU);
 
 	selectNum_ = 0;
@@ -133,12 +140,12 @@ void TitleScene::NormalDraw(void)
 		0,
 		Application::SCREEN_SIZE_X,
 		Application::SCREEN_SIZE_Y,
-		imgTitleBack,
+		imgTitleBack_,
 		true
 	);
 	
 	//タイトルロゴ
-	DrawExtendGraphF(logoPos_.x, logoPos_.y, logoPos_.x + LOGO_SIZE_X, logoPos_.y + LOGO_SIZE_Y, imgTitleLogo, true);
+	DrawExtendGraphF(logoPos_.x, logoPos_.y, logoPos_.x + LOGO_SIZE_X, logoPos_.y + LOGO_SIZE_Y, imgTitleLogo_, true);
 	menuController_->Draw();
 
 	//はいいいえ

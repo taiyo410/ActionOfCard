@@ -48,6 +48,9 @@ public:
 	//シェーダーFLOAT4デフォルト値
 	static constexpr FLOAT4 DEFAULT_FLOAT4 = { 1.0f,1.0f,1.0f,1.0f };
 
+	//シェーダーFLOAT4ゼロ
+	static constexpr FLOAT4 FLOAT4_ZERO = { 0.0f,0.0f,0.0f,0.0f };
+
 
 	/// @brief 四捨五入
 	/// @param v ベクトル

@@ -135,7 +135,12 @@ void ModelRenderer::SetConstBufFloat4VS(void)
 	// 定数バッファハンドル
 	int constBuf = modelMaterial_.GetConstBufFloat4VS();
 
+	//ポインタを取得
 	FLOAT4* constBufsPtr = (FLOAT4*)GetBufferShaderConstantBuffer(constBuf);
+
+	//バッファへの書き込みが不可な場合、処理を抜ける
+	if (!constBufsPtr)return;
+
 	const auto& constBufs = modelMaterial_.GetConstBufsFloat4VS();
 
 	size_t size = constBufs.size();
@@ -173,12 +178,9 @@ void ModelRenderer::SetConstBufMatrixVS(void)
 	//ポインタを取得
 	MATRIX* constBufsMatPtr = (MATRIX*)GetBufferShaderConstantBuffer(constBufMat);
 
-	//バッファへの書き込みが不可な場合
-	if (!constBufsMatPtr)
-	{
-		//処理を終了する
-		return;
-	}
+	//バッファへの書き込みが不可な場合は処理を抜ける
+	if (!constBufsMatPtr)return;
+
 	//書き込み元のマトリックスが空の場合
 	if (!constBufsMat.empty())
 	{

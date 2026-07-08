@@ -10,16 +10,13 @@ cbuffer cbParam : register(b7)
 {
     float g_uv_scale;
     float3 dummy;
-    float4x4 g_LightVPMatrix; // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
-    
 }
 // 定数バッファ：スロット8番目
 cbuffer cbParamShadow : register(b8)
 {
-    //float4x3 g_light_viewmatrix;
-    //float4x4 g_light_projectionMatrix;
-    
-    //float4x4 g_LightVPMatrix; // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
+    // ライト用 ビュー×プロジェクション行列 (FLOAT4 x 4行分)
+    // HLSL用に行列を整えるためにrow_majorで要素の格納順を行優先にする
+    row_major float4x4 g_LightVPMatrix; 
 };
 VS_OUTPUT main(VS_INPUT VSInput)
 {
@@ -41,16 +38,9 @@ VS_OUTPUT ret;
 // ワールド座標をビュー座標に変換
     lViewPosition.w = 1.0f;
     lViewPosition.xyz = mul(lWorldPosition, g_base.viewMatrix);
-    //ret.vwPos.xyz = lViewPosition.xyz;
     
 // ビュー座標を射影座標に変換
     ret.svPos = mul(lViewPosition, g_base.projectionMatrix);
-    
- //   // ライトのビュー座標をライトの射影座標に変換
- //   float4 lLViewPosition = mul(g_light_viewmatrix, ret.worldPos);
- 
-	//// ライトのビュー座標をライトの射影座標に変換
- //   ret.lightAtPos = mul(g_light_projectionMatrix, lLViewPosition).xyz;
     
 // 頂点座標変換 +++++++++++++++++++++++++++++++++++++( 終了 )
     // その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 開始 )
@@ -66,10 +56,7 @@ VS_OUTPUT ret;
 // ディフューズカラー
     ret.diffuse = VSInput.diffuse;
     
-//// ライト方向(ローカル)
-//    ret.lightDir = float3(0.0f, 0.0f, 0.0f);
-    
-//// ライトから見た座標
+// ライトから見た座標
     //ライトから見た座標を計算してピクセルシェーダへ渡す
     float4 lightSpacePos = mul(float4(ret.worldPos, 1.0f), g_LightVPMatrix);
     

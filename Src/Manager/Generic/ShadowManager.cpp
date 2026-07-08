@@ -6,15 +6,12 @@
 #include "Manager/Game/CharacterManager.h"
 #include "ShadowManager.h"
 
-ShadowManager::ShadowManager(void):
+ShadowManager::ShadowManager(void) :
 	scnMng_(SceneManager::GetInstance()),
 	charaMng_(CharacterManager::GetInstance()),
-	shadowPsHandle_(UtilityCommon::INITIAL_HANDLE),
-	shadowMeshVSHandle_(UtilityCommon::INITIAL_HANDLE),
-	shadowSkinnedMeshVSHandle_(UtilityCommon::INITIAL_HANDLE)
+	shadowMapTexture_(UtilityCommon::INITIAL_HANDLE),
+	shadowMapViewProjectionMat__()
 {
-	lightViewMatrix_ = MATRIX{};
-	lightProjectionMatrix_ = MATRIX{};
 }
 
 void ShadowManager::Init(void)
@@ -28,11 +25,11 @@ void ShadowManager::Init(void)
 	SetShadowMapDrawArea(shadowMapTexture_,
 		VGet(-SHADOWMAP_SIZE_HORIZON, -SHADOWMAP_SIZE_VERTICAL, -SHADOWMAP_SIZE_HORIZON),
 		VGet(SHADOWMAP_SIZE_HORIZON, SHADOWMAP_SIZE_VERTICAL, SHADOWMAP_SIZE_HORIZON));
-	////シャドウマップ生成用シェーダーハンドルの取得
-	//ResourceManager& resMng = ResourceManager::GetInstance();
-	//shadowPsHandle_ = resMng.Load(ResourceManager::SRC::SHADOW_PS).handleId_;
-	//shadowMeshVSHandle_ = resMng.Load(ResourceManager::SRC::SHADOW_MESH_VS).handleId_;
-	//shadowSkinnedMeshVSHandle_ = resMng.Load(ResourceManager::SRC::SHADOW_SKINNED_MESH_VS).handleId_;
+}
+
+void ShadowManager::Release(void)
+{
+	DeleteShadowMap(shadowMapTexture_);
 }
 
 void ShadowManager::DrawInitShadow(void)
@@ -52,7 +49,8 @@ void ShadowManager::DrawStartSetUp(void)
 	//描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
 	//ライトの向き
-	SetLightDirection(SceneManager::LIGHT_DIR);
+	const VECTOR cameraVec = VNorm(GetCameraRightVector());
+	SetLightDirection(cameraVec);
 	//シャドウマップ位置を計算(カメラ基準)
 	VECTOR cameraPos = SceneManager::GetInstance().GetCamera().lock()->GetPos();
 	//最も低い位置を出す
@@ -68,7 +66,6 @@ void ShadowManager::DrawStartSetUp(void)
 
 	SetShadowMapDrawArea(shadowMapTexture_, minPos, maxPos);
 
-
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(shadowMapTexture_);
 }
@@ -81,36 +78,8 @@ void ShadowManager::DrawEndSetUp(void)
 	// 描画に使用するシャドウマップを設定
 	SetUseShadowMap(0, shadowMapTexture_);
 
-	// ─── DXライブラリから自動生成された正確なシャドウマップ行列を取得 ───
-	GetShadowMapViewProjectionMatrix(shadowMapTexture_, &shadowMat_);
-
-}
-
-void ShadowManager::DrawShadowNormal(void)
-{
-	// オリジナルシェーダー使用の設定
-	MV1SetUseOrigShader(TRUE);
-
-	// 深度記録画像への剛体メッシュ描画用の頂点シェーダーをセット
-	SetUseVertexShader(shadowMeshVSHandle_);
-
-	// 深度記録画像への描画用のピクセルシェーダーをセット
-	SetUsePixelShader(shadowPsHandle_);
-}
-
-void ShadowManager::DrawShadowSkinned(void)
-{
-	//設定したカメラのビュー行列と射影行列を取得しておく
-	lightViewMatrix_ = GetCameraViewportMatrix();
-	lightProjectionMatrix_ = GetCameraProjectionMatrix();
-
-	//影用深度記録画像をクリアする
-	scnMng_.GetCamera().lock()->SetShadowCamera();
-	//オリジナルシェーダー使用の再設定
-	MV1SetUseOrigShader(TRUE);
-
-	// 深度記録画像への剛体メッシュ描画用の頂点シェーダーをセット
-	SetUseVertexShader(shadowSkinnedMeshVSHandle_);
+	// DXライブラリから自動生成された正確なシャドウマップ行列を取得
+	GetShadowMapViewProjectionMatrix(shadowMapTexture_, &shadowMapViewProjectionMat__);
 }
 
 void ShadowManager::ResetShader(void)

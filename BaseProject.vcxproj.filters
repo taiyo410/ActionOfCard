@@ -366,7 +366,7 @@
     <ClCompile Include="Src\Object\Common\Geometry\ExternalLine.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Object\Common\Shadow.cpp">
+    <ClCompile Include="Src\Manager\Generic\ShadowManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -824,7 +824,7 @@
     <ClInclude Include="Src\Object\Common\Geometry\ExternalLine.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Object\Common\Shadow.h">
+    <ClInclude Include="Src\Manager\Generic\ShadowManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -848,15 +848,7 @@
     <FxCompile Include="Src\Shader\Model\SelectCardPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\SkyDomePS.hlsl" />
     <FxCompile Include="Src\Shader\Model\RevolutionPostEffectPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\CharacterModelVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\CharacterModelPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\CharacterShadowPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\ShadowMeshVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\ShadowPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\StandardPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\StandardVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\ShadowSkinnedMeshVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\ShadowStandardPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\CharacterShadowVS.hlsl" />
   </ItemGroup>
 </Project>

@@ -481,26 +481,6 @@
         "constBufFloat4Num": 1
       },
       {
-        "name": "CHARACTER_MODEL_PS",
-        "handle": "CharacterModelPS.cso",
-        "constBufFloat4Num": 0
-      },
-      {
-        "name": "CHARACTER_SHADOW_PS",
-        "handle": "CharacterShadowPS.cso",
-        "constBufFloat4Num": 3
-      },
-      {
-        "name": "SHADOW_PS",
-        "handle": "ShadowPS.cso",
-        "constBufFloat4Num": 0
-      },
-      {
-        "name": "SHADOW_PS",
-        "handle": "ShadowPS.cso",
-        "constBufFloat4Num": 0
-      },
-      {
         "name": "SHADOW_STANDARD_PS",
         "handle": "ShadowStandardPS.cso",
         "constBufFloat4Num": 1
@@ -512,35 +492,13 @@
       {
         "name": "STANDARD_VS",
         "handle": "StandardVS.cso",
-        "constBufFloat4Num": 5,
+        "constBufFloat4Num": 1,
         "constBufMatrixNum": 1
       },
       {
         "name": "TILEMAP_VS",
         "handle": "TileMapVS.cso",
         "constBufFloat4Num": 1
-      },
-      {
-        "name": "CHARACTER_MODEL_VS",
-        "handle": "CharacterModelVS.cso",
-        "constBufFloat4Num": 0,
-        "constBufMatrixNum": 2
-      },
-      {
-        "name": "CHARACTER_SHADOW_VS",
-        "handle": "CharacterShadowVS.cso",
-        "constBufFloat4Num": 0,
-        "constBufMatrixNum": 2
-      },
-      {
-        "name": "SHADOW_MESH_VS",
-        "handle": "ShadowMeshVS.cso",
-        "constBufFloat4Num": 0
-      },
-      {
-        "name": "SHADOW_SKINNED_MESH_VS",
-        "handle": "ShadowSkinnedMeshVS.cso",
-        "constBufFloat4Num": 0
       }
     ]
   }

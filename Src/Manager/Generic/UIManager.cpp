@@ -179,11 +179,11 @@ void UIManager::DrawAttackButtonAndDodgeButton(void)
 	Vector2F btnPos = topButtonPos_;
 	ButtonUIManager::GetInstance().DrawFromLeftTop(ButtonUIManager::BTN_UI_TYPE::B_BUTTON_COL_PUSH, btnPos, buttonSize_);
 	Vector2F strPos = { btnPos.x + buttonSize_ ,btnPos.y + FONT_SIZE / 2.0f };
-	DrawStringFToHandle(strPos.x, strPos.y, attackStr_.c_str(), UtilityCommon::BLACK, fontHandle_);
+	DrawStringFToHandle(strPos.x, strPos.y, attackStr_.c_str(), UtilityCommon::WHITE, fontHandle_);
 
 	btnPos.y += buttonSize_ + buttonDistanceY_;
 	strPos.y += buttonSize_ + buttonDistanceY_;
-	DrawStringFToHandle(strPos.x, strPos.y, dodgeStr_.c_str(), UtilityCommon::BLACK, fontHandle_);
+	DrawStringFToHandle(strPos.x, strPos.y, dodgeStr_.c_str(), UtilityCommon::WHITE, fontHandle_);
 	ButtonUIManager::GetInstance().DrawFromLeftTop(ButtonUIManager::BTN_UI_TYPE::X_BUTTON_COL_PUSH, btnPos, buttonSize_);
 }
 

@@ -14,8 +14,7 @@ SceneBase::SceneBase(void) :
 	scnMng_(SceneManager::GetInstance()),
 	inputMng_(InputManager::GetInstance()),
 	inputMngS_(InputManagerS::GetInstance()),
-	soundMng_(SoundManager::GetInstance()),
-	shadowMng_(ShadowManager::GetInstance())
+	soundMng_(SoundManager::GetInstance())
 {
 	buttonFontHandle_ = -1;
 	loadingTime_ = -1;

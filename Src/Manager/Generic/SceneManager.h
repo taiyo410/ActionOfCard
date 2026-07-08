@@ -128,12 +128,6 @@ public:
 	/// @param  
 	void Fade(void);
 
-	//オリジナルシャドウマップ用テクスチャの作成
-	void MakeShadowMapTextureOriginal(void);
-
-	//DxLibの関数を用いてのシャドウマップテクスチャ作成
-	void MakeShadowMapTextureForDxLib(void);
-
 private:
 
 #pragma region メンバー定数

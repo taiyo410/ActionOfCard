@@ -194,7 +194,8 @@ void CharacterBase::Draw(void)
 
 void CharacterBase::DrawShadow(void)
 {
-	MV1DrawModel(trans_.modelId);
+	DrawCommon();
+	DrawCharacter();
 }
 
 void CharacterBase::DrawCommon(void)

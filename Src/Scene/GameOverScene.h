@@ -35,9 +35,6 @@ private:
 	//ゲームオーバー画面
 	int imgGameOver_;
 
-	//サウンド
-	SoundManager& soundMng_;
-
 	//更新関数
 	void NormalUpdate(void) override;
 

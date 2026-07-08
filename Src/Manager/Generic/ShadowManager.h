@@ -16,9 +16,9 @@ public:
 	/// @param  
 	void Init(void);
 
-	///// @brief 描画
-	///// @param  
-	//void Draw(void);
+	/// @brief 解放
+	/// @param  
+	void Release(void);
 
 	/// @brief シャドウ描画の初期化
 	/// @param  
@@ -27,15 +27,10 @@ public:
 	/// @brief DxLibによるシャドウマップを始める際のセット
 	/// @param  
 	void DrawStartSetUp(void);
+
+	/// @brief DxLibによるシャドウマップを終える際のセット
+	/// @param  
 	void DrawEndSetUp(void);
-
-	/// @brief 通常のメッシュのシャドウマップ描画
-	/// @param _drawFunc 描画する関数
-	void DrawShadowNormal(void);
-
-	/// @brief スキンメッシュのシャドウマップ描画
-	/// @param _drawFunc 描画する関数
-	void DrawShadowSkinned(void);
 
 	/// @brief シェーダーのリセット
 	/// @param  
@@ -46,28 +41,10 @@ public:
 	/// @return 
 	const int GetShadowMapTexture(void) { return shadowMapTexture_; }
 
-	/// @brief ライトビュー行列の取得
-	/// @param
-	/// @return ライトビュー行列
-	const MATRIX& GetLightViewMatrix(void) const { return lightViewMatrix_; }
-
-	/// @brief ライトプロジェクション行列の取得
-	/// @param
-	/// @return ライトプロジェクション行列
-	const MATRIX& GetLightProjectionMatrix(void) const { return lightProjectionMatrix_; }
-
-	/// @brief シャドウマップ行列の取得
+	/// @brief ライト×ビュープロジェクションの行列の取得
 	/// @param  
-	/// @return 
-	const MATRIX& GetShadowMatrix(void) const { return shadowMat_; }
-
-	/// @brief ライトのビュー行列を設定
-	/// @param lightViewMat ビュー行列
-	void SetLightViewMatrix(const MATRIX& lightViewMat) { lightViewMatrix_ = lightViewMat; }
-
-	/// @brief ライトのプロジェクション行列を設定
-	/// @param lightProjectionMat プロジェクション行列
-	void SetLightProjectionMatrix(const MATRIX& lightProjectionMat) { lightProjectionMatrix_ = lightProjectionMat; }
+	/// @return ライト×ビュープロジェクションの行列
+	const MATRIX& GetShadowMapViewProjectionMat(void) const { return shadowMapViewProjectionMat__; }
 
 private:
 
@@ -95,13 +72,8 @@ private:
 	CharacterManager& charaMng_;	// キャラクター管理クラスの参照
 
 	int shadowMapTexture_;			//シャドウマップ用テクスチャのハンドル
-	int shadowPsHandle_;			// シャドウマップ生成用ピクセルシェーダーのハンドル
-	int shadowMeshVSHandle_;		// シャドウマップ生成用メッシュ頂点シェーダーのハンドル
-	int shadowSkinnedMeshVSHandle_;	// シャドウマップ生成用スキンメッシュのハンドル
 
-	MATRIX shadowMat_;				//シャドウマップの行列
-	MATRIX lightViewMatrix_;			// ライトのビュー行列
-	MATRIX lightProjectionMatrix_;	// ライトのプロジェクション行列
+	MATRIX shadowMapViewProjectionMat__;				//ライト×ビュープロジェクションの行列
 #pragma endregion
 
 #pragma region メンバー関数

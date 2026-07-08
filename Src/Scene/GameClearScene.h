@@ -27,7 +27,7 @@ public:
 
 	/// @brief 解放
 	/// @param  
-	void Release(void)override;
+	void Release(void) override;
 
 private:
 
@@ -35,23 +35,13 @@ private:
 	//イージング時間
 	static constexpr float EASING_TIME = 1.0f;
 
-	//BGMの大きさ
-	static constexpr float BGM_VOL = 0.8f;
-
 	//イージングY座標上限
 	static constexpr float BACK_TITLE_STRING_POS_EASE_LIMIT = 40;
 #pragma endregion
 
-#
-
-
+#pragma region メンバー変数
 	//ゲームクリア画像
 	int imgGameClear_;
-
-	//サウンド
-	SoundManager& soundMng_;
-
-
 
 	//イージング
 	std::unique_ptr<Easing>easing_;
@@ -61,7 +51,9 @@ private:
 
 	//文字のY座標
 	float strYPos_;
+#pragma endregion
 
+#pragma region メンバー関数
 	//更新関数
 	void NormalUpdate(void) override;
 
@@ -70,5 +62,6 @@ private:
 
 	//処理の変更
 	void OnSceneEnter(void) override;
+#pragma endregion
 };
 

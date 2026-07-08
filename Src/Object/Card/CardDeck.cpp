@@ -44,13 +44,6 @@ void CardDeck::Init(void)
 	currentNum_ = 0;
 }
 
-void CardDeck::CardUseUpdate(void)
-{
-	CardSystem& cardSystem = CardSystem::GetInstance();
-	//カード同士を比べる
-	cardSystem.CompareCards();
-}
-
 void CardDeck::EraseHandCard(void)
 {
 	usingCards_.clear();
@@ -132,12 +125,6 @@ void CardDeck::LoadCardData(void)
 	AddDrawPile(CardBase::CARD_STATUS{ RELOAD_CARD_POW,CardBase::CARD_TYPE::RELOAD });
 }
 
-void CardDeck::AddDuelDeck(const CardBase::CARD_STATUS& _status)
-{
-	std::unique_ptr<CardBase>card = std::make_unique<CardBase>(_status);
-	enemyDuelDeck_.emplace_back(std::move(card));
-}
-
 void CardDeck::MoveUsingCardToDrawPile(void)
 {
 	//山札にあるカードを手札に加える
@@ -151,26 +138,6 @@ void CardDeck::MoveUsingCardToDrawPile(void)
 	}
 	//システム側の処理
 	DrawCardFromDeck();
-}
-
-void CardDeck::MoveUsingCardToDuelDeck(void)
-{
-	//山札にあるカードを手札に加える
-	usingCards_.emplace_back(std::move(enemyDuelDeck_[currentNum_]));
-
-	//山札からカードを削除する
-	UtilityTemplates::EraseVectorArray(enemyDuelDeck_);
-	if (currentNum_ > static_cast<int>(enemyDuelDeck_.size()) - 1)
-	{
-		currentNum_ = 0;
-	}
-	//システム側の処理
-	DrawCardFromDeck();
-}
-
-void CardDeck::ClearDuelDeck(void)
-{
-	enemyDuelDeck_.clear();
 }
 
 void CardDeck::DrawCardFromDeck(void)
@@ -226,22 +193,6 @@ void CardDeck::Reload(void)
 
 	//それぞれの番号の初期化
 	currentNum_ = 0;
-}
-
-void CardDeck::MoveChargeToUsingCard(void)
-{
-	const int cardSize = static_cast<int>(usingCards_.size());
-	if (cardSize >= CHARGE_MAX)
-	{
-		//ここは絶対通らない
-		return;
-	}
-	//チャージ札に移動
-	chargeCard_.emplace_back(std::move(usingCards_[0]));
-	usingCards_.clear();
-
-	//負けた時の初期化
-	CardSystem::GetInstance().LoseInitPutCardPow(playerNum_);
 }
 
 void CardDeck::CardMoveLimit(void)

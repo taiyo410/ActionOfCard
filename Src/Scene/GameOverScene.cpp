@@ -10,7 +10,6 @@
 #include "GameOverScene.h"
 
 GameOverScene::GameOverScene(void):
-	soundMng_(SoundManager::GetInstance()),
 	imgGameOver_(UtilityCommon::INITIAL_HANDLE)
 {
 	//更新関数のセット

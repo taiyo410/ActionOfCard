@@ -58,7 +58,8 @@ Camera::Camera(void):
 	startAngles_(),
 	startFollowLocalCenterPos_(),
 	targetPoses_(),
-	followPos_()
+	followPos_(),
+	followLocalPos_()
 {
 
 }
@@ -156,7 +157,6 @@ void Camera::SetBeforeDraw(void)
 
 void Camera::Draw(void)
 {
-	DrawFormatString(500, 500, 0xffffff, L"cameraPos(%f,%f)", lightPos_.x, lightPos_.y);
 }
 
 void Camera::OnHit(const std::weak_ptr<Collider> _hitCol)

@@ -1,6 +1,7 @@
 #include <chrono>
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
+#include "Utility/UtilityCommon.h"
 #include "Manager/Generic/DataBank.h"
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/ButtonUIManager.h"
@@ -41,10 +42,6 @@ void SceneManager::Init(void)
 		Application::SCREEN_SIZE_X,
 		Application::SCREEN_SIZE_Y,
 		true);
-
-	//シャドウマップ生成
-	ShadowManager::CreateInstance();
-	ShadowManager::GetInstance().Init();
 
 	//ウィンドウがアクティブ状態でなくとも処理を行う
 	SetAlwaysRunFlag(true);
@@ -209,7 +206,10 @@ void SceneManager::DeletePostEffect(const std::shared_ptr<PixelRenderer> _postEf
 	}
 }
 
-SceneManager::SceneManager(void)
+SceneManager::SceneManager(void):
+	isEndFade_(false),
+	mainScreen_(UtilityCommon::INITIAL_HANDLE),
+	postEffScreen_(UtilityCommon::INITIAL_HANDLE)
 {
 	sceneId_ = SCENE_ID::NONE;
 	waitSceneId_ = SCENE_ID::NONE;
@@ -351,34 +351,5 @@ void SceneManager::PostEffectScreen(void)
 
 	// 暗転・明転
 	fader_->Draw();
-
-}
-
-void SceneManager::MakeShadowMapTextureOriginal(void)
-{
-	//// 描画可能テクスチャをシャドウマップ用にする
-	//SetCreateDrawValidGraphChannelNum(1);
-
-	//// 描画可能テクスチャを浮動小数点型で作成するフラグを有効にする
-	//SetDrawValidFloatTypeGraphCreateFlag(TRUE);
-
-	//// 描画可能テクスチャの色深度を設定する
-	//SetCreateGraphColorBitDepth(COLOR_BIT_DEPTH);
-
-	//// シャドウマップ用テクスチャの作成
-	//shadowMapTexture_ = MakeScreen(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE, false);
-
-	//// 描画可能テクスチャを通常の設定に戻す
-	//SetDrawValidFloatTypeGraphCreateFlag(FALSE);
-
-	//// 描画可能テクスチャのチャンネル数を元に戻す
-	//SetCreateDrawValidGraphChannelNum(DEFAULT_CHANNEL_NUM);
-
-	//// 描画可能テクスチャの色深度を元に戻す
-	//SetCreateGraphChannelBitDepth(0);
-}
-
-void SceneManager::MakeShadowMapTextureForDxLib(void)
-{
 
 }

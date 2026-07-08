@@ -54,7 +54,7 @@ VS_OUTPUT ret;
 // ディフューズカラー
     ret.diffuse = VSInput.diffuse;
     
-    // 透視投影に変更した時のためW除算をしておく
+    // ライトは使わないため初期化
     ret.lightAtPos = float3(0,0,0);
     
 // その他、ピクセルシェーダへ引継&初期化 ++++++++++++( 終了 )

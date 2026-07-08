@@ -78,7 +78,6 @@ protected:
 	InputManagerS& inputMngS_;		//スティックなどの入力
 	SceneManager& scnMng_;			//シーンマネージャ
 	SoundManager& soundMng_;		//サウンドマネージャ
-	ShadowManager& shadowMng_;		//シャドウマネージャ
 
 	std::function<void(void)> updateFunc_;	//更新処理
 	std::function<void(void)> drawFunc_;	//描画処理
