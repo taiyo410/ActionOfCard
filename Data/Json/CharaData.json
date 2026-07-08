@@ -83,7 +83,7 @@
 	},
 	"Enemy": {
 		"Status": {
-			"hp": 500,
+			"hp": 400,
 			"speed": 9.0
 		},
 		"ModelData": {
