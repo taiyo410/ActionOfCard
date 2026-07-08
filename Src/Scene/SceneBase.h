@@ -8,6 +8,7 @@ class ResourceManager;
 class InputManager;
 class InputManagerS;
 class SoundManager;
+class ShadowManager;
 
 class SceneBase
 {

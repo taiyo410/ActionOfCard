@@ -13,7 +13,7 @@ ResourceManager::ResourceManager(void):
 	//素材の登録文字列とSRCの結び付け
 	resStr_ = {
 		//モデル
-		{"STAGE",SRC::STAGE },
+		{"STAGE_FLOOR",SRC::STAGE_FLOOR },
 		{"STAGE_WALL",SRC::STAGE_WALL},
 		{"PLAYER" ,SRC::PLAYER},
 		{"ENEMY_1",SRC::ENEMY},
@@ -110,8 +110,11 @@ ResourceManager::ResourceManager(void):
 		{"ACTION_DATA" ,SRC::ACTION_DATA},
 		{"COLLISION_DATA" ,SRC::COLLISION_DATA},
 		{"UI_DATA" ,SRC::UI_DATA},
+		{"MODEL_DATA" ,SRC::MODEL_DATA},
 		//ピクセルシェーダ
-		{"STAGE_PS",SRC::STAGE_PS},
+		{"STANDARD_PS",SRC::STANDARD_PS},
+		{"TILEMAP_PS",SRC::TILEMAP_PS},
+		{"CHARACTER_MODEL_PS",SRC::CHARACTER_MODEL_PS},
 		{"SKYDOME_PS",SRC::SKYDOME_PS},
 		{"HPBAR_PS",SRC::HPBAR_PS},
 		{"ARCBAR_PS",SRC::ARCBAR_PS},
@@ -119,8 +122,16 @@ ResourceManager::ResourceManager(void):
 		{"CARD_RELOAD_PS",SRC::CARD_RELOAD_PS},
 		{"CARD_SELECT_PS",SRC::CARD_SELECT_PS},
 		{"REVOLUTION_POSTEFF_PS",SRC::REVOLUTION_POSTEFF_PS},
+		{"CHARACTER_SHADOW_PS",SRC::CHARACTER_SHADOW_PS },
+		{"SHADOW_PS",SRC::SHADOW_PS },
+		{"SHADOW_STANDARD_PS",SRC::SHADOW_STANDARD_PS },
 		//頂点シェーダ
-		{"STAGE_VS",SRC::STAGE_VS}
+		{"STANDARD_VS",SRC::STANDARD_VS },
+		{"TILEMAP_VS",SRC::TILEMAP_VS},
+		{"CHARACTER_MODEL_VS",SRC::CHARACTER_MODEL_VS},
+		{"CHARACTER_SHADOW_VS",SRC::CHARACTER_SHADOW_VS},
+		{"SHADOW_MESH_VS",SRC::SHADOW_MESH_VS},
+		{"SHADOW_SKINNED_MESH_VS",SRC::SHADOW_SKINNED_MESH_VS}
 	};
 
 	//リソース種類と文字列の結び付け
@@ -393,12 +404,17 @@ void ResourceManager::LoadResourceShader(const RES_INFO _info, const nlohmann::j
 	RESOURCE_COMMON_PARAM parameter = GetResourceParameter(_info,_data);
 
 	//定数バッファサイズ
-	int constBufNum = 0;
+	int constBufFloat4Num = 0;
+	int constBufMatrixNum = 0;
 
-	//定数バッファサイズを取得
-	constBufNum = _data.value("constBufNum", 0);
+	//FLOAT4の定数バッファサイズを取得
+	constBufFloat4Num = _data.value("constBufFloat4Num", 0);
+
+	//MATRIXの定数バッファサイズを取得
+	constBufMatrixNum = _data.value("constBufMatrixNum", 0);
+
 	//シェーダのリソース情報を渡す
-	res = std::make_unique<ResourceData>(parameter.type, parameter.path, constBufNum);
+	res = std::make_unique<ResourceData>(parameter.type, parameter.path, constBufFloat4Num, constBufMatrixNum);
 
 	//配列に挿入
 	resourcesMap_.emplace(parameter.src, std::move(res));

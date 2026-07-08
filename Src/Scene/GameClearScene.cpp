@@ -14,7 +14,6 @@
 #include "GameClearScene.h"
 
 GameClearScene::GameClearScene(void):
-	soundMng_(SoundManager::GetInstance()),
 	easeCnt_(0.0f),
 	strYPos_(SceneBase::BACK_TITLE_STRING_POS_Y)
 {

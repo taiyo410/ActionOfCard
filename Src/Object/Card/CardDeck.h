@@ -38,14 +38,6 @@ public:
 	/// @brief 描画
 	/// @param  
 	void Draw(void)override;
-	
-	/// @brief デュエルデッキにカード追加
-	/// @param _status 追加したいカードの強さ
-	void AddDuelDeck(const CardBase::CARD_STATUS& _status);
-
-	/// @brief カード使用
-	/// @param  
-	void CardUseUpdate(void);
 
 	/// @brief 使用中のカードを消す
 	/// @param _isLose カード負けかどうか
@@ -59,14 +51,6 @@ public:
 	/// @brief カードを使用札に移動
 	/// @param  
 	void MoveUsingCardToDrawPile(void);
-
-	/// @brief デュエルデッキから使用札へ
-	/// @param  
-	void MoveUsingCardToDuelDeck(void);
-
-	/// @brief デュエルデッキの解放
-	/// @param  
-	void ClearDuelDeck(void);
 
 	/// @brief デッキからカードを引く
 	/// @param  
@@ -82,7 +66,9 @@ public:
 	/// @return 
 	bool IsNone(void);
 
-	//カード勝利フラグ	
+	/// @brief 勝利したかどうかの取得
+	/// @param  
+	/// @return 
 	bool IsCardWin(void);
 	
 	/// @brief カードの種類(アタックカードか魔法カードか)の取得
@@ -98,10 +84,6 @@ public:
 	/// @brief リロードする
 	/// @param  
 	void Reload(void);
-
-	/// @brief 使用中カードからチャージカードへ移動
-	/// @param  
-	void MoveChargeToUsingCard(void);
 
 private:
 

@@ -360,6 +360,15 @@
     <ClCompile Include="Src\Object\Common\Geometry\Plane.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Object\Character\Action\EnemyAction\EnemyRevolutionAction.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Object\Common\Geometry\ExternalLine.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Manager\Generic\ShadowManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Common\Fader.h">
@@ -809,6 +818,15 @@
     <ClInclude Include="Src\Object\Common\Geometry\Plane.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Object\Character\Action\EnemyAction\EnemyRevolutionAction.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Object\Common\Geometry\ExternalLine.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Manager\Generic\ShadowManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Src\Shader\Common\Pixel\PixelShader2DHeader.hlsli" />
@@ -818,18 +836,19 @@
     <None Include="Src\Shader\Common\Vertex\VertexInputType.hlsli" />
     <None Include="Src\Shader\Common\Vertex\VertexShader3DHeader.hlsli" />
     <None Include="Src\Shader\Common\VertexToPixelHeader.hlsli" />
+    <None Include="Src\Shader\Common\Pixel\PixelShaderCommonFunction.hlsli" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Src\Shader\Model\StagePS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\StageVS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\CardVS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\TileMapPS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\TileMapVS.hlsl" />
     <FxCompile Include="Src\Shader\Model\CardNormalPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\CardReloadPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\LineHpBarPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\ArcHpBarPS.hlsl" />
     <FxCompile Include="Src\Shader\Model\SelectCardPS.hlsl" />
-    <FxCompile Include="Src\Shader\Model\IntensivePS.hlsl" />
     <FxCompile Include="Src\Shader\Model\SkyDomePS.hlsl" />
     <FxCompile Include="Src\Shader\Model\RevolutionPostEffectPS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\StandardPS.hlsl" />
+    <FxCompile Include="Src\Shader\Model\StandardVS.hlsl" />
   </ItemGroup>
 </Project>

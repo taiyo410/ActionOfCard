@@ -1,0 +1,47 @@
+{
+  "StageFloor": {
+    "model": "STAGE_FLOOR"
+  },
+  "StageWall": {
+    "model": "STAGE_WALL"
+  },
+  "Player": {
+    "model": "PLAYER",
+    "scale": 1.0,
+    "spineFrameNum": 0,
+    "handFrameNum": 36,
+    "localDegree": {
+      "x": 0.0,
+      "y": 180.0,
+      "z": 0.0
+    },
+    "localPos": {
+      "x": 0.0,
+      "y": 25.0,
+      "z": 0.0
+    }
+  },
+  "Enemy": {
+    "model": "ENEMY_1",
+    "spineFrameNum": 1,
+    "handFrameNum": 36,
+    "chestFrameNum": 4,
+    "scale": 5.0,
+    "localDegree": {
+      "x": 0.0,
+      "y": 180.0,
+      "z": 0.0
+    },
+    "localPos": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    }
+  },
+  "Weapon": {
+    "model": "WEAPON_1",
+    "scale": 0.2,
+    "effectPlayFrameNo": 1,
+    "effectScale": 20.0
+  }
+}

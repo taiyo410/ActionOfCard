@@ -1,9 +1,11 @@
 #include <chrono>
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
+#include "Utility/UtilityCommon.h"
 #include "Manager/Generic/DataBank.h"
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Generic/ButtonUIManager.h"
+#include "Manager/Generic/ShadowManager.h"
 #include "Scene/TitleScene.h"
 #include "Scene/GameScene.h"
 #include "Scene/GameEventRevolutionScene.h"
@@ -204,7 +206,10 @@ void SceneManager::DeletePostEffect(const std::shared_ptr<PixelRenderer> _postEf
 	}
 }
 
-SceneManager::SceneManager(void)
+SceneManager::SceneManager(void):
+	isEndFade_(false),
+	mainScreen_(UtilityCommon::INITIAL_HANDLE),
+	postEffScreen_(UtilityCommon::INITIAL_HANDLE)
 {
 	sceneId_ = SCENE_ID::NONE;
 	waitSceneId_ = SCENE_ID::NONE;

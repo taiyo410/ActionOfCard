@@ -297,7 +297,7 @@ void Utility3D::MoveLimit(VECTOR& _objectPos, VECTOR& _movedPos,const float _bod
     {
         _movedPos.z = limit.z;
     }
-    if (limitPos.z <= -limit.z)
+    if (limitPos.z < -limit.z)
     {
         _movedPos.z = -limit.z;
     }

@@ -13,7 +13,7 @@ class Player;
 class Enemy;
 class Stage;
 class CardSystem;
-
+class ShadowManager;
 class DrawUI3D;
 
 class GameScene : public SceneBase
@@ -88,11 +88,11 @@ private:
 	std::unique_ptr<SkyDome> skyDome_;								//スカイドーム
 	std::unique_ptr<Stage> stage_;									//ステージ
 	std::shared_ptr<PauseScene> pauseScene_;						//ポーズ画面
-	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン	//レンダラー
+	std::shared_ptr<GameEventRevolutionScene> revolutionScene_;		//革命シーン
 
 	//更新フェーズ
 	UPDATE_PHASE updatePhase_;											//更新
-	std::map<UPDATE_PHASE, std::function<void(void)>> changeUpdate_;		//遷移
+	std::map<UPDATE_PHASE, std::function<void(void)>> changeUpdate_;	//遷移
 
 	int slowFrame_;										//スローカウンタ(フレーム)
 	bool isSkippingDirection_;							//スキップ中
@@ -134,6 +134,9 @@ private:
 	/// @brief 更新フェーズの変更
 	/// @param _phase 
 	void ChangeUpdatePhase(const UPDATE_PHASE _phase);
+
+	//シャドウの描画
+	void DrawShadow(void);
 
 	//各状態の遷移処理
 	void ChangeNone(void);

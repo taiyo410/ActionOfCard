@@ -51,6 +51,10 @@ public:
     /// @param  
     void Draw(void)override;
 
+    /// @brief 影の描画
+    /// @param  
+    void DrawShadow(void);
+
     /// @brief 当たった時の処理
     /// @param _hitCol 相手のコライダ
     void OnHit(const std::weak_ptr<Collider> _hitCol)override;
@@ -64,14 +68,22 @@ private:
     //壁の文字列(当たり判定生成用)
     const std::string WALL_STR = "Wall";
 
-#pragma endregion
+    //環境光の設定
+    const VECTOR AMBIENT_VEC = { 0.2f, 0.2f, 0.2f };
 
+#pragma endregion
 
     //壁の情報
     Transform wallTrans_;
 
-    //シェーダー関連
-    std::unique_ptr<ModelMaterial> material_;       //マテリアル
-    std::unique_ptr<ModelRenderer> renderer_;       //レンダラー
+	//壁のマテリアルとレンダラー
+    std::unique_ptr<ModelMaterial> wallMaterial_;
+    std::unique_ptr<ModelRenderer> wallRenderer_;
+
+#pragma region メンバー関数
+    //シェーダー設定
+    void SettingShader(void);
+#pragma endregion
+
 };
 

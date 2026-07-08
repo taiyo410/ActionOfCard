@@ -29,6 +29,9 @@ public:
 		GAME_OVER,
 	};
 	
+	//ライトの方向
+	static constexpr VECTOR LIGHT_DIR = { 0.0f, -1.0f, 1.0f };
+
 	/// @brief 初期化
 	/// @param  
 	void Init(void);
@@ -128,8 +131,6 @@ public:
 private:
 
 #pragma region メンバー定数
-	//ライトの方向
-	static constexpr VECTOR LIGHT_DIR = { 0.0f, -1.0f, 1.0f };
 
 	//フォグの色
 	static constexpr int FOG_COLOR_R = 5;

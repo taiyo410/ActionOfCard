@@ -3,7 +3,10 @@
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Resource/SoundManager.h"
 #include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/ShadowManager.h"
 #include "Manager/Game/CollisionManager.h"
+#include "Renderer/ModelMaterial.h"
+#include "Renderer/ModelRenderer.h"
 #include "./Common/Geometry/Capsule.h"
 #include "./Common/Geometry/Cube.h"
 #include "./Common/Geometry/Model.h"
@@ -17,6 +20,7 @@ ObjectBase::ObjectBase(void)
 	scnMng_(SceneManager::GetInstance()),
 	tag_(Collider::TAG::NONE),
 	soundMng_(SoundManager::GetInstance()),
+	shadowMng_(ShadowManager::GetInstance()),
 	trans_()
 {
 	makeCollisionTable_ = {
@@ -99,7 +103,6 @@ const bool ObjectBase::IsAliveCollider(const Collider::TAG _chataTag, const Coll
 	return false;
 }
 
-
 void ObjectBase::DeleteCollider(const TAG_PRIORITY _priority)
 {
 	//“Á’è‚Ìƒ^ƒO‚ð’T‚·
@@ -133,6 +136,10 @@ void ObjectBase::DeleteAllCollider(void)
 void ObjectBase::LoadObjectData(void)
 {
 
+}
+
+void ObjectBase::LoadModelData(const std::string& _modelName)
+{
 }
 
 void ObjectBase::MakeColliderFromJsonData(void)

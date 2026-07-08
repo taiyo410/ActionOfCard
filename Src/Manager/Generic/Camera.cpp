@@ -18,7 +18,8 @@
 Camera::Camera(void):
 	angles_(),
 	cameraUp_(),
-	mode_(MODE::NONE),
+	currentMode_(MODE::NONE),
+	preMode_(MODE::NONE),
 	pos_(),
 	targetPos_(),
 	prePos_(),
@@ -57,7 +58,8 @@ Camera::Camera(void):
 	startAngles_(),
 	startFollowLocalCenterPos_(),
 	targetPoses_(),
-	followPos_()
+	followPos_(),
+	followLocalPos_()
 {
 
 }
@@ -78,7 +80,7 @@ void Camera::Init(void)
 		{MODE::SELF_SHOT,[this]() {ChangeSelfShot(); }},
 		{MODE::TARGET_POINT,[this]() {ChangeTargetCamera(); }},
 		{MODE::CHANGE_TARGET,[this]() {ChangeTargetLerp(); }},
-		{MODE::START_DIRECTION ,[this]() {ChangeStartDirection(); }}
+		{MODE::START_DIRECTION ,[this]() {ChangeStartDirection(); }},
 	};
 
 	//カメラのサブモード
@@ -109,6 +111,32 @@ void Camera::Update(void)
 
 	//イージングなどの更新
 	subUpdate_();
+
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_I))
+	{
+		lightPos_.z += 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_K))
+	{
+		lightPos_.z -= 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_J))
+	{
+		lightPos_.x -= 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_L))
+	{
+		lightPos_.x += 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_I))
+	{
+		lightPos_.y += 10.0f;
+	}
+	if (InputManager::GetInstance().IsNew(KEY_INPUT_P))
+	{
+		lightPos_.y -= 10.0f;
+	}
+
 }
 
 void Camera::SetBeforeDraw(void)
@@ -196,10 +224,25 @@ VECTOR Camera::GetForward(void) const
 
 void Camera::ChangeMode(const MODE mode)
 {
-	if (mode_ == mode)return;
+	if (currentMode_ == mode)return;
+	//現在のカメラモードを保存
+	preMode_ = currentMode_;
 	// カメラモードの変更
-	mode_ = mode;
-	changeMode_[mode_]();
+	currentMode_ = mode;
+	changeMode_[currentMode_]();
+}
+
+void Camera::UndoShadowCamera(void)
+{
+	// クリップ距離を設定する(SetDrawScreenでリセットされる)
+	SetCameraNearFar(CAMERA_NEAR, CAMERA_FAR);
+
+	// カメラの設定(位置と注視点による制御)
+	SetCameraPositionAndTargetAndUpVec(
+		pos_,
+		targetPos_,
+		cameraUp_
+	);
 }
 
 void Camera::SetDefault(void)
@@ -499,6 +542,30 @@ void Camera::SetBeforeDrawStartDirection(void)
 	directionUpdate_();
 }
 
+void Camera::SetShadowCamera(void)
+{
+	constexpr float SIZE = 13250.0f;
+	//constexpr float SIZE = 3000.0f;
+	constexpr float S_NEAR = 10.0f;
+	constexpr float S_FAR = 13050.0f;
+	constexpr float TARGET_LIMIT_Y = 0;
+
+	// カメラのタイプを正射影タイプにセット、描画範囲も指定
+	SetupCamera_Ortho(SIZE);
+
+	// 描画する奥行き範囲をセット
+	SetCameraNearFar(S_NEAR, S_FAR);
+
+	// 注視点に制限を設ける
+	VECTOR target = targetPos_;
+	if (target.y > TARGET_LIMIT_Y) {target.y = TARGET_LIMIT_Y; }
+
+	// カメラの視点、注視点を設定
+	static constexpr VECTOR LIGHT_POS = { 2976, 2281, 1985 };
+	static constexpr VECTOR LIGHT_TARGET = { 2889, 2127, 2079 };
+	SetCameraPositionAndTarget_UpVecY(lightPos_, targetPos_);
+}
+
 void Camera::ChangeFixedPoint(void)
 {
 	SetDefault();
@@ -535,6 +602,10 @@ void Camera::ChangeStartDirection(void)
 	directionMode_ = DIRECTION_MODE::NONE;
 	ChangeDirectionMode(DIRECTION_MODE::PLAYER_AND_ENEMY_VIEW);
 	modeUpdate_ = [this]() {SetBeforeDrawStartDirection(); };
+}
+void Camera::ChangeShadowCamera(void)
+{
+	modeUpdate_ = [this]() {SetShadowCamera(); };
 }
 void Camera::UpdateNone(void)
 {

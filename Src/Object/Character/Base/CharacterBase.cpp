@@ -2,7 +2,11 @@
 #include "Utility/Utility3D.h"
 #include "Utility/UtilityJson.h"
 #include "Manager/Generic/SceneManager.h"
+#include "Manager/Generic/Camera.h"
 #include "Manager/Generic/UIManager.h"
+#include "Manager/Generic/ShadowManager.h"
+#include "Renderer/ModelMaterial.h"
+#include "Renderer/ModelRenderer.h"
 #include "Object/Common/AnimationController.h"
 #include "Object/Common/EffectController.h"
 #include "Object/Common/Geometry/Capsule.h"
@@ -122,6 +126,12 @@ void CharacterBase::LoadCommonData(void)
 
 void CharacterBase::InitCommon(void)
 {
+	material_ = std::make_unique<ModelMaterial>(
+		ResourceManager::SRC::CHARACTER_MODEL_VS,
+		ResourceManager::SRC::CHARACTER_MODEL_PS);
+
+	renderer_ = std::make_unique<ModelRenderer>(trans_.modelId, *material_);
+
 	trans_.scl = { modelScl_,modelScl_,modelScl_ };
 	trans_.quaRotLocal =
 		Quaternion::Euler({ UtilityCommon::Deg2RadF(localDeg_.x)
@@ -177,6 +187,12 @@ void CharacterBase::Update(void)
 }
 
 void CharacterBase::Draw(void)
+{
+	DrawCommon();
+	DrawCharacter();
+}
+
+void CharacterBase::DrawShadow(void)
 {
 	DrawCommon();
 	DrawCharacter();

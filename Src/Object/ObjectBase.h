@@ -10,7 +10,10 @@
 class ResourceManager;
 class SceneManager;
 class SoundManager;
+class ShadowManager;
 class Geometry;
+class ModelMaterial;
+class ModelRenderer;
 
 class ObjectBase
 {
@@ -81,13 +84,22 @@ public:
 
 protected:
 
+#pragma region メンバー定数
+	static constexpr int SHADOW_MAP_TEXTURE_NUM = 8;
+#pragma endregion
+
 	// シングルトン参照
 	ResourceManager& resMng_;		//リソース
 	SceneManager& scnMng_;			//シーン
-	SoundManager& soundMng_;
+	SoundManager& soundMng_;		//サウンド
+	ShadowManager& shadowMng_;		//シャドウマネージャー
 
 	// モデル制御の基本情報
 	Transform trans_;
+
+	//シェーダー関連
+	std::unique_ptr<ModelMaterial> material_;       //マテリアル
+	std::unique_ptr<ModelRenderer> renderer_;       //レンダラー
 
 	//当たり判定関係
 	std::map<TAG_PRIORITY, std::shared_ptr<Collider>> collider_;	//全体の当たり判定情報
@@ -130,6 +142,8 @@ protected:
 	//オブジェクト毎に外部データをロード
 	virtual void LoadObjectData(void);
 
+	//モデル情報のロード
+	virtual void LoadModelData(const std::string& _modelName);
 
 private:
 	//当たり判定形状の文字列と生成する関数の対応表

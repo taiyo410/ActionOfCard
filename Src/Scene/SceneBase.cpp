@@ -4,6 +4,7 @@
 #include "Manager/Generic/SceneManager.h"
 #include "Manager/Generic/InputManager.h"
 #include "Manager/Generic/InputManagerS.h"
+#include "Manager/Generic/ShadowManager.h"
 #include "Manager/Resource/ResourceManager.h"
 #include "Manager/Resource/SoundManager.h"
 #include "./SceneBase.h"

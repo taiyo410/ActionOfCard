@@ -126,7 +126,6 @@ void Player::Draw2D(void)
 {
 
 #ifdef _DEBUG
-	//actionCtrl_->DrawDebug();
 	DrawDebug();
 #endif // _DEBUG
 }
@@ -182,10 +181,7 @@ void Player::Damage(const int _dam)
 void Player::DrawDebug(void)
 {
 	animCtrl_->DrawDebug();
-
 	cardPresent_->DrawCardDeckError();
-
-	DrawFormatString(100, 100, 0x000000, L"pos(%f,%f,%f)", trans_.pos.x, trans_.pos.y, trans_.pos.z);
 	for (const auto& col : collider_)
 	{
 		col.second->GetGeometry().Draw();

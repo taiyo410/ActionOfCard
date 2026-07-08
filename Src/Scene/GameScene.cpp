@@ -12,6 +12,7 @@
 #include "Manager/Game/CollisionManager.h"
 #include "Manager/Game/CharacterManager.h"
 #include "Manager/Resource/SoundManager.h"
+#include "Manager/Generic/ShadowManager.h"
 #include "Manager/Generic/DataBank.h"
 #include "Renderer/PixelMaterial.h"
 #include "Renderer/PixelRenderer.h"
@@ -25,7 +26,8 @@
 GameScene::GameScene(void):
 	isSkippingDirection_(),
 	skipKeepCnt_(),
-	slowFrame_()
+	slowFrame_(),
+	updatePhase_(UPDATE_PHASE::NONE)
 {
 	//更新関数のセット
 	updateFunc_ = [this]() {LoadingUpdate(); };
@@ -50,6 +52,10 @@ GameScene::GameScene(void):
 	CharacterManager::CreateInstance();
 	CollisionManager::CreateInstance();
 
+	//シャドウマップ生成
+	ShadowManager::CreateInstance();
+	ShadowManager::GetInstance().Init();
+
 	//シーンの生成
 	pauseScene_ = std::make_shared<PauseScene>();
 	revolutionScene_ = std::make_shared<GameEventRevolutionScene>();
@@ -62,6 +68,7 @@ GameScene::~GameScene(void)
 	CollisionManager::GetInstance().Destroy();
 	CharacterManager::GetInstance().Destroy();
 	UIManager::GetInstance().Destroy(); 
+	ShadowManager::GetInstance().Destroy();
 	changeUpdate_.clear();
 }
 
@@ -87,6 +94,7 @@ void GameScene::Init(void)
 void GameScene::Release(void)
 {
 	soundMng_.AllStop();
+	ShadowManager::GetInstance().Release();
 }
 
 void GameScene::CheckSkip(void)
@@ -155,7 +163,9 @@ void GameScene::NormalDraw(void)
 
 void GameScene::DirectionDraw(void)
 {
-	//プレイヤー
+	DrawShadow();
+
+	//スカイドーム
 	skyDome_->Draw();
 
 	//ステージ
@@ -176,6 +186,14 @@ void GameScene::ChangeUpdatePhase(const UPDATE_PHASE _phase)
 	if (updatePhase_ == _phase)return;
 	updatePhase_ = _phase;
 	changeUpdate_[updatePhase_]();
+}
+
+void GameScene::DrawShadow(void)
+{
+	ShadowManager::GetInstance().DrawStartSetUp();
+	stage_->DrawShadow();
+	CharacterManager::GetInstance().DrawShadow();
+	ShadowManager::GetInstance().DrawEndSetUp();
 }
 
 void GameScene::ChangeNone(void)
@@ -368,8 +386,11 @@ void GameScene::ObjectUpdate(void)
 
 void GameScene::ObjectDraw(void)
 {
+	DrawShadow();
+
 	skyDome_->Draw();	//プレイヤー
 	stage_->Draw();		//ステージ
+
 	//キャラクター
 	CharacterManager::GetInstance().Draw();
 	CharacterManager::GetInstance().Draw2D();

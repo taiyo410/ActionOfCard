@@ -22,7 +22,7 @@
         "handle": "KeyBlade/KeyBlade1.mv1"
       },
       {
-        "name": "STAGE",
+        "name": "STAGE_FLOOR",
         "handle": "SandStage.mv1"
       },
       {
@@ -427,58 +427,78 @@
       {
         "name": "UI_DATA",
         "handle": "UIData.json"
+      },
+      {
+        "name": "MODEL_DATA",
+        "handle": "ModelData.json"
       }
     ],
 
     "pixelShader": [
       {
-        "name": "STAGE_PS",
-        "handle": "StagePS.cso",
-        "constBufNum": 0
+        "name": "STANDARD_PS",
+        "handle": "StandardPS.cso",
+        "constBufFloat4Num": 3
+      },
+      {
+        "name": "TILEMAP_PS",
+        "handle": "TileMapPS.cso",
+        "constBufFloat4Num": 0
       },
       {
         "name": "SKYDOME_PS",
         "handle": "SkyDomePS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
       },
       {
         "name": "HPBAR_PS",
         "handle": "LineHpBarPS.cso",
-        "constBufNum": 3
+        "constBufFloat4Num": 3
       },
       {
         "name": "ARCBAR_PS",
         "handle": "ArcHpBarPS.cso",
-        "constBufNum": 2
+        "constBufFloat4Num": 2
       },
       {
         "name": "CARD_NORMAL_PS",
         "handle": "CardNormalPS.cso",
-        "constBufNum": 2
+        "constBufFloat4Num": 2
       },
       {
         "name": "CARD_RELOAD_PS",
         "handle": "CardReloadPS.cso",
-        "constBufNum": 2
+        "constBufFloat4Num": 2
       },
       {
         "name": "CARD_SELECT_PS",
         "handle": "SelectCardPS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
       },
       {
         "name": "REVOLUTION_POSTEFF_PS",
         "handle": "RevolutionPostEffectPS.cso",
-        "constBufNum": 1
+        "constBufFloat4Num": 1
+      },
+      {
+        "name": "SHADOW_STANDARD_PS",
+        "handle": "ShadowStandardPS.cso",
+        "constBufFloat4Num": 1
       }
     ],
 
 
     "vertexShader": [
       {
-        "name": "STAGE_VS",
-        "handle": "StageVS.cso",
-        "constBufNum": 1
+        "name": "STANDARD_VS",
+        "handle": "StandardVS.cso",
+        "constBufFloat4Num": 1,
+        "constBufMatrixNum": 1
+      },
+      {
+        "name": "TILEMAP_VS",
+        "handle": "TileMapVS.cso",
+        "constBufFloat4Num": 1
       }
     ]
   }

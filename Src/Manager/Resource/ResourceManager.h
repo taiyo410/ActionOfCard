@@ -19,8 +19,8 @@ public:
 	{
 		NONE,
 		//モデル
-		STAGE,						//ステージ
-		STAGE_WALL,					//壁
+		STAGE_FLOOR,				//ステージ床
+		STAGE_WALL,					//ステージ壁
 		PLAYER,						//プレイヤー
 		ENEMY,						//敵
 		SKY_DOME,					//スカイドーム
@@ -127,19 +127,30 @@ public:
 		ACTION_DATA,					//アクションデータ
 		COLLISION_DATA,					//当たり判定データ
 		UI_DATA,						//UIのパラメータデータ
+		MODEL_DATA,						//モデルのパラメータデータ
 
 		//ピクセルシェーダ
-		STAGE_PS,					//ステージ
+		STANDARD_PS,				//通常描画シェーダー
+		TILEMAP_PS,					//タイルマップ
+		CHARACTER_MODEL_PS,			//キャラクター用のピクセルシェーダ
+		CHARACTER_SHADOW_PS,		//キャラクター用のシャドウシェーダ
 		SKYDOME_PS,					//スカイドーム
 		HPBAR_PS,					//HPバー
 		ARCBAR_PS,					//円形ゲージ
 		CARD_NORMAL_PS,				//通常カード
 		CARD_RELOAD_PS,				//リロードカード
 		CARD_SELECT_PS,				//カード選択枠
-		REVOLUTION_POSTEFF_PS,			//革命を起こした時のポストエフェクト
-		
+		REVOLUTION_POSTEFF_PS,		//革命を起こした時のポストエフェクト
+		SHADOW_PS,					//シャドウ用のピクセルシェーダ
+		SHADOW_STANDARD_PS,			//標準シャドウモデル用のピクセルシェーダ
+
 		//頂点シェーダ
-		STAGE_VS					//ステージ
+		STANDARD_VS,				//通常描画シェーダー
+		TILEMAP_VS,					//タイルマップ
+		CHARACTER_MODEL_VS,			//キャラクターモデル
+		CHARACTER_SHADOW_VS,			//キャラクターモデル
+		SHADOW_MESH_VS,				//シャドウメッシュ
+		SHADOW_SKINNED_MESH_VS,		//シャドウスキンメッシュ
 	};
 
 	struct RES_INFO
@@ -210,18 +221,6 @@ public:
 	/// @return 
 	const SRC GetSrcFromString(const std::string& _str) const;
 private:
-
-	////カード番号画像
-	//static constexpr int CARD_NO_X = 5;	//横の数
-	//static constexpr int CARD_NO_Y = 2;	//縦の数
-	//static constexpr int CARD_NO_SIZE_X = 180;
-	//static constexpr int CARD_NO_SIZE_Y = 222;
-
-	////コントローラーUI画像
-	//static constexpr int CONTROLLER_UI_NO_X = 10;
-	//static constexpr int CONTROLLER_UI_NO_Y = 10;
-	//static constexpr int CONTROLLER_UI_SIZE_X = 128;
-	//static constexpr int CONTROLLER_UI_SIZE_Y = 128;
 
 	//JSONファイルで素材が見つからなかった場合のエラー文
 	const std::wstring NONE_SRC_INJSON_STR = L"JSONファイルで名前が見つかりませんでした。";
