@@ -127,52 +127,26 @@ public:
 	/// @param texA テクスチャアドレス
 	void SetTextureAddress(TEXADDRESS texA) { texAddress_ = texA; }
 
+	/// @brief シェーダーのデバッグ表示
+	/// @param  
 	void DrawShaderDebug(void);
 
 private:
 
-	// 頂点シェーダ
-	int shaderVS_;
-
-	// ピクセルシェーダ
-	int shaderPS_;
-
-	//リソースマネージャ
-	ResourceManager& resMng_;
-
-	// 頂点定数バッファの確保サイズ(FLOAT4をいくつ作るか)
-	int constBufFloat4SizeVS_;
-
-	// 頂点定数バッファハンドル
-	int constBufFloat4VS_;
-
-	//MATRIX用の定数バッファハンドル
-	int constBufMatrixVS_;
-
-	// ピクセル定数バッファの確保サイズ(FLOAT4をいくつ作るか)
-	int constBufFloat4SizePS_;
-
-	//頂点行列定数バッファの確保サイズ(MATRIXをいくつ作るか)
-	int constBufMatrixSizeVS_;
-
-	// ピクセル定数バッファハンドル
-	int constBufPS_;
-
-
-	// テクスチャアドレス
-	TEXADDRESS texAddress_;
-
-	// FLOAT4の定数バッファ
-	std::vector<FLOAT4> constBufsFloat4VS_;
-
-	//MATRIXの定数バッファ
-	std::vector<MATRIX> constBufsMatrixVS_;
-
-	// ピクセル定数バッファ
-	std::vector<FLOAT4> constBufsPS_;
-
-
-	// 画像
-	std::map<int, int> textures_;
-
+#pragma region メンバー変数
+	ResourceManager& resMng_;	//リソースマネージャ
+	int shaderVS_;				// 頂点シェーダ
+	int shaderPS_;				// ピクセルシェーダ
+	int constBufFloat4SizeVS_;	// 頂点定数バッファの確保サイズ(FLOAT4をいくつ作るか)
+	int constBufFloat4VS_;		// 頂点定数バッファハンドル
+	int constBufMatrixVS_;		//MATRIX用の定数バッファハンドル
+	int constBufFloat4SizePS_;	// ピクセル定数バッファの確保サイズ(FLOAT4をいくつ作るか)
+	int constBufMatrixSizeVS_;	//頂点行列定数バッファの確保サイズ(MATRIXをいくつ作るか)
+	int constBufPS_;			// ピクセル定数バッファハンドル
+	TEXADDRESS texAddress_;		// テクスチャアドレス
+	std::vector<FLOAT4> constBufsFloat4VS_;	// FLOAT4の定数バッファ
+	std::vector<MATRIX> constBufsMatrixVS_;	//MATRIXの定数バッファ
+	std::vector<FLOAT4> constBufsPS_;		// ピクセル定数バッファ
+	std::map<int, int> textures_;			// 画像
+#pragma endregion
 };

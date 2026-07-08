@@ -100,6 +100,7 @@ private:
 
 #pragma endregion
 
+#pragma region ƒƒ“ƒo[ŠÖ”
 	//ˆ—‚Ì•ÏX
 	void OnSceneEnter(void) override;
 
@@ -146,5 +147,5 @@ private:
 	void ChangeOverDirection(void);
 	void ChangeNormal(void);
 	void ChangeSlow(void);
-
+#pragma endregion
 };

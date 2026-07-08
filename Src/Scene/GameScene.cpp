@@ -95,6 +95,7 @@ void GameScene::Release(void)
 {
 	soundMng_.AllStop();
 	ShadowManager::GetInstance().Release();
+	UIManager::GetInstance().DeleteRevolutionPostEffect();
 }
 
 void GameScene::CheckSkip(void)

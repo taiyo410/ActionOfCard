@@ -65,23 +65,13 @@ public:
 	void Draw(float x, float y);
 	void DrawFromCenter(float centerX, float centerY);
 
-	//ポストエフェクトの描画
-	void DrawPostEffect(void);
-
 private:
 
-	// 座標
-	Vector2F pos_;
-
-	// 描画サイズ
-	Vector2F size_;
-
-	// 頂点
-	VERTEX2DSHADER vertexs_[NUM_VERTEX];
-
-	// 頂点インデックス
-	WORD indexes_[NUM_VERTEX_IDX];
-
-	// ピクセルマテリアル
-	PixelMaterial& material_;
+#pragma region メンバー変数
+	Vector2F pos_;							// 座標
+	Vector2F size_;							// 描画サイズ
+	VERTEX2DSHADER vertexs_[NUM_VERTEX];	// 頂点
+	WORD indexes_[NUM_VERTEX_IDX];			// 頂点インデックス
+	PixelMaterial& material_;				// ピクセルマテリアル
+#pragma endregion
 };

@@ -10,10 +10,10 @@ void CollisionManager::AddCollider(const std::shared_ptr<Collider> _collider)
 	//コライダの追加
 	colliders3D_.push_back(_collider);
 
-	//コライダーの並べ替え
-	std::sort(colliders3D_.begin(), colliders3D_.end(), [this](std::weak_ptr<Collider> a, std::weak_ptr<Collider> b) {
-		return static_cast<int>(GetTopTags(a)) < static_cast<int>(GetTopTags(b));
-		});
+	////コライダーの並べ替え
+	//std::sort(colliders3D_.begin(), colliders3D_.end(), [this](std::weak_ptr<Collider> a, std::weak_ptr<Collider> b) {
+	//	return static_cast<int>(GetTopTags(a)) < static_cast<int>(GetTopTags(b));
+	//	});
 }
 
 void CollisionManager::Sweep(void)

@@ -72,7 +72,7 @@ void CardUIBase::StartResultDirection(void)
 
 	//ïâÇØÇΩèÍçá
 	if (result == CardSystem::BATTLE_RESULT::BE_DRAW || result == CardSystem::BATTLE_RESULT::GIVE_DRAW
-		|| result == CardSystem::BATTLE_RESULT::NONE || result == CardSystem::BATTLE_RESULT::FAILURE_USE_BE_REFLECTED)
+		|| result == CardSystem::BATTLE_RESULT::FAILURE_USE_BE_REFLECTED)
 	{
 		winRes = ResourceManager::SRC::CARD_BE_REFLECTED_SE;
 	}
@@ -84,7 +84,7 @@ void CardUIBase::StartResultDirection(void)
 	}
 
 	//SEÇÃèdï°çƒê∂ÇñhÇÆ
-	if (!SoundManager::GetInstance().IsPlay(winRes))
+	if (!SoundManager::GetInstance().IsPlay(winRes)&&winRes!= ResourceManager::SRC::NONE)
 	{
 		SoundManager::GetInstance().PlayOnce(winRes, SoundManager::PLAYTYPE::BACK);
 	}

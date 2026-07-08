@@ -48,7 +48,7 @@ void PlayerCardAttackOneMiddle::AttackUpdate(void)
 			, (attackTime_ - midAtkCnt_) / attackTime_
 			, Easing::EASING_TYPE::QUAD_OUT);
 
-		//攻撃判定生成
+			//攻撃判定生成
 		character_.MakeAttackCol(character_.GetCharaTag(), Collider::TAG::NML_ATK, {}, 0.0f);
 	}
 	else if (midAtkCnt_ <= 0.0f || isHitTarget)		//アニメーション終了でアイドル状態変更

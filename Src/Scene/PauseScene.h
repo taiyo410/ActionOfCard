@@ -50,6 +50,7 @@ public:
 
 private:
 	
+#pragma region メンバー定数
 	//続ける文字列
 	const std::wstring CONTINUE_STR = L"つづける";
 
@@ -60,24 +61,23 @@ private:
 	const std::wstring GAME_END_STR = L"ゲーム終了";
 
 	//画面のアルファ値
-	static constexpr int PAUSE_ALPHA = 128; 
+	static constexpr int PAUSE_ALPHA = 128;
 
 	// フォントの太さ
-	static constexpr int FONT_THICK = 3; 
+	static constexpr int FONT_THICK = 3;
+#pragma endregion
 
-	//ポーズフォント
-	int pauseFont_; 	
-
-	//ポーズリストの選択
-	int selectIndex_;
-
+#pragma region メンバー変数
 	//選択リスト
 	std::wstring pauseList_[LIST_MAX] = { CONTINUE_STR,BACK_TITLE_STR,GAME_END_STR };
-
 	//リスト選択テーブル
 	std::unordered_map<LIST, std::function<void()>> listFuncTable_;
+	int pauseFont_;		//ポーズフォント
+	int selectIndex_;	//ポーズリストの選択
+#pragma endregion
 
+#pragma region メンバー関数
 	//シーンに入った後に行う処理
 	void OnSceneEnter(void)override;
+#pragma endregion
 };
-

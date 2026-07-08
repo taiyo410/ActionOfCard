@@ -60,33 +60,22 @@ public:
 
 protected:
 
-	//カードのナンバーローカル座標
-	static constexpr Vector2F NUM_LOCAL_POS = { 35.0f,53.0f };
-
+#pragma region メンバー定数
 	//カードのスケール
 	static constexpr float CARD_SCALE = 1.4f;
+#pragma endregion
 
-	////カードの種類
-	CARD_STATUS status_;
+#pragma region メンバー変数
+	CARD_STATUS status_;	//カードの種類
+	bool isWin_;		//カードの勝敗
+	bool isUsed_;		//使用済みかどうか
+	int* cardNoImg_;	//カード番号イメージ
+	int atkCardImg_;	//攻撃カード画像
+	double cardScl_;	//カードの大きさ
+	Vector2F cardPos_;	//カードの座標
+	Vector2F numPos_;	//カードナンバー座標
+#pragma endregion
 
-	//カードの勝敗
-	bool isWin_;
 
-	//使用済みかどうか
-	bool isUsed_;
 
-	//カード番号イメージ
-	int* cardNoImg_;
-
-	//攻撃カード画像
-	int atkCardImg_;
-
-	//カードの大きさ
-	double cardScl_;
-
-	//カードの座標
-	Vector2F cardPos_;
-
-	//カードナンバー座標
-	Vector2F numPos_;
 };

@@ -82,32 +82,21 @@ public:
 	/// @param texA テクスチャアドレス
 	void SetTextureAddress(TEXADDRESS texA) { texAddress_ = texA; }
 
-	int GetConstBufNum(void) { return constBufFloat4Size_; }
+	/// @brief Float4の定数バッファの個数の取得
+	/// @param  
+	/// @return Float4の定数バッファの個数
+	int GetConstBufFloat4Num(void) { return constBufFloat4Size_; }
 
 private:
 
-	//リソースマネージャ
-	ResourceManager& resMng_;
-
-	//使用するシェーダ
-	ResourceManager::SRC psSrc_;
-
-	// シェーダ
-	int shader_;
-
-	// 定数バッファの確保サイズ(FLOAT4をいくつ作るか)
-	int constBufFloat4Size_;
-
-	// 定数バッファハンドル
-	int constBuf_;
-
-	// テクスチャアドレス
-	TEXADDRESS texAddress_;
-
-	// 定数バッファ
-	std::vector<FLOAT4> constBufs_;
-
-	// 画像
-	std::vector<int> textures_;
-
+#pragma region メンバー変数
+	ResourceManager& resMng_;		//リソースマネージャ
+	ResourceManager::SRC psSrc_;	//使用するシェーダ
+	int shader_;					// シェーダ
+	int constBufFloat4Size_;		// 定数バッファの確保サイズ(FLOAT4をいくつ作るか)
+	int constBuf_;					// 定数バッファハンドル
+	TEXADDRESS texAddress_;			// テクスチャアドレス
+	std::vector<FLOAT4> constBufs_;	// 定数バッファ
+	std::vector<int> textures_;		// 画像
+#pragma endregion
 };

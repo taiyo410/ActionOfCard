@@ -115,6 +115,9 @@ void Weapon::OnHit(const std::weak_ptr<Collider> _hitCol)
 	//ヒットストップで一瞬だけ処理を止める
 	character_.ChangeUpdatePhase(CharacterBase::UPDATE_PHASE::HIT_STOP);
 
+	//当たったら判定を消す
+	DeleteCollider(TAG_PRIORITY::ATK_SPHERE);
+
 	//カメラシェイク
 	scnMng_.GetInstance().GetCamera().lock()->SetShakeStatus(-1.0f, 100.0f, Easing::EASING_TYPE::ELASTIC_BACK, 0.5f);
 	scnMng_.GetInstance().GetCamera().lock()->ChangeSub(Camera::SUB_MODE::ONE_SHAKE);

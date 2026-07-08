@@ -9,6 +9,7 @@
 #include "Object/Character/Base/CardActionBase.h"
 #include "Object/Character/UIData/CharacterUIData.h"
 #include "Object/Character/Base/ActionBase.h"
+#include "Object/Character/Action/ActionController.h"
 #include "Object/ObjectBase.h"
 
 class AnimationController;
@@ -158,6 +159,8 @@ public:
 	/// @brief 攻撃の当たり判定削除
 	/// @param _charaTag 自身のタグ
 	virtual void DeleteAttackCol(const Collider::TAG& _charaTag, const Collider::TAG& _attackCol);
+
+	ActionController::ACTION_TYPE GetActionType(void);
 
 	/// @brief ターゲットの方向に向く
 	/// @param  

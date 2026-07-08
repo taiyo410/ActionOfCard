@@ -82,12 +82,10 @@ public:
 	
 private:
 
-	//カードデッキ
-	CardDeck& deck_;
+#pragma region メンバー変数
+	CardDeck& deck_;		//カードデッキ
+	UIManager& uiMng_;		//カードUI
+	CHARACTER_TYPE& type_;	//キャラクター
+#pragma endregion
 
-	//カードUI
-	UIManager& uiMng_;
-
-	//キャラクター
-	CHARACTER_TYPE& type_;
 };

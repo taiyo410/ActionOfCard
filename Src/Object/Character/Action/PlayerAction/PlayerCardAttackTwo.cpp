@@ -26,6 +26,7 @@ void PlayerCardAttackTwo::InitAttack(void)
 
 void PlayerCardAttackTwo::AttackUpdate(void)
 {
+	//if(anim_.IsBlendAnim(static_cast<int>(CharacterBase::ANIM_TYPE::ATTACK_2)))return;
 	//ƒRƒ“ƒ{“ü—ÍŽó•t
 	actionCtrl_.ComboInput();
 

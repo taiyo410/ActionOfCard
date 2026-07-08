@@ -161,8 +161,8 @@ void Player::SetGoalRotate(void)
 
 void Player::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)
 {
-	//‚·‚Å‚É“–‚½‚è”»’è‚ª‚ ‚éê‡‚Íì‚ç‚È‚¢
-	if (weapon_->IsAliveCollider(_charaTag, _attackTag))return;
+	//‚·‚Å‚É“–‚½‚è”»’è‚ª‚ ‚éê‡‚âƒ_ƒ[ƒW‚ð—^‚¦‚Ä‚¢‚éUŒ‚‚Ìê‡‚Íì‚ç‚È‚¢
+	if (weapon_->IsAliveCollider(_charaTag, _attackTag)||actionCtrl_->GetMainAction().GetIsDamage())return;
 	weapon_->MakeWeaponCollider();
 }
 
@@ -182,6 +182,7 @@ void Player::DrawDebug(void)
 {
 	animCtrl_->DrawDebug();
 	cardPresent_->DrawCardDeckError();
+	DrawFormatString(100, 100,0xffffff, L"Action(%d)", static_cast<int>(actionCtrl_->GetActionType()));
 	for (const auto& col : collider_)
 	{
 		col.second->GetGeometry().Draw();

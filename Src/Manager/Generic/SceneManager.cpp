@@ -132,6 +132,11 @@ void SceneManager::CreateScene(const SCENE_ID _sceneId)
 	}
 	else
 	{
+	//シーンが挿入されていた場合、前のシーンを開放する
+		for (const auto& scene : scenes_)
+		{
+			scene->Release();
+		}
 		scenes_.front() = scenePtr_;
 	}
 

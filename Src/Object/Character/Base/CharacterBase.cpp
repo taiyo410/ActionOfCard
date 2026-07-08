@@ -179,7 +179,7 @@ void CharacterBase::Update(void)
 	updatePhase_();
 
 	//アニメーションの更新
-	animCtrl_->Update(animSpdScl_);
+	if(phase_ !=UPDATE_PHASE::HIT_STOP)animCtrl_->Update(animSpdScl_);
 
 	//Transformの更新
 	trans_.quaRot = charaRot_.playerRotY_;
@@ -206,8 +206,8 @@ void CharacterBase::DrawCommon(void)
 
 void CharacterBase::MakeAttackCol(const Collider::TAG _charaTag, const Collider::TAG _attackTag, const VECTOR& _atkPos, const float& _radius)
 {
-	//当たり判定が存在したら削除する
-	if (IsAliveCollider(_charaTag, _attackTag))return;
+	//当たり判定が存在したら処理を飛ばす
+	if (IsAliveCollider(_charaTag, _attackTag)||actionCtrl_->GetMainAction().GetIsDamage())return;
 	std::unique_ptr<Sphere>sphere = std::make_unique<Sphere>(_atkPos, _radius);
 
 	MakeCollider(TAG_PRIORITY::ATK_SPHERE,{ _charaTag,_attackTag }, std::move(sphere),{Collider::TAG::STAGE});
@@ -224,6 +224,11 @@ void CharacterBase::DeleteAttackCol(const Collider::TAG& _charaTag, const Collid
 {
 	if (!IsAliveCollider(_charaTag, _attackCol))return;
 	DeleteCollider(TAG_PRIORITY::ATK_SPHERE);
+}
+
+ActionController::ACTION_TYPE CharacterBase::GetActionType(void)
+{
+	return actionCtrl_->GetActionType();
 }
 
 void CharacterBase::LookAtTargetVec(void)
@@ -557,6 +562,7 @@ void CharacterBase::UpdateOverDirection(void)
 
 void CharacterBase::UpdateHitStop(void)
 {
+	//ヒットストップフレームが0になったら通常に戻る
 	if (--hitStopFrame_ > 0)return;
 	hitStopFrame_ = HIT_STOP_FRAME;
 	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);

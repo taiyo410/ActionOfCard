@@ -26,8 +26,6 @@ CardDeck::~CardDeck(void)
 {
 	drawPile_.clear();
 	usingCards_.clear();
-	chargeCard_.clear();
-	disCard_.clear();
 	initDeck_.clear();
 }
 

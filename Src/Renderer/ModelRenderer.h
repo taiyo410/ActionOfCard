@@ -9,15 +9,6 @@ class ModelRenderer
 
 public:
 
-	// FLAOT4の頂点シェーダ用オリジナル定数バッファの使用開始スロット
-	static constexpr int FLOAT4_CONSTANT_BUF_SLOT_BEGIN_VS = 7;
-
-	// MATRIX頂点シェーダ用オリジナル定数バッファの使用開始スロット
-	static constexpr int MATRIX_CONSTANT_BUF_SLOT_BEGIN_VS = 8;
-
-	// ピクセルシェーダ用オリジナル定数バッファの使用開始スロット
-	static constexpr int CONSTANT_BUF_SLOT_BEGIN_PS = 4;
-
 	/// @brief コンストラクタ
 	/// @param modelId_ モデルID
 	/// @param modelMaterial モデルマテリアル参照
@@ -33,19 +24,36 @@ public:
 
 private:
 
-	// モデルのハンドルID
-	int modelId_;
+#pragma region メンバー定数
+	// FLAOT4の頂点シェーダ用オリジナル定数バッファの使用開始スロット
+	static constexpr int FLOAT4_CONSTANT_BUF_SLOT_BEGIN_VS = 7;
 
-	// モデルマテリアル
-	ModelMaterial& modelMaterial_;
+	// MATRIX頂点シェーダ用オリジナル定数バッファの使用開始スロット
+	static constexpr int MATRIX_CONSTANT_BUF_SLOT_BEGIN_VS = 8;
 
+	// ピクセルシェーダ用オリジナル定数バッファの使用開始スロット
+	static constexpr int CONSTANT_BUF_SLOT_BEGIN_PS = 4;
+#pragma endregion
+
+#pragma region メンバー変数
+	int modelId_;					// モデルのハンドルID
+	ModelMaterial& modelMaterial_;	// モデルマテリアル
+#pragma endregion
+
+#pragma region メンバー関数
 	// シェーダ設定(頂点)
 	void SetReserveVS(void);
 
 	// シェーダ設定(ピクセル)
 	void SetReservePS(void);
 
+	//ピクセルシェーダーのFLOAT4定数バッファセット
 	void SetConstBufFloat4PS(void);
+
+	//頂点シェーダーのFLOAT4定数バッファセット
 	void SetConstBufFloat4VS(void);
+
+	//頂点シェーダーのMatrix定数バッファセット
 	void SetConstBufMatrixVS(void);
+#pragma endregion
 };

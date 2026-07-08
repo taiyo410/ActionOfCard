@@ -87,6 +87,7 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//チャージカード最大枚数
 	static constexpr int CHARGE_MAX = 3;
 
@@ -104,7 +105,23 @@ private:
 
 	//カードパワーを読み込むパス
 	const std::string CARD_POWER_PATH = "pow";
-	
+#pragma endregion
+
+#pragma region メンバー変数
+
+	//カード種類の文字列との対応マップ
+	std::unordered_map<std::string, CardBase::CARD_TYPE> cardTypeMap_;	
+	//札関連
+	std::vector<std::unique_ptr<CardBase>>initDeck_;	//初期札
+	std::vector<std::unique_ptr<CardBase>>drawPile_;	//山札
+	std::vector<std::unique_ptr<CardBase>>usingCards_;	//今使っているカード
+	int currentNum_;				//現在選択中のカード
+	int playerNum_;					//カード使用者のプレイヤー番号
+	int duelNo_;					//敵デュエルデッキの現在選択中番号
+	CHARACTER_TYPE& charaType_;		//キャラクタータイプ
+#pragma endregion
+
+#pragma region メンバー関数
 	//カードを選択したときの制限
 	void CardMoveLimit(void);
 
@@ -114,38 +131,5 @@ private:
 
 	//カードデータの読み込み
 	void LoadCardData(void);
-
-	//札関連
-	//初期札
-	std::vector<std::unique_ptr<CardBase>>initDeck_;
-
-	//山札
-	std::vector<std::unique_ptr<CardBase>>drawPile_;
-
-	//今使っているカード
-	std::vector<std::unique_ptr<CardBase>>usingCards_;
-
-	//チャージ中カード
-	std::vector<std::unique_ptr<CardBase>>chargeCard_;
-
-	//捨て札
-	std::vector<std::unique_ptr<CardBase>>disCard_;
-
-	//敵用のデュエルデッキ
-	std::vector<std::unique_ptr<CardBase>>enemyDuelDeck_;
-
-	//現在選択中のカード
-	int currentNum_;
-
-	//カード使用者のプレイヤー番号
-	int playerNum_;
-
-	//敵デュエルデッキの現在選択中番号
-	int duelNo_;
-
-	//キャラクタータイプ
-	CHARACTER_TYPE& charaType_;
-
-	//カード種類の文字列との対応マップ
-	std::unordered_map<std::string, CardBase::CARD_TYPE> cardTypeMap_;
+#pragma endregion
 };

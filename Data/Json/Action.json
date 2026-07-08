@@ -83,7 +83,7 @@
       "animation": {
         "useAnim": "P_ATTACK_2",
         "animSpeed": 40.0,
-        "detachSpeed": 2.0,
+        "detachSpeed": 5.0,
         "isLoop": false,
         "startStep": 0.0,
         "endStep": 40.0

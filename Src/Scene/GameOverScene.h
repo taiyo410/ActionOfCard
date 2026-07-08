@@ -29,12 +29,17 @@ public:
 
 private:
 
+#pragma region メンバー定数
 	//BGMの大きさ
 	static constexpr float BGM_VOL = 0.8f;
+#pragma endregion
 
+#pragma region メンバー変数
 	//ゲームオーバー画面
 	int imgGameOver_;
+#pragma endregion
 
+#pragma region メンバー関数
 	//更新関数
 	void NormalUpdate(void) override;
 
@@ -43,5 +48,6 @@ private:
 
 	//処理の変更
 	void OnSceneEnter(void) override;
+#pragma endregion
 };
 

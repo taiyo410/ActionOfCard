@@ -40,17 +40,10 @@ private:
 #pragma endregion
 
 #pragma region メンバー変数
-	//ゲームクリア画像
-	int imgGameClear_;
-
-	//イージング
-	std::unique_ptr<Easing>easing_;
-
-	//イージングカウント
-	float easeCnt_;
-
-	//文字のY座標
-	float strYPos_;
+	std::unique_ptr<Easing>easing_;	//イージング
+	int imgGameClear_;	//ゲームクリア画像
+	float easeCnt_;		//イージングカウント
+	float strYPos_;		//文字のY座標
 #pragma endregion
 
 #pragma region メンバー関数

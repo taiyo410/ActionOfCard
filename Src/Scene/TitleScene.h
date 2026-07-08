@@ -83,6 +83,8 @@ public:
 
 private:
 
+#pragma region メンバー定数
+
 	//ゲーム終了メッセージ
 	const std::wstring EXIT_MESSAGE = L"本当にゲームを終了しますか？";
 
@@ -152,52 +154,30 @@ private:
 
 	//ボタンの説明文字列座標オフセット
 	static constexpr float BTN_STR_OFFSET_X = 16.0f;
-
-	//イージング
-	std::unique_ptr<Easing> easing_;
-
-	//各選択肢の更新
-	std::function<void(void)> updateTitle_;
-
+#pragma endregion
+#pragma region メンバー変数
 	//タイトルのセレクト処理テーブル
 	std::unordered_map<TITLE_STATE, std::function<void(void)>> titleSelectFuncTable_;
-
 	//文字列格納
 	std::unordered_map<TITLE_BTN, std::wstring> buttonStrTable_;
-
 	//YES,NOの文字列
 	std::unordered_map<YES_NO, std::wstring> yesNoStrTable_;
 
-	//メニューコントローラー
-	std::unique_ptr<MenuController> menuController_;
+	std::unique_ptr<Easing> easing_;	//イージング
+	std::function<void(void)> updateTitle_;	//各選択肢の更新
+	std::unique_ptr<MenuController> menuController_;	//メニューコントローラー
+	Vector2F logoPos_;			//タイトルロゴ座標
+	TITLE_BTN selectBtn_;		//セレクト中のボタン
+	TITLE_STATE selectState_;	//セレクト状態
+	int imgTitleBack_;			//タイトル背景
+	int imgTitleLogo_;			//タイトルロゴ
+	int selectNum_;				//現在選んでいるボタン
+	float easeDistanceCnt_;		//イージング開始の間隔カウント
+	float logoEaseCnt_;			//タイトルイージングカウント
+	YES_NO yesNoState_;			//はいの選択肢を選んでいるか
+#pragma endregion
 
-	//タイトルロゴ座標
-	Vector2F logoPos_;
-
-	//セレクト中のボタン
-	TITLE_BTN selectBtn_;
-
-	//セレクト状態
-	TITLE_STATE selectState_;
-
-	//タイトル背景
-	int imgTitleBack_;
-
-	//タイトルロゴ
-	int imgTitleLogo_;
-
-	//現在選んでいるボタン
-	int selectNum_;
-
-	//イージング開始の間隔カウント
-	float easeDistanceCnt_;
-
-	//タイトルイージングカウント
-	float logoEaseCnt_;
-
-	//はいの選択肢を選んでいるか
-	YES_NO yesNoState_;
-
+#pragma region メンバー関数
 	//状態遷移
 	void ChangeState(const TITLE_STATE& _state);
 
@@ -233,4 +213,5 @@ private:
 
 	//スクリーンの大きさを変更
 	void ChangeScreenSize(void);
+#pragma endregion
 };

@@ -36,10 +36,6 @@ private:
 	static constexpr float WAIT_TIME = 1.0f;
 #pragma endregion
 
-#pragma region 外部ファイルから読み込み
-
-#pragma endregion
-
 #pragma region メンバー変数
 	//ポストエフェクト
 	std::unique_ptr<PixelMaterial>material_;		//マテリアル
