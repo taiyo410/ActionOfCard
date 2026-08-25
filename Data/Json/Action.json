@@ -57,7 +57,7 @@
       "animation": {
         "useAnim": "P_ATTACK_1_MIDDLE",
         "animSpeed": 80.0,
-        "detachSpeed": 5.0,
+        "detachSpeed": 3.0,
         "isLoop": false,
         "startStep": 0.0,
         "endStep": 37.0
@@ -71,7 +71,7 @@
       "animation": {
         "useAnim": "P_ATTACK_1_SHORT",
         "animSpeed": 40.0,
-        "detachSpeed": 5.0,
+        "detachSpeed": 3.0,
         "isLoop": false
       }
     },
@@ -83,7 +83,7 @@
       "animation": {
         "useAnim": "P_ATTACK_2",
         "animSpeed": 40.0,
-        "detachSpeed": 5.0,
+        "detachSpeed": 3.0,
         "isLoop": false,
         "startStep": 0.0,
         "endStep": 40.0

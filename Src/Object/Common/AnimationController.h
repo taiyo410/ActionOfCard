@@ -26,7 +26,10 @@ public :
 		float stepEndLoopStart=0.0f;
 		float stepEndLoopEnd=0.0f;
 		float endLoopSpeed=0.0f;
-		VECTOR invalidPos = {};				//座標移動無効化用
+
+		//アニメーションによる座標移動を有効化する(無効：0.0 有効：1.0)
+		//デフォルトはY軸のみ有効化
+		VECTOR animPosMask_ = {0.0f,1.0f,0.0f};
 		bool isStop = false;				// アニメーションを止めたままにする
 	};
 
@@ -36,7 +39,7 @@ public :
 		int model = -1;				//モデルID
 		int attachNo = -1;			//アタッチ番号
 		int animIndex = 0;			//アニメーション番号
-		VECTOR invalidPos = {};		//座標移動無効化用
+		VECTOR animPosMask_ = {};		//座標移動無効化用
 		VECTOR firstPos = {};		//移動量格納
 		VECTOR movePow = {};		//座標移動無効化用
 		bool isStop = false;				// アニメーションを止めたままにする
@@ -181,6 +184,7 @@ private :
 	bool isBlend_;				//ブレンドしているか
 	VECTOR invalidBlendPos_;	// アニメーションの座標移動を無効化するためのオフセット
 	int spineFrameNum_;			//モデルの腰番号
+	VECTOR currentAnimPosMask_;		//現在のアニメーションによる座標移動量
 #pragma endregion
 
 #pragma region メンバー関数

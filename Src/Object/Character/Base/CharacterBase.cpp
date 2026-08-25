@@ -508,6 +508,9 @@ void CharacterBase::LoadActionData(OnActionDataLoaded _callBack)
 		//終了ステップの取得
 		animVariable.totalTime = animData.value("endStep", 0.0f);
 
+		//アニメーションの座標有効軸の取得
+		animVariable.animPosMask_ = UtilityJson::GetLoadVector3("animPosMask", animData);
+
 		//アクションのロードデータに格納
 		actionLoadData.animVariable = animVariable;
 

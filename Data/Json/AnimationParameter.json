@@ -81,7 +81,12 @@
     "E_JUMP_ATK": {
       "animSpeed": 10.0,
       "detachSpeed": 5.0,
-      "isLoop": false
+      "isLoop": false,
+      "animPosMask": {
+        "x": 0.0,
+        "y": 1.0,
+        "z": 0.0
+      }
     },
     "E_ROAR_ATK": {
       "animSpeed": 30.0,

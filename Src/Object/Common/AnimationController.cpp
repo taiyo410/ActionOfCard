@@ -94,13 +94,14 @@ void AnimationController::PlayBlend(int type, ANIMATION_VARIABLE animVariable)
 		pri.blendRate = animRate;
 		pri.variable.totalTime = animVariable.totalTime > 0.0f ? animVariable.totalTime : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
 		pri.variable.isLoop = animVariable.isLoop;
-		pri.invalidPos = animVariable.invalidPos;
+		pri.animPosMask_ = animVariable.animPosMask_;
 		pri.variable.isMidLoop = false;
 		pri.isStop = animVariable.isStop;
 		pri.isPriority = true;
 
 		pri.variable.speed = animVariable.speed;
 		pri.variable.detachSpeed = animVariable.detachSpeed;
+		currentAnimPosMask_ = pri.animPosMask_;	
 	}
 	else
 	{
@@ -145,10 +146,10 @@ void AnimationController::PlayBlend(int type, ANIMATION_VARIABLE animVariable)
 		pri.blendRate = animRate;
 		pri.variable.totalTime = animVariable.totalTime > 0.0f ? animVariable.totalTime : MV1GetAttachAnimTotalTime(modelId_, pri.attachNo);
 		pri.variable.isLoop = animVariable.isLoop;
-		pri.invalidPos = animVariable.invalidPos;
+		pri.animPosMask_ = animVariable.animPosMask_;
 		pri.variable.speed = animVariable.speed;
 		pri.variable.detachSpeed = animVariable.detachSpeed;
-
+		currentAnimPosMask_ = pri.animPosMask_;
 	}
 }
 
@@ -420,19 +421,16 @@ void AnimationController::FreezeMovementForAnimation(void)
 	auto pos = MGetTranslateElem(mat);	// 行列から移動値を取り出す
 
 	//Y軸の移動値は調整しない
-	invalidBlendPos_.y = pos.y;
+	//invalidBlendPos_.y = pos.y;
+	invalidBlendPos_.x = pos.x * currentAnimPosMask_.x;
+	invalidBlendPos_.y = pos.y * currentAnimPosMask_.y;
+	invalidBlendPos_.z = pos.z * currentAnimPosMask_.z;
 
 	// 大きさ、回転、位置をローカル行列に戻す
 	MATRIX mix = MGetIdent();
 	mix = MMult(mix, MGetScale(scl));	// 大きさ
 	mix = MMult(mix, rot);				// 回転
 	mix = MMult(mix, MGetTranslate(invalidBlendPos_));
-
-	// ここでローカル座標を行列に、そのまま戻さず、
-	// 移動値をゼロにすることで、アニメーションによる移動を無効化している
-	//mix = MMult(mix, pos);
-	//mix = MMult(mix, MGetTranslate({ 0.0f, 0.0f, 0.0f }));
-	// Y軸の変更は微調整なので気にしなくてよき
 
 	// 合成した行列を対象フレームにセットし直して、
 	// アニメーションの移動値を無効化
@@ -516,6 +514,7 @@ void AnimationController::UpdateBlend(void)
 	if (pri.blendRate>=1.0f)
 	{
 		pri.blendRate = 1.0f;
+
 		// 最優先以外を完全除去
 		for (auto& anim : animations_)
 		{
@@ -527,5 +526,6 @@ void AnimationController::UpdateBlend(void)
 			}
 		}
 		isBlend_ = false;
+		currentAnimPosMask_ = pri.animPosMask_;
 	}
 }
