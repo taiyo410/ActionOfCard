@@ -185,6 +185,7 @@ private :
 	VECTOR invalidBlendPos_;	// アニメーションの座標移動を無効化するためのオフセット
 	int spineFrameNum_;			//モデルの腰番号
 	VECTOR currentAnimPosMask_;		//現在のアニメーションによる座標移動量
+	VECTOR resetAnimPos_;		//アニメーションによる座標移動量をリセットするためのオフセット
 #pragma endregion
 
 #pragma region メンバー関数

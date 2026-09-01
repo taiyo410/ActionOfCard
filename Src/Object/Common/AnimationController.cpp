@@ -10,7 +10,8 @@ AnimationController::AnimationController(void) :
 	modelId_(),
 	playType_(-1),
 	isBlend_(false),
-	invalidBlendPos_({})
+	invalidBlendPos_({}), 
+	resetAnimPos_({})
 {
 	easing_ = std::make_unique<Easing>();
 }
@@ -281,6 +282,11 @@ void AnimationController::SetModelInfo(const int _modelId, const int _spineFrame
 {
 	modelId_ = _modelId;
 	spineFrameNum_ = _spineFrameNum;
+
+	// 対象フレームのローカル行列を初期値にリセットする
+	MV1ResetFrameUserLocalMatrix(modelId_, spineFrameNum_);
+	auto mat = MV1GetFrameLocalMatrix(modelId_, spineFrameNum_);
+	resetAnimPos_ = MGetTranslateElem(mat);
 }
 
 void AnimationController::GetFrameLocalMatrix(const int _modelId, int _frameIdx, VECTOR& _scl, MATRIX& _matRot, VECTOR& _pos)
@@ -413,18 +419,20 @@ void AnimationController::FreezeMovementForAnimation(void)
 {
 	// 対象フレーム(今回は0版)のローカル行列を初期値にリセットする
 	MV1ResetFrameUserLocalMatrix(modelId_, spineFrameNum_);
-
 	// 対象フレームのローカル行列(大きさ、回転、位置)を取得する
 	auto mat = MV1GetFrameLocalMatrix(modelId_, spineFrameNum_);
 	auto scl = MGetSize(mat);			// 行列から大きさを取り出す
 	auto rot = MGetRotElem(mat);		// 行列から回転を取り出す
 	auto pos = MGetTranslateElem(mat);	// 行列から移動値を取り出す
-
 	//Y軸の移動値は調整しない
-	//invalidBlendPos_.y = pos.y;
-	invalidBlendPos_.x = pos.x * currentAnimPosMask_.x;
-	invalidBlendPos_.y = pos.y * currentAnimPosMask_.y;
-	invalidBlendPos_.z = pos.z * currentAnimPosMask_.z;
+	invalidBlendPos_.y = pos.y;
+	//invalidBlendPos_.x = pos.x * currentAnimPosMask_.x;
+	//invalidBlendPos_.y = pos.y * currentAnimPosMask_.y;
+	//invalidBlendPos_.z = pos.z * currentAnimPosMask_.z;
+
+	//invalidBlendPos_.x = resetAnimPos_.x + (pos.x - resetAnimPos_.x) * currentAnimPosMask_.x;
+	//invalidBlendPos_.y = resetAnimPos_.y + (pos.y - resetAnimPos_.y) * currentAnimPosMask_.y;
+	//invalidBlendPos_.z = resetAnimPos_.z + (pos.z - resetAnimPos_.z) * currentAnimPosMask_.z;
 
 	// 大きさ、回転、位置をローカル行列に戻す
 	MATRIX mix = MGetIdent();

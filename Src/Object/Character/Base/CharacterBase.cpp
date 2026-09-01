@@ -509,7 +509,8 @@ void CharacterBase::LoadActionData(OnActionDataLoaded _callBack)
 		animVariable.totalTime = animData.value("endStep", 0.0f);
 
 		//アニメーションの座標有効軸の取得
-		animVariable.animPosMask_ = UtilityJson::GetLoadVector3("animPosMask", animData);
+		const VECTOR defaultAnimPosMask = { 0.0f,1.0f,0.0f };
+		animVariable.animPosMask_ = UtilityJson::GetLoadVector3("animPosMask", animData, defaultAnimPosMask);
 
 		//アクションのロードデータに格納
 		actionLoadData.animVariable = animVariable;
