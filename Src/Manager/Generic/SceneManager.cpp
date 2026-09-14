@@ -161,6 +161,7 @@ void SceneManager::PopScene()
 void SceneManager::Release(void)
 {
 	DataBank::Destroy();
+	ButtonUIManager::Destroy();
 }
 
 void SceneManager::ChangeScene(SCENE_ID nextId)
