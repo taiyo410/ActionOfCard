@@ -86,10 +86,13 @@ void EnemyCardUI::ChangeNone(void)
 void EnemyCardUI::ChangeDecision(void)
 {
 	//アクション配列に入れる
-	actionCards_.emplace_back(*handCurrent_);
+	actionCards_.emplace_back(handCurrent_);
 
 	//現在の選択カードを増やす
-	handCurrent_++;
+	auto it = std::find(handCards_.begin(), handCards_.end(), handCurrent_);
+	size_t currentIndex = std::distance(handCards_.begin(), it);
+	handCurrent_ = handCards_[(currentIndex + 1) % handCards_.size()];
+	//handCurrent_ = handCards_.front();
 
 	//使用中状態に移行。カードUIを動かす
 	for (auto& act : actionCards_)
@@ -156,6 +159,6 @@ void EnemyCardUI::InitCardUI(void)
 	//手札が空でなければ、選択中カードを手札の初めの配列へ設定する
 	if (!handCards_.empty())
 	{
-		handCurrent_ = handCards_.begin();
+		handCurrent_ = handCards_.front();
 	}
 }

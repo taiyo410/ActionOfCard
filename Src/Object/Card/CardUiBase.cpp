@@ -234,20 +234,36 @@ void CardUIBase::ReactMoveCard(const Vector2F& _goalPos)
 
 void CardUIBase::AddHandCurrent(void)
 {
-	handCurrent_++;
-	if (handCurrent_ == handCards_.end())
+	if (handCards_.empty())return;
+
+	auto it = std::find(handCards_.begin(), handCards_.end(), handCurrent_);
+	if(it==handCards_.end())
 	{
-		handCurrent_ = handCards_.begin();
+		handCurrent_ = handCards_.front();
 	}
+
+	size_t index = std::distance(handCards_.begin(), it);
+	index = (index + 1) % handCards_.size();
+	handCurrent_ = handCards_[index];
 }
 
 void CardUIBase::SubHandCurrent(void)
 {
-	if (handCurrent_ == handCards_.begin())
+	if (handCards_.empty())return;
+	auto it = std::find(handCards_.begin(), handCards_.end(), handCurrent_);
+	if(it== handCards_.end())
 	{
-		handCurrent_ = handCards_.end();
+		handCurrent_ = handCards_.back();
 	}
-	handCurrent_--;
+
+	size_t index = std::distance(handCards_.begin(), it);
+	index = (index + handCards_.size() - 1) % handCards_.size();
+	handCurrent_ = handCards_[index];
+	//if (handCurrent_ == handCards_.begin())
+	//{
+	//	handCurrent_ = handCards_.end();
+	//}
+	//handCurrent_--;
 }
 
 int CardUIBase::MakeCardNumImg(const CardBase::CARD_STATUS& _status)

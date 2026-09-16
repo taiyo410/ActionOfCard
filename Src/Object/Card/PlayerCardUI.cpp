@@ -120,7 +120,7 @@ void PlayerCardUI::Draw(void)
 	for (auto& card : visibleCards_ | std::ranges::views::reverse)
 	{
 		//選択中のカードはスキップ
-		if (GetSearchHandIt(card)==handCurrent_)
+		if (GetSearchHandIt(card) ==handCurrent_)
 		{
 			continue;
 		}
@@ -139,20 +139,20 @@ void PlayerCardUI::Draw(void)
 	}
 
 	//選択中のカードが隠れないように選択中のカードだけもう一度描画
-	if (handCurrent_ != handCards_.end())
+	if (handCurrent_)
 	{
-		(*handCurrent_)->DrawSelectCard();
+		handCurrent_->DrawSelectCard();
 		//リロードカードの描画
-		if ((*handCurrent_)->GetStatus().type == CardBase::CARD_TYPE::RELOAD)
+		if (handCurrent_->GetStatus().type == CardBase::CARD_TYPE::RELOAD)
 		{
-			(*handCurrent_)->DrawReloadGauge(reloadPer_);
-			Vector2F pos = (*handCurrent_)->GetCenterPos();
+			handCurrent_->DrawReloadGauge(reloadPer_);
+			Vector2F pos = handCurrent_->GetCenterPos();
 			UtilityDraw::DrawStringCenter(static_cast<int>(pos.x)
 				, static_cast<int>(pos.y - reloadStrOffsetYFromCard_)
 				, reloadStr_, UtilityCommon::WHITE, reloadFontHandle_);
 		}
 		//選択カード枠描画
-		(*handCurrent_)->DrawSelectCardFrame();
+		handCurrent_->DrawSelectCardFrame();
 	}
 
 	//カード残り枚数ゲージ背景の描画
@@ -237,7 +237,7 @@ void PlayerCardUI::InitCardUI(void)
 	//現在のカードをセット
 	if (!handCards_.empty())
 	{
-		handCurrent_ = handCards_.begin();
+		handCurrent_ = (*handCards_.begin());
 	}
 }
 
@@ -272,9 +272,9 @@ void PlayerCardUI::ChangeLeft(void)
 	}
 
 	//先頭に追加
-	auto it = handCurrent_; // 手札の現在選択カード(handCards_のイテレータ
-	const int rupeNum = static_cast<int>(visibleCards_.size()) - 1;
-	for (int i = 0; i < rupeNum;i++)
+	auto it = std::find(handCards_.begin(), handCards_.end(), handCurrent_); // 手札の現在選択カード(handCards_のイテレータ
+	const int loopNum = static_cast<int>(visibleCards_.size()) - 1;
+	for (int i = 0; i < loopNum;i++)
 	{
 		it++;
 		if (it == handCards_.end())
@@ -320,8 +320,7 @@ void PlayerCardUI::ChangeRight(void)
 	}
 	
 	//先頭に追加
-	auto it = handCurrent_;
-
+	auto it = std::find(handCards_.begin(), handCards_.end(), handCurrent_);
 	//現在位置より２枚遡って配列に入れる
 	for (int i = 0; i < PREV_CARD_COUNT; i++)
 	{
@@ -357,12 +356,12 @@ void PlayerCardUI::ChangeRight(void)
 void PlayerCardUI::ChangeDecision(void)
 {
 	// カードを使う処理
-	if (selectState_ == CARD_SELECT::NONE&&(*handCurrent_)->GetStatus().type == CardBase::CARD_TYPE::RELOAD)
+	if (selectState_ == CARD_SELECT::NONE&&handCurrent_->GetStatus().type == CardBase::CARD_TYPE::RELOAD)
 	{
 		ChangeSelectState(CARD_SELECT::RELOAD_WAIT);
 		return;
 	}
-	actionCards_.emplace_back(*handCurrent_);
+	actionCards_.emplace_back(handCurrent_);
 
 	//決定カウントをセット
 	for (auto& act : actionCards_)
@@ -404,10 +403,10 @@ void PlayerCardUI::ChangeReload(void)
 	isReloadEnd_ = false;
 
 	//一番最後の配列を見る
-	reloadAnimCurr_ = std::prev(initialCards_.end());
+	reloadAnimCurr_ = initialCards_.back();
 
 	//リロードアニメーション中はカレントを終端にする
-	handCurrent_ = handCards_.end();
+	handCurrent_ = nullptr;
 	updateCardUI_ = [this]() {UpdateReload(); };
 }
 void PlayerCardUI::UpdateNone(void)
@@ -455,7 +454,7 @@ void PlayerCardUI::UpdateDecision(void)
 {
 	DecisionMoveCardAll();
 
-	std::list<std::shared_ptr<CardUIController>>::iterator visibleCurrent = GetVisibleCurrentIt();
+	std::deque<std::shared_ptr<CardUIController>>::iterator visibleCurrent = std::find(visibleCards_.begin(), visibleCards_.end(), handCurrent_);
 	for (auto it = visibleCurrent; it != visibleCards_.end(); it++)
 	{
 		(*it)->MoveOnRevolver(cardMoveCnt_,CardUIController::DISITION_MOVE_CARD_TIME);
@@ -506,7 +505,7 @@ void PlayerCardUI::UpdateReload(void)
 			//選択カードを先頭にセット
 			if (!handCards_.empty())
 			{
-				handCurrent_ = handCards_.begin();
+				handCurrent_ = handCards_.front();
 			}
 			SetBasePosVisibleCards();
 			ChangeSelectState(CARD_SELECT::NONE);
@@ -586,8 +585,8 @@ void PlayerCardUI::UpdateVisibleCard(void)
 	if (size > VISIBLE_CARD_MAX)
 	{
 		//先頭に追加
-		auto endIt = handCurrent_;
-		auto visibleIt = GetVisibleCurrentIt();
+		auto endIt = std::find(handCards_.begin(), handCards_.end(), handCurrent_);
+		auto visibleIt = std::find(visibleCards_.begin(), visibleCards_.end(), handCurrent_);
 
 		//表示カードの次の配列になるまで手札のイテレータを回す
 		for (; visibleIt != visibleCards_.end(); visibleIt++)
@@ -605,9 +604,9 @@ void PlayerCardUI::UpdateVisibleCard(void)
 
 void PlayerCardUI::EraseHandCard(void)
 {
-	std::list<std::shared_ptr<CardUIController>>::iterator eraseHandIt = handCurrent_;
-	std::list<std::shared_ptr<CardUIController>>::iterator eraseVisibleIt = GetVisibleCurrentIt();
-	std::list<std::shared_ptr<CardUIController>>::iterator visibleCurrentIt = eraseVisibleIt;
+	std::vector<std::shared_ptr<CardUIController>>::iterator eraseHandIt = std::find(handCards_.begin(), handCards_.end(), handCurrent_);
+	std::deque<std::shared_ptr<CardUIController>>::iterator eraseVisibleIt = std::find(visibleCards_.begin(), visibleCards_.end(), handCurrent_);
+	std::deque<std::shared_ptr<CardUIController>>::iterator visibleCurrentIt = eraseVisibleIt;
 
 	// 使用した手札を削除するので、新しい手札カレントを設定する処理
 	// 見えている手札UIカード上の右側(時計回りの次)を手札とする
@@ -633,7 +632,8 @@ void PlayerCardUI::EraseHandCard(void)
 void PlayerCardUI::DecideGoalAngle(void)
 {
 	//カードの範囲変数を更新する
-	auto visibleIt = std::next(GetVisibleCurrentIt());
+	auto visibleCurrentIt = std::find(visibleCards_.begin(), visibleCards_.end(), handCurrent_);
+	auto visibleIt = std::next(visibleCurrentIt);
 	for (; visibleIt != visibleCards_.end(); visibleIt++)
 	{
 		float currentAngle = (*visibleIt)->GetCurrentAngle();
@@ -662,27 +662,30 @@ void PlayerCardUI::ReloadAnimation(void)
 		//配列追加
 		ReloadCardArray();
 
-		//見せカードが7枚以上の時は終了
-		if(visibleCards_.size()>VISIBLE_CARD_MAX&& reloadAnimCurr_==std::prev(initialCards_.end()))
+		//見せカードが7枚以上の時かつ手札が初期札と同じ枚数の場合は終了
+		if(visibleCards_.size()>VISIBLE_CARD_MAX&&handCards_.size()==initialCards_.size())
 		{
 			isReloadEnd_ = true;
 		}
 		
 		//リロード中カードを更新
-		reloadAnimCurr_--;
+		auto it = std::find(initialCards_.begin(), initialCards_.end(), reloadAnimCurr_);
+		size_t reloadAnimCurrIdx = std::distance(initialCards_.begin(), it);
+		reloadAnimCurr_ = initialCards_[reloadAnimCurrIdx];
+		reloadAnimCurrIdx--;
 
 		//先頭まで来たら最後尾に戻し、見せカードにリロードカードを追加
-		if (reloadAnimCurr_ == initialCards_.begin())
+		if (reloadAnimCurr_ == (*initialCards_.begin()))
 		{
-			(*reloadAnimCurr_)->SetCurrentAngle(static_cast<float>(-ARROUND_PER_RAD * PREV_CARD_COUNT));
-			visibleCards_.emplace_front(*reloadAnimCurr_);
+			reloadAnimCurr_->SetCurrentAngle(static_cast<float>(-ARROUND_PER_RAD * PREV_CARD_COUNT));
+			visibleCards_.emplace_front(reloadAnimCurr_);
 
-			auto insertIt = (*reloadAnimCurr_);
+			auto& insertIt = (reloadAnimCurr_);
 			insertIt->ResetCount();
-			handCards_.emplace_front(insertIt);
+			//handCards_.emplace_front(insertIt);
 
 			//リロードカードの対象を最後尾に戻す
-			reloadAnimCurr_ = std::prev(initialCards_.end());
+			reloadAnimCurr_ = initialCards_.back();
 		}
 		cardMoveCnt_ = CardUIController::RELOAD_MOVE_CARD_TIME_PER;
 
@@ -708,17 +711,25 @@ void PlayerCardUI::ReloadAnimation(void)
 void PlayerCardUI::ReloadCardArray(void)
 {
 	//リロードカードの現在位置にセット
-	(*reloadAnimCurr_)->SetCurrentAngle(static_cast<float>(-ARROUND_PER_RAD * PREV_CARD_COUNT));
+	reloadAnimCurr_->SetCurrentAngle(static_cast<float>(-ARROUND_PER_RAD * PREV_CARD_COUNT));
 
 	//見せるカード配列に追加
-	visibleCards_.emplace_front(*reloadAnimCurr_);
+	visibleCards_.emplace_front(reloadAnimCurr_);
 
-	//手札配列に追加
-	if (std::find(handCards_.begin(), handCards_.end(), *reloadAnimCurr_) == handCards_.end())
+	//手札配列に追加(手札はvectorなので初期札の０番目から挿入する)
+	auto reloadIt = std::find(initialCards_.begin(), initialCards_.end(), reloadAnimCurr_);
+	size_t handReloadIndex=initialCards_.size() - 1 - std::distance(initialCards_.begin(), reloadIt);
+
+	if (handReloadIndex >= 12)
 	{
-		auto insertIt = (*reloadAnimCurr_);
+		int i = 0;
+	}
+
+	if (std::find(handCards_.begin(), handCards_.end(), reloadAnimCurr_) == handCards_.end())
+	{
+		auto insertIt = initialCards_[handReloadIndex];
 		insertIt->ResetCount();
-		handCards_.emplace_front(insertIt);
+		handCards_.emplace_back(insertIt);
 	}
 }
 
@@ -756,16 +767,23 @@ void PlayerCardUI::DrawArrowAndButton(void)
 
 }
 
-std::list<std::shared_ptr<CardUIController>>::iterator PlayerCardUI::GetVisibleCurrentIt(void)
+std::shared_ptr<CardUIController> PlayerCardUI::GetVisibleCurrentIt(void)
 {
-	auto it = std::find(visibleCards_.begin(), visibleCards_.end(), *handCurrent_);
-	return it;
+	auto it = std::find(visibleCards_.begin(), visibleCards_.end(), handCurrent_);
+	if (it == visibleCards_.end())
+	{
+		return nullptr;
+	}
+	return *it;
 }
 
-std::list<std::shared_ptr<CardUIController>>::iterator PlayerCardUI::GetSearchHandIt(
-	std::shared_ptr<CardUIController> target)
+std::shared_ptr<CardUIController> PlayerCardUI::GetSearchHandIt(std::shared_ptr<CardUIController> target)
 {
 	auto it = std::find(handCards_.begin(), handCards_.end(), target);
-	return it;
+	if(it==handCards_.end())
+	{
+		return nullptr;
+	}
+	return *it;
 }
 

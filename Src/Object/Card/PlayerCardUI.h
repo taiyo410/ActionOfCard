@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <list>
+#include <deque>
 #include "CardUiBase.h"
 #include "./CardBase.h"
 #include "../../Common/Vector2.h"
@@ -113,9 +114,9 @@ private:
 	std::unique_ptr<PixelRenderer> cardGaugePSRenderer_;
 
 	//見せるカード
-	std::list<std::shared_ptr<CardUIController>>visibleCards_;
+	std::deque<std::shared_ptr<CardUIController>>visibleCards_;
 	//リロード用の現在のカードイテレータ
-	std::list<std::shared_ptr<CardUIController>>::iterator reloadAnimCurr_;
+	std::shared_ptr<CardUIController> reloadAnimCurr_;
 
 	bool isReloadEnd_;		//リロード終了
 	float cardNumPer_;		//残りカード枚数ゲージ
@@ -177,7 +178,7 @@ private:
 	void DrawArrowAndButton(void);
 
 	//現在選択中のカードの配列を取得
-	std::list<std::shared_ptr<CardUIController>>::iterator GetVisibleCurrentIt(void);
-	std::list<std::shared_ptr<CardUIController>>::iterator GetSearchHandIt(std::shared_ptr<CardUIController> target);
+	std::shared_ptr<CardUIController> GetVisibleCurrentIt(void);
+	std::shared_ptr<CardUIController> GetSearchHandIt(std::shared_ptr<CardUIController> target);
 #pragma endregion
 };

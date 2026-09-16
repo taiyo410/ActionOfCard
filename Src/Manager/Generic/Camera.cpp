@@ -111,32 +111,6 @@ void Camera::Update(void)
 
 	//イージングなどの更新
 	subUpdate_();
-
-	if (InputManager::GetInstance().IsNew(KEY_INPUT_I))
-	{
-		lightPos_.z += 10.0f;
-	}
-	if (InputManager::GetInstance().IsNew(KEY_INPUT_K))
-	{
-		lightPos_.z -= 10.0f;
-	}
-	if (InputManager::GetInstance().IsNew(KEY_INPUT_J))
-	{
-		lightPos_.x -= 10.0f;
-	}
-	if (InputManager::GetInstance().IsNew(KEY_INPUT_L))
-	{
-		lightPos_.x += 10.0f;
-	}
-	if (InputManager::GetInstance().IsNew(KEY_INPUT_I))
-	{
-		lightPos_.y += 10.0f;
-	}
-	if (InputManager::GetInstance().IsNew(KEY_INPUT_P))
-	{
-		lightPos_.y -= 10.0f;
-	}
-
 }
 
 void Camera::SetBeforeDraw(void)
