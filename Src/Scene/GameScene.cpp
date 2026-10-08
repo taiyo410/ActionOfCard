@@ -350,8 +350,12 @@ void GameScene::SlowUpdate(void)
 
 void GameScene::OnSceneEnter(void)
 {
+#ifdef _DEBUG
+	ChangeUpdatePhase(UPDATE_PHASE::NORMAL);
+#else
 	//ââèoèÛë‘Ç÷à⁄çs
 	ChangeUpdatePhase(UPDATE_PHASE::START_DIRECTION);
+#endif
 }
 
 void GameScene::ObjectLoad(void)

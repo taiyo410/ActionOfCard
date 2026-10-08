@@ -407,6 +407,7 @@ void PlayerCardUI::ChangeReload(void)
 
 	//リロードアニメーション中はカレントを終端にする
 	handCurrent_ = nullptr;
+
 	updateCardUI_ = [this]() {UpdateReload(); };
 }
 void PlayerCardUI::UpdateNone(void)
@@ -652,7 +653,6 @@ void PlayerCardUI::ReloadAnimation(void)
 	//見せカードの0番目にリロードカードが来たら終了
 	//endItをbeginの５個先(６枚目)に指定する
 	//６枚目までイテレータを回す
-	cardMoveCnt_ -= DELTA;
 	//定期的に見せカード配列に格納する
 	if (cardMoveCnt_ < 0.0f)
 	{
@@ -671,8 +671,9 @@ void PlayerCardUI::ReloadAnimation(void)
 		//リロード中カードを更新
 		auto it = std::find(initialCards_.begin(), initialCards_.end(), reloadAnimCurr_);
 		size_t reloadAnimCurrIdx = std::distance(initialCards_.begin(), it);
-		reloadAnimCurr_ = initialCards_[reloadAnimCurrIdx];
 		reloadAnimCurrIdx--;
+		reloadAnimCurr_ = initialCards_[reloadAnimCurrIdx];
+	
 
 		//先頭まで来たら最後尾に戻し、見せカードにリロードカードを追加
 		if (reloadAnimCurr_ == (*initialCards_.begin()))
@@ -680,9 +681,13 @@ void PlayerCardUI::ReloadAnimation(void)
 			reloadAnimCurr_->SetCurrentAngle(static_cast<float>(-ARROUND_PER_RAD * PREV_CARD_COUNT));
 			visibleCards_.emplace_front(reloadAnimCurr_);
 
+			//最後の配列を手札に追加する
 			auto& insertIt = (reloadAnimCurr_);
 			insertIt->ResetCount();
-			//handCards_.emplace_front(insertIt);
+			handCards_.emplace_back(insertIt);
+
+			//初期札と同じ順番にするために配列を逆順にする
+			std::reverse(handCards_.begin(), handCards_.end());
 
 			//リロードカードの対象を最後尾に戻す
 			reloadAnimCurr_ = initialCards_.back();
@@ -701,6 +706,8 @@ void PlayerCardUI::ReloadAnimation(void)
 		i++;
 	}
 
+	//カウントダウン
+	cardMoveCnt_ -= DELTA;
 	//見せカードが7枚以上お時はポップ
 	if(visibleCards_.size()>VISIBLE_CARD_MAX)
 	{
@@ -718,16 +725,12 @@ void PlayerCardUI::ReloadCardArray(void)
 
 	//手札配列に追加(手札はvectorなので初期札の０番目から挿入する)
 	auto reloadIt = std::find(initialCards_.begin(), initialCards_.end(), reloadAnimCurr_);
-	size_t handReloadIndex=initialCards_.size() - 1 - std::distance(initialCards_.begin(), reloadIt);
-
-	if (handReloadIndex >= 12)
-	{
-		int i = 0;
-	}
+	size_t distance = std::distance(initialCards_.begin(), reloadIt);
+	size_t handReloadIndex=initialCards_.size() - 1 - distance;
 
 	if (std::find(handCards_.begin(), handCards_.end(), reloadAnimCurr_) == handCards_.end())
 	{
-		auto insertIt = initialCards_[handReloadIndex];
+		auto insertIt = initialCards_[distance];
 		insertIt->ResetCount();
 		handCards_.emplace_back(insertIt);
 	}

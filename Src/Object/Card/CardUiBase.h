@@ -243,9 +243,6 @@ protected:
 	const int GetTypeImg(const CardBase::CARD_STATUS _status);
 #pragma endregion
 
-
-
-
 private:
 
 	//カード画像の配列

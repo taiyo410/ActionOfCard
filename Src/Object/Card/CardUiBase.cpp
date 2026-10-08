@@ -259,11 +259,6 @@ void CardUIBase::SubHandCurrent(void)
 	size_t index = std::distance(handCards_.begin(), it);
 	index = (index + handCards_.size() - 1) % handCards_.size();
 	handCurrent_ = handCards_[index];
-	//if (handCurrent_ == handCards_.begin())
-	//{
-	//	handCurrent_ = handCards_.end();
-	//}
-	//handCurrent_--;
 }
 
 int CardUIBase::MakeCardNumImg(const CardBase::CARD_STATUS& _status)
