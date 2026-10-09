@@ -473,8 +473,6 @@ void Camera::SetBeforeDrawFollow(void)
 	//ƒJƒƒ‰‚Ì‰Ÿ‚µo‚µ
 	Collision();
 
-	//Utility3D::MoveLimit(prePos_, pos_, COLLISION_BACK_DIS, stageTransform_->pos, { Stage::STAGE_SIZE,0.0f, Stage::STAGE_SIZE });
-
 	if (InputManager::GetInstance().IsTrgDown(KEY_INPUT_T))
 	{
 		ChangeMode(MODE::TARGET_POINT);
