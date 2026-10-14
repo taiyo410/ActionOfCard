@@ -18,8 +18,6 @@ public:
 	static constexpr int FONT_TYPES = static_cast<int>(FONT_TYPE::MAX);
 
 	//フォントネーム(cppで設定。プロパティ→詳細のタイトルを入れること)
-	static const std::wstring FONT_DOT;
-	static const std::wstring FONT_BOKUTATI;
 	static const std::wstring FONT_APRIL_GOTHIC;
 	
 	/// @brief コンストラクタ
@@ -41,8 +39,6 @@ public:
 private:
 
 	//フォントのハンドル
-	const std::wstring FONT_DOT_PASS=L"FontDot.otf";
-	const std::wstring FONT_BOKUTATI_PASS = L"bokutachi.otf";
 	const std::wstring FONT_APRIL_GOTHIC_PASS = L"AprilGothicOne-R.ttf";
 
 	//フォントパスの初期化

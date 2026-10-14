@@ -2,8 +2,6 @@
 #include "Application.h"
 #include "FontManager.h"
 
-const std::wstring FontManager::FONT_DOT = L"ベストテンDOT";
-const std::wstring FontManager::FONT_BOKUTATI = L"ぼくたちのゴシック";
 const std::wstring FontManager::FONT_APRIL_GOTHIC = L"April Gothic one Regular";
 
 
@@ -20,8 +18,6 @@ void FontManager::Init(void)
 {
 	//フォント登録を行う
 	// フォントパス初期化
-	fontPath_[static_cast<int>(FONT_TYPE::DOT)] = FONT_DOT_PASS;
-	fontPath_[static_cast<int>(FONT_TYPE::BOKUTATI)] = FONT_BOKUTATI_PASS;
 	fontPath_[static_cast<int>(FONT_TYPE::APRIL_GOTHIC_ONE)] = FONT_APRIL_GOTHIC_PASS;
 
 	// フォントをシステムに登録
@@ -33,7 +29,7 @@ void FontManager::Init(void)
 			NULL)
 			== 0)
 		{
-			return;
+			continue;
 		}
 	}
 }
@@ -49,7 +45,7 @@ void FontManager::Destroy(void)
 			NULL)
 			== -1)
 		{
-			return;
+			continue;
 		}
 	}
 }

@@ -517,7 +517,6 @@ void Camera::SetBeforeDrawStartDirection(void)
 void Camera::SetShadowCamera(void)
 {
 	constexpr float SIZE = 13250.0f;
-	//constexpr float SIZE = 3000.0f;
 	constexpr float S_NEAR = 10.0f;
 	constexpr float S_FAR = 13050.0f;
 	constexpr float TARGET_LIMIT_Y = 0;
