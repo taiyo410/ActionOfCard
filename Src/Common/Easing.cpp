@@ -6,23 +6,23 @@
 Easing::Easing(void)
 {
     easingFuncTable_ = {
-        {EASING_TYPE::LERP, [this](float t) {easingUpdate_ = [this, t](float) {return Lerp(t); }; }},
-        {EASING_TYPE::LERP_COMEBACK, [this](float t) {easingUpdate_ = [this, t](float) {return LerpBack(t); }; }},
-		{EASING_TYPE::OUT_BACK, [this](float t) {easingUpdate_ = [this, t](float) {return OutBack(t); }; }},
-        {EASING_TYPE::QUAD_IN, [this](float t) {easingUpdate_ = [this, t](float) {return EaseQuadIn(t); }; }},
-        {EASING_TYPE::QUAD_OUT, [this](float t) {easingUpdate_ = [this, t](float) {return EaseQuadOut(t); }; }},
-        {EASING_TYPE::QUAD_IN_OUT, [this](float t) {easingUpdate_ = [this, t](float) {return EaseQuadInOut(t); }; }},
-        {EASING_TYPE::QUAD_OUT_IN, [this](float t) {easingUpdate_ = [this, t](float) {return EaseQuadOutIn(t); }; }},
-        {EASING_TYPE::QUAD_BACK, [this](float t) {easingUpdate_ = [this, t](float) {return EaseQuadBack(t); }; }},
-        {EASING_TYPE::CUBIC_IN, [this](float t) {easingUpdate_ = [this, t](float) {return EaseCubicIn(t); }; }},
-        {EASING_TYPE::CUBIC_OUT, [this](float t) {easingUpdate_ = [this, t](float) {return EaseCubicOut(t); }; }},
-        {EASING_TYPE::EXPO, [this](float t) {easingUpdate_ = [this, t](float) {return EaseExpo(t); }; }},
-        {EASING_TYPE::SIN_BACK, [this](float t) {easingUpdate_ = [this, t](float) {return EaseSinBack(t); }; }},
-        {EASING_TYPE::COS_BACK, [this](float t) {easingUpdate_ = [this, t](float) {return EaseCosBack(t); }; }},
-        {EASING_TYPE::ELASTIC_IN, [this](float t) {easingUpdate_ = [this, t](float) {return EaseInElastic(t); }; }},
-        {EASING_TYPE::ELASTIC_OUT, [this](float t) {easingUpdate_ = [this, t](float) {return EaseOutElastic(t); }; }},
-		{EASING_TYPE::ELASTIC_BACK, [this](float t) {easingUpdate_ = [this, t](float) {return EaseBackElastic(t); }; }},
-		{EASING_TYPE::BOUNCE, [this](float t) {easingUpdate_ = [this, t](float) {return EaseBounce(t); }; }}
+        {EASING_TYPE::LERP, [this](float t) {return Lerp(t); }},
+        {EASING_TYPE::LERP_COMEBACK, [this](float t) {return LerpBack(t); }},
+		{EASING_TYPE::OUT_BACK, [this](float t) {return OutBack(t); }},
+        {EASING_TYPE::QUAD_IN, [this](float t) {return EaseQuadIn(t); }},
+        {EASING_TYPE::QUAD_OUT, [this](float t) {return EaseQuadOut(t); }},
+        {EASING_TYPE::QUAD_IN_OUT, [this](float t) {return EaseQuadInOut(t); }},
+        {EASING_TYPE::QUAD_OUT_IN, [this](float t) {return EaseQuadOutIn(t); }},
+        {EASING_TYPE::QUAD_BACK, [this](float t) {return EaseQuadBack(t); }},
+        {EASING_TYPE::CUBIC_IN, [this](float t) {return EaseCubicIn(t); }},
+        {EASING_TYPE::CUBIC_OUT, [this](float t) {return EaseCubicOut(t); }},
+        {EASING_TYPE::EXPO, [this](float t) {return EaseExpo(t); }},
+        {EASING_TYPE::SIN_BACK, [this](float t) {return EaseSinBack(t); }},
+        {EASING_TYPE::COS_BACK, [this](float t) {return EaseCosBack(t); }},
+        {EASING_TYPE::ELASTIC_IN, [this](float t) {return EaseInElastic(t); }},
+        {EASING_TYPE::ELASTIC_OUT, [this](float t) {return EaseOutElastic(t); }},
+		{EASING_TYPE::ELASTIC_BACK, [this](float t) {return EaseBackElastic(t); }},
+		{EASING_TYPE::BOUNCE, [this](float t) {return EaseBounce(t); }}
     };
 
 }
@@ -32,51 +32,46 @@ Easing::~Easing(void)
     easingFuncTable_.clear();
 }
 
-void Easing::SetEasing(const float t, const EASING_TYPE type)
-{
-    easingFuncTable_[type](t);
-}
-
 int Easing::EaseFunc(const int start, const int end, const float t, const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     int dis = end - start;
-    int ret = UtilityCommon::Round(start + dis * easingUpdate_(t));
+    int ret = UtilityCommon::Round(start + dis * easeRate);
     return ret;
 }
 
 float Easing::EaseFunc(const float start, const float end, const float t,const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     float dis = end - start;
-    return start + dis * easingUpdate_(t);
+    return start + dis * easeRate;
 }
 double Easing::EaseFunc(const double start, const double end, const float t, const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     double dis = end - start;
-    return start + dis * easingUpdate_(t);
+    return start + dis * easeRate;
 }
 Vector2F Easing::EaseFunc(const Vector2F& start, const Vector2F& end, const float t, const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     Vector2F dis = end - start;
-    return start + dis * easingUpdate_(t);
+    return start + dis * easeRate;
 }
 Vector2 Easing::EaseFunc(const Vector2& start, const Vector2& end, const float t, const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     Vector2 dis = end - start;
     Vector2 ret = {};
-    ret.x = UtilityCommon::Round(start.x + dis.x * easingUpdate_(t));
-    ret.y = UtilityCommon::Round(start.y + dis.y * easingUpdate_(t));
+    ret.x = UtilityCommon::Round(start.x + dis.x * easeRate);
+    ret.y = UtilityCommon::Round(start.y + dis.y * easeRate);
     return ret;
 }
 VECTOR Easing::EaseFunc(const VECTOR& start, const VECTOR& end, const float t, const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     VECTOR dis = VSub(end, start);
-    VECTOR power = VScale(dis, easingUpdate_(t));
+    VECTOR power = VScale(dis, easeRate);
     return VAdd(start, power);
 }
 
@@ -87,12 +82,12 @@ COLOR_F Easing::EaseFunc(const COLOR_F& start, const COLOR_F& end, const float t
     {
         return end;
     }
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     COLOR_F ret = start;
-    ret.r += (end.r - start.r) * easingUpdate_(t);
-    ret.g += (end.g - start.g) * easingUpdate_(t);
-    ret.b += (end.b - start.b) * easingUpdate_(t);
-    ret.a += (end.a - start.a) * easingUpdate_(t);
+    ret.r += (end.r - start.r) * easeRate;
+    ret.g += (end.g - start.g) * easeRate;
+    ret.b += (end.b - start.b) * easeRate;
+    ret.a += (end.a - start.a) * easeRate;
     return ret;
 }
 
@@ -162,9 +157,9 @@ double Easing::EaseFuncDeg(double& start, double& end, float t, const EASING_TYP
 
 float Easing::EaseFuncRad(float& start, float& end, const float t, const EASING_TYPE type)
 {
-    SetEasing(t, type);
+    float easeRate = easingFuncTable_[type](t);
     float diff = remainder(end - start, 2.0f * DX_PI_F);
-    return start + diff * easingUpdate_(t);
+    return start + diff * easeRate;
 }
 
 
@@ -232,7 +227,7 @@ float Easing::EaseBounce(const float t)
     if (t > EASING_MAX)return EASING_MAX;
     const float BOUNCE_POW = 2.75f;
     const float BOUNCE_ACCEL = 7.5625;
-    MATH_FUNC quad;
+    static MATH_FUNC quad;
     float ret = 0.0f;
     quad.accel = BOUNCE_ACCEL;
     if (t < EASING_MAX / BOUNCE_POW)
@@ -262,7 +257,7 @@ float Easing::EaseBounce(const float t)
 float Easing::EaseQuadIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    MATH_FUNC quad;
+    static MATH_FUNC quad;
     float ret = quad.QuadFunc(t);
     return ret;
 }
@@ -272,7 +267,7 @@ float Easing::EaseQuadIn(const float t)
 float Easing::EaseQuadOut(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    MATH_FUNC quad;
+    static MATH_FUNC quad;
     quad.accel = -EASING_MAX;
     quad.graph_vertex = { EASING_MAX,EASING_MAX };
     float ret = quad.QuadFunc(t);
@@ -282,7 +277,7 @@ float Easing::EaseQuadOut(const float t)
 float Easing::EaseQuadBack(const float t)
 {
     if (t > EASING_MAX)return 0.0f;
-    MATH_FUNC ret;
+    static MATH_FUNC ret;
     ret.accel = -4.0f;
     ret.graph_vertex = { EASING_HALF,EASING_MAX };
 
@@ -294,7 +289,7 @@ float Easing::EaseQuadInOut(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
     float ret = 0.0f;
-    MATH_FUNC quad;
+    static MATH_FUNC quad;
     if (t <= HALF)
     {
         quad.accel = 2.0f;
@@ -313,7 +308,7 @@ float Easing::EaseQuadOutIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
     float ret = 0.0f;
-    MATH_FUNC quad;
+    static MATH_FUNC quad;
     if (t < EASING_HALF)
     {
         quad.accel = -2.0f;
@@ -332,8 +327,8 @@ float Easing::EaseQuadOutIn(const float t)
 float Easing::EaseCubicIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    MATH_FUNC qubic;
-    float ret = qubic.CubicFunc(t);
+    static MATH_FUNC cubic;
+    float ret = cubic.CubicFunc(t);
     return ret;
 }
 
@@ -341,9 +336,9 @@ float Easing::EaseCubicIn(const float t)
 float Easing::EaseCubicOut(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    MATH_FUNC qubic;
-    qubic.graph_vertex = { -EASING_MAX,EASING_MAX };
-    float ret = qubic.CubicFunc(t);
+    static MATH_FUNC cubic;
+    cubic.graph_vertex = { -EASING_MAX,EASING_MAX };
+    float ret = cubic.CubicFunc(t);
     return ret;
 }
 
@@ -373,7 +368,7 @@ float Easing::EaseInElastic(const float t)
 float Easing::EaseSinBack(const float t)
 {
     if (t >= EASING_MAX)return 0.0f;
-    TRIG_FUNC sinFunc;
+    static TRIG_FUNC sinFunc;
     sinFunc.amplitude = 1.0f;
     sinFunc.lambda = 2.0f;
     return sinFunc.SinFunc(t);;
@@ -382,7 +377,7 @@ float Easing::EaseSinBack(const float t)
 float Easing::EaseCosBack(const float t)
 {
     if (t >= EASING_MAX)return 0.0f;
-    TRIG_FUNC cosFunc;
+    static TRIG_FUNC cosFunc;
     cosFunc.amplitude = -EASING_HALF;
     cosFunc.lambda = EASING_MAX;
     return cosFunc.CosFunc(t);

@@ -51,14 +51,14 @@ public:
 		Vector2F graph_vertex = { 0.0f,0.0f };		//軸の頂点(b,c)
 
 		//二次関数の計算
-		float QuadFunc(const float& t)
+		float QuadFunc(const float t)
 		{
 			float pow = powf(t - graph_vertex.x, 2.0f);
 			return (accel * pow) + graph_vertex.y;
 		}
 
 		//三次関数の計算
-		float CubicFunc(const float& t)
+		float CubicFunc(const float t)
 		{
 			float pow = powf(t + graph_vertex.x, 3.0f);
 			return (accel * pow) + graph_vertex.y;
@@ -93,9 +93,6 @@ public:
 
 	//デストラクタ
 	~Easing(void);
-
-	//イージングセット(OneWay)
-	void SetEasing(const float t, const EASING_TYPE type);
 
 	/// @brief イージング計算
 	/// @param start 初期位置
@@ -142,10 +139,10 @@ private:
 	static constexpr float HALF_RAD_MAX = DX_PI_F;
 
 	//イージングの更新を格納
-	std::function<float(const float)>easingUpdate_;
+	//std::function<float(const float)>easingUpdate_;
 
 	//イージング関数テーブル
-	std::unordered_map<EASING_TYPE, std::function<void(float)>>easingFuncTable_;
+	std::unordered_map<EASING_TYPE, std::function<float(float)>>easingFuncTable_;
 
 	/// @brief 線形補完
 	/// @param t 時間
