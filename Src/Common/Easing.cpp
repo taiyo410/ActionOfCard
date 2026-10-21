@@ -46,18 +46,21 @@ float Easing::EaseFunc(const float start, const float end, const float t,const E
     float dis = end - start;
     return start + dis * easeRate;
 }
+
 double Easing::EaseFunc(const double start, const double end, const float t, const EASING_TYPE type)
 {
     float easeRate = easingFuncTable_[type](t);
     double dis = end - start;
     return start + dis * easeRate;
 }
+
 Vector2F Easing::EaseFunc(const Vector2F& start, const Vector2F& end, const float t, const EASING_TYPE type)
 {
     float easeRate = easingFuncTable_[type](t);
     Vector2F dis = end - start;
     return start + dis * easeRate;
 }
+
 Vector2 Easing::EaseFunc(const Vector2& start, const Vector2& end, const float t, const EASING_TYPE type)
 {
     float easeRate = easingFuncTable_[type](t);
@@ -67,6 +70,7 @@ Vector2 Easing::EaseFunc(const Vector2& start, const Vector2& end, const float t
     ret.y = UtilityCommon::Round(start.y + dis.y * easeRate);
     return ret;
 }
+
 VECTOR Easing::EaseFunc(const VECTOR& start, const VECTOR& end, const float t, const EASING_TYPE type)
 {
     float easeRate = easingFuncTable_[type](t);
@@ -90,8 +94,6 @@ COLOR_F Easing::EaseFunc(const COLOR_F& start, const COLOR_F& end, const float t
     ret.a += (end.a - start.a) * easeRate;
     return ret;
 }
-
-
 
 float Easing::EaseFuncDeg(float& start, float& end, const float t, const EASING_TYPE type)
 {
@@ -187,7 +189,6 @@ const float Easing::CalcCosFunc(const TRIG_PARAM trig, const float t) const
     return trig.amplitude * cos(phase) - trig.amplitude;
 }
 
-
 float Easing::Lerp(const float t)
 {
     if (t > EASING_MAX)return EASING_MAX;
@@ -218,8 +219,6 @@ float Easing::OutBack(const float t)
 
     return 1.0f + c3 * pow(t - 1.0f, 3.0f) + c1 * pow(t - 1.0f, 2.0f);
 }
-
-
 
 float Easing::EaseOutElastic(const float t)
 {
@@ -277,7 +276,6 @@ float Easing::EaseBounce(const float t)
     }
     return ret;
 }
-
 
 float Easing::EaseQuadIn(const float t)
 {
@@ -345,7 +343,6 @@ float Easing::EaseQuadOutIn(const float t)
     return ret;
 }
 
-
 float Easing::EaseCubicIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
@@ -353,7 +350,6 @@ float Easing::EaseCubicIn(const float t)
     float ret = CalcCubicFunc(curve,t);
     return ret;
 }
-
 
 float Easing::EaseCubicOut(const float t)
 {
