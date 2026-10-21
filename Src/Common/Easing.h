@@ -110,13 +110,13 @@ private:
 	std::unordered_map<EASING_TYPE, std::function<float(float)>>easingFuncTable_;
 
 	//二次関数の計算
-	const float QuadFunc(const CURVE_PARAM curve,const float t) const;
+	const float CalcQuadFunc(const CURVE_PARAM curve,const float t) const;
 	//三次関数の計算
-	const float CubicFunc(const CURVE_PARAM curve,const float t) const;
+	const float CalcCubicFunc(const CURVE_PARAM curve,const float t) const;
 
 	//三角関数の計算
-	const float SinFunc(const TRIG_PARAM trig, const float t) const;
-	const float CosFunc(const TRIG_PARAM trig, const float t) const;
+	const float CalcSinFunc(const TRIG_PARAM trig, const float t) const;
+	const float CalcCosFunc(const TRIG_PARAM trig, const float t) const;
 
 	/// @brief 線形補完
 	/// @param t 時間

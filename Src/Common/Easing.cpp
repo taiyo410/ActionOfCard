@@ -162,25 +162,25 @@ float Easing::EaseFuncRad(float& start, float& end, const float t, const EASING_
     return start + diff * easeRate;
 }
 
-const float Easing::QuadFunc(const CURVE_PARAM curve, const float t) const
+const float Easing::CalcQuadFunc(const CURVE_PARAM curve, const float t) const
 {
     float pow = powf(t - curve.graph_vertex.x, 2.0f);
 	return (curve.accel * pow) + curve.graph_vertex.y;
 }
 
-const float Easing::CubicFunc(const CURVE_PARAM curve, const float t) const
+const float Easing::CalcCubicFunc(const CURVE_PARAM curve, const float t) const
 {
     float pow = powf(t + curve.graph_vertex.x, 3.0f);
     return (curve.accel * pow) + curve.graph_vertex.y;
 }
 
-const float Easing::SinFunc(const TRIG_PARAM trig, const float t) const
+const float Easing::CalcSinFunc(const TRIG_PARAM trig, const float t) const
 {
     float phase = (DX_TWO_PI_F / trig.lambda) * t;
     return trig.amplitude * sin(phase);
 }
 
-const float Easing::CosFunc(const TRIG_PARAM trig, const float t) const
+const float Easing::CalcCosFunc(const TRIG_PARAM trig, const float t) const
 {
     float phase = (DX_TWO_PI_F / trig.lambda) * t;
     //‹——£‚ð0‚©‚çŽn‚ß‚é‚½‚ß‚ÌŒvŽZ
@@ -262,18 +262,18 @@ float Easing::EaseBounce(const float t)
     else if (1.0f / BOUNCE_POW <= t && t < 2.0f / BOUNCE_POW)
     {
         curve.graph_vertex = { 1.5f / BOUNCE_POW,0.75f };
-        ret = QuadFunc(curve,t);
+        ret = CalcQuadFunc(curve,t);
 
     }
     else if (2.0f / BOUNCE_POW <= t && t < 2.5f / BOUNCE_POW)
     {
         curve.graph_vertex = { 2.25f / BOUNCE_POW,0.9375f };
-        ret = QuadFunc(curve,t);
+        ret = CalcQuadFunc(curve,t);
     }
     else
     {
         curve.graph_vertex = { 2.625f / BOUNCE_POW,0.984375f };
-        ret = QuadFunc(curve,t);
+        ret = CalcQuadFunc(curve,t);
     }
     return ret;
 }
@@ -283,11 +283,9 @@ float Easing::EaseQuadIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
     CURVE_PARAM quad = {};
-    float ret = QuadFunc(quad,t);
+    float ret = CalcQuadFunc(quad,t);
     return ret;
 }
-
-
 
 float Easing::EaseQuadOut(const float t)
 {
@@ -295,7 +293,7 @@ float Easing::EaseQuadOut(const float t)
     CURVE_PARAM curve = {};
     curve.accel = -EASING_MAX;
     curve.graph_vertex = { EASING_MAX,EASING_MAX };
-    float ret = QuadFunc(curve,t);
+    float ret = CalcQuadFunc(curve,t);
     return ret;
 }
 
@@ -306,7 +304,7 @@ float Easing::EaseQuadBack(const float t)
     curve.accel = -4.0f;
     curve.graph_vertex = { EASING_HALF,EASING_MAX };
 
-    return QuadFunc(curve,t);
+    return CalcQuadFunc(curve,t);
 }
 
 
@@ -324,10 +322,9 @@ float Easing::EaseQuadInOut(const float t)
         curve.graph_vertex = { EASING_MAX,EASING_MAX };
         curve.accel = -2.0f;
     }
-    ret = QuadFunc(curve,t);
+    ret = CalcQuadFunc(curve,t);
     return ret;
 }
-
 
 float Easing::EaseQuadOutIn(const float t)
 {
@@ -344,7 +341,7 @@ float Easing::EaseQuadOutIn(const float t)
         curve.accel = 2.0f;
         curve.graph_vertex = { EASING_HALF,EASING_HALF };
     }
-    ret = QuadFunc(curve,t);
+    ret = CalcQuadFunc(curve,t);
     return ret;
 }
 
@@ -353,7 +350,7 @@ float Easing::EaseCubicIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
     CURVE_PARAM curve = {};
-    float ret = CubicFunc(curve,t);
+    float ret = CalcCubicFunc(curve,t);
     return ret;
 }
 
@@ -363,7 +360,7 @@ float Easing::EaseCubicOut(const float t)
     if (t >= EASING_MAX)return EASING_MAX;
     CURVE_PARAM curve = {};
     curve.graph_vertex = { -EASING_MAX,EASING_MAX };
-    float ret = CubicFunc(curve,t);
+    float ret = CalcCubicFunc(curve,t);
     return ret;
 }
 
@@ -396,7 +393,7 @@ float Easing::EaseSinBack(const float t)
     TRIG_PARAM trig = {};
     trig.amplitude = 1.0f;
     trig.lambda = 2.0f;
-    return SinFunc(trig,t) ;
+    return CalcSinFunc(trig,t) ;
 }
 
 float Easing::EaseCosBack(const float t)
@@ -405,7 +402,7 @@ float Easing::EaseCosBack(const float t)
     TRIG_PARAM trig;
     trig.amplitude = -EASING_HALF;
     trig.lambda = EASING_MAX;
-    return CosFunc(trig,t);
+    return CalcCosFunc(trig,t);
 }
 
 Vector2F Easing::EaseEpiCycloid(const Vector2F& start, const float t, const float halfRadiusNum, const float smallRadius)
