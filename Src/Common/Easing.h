@@ -40,52 +40,20 @@ public:
 		HYPOCYCLOID,
 	};
 
-	//半分の割合
-	static constexpr float HALF = 0.5f;
-
-	//関数
-	struct MATH_FUNC
+	struct CURVE_PARAM
 	{
-		//解の公式	a*(x-b)^2+c
 		float accel = 1.0f;	//開き具合(公式のa)
 		Vector2F graph_vertex = { 0.0f,0.0f };		//軸の頂点(b,c)
-
-		//二次関数の計算
-		float QuadFunc(const float t)
-		{
-			float pow = powf(t - graph_vertex.x, 2.0f);
-			return (accel * pow) + graph_vertex.y;
-		}
-
-		//三次関数の計算
-		float CubicFunc(const float t)
-		{
-			float pow = powf(t + graph_vertex.x, 3.0f);
-			return (accel * pow) + graph_vertex.y;
-		}
 	};
-	//サイン計算
-	struct TRIG_FUNC
+
+	struct TRIG_PARAM
 	{
-		//公式：a*sin((2π/λ)*x)
-
-		//振れ幅(a)
-		float amplitude = 1.0f;
-		//波長
-		float lambda = 1.0f;
-
-		float SinFunc(const float t)
-		{
-			float phase = (DX_TWO_PI_F / lambda) * t;
-			return amplitude * sin(phase);
-		}
-		float CosFunc(const float t)
-		{
-			float phase = (DX_TWO_PI_F / lambda) * t;
-			//距離を0から始めるための計算
-			return amplitude * cos(phase) - amplitude;
-		}
+		float amplitude = 1.0f;	//振れ幅(a)
+		float lambda = 1.0f;	//波長(λ)
 	};
+
+	//半分の割合
+	static constexpr float HALF = 0.5f;
 
 	/// @brief コンストラクタ
 	/// @param  
@@ -138,11 +106,17 @@ private:
 	//半円の最大値(ラジアン)
 	static constexpr float HALF_RAD_MAX = DX_PI_F;
 
-	//イージングの更新を格納
-	//std::function<float(const float)>easingUpdate_;
-
 	//イージング関数テーブル
 	std::unordered_map<EASING_TYPE, std::function<float(float)>>easingFuncTable_;
+
+	//二次関数の計算
+	const float QuadFunc(const CURVE_PARAM curve,const float t) const;
+	//三次関数の計算
+	const float CubicFunc(const CURVE_PARAM curve,const float t) const;
+
+	//三角関数の計算
+	const float SinFunc(const TRIG_PARAM trig, const float t) const;
+	const float CosFunc(const TRIG_PARAM trig, const float t) const;
 
 	/// @brief 線形補完
 	/// @param t 時間

@@ -162,6 +162,31 @@ float Easing::EaseFuncRad(float& start, float& end, const float t, const EASING_
     return start + diff * easeRate;
 }
 
+const float Easing::QuadFunc(const CURVE_PARAM curve, const float t) const
+{
+    float pow = powf(t - curve.graph_vertex.x, 2.0f);
+	return (curve.accel * pow) + curve.graph_vertex.y;
+}
+
+const float Easing::CubicFunc(const CURVE_PARAM curve, const float t) const
+{
+    float pow = powf(t + curve.graph_vertex.x, 3.0f);
+    return (curve.accel * pow) + curve.graph_vertex.y;
+}
+
+const float Easing::SinFunc(const TRIG_PARAM trig, const float t) const
+{
+    float phase = (DX_TWO_PI_F / trig.lambda) * t;
+    return trig.amplitude * sin(phase);
+}
+
+const float Easing::CosFunc(const TRIG_PARAM trig, const float t) const
+{
+    float phase = (DX_TWO_PI_F / trig.lambda) * t;
+    //‹——£‚ð0‚©‚çŽn‚ß‚é‚½‚ß‚ÌŒvŽZ
+    return trig.amplitude * cos(phase) - trig.amplitude;
+}
+
 
 float Easing::Lerp(const float t)
 {
@@ -227,28 +252,28 @@ float Easing::EaseBounce(const float t)
     if (t > EASING_MAX)return EASING_MAX;
     const float BOUNCE_POW = 2.75f;
     const float BOUNCE_ACCEL = 7.5625;
-    static MATH_FUNC quad;
     float ret = 0.0f;
-    quad.accel = BOUNCE_ACCEL;
+    CURVE_PARAM curve = {};
+    curve.accel = BOUNCE_ACCEL;
     if (t < EASING_MAX / BOUNCE_POW)
     {
         return EaseQuadIn(t / (EASING_MAX / BOUNCE_POW));
     }
     else if (1.0f / BOUNCE_POW <= t && t < 2.0f / BOUNCE_POW)
     {
-        quad.graph_vertex = { 1.5f / BOUNCE_POW,0.75f };
-        ret = quad.QuadFunc(t);
+        curve.graph_vertex = { 1.5f / BOUNCE_POW,0.75f };
+        ret = QuadFunc(curve,t);
 
     }
     else if (2.0f / BOUNCE_POW <= t && t < 2.5f / BOUNCE_POW)
     {
-        quad.graph_vertex = { 2.25f / BOUNCE_POW,0.9375f };
-        ret = quad.QuadFunc(t);
+        curve.graph_vertex = { 2.25f / BOUNCE_POW,0.9375f };
+        ret = QuadFunc(curve,t);
     }
     else
     {
-        quad.graph_vertex = { 2.625f / BOUNCE_POW,0.984375f };
-        ret = quad.QuadFunc(t);
+        curve.graph_vertex = { 2.625f / BOUNCE_POW,0.984375f };
+        ret = QuadFunc(curve,t);
     }
     return ret;
 }
@@ -257,8 +282,8 @@ float Easing::EaseBounce(const float t)
 float Easing::EaseQuadIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    static MATH_FUNC quad;
-    float ret = quad.QuadFunc(t);
+    CURVE_PARAM quad = {};
+    float ret = QuadFunc(quad,t);
     return ret;
 }
 
@@ -267,21 +292,21 @@ float Easing::EaseQuadIn(const float t)
 float Easing::EaseQuadOut(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    static MATH_FUNC quad;
-    quad.accel = -EASING_MAX;
-    quad.graph_vertex = { EASING_MAX,EASING_MAX };
-    float ret = quad.QuadFunc(t);
+    CURVE_PARAM curve = {};
+    curve.accel = -EASING_MAX;
+    curve.graph_vertex = { EASING_MAX,EASING_MAX };
+    float ret = QuadFunc(curve,t);
     return ret;
 }
 
 float Easing::EaseQuadBack(const float t)
 {
     if (t > EASING_MAX)return 0.0f;
-    static MATH_FUNC ret;
-    ret.accel = -4.0f;
-    ret.graph_vertex = { EASING_HALF,EASING_MAX };
+    CURVE_PARAM curve = {};
+    curve.accel = -4.0f;
+    curve.graph_vertex = { EASING_HALF,EASING_MAX };
 
-    return ret.QuadFunc(t);
+    return QuadFunc(curve,t);
 }
 
 
@@ -289,17 +314,17 @@ float Easing::EaseQuadInOut(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
     float ret = 0.0f;
-    static MATH_FUNC quad;
+    CURVE_PARAM curve = {};
     if (t <= HALF)
     {
-        quad.accel = 2.0f;
+        curve.accel = 2.0f;
     }
     else
     {
-        quad.graph_vertex = { EASING_MAX,EASING_MAX };
-        quad.accel = -2.0f;
+        curve.graph_vertex = { EASING_MAX,EASING_MAX };
+        curve.accel = -2.0f;
     }
-    ret = quad.QuadFunc(t);
+    ret = QuadFunc(curve,t);
     return ret;
 }
 
@@ -308,18 +333,18 @@ float Easing::EaseQuadOutIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
     float ret = 0.0f;
-    static MATH_FUNC quad;
+    CURVE_PARAM curve = {};
     if (t < EASING_HALF)
     {
-        quad.accel = -2.0f;
-        quad.graph_vertex = { EASING_HALF,EASING_HALF };
+        curve.accel = -2.0f;
+        curve.graph_vertex = { EASING_HALF,EASING_HALF };
     }
     else
     {
-        quad.accel = 2.0f;
-        quad.graph_vertex = { EASING_HALF,EASING_HALF };
+        curve.accel = 2.0f;
+        curve.graph_vertex = { EASING_HALF,EASING_HALF };
     }
-    ret = quad.QuadFunc(t);
+    ret = QuadFunc(curve,t);
     return ret;
 }
 
@@ -327,8 +352,8 @@ float Easing::EaseQuadOutIn(const float t)
 float Easing::EaseCubicIn(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    static MATH_FUNC cubic;
-    float ret = cubic.CubicFunc(t);
+    CURVE_PARAM curve = {};
+    float ret = CubicFunc(curve,t);
     return ret;
 }
 
@@ -336,9 +361,9 @@ float Easing::EaseCubicIn(const float t)
 float Easing::EaseCubicOut(const float t)
 {
     if (t >= EASING_MAX)return EASING_MAX;
-    static MATH_FUNC cubic;
-    cubic.graph_vertex = { -EASING_MAX,EASING_MAX };
-    float ret = cubic.CubicFunc(t);
+    CURVE_PARAM curve = {};
+    curve.graph_vertex = { -EASING_MAX,EASING_MAX };
+    float ret = CubicFunc(curve,t);
     return ret;
 }
 
@@ -368,19 +393,19 @@ float Easing::EaseInElastic(const float t)
 float Easing::EaseSinBack(const float t)
 {
     if (t >= EASING_MAX)return 0.0f;
-    static TRIG_FUNC sinFunc;
-    sinFunc.amplitude = 1.0f;
-    sinFunc.lambda = 2.0f;
-    return sinFunc.SinFunc(t);;
+    TRIG_PARAM trig = {};
+    trig.amplitude = 1.0f;
+    trig.lambda = 2.0f;
+    return SinFunc(trig,t) ;
 }
 
 float Easing::EaseCosBack(const float t)
 {
     if (t >= EASING_MAX)return 0.0f;
-    static TRIG_FUNC cosFunc;
-    cosFunc.amplitude = -EASING_HALF;
-    cosFunc.lambda = EASING_MAX;
-    return cosFunc.CosFunc(t);
+    TRIG_PARAM trig;
+    trig.amplitude = -EASING_HALF;
+    trig.lambda = EASING_MAX;
+    return CosFunc(trig,t);
 }
 
 Vector2F Easing::EaseEpiCycloid(const Vector2F& start, const float t, const float halfRadiusNum, const float smallRadius)
